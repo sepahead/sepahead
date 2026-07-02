@@ -19,7 +19,7 @@
 &nbsp;&nbsp;
 <a href="https://scholar.google.com/citations?user=t3PSg8kAAAAJ" title="Google Scholar — Sepehr Mahmoudian"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-scholar.svg" width="58" height="48" alt="Google Scholar — Sepehr Mahmoudian"/></a>
 &nbsp;&nbsp;
-<a href="https://substack.com/@thetorus" title="Substack — @thetorus"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-substack.svg" width="157" height="48" alt="Substack — @thetorus"/></a>
+<a href="https://substack.com/@torusprime" title="Substack — @torusprime"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-substack.svg" width="174" height="48" alt="Substack — @torusprime"/></a>
 &nbsp;&nbsp;
 <a href="https://huggingface.co/torusprime" title="Hugging Face — @torusprime"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-huggingface.svg" width="174" height="48" alt="Hugging Face — @torusprime"/></a>
 &nbsp;&nbsp;
