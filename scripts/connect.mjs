@@ -9,6 +9,7 @@
 // Theme-adaptive, reduced-motion safe, zero deps. Run: `node scripts/connect.mjs`.
 
 import { writeFileSync, mkdirSync } from "node:fs";
+import { writeThemedPair } from "./theme-split.mjs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PALETTE, MONO, escapeXML, charLen, sweepDefs, CURBLINK_KEYFRAMES } from "./tokens.mjs";
@@ -102,5 +103,5 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
 `;
 
 mkdirSync(dirname(OUT), { recursive: true });
-writeFileSync(OUT, svg, "utf8");
+writeThemedPair(OUT, svg);
 console.log(`[connect] wrote ${OUT} (${svg.length} bytes)`);

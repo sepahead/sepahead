@@ -11,6 +11,7 @@
 // Run: `node scripts/section-titles.mjs`.
 
 import { writeFileSync, mkdirSync } from "node:fs";
+import { writeThemedPair } from "./theme-split.mjs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PALETTE, MONO, escapeXML, charLen, sweepDefs, CURBLINK_KEYFRAMES } from "./tokens.mjs";
@@ -174,10 +175,10 @@ function renderHeading({ label, comment, accent, begin = "0.6s" }) {
 mkdirSync(ASSETS, { recursive: true });
 for (const s of SECTIONS) {
   const out = resolve(ASSETS, `title-${s.slug}.svg`);
-  writeFileSync(out, render(s), "utf8");
+  writeThemedPair(out, render(s));
   console.log(`[section-titles] wrote ${out}`);
 }
 
 const moreOut = resolve(ASSETS, "title-more.svg");
-writeFileSync(moreOut, renderHeading({ label: "MORE REPOSITORIES", comment: `# ${REPOS.length} repos`, accent: "work" }), "utf8");
+writeThemedPair(moreOut, renderHeading({ label: "MORE REPOSITORIES", comment: `# ${REPOS.length} repos`, accent: "work" }));
 console.log(`[section-titles] wrote ${moreOut}`);

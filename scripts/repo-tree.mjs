@@ -13,6 +13,7 @@
 // Run: `node scripts/repo-tree.mjs`.
 
 import { writeFileSync, mkdirSync } from "node:fs";
+import { writeThemedPair } from "./theme-split.mjs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PALETTE, MONO, escapeXML, charLen, sweepDefs, CURBLINK_KEYFRAMES } from "./tokens.mjs";
@@ -155,5 +156,5 @@ ${rows}
 `;
 
 mkdirSync(dirname(OUT), { recursive: true });
-writeFileSync(OUT, svg, "utf8");
+writeThemedPair(OUT, svg);
 console.log(`[repo-tree] wrote ${OUT} (${svg.length} bytes)`);

@@ -21,6 +21,7 @@
 // Run: `node scripts/work-graph.mjs`.
 
 import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
+import { writeThemedPair } from "./theme-split.mjs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -628,5 +629,5 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
 `;
 
 mkdirSync(dirname(OUT_PATH), { recursive: true });
-writeFileSync(OUT_PATH, svg, "utf8");
+writeThemedPair(OUT_PATH, svg);
 console.log(`[work-graph] wrote ${OUT_PATH} (${svg.length} bytes)`);

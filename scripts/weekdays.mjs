@@ -36,6 +36,7 @@
 // % of the 500-day total. That's the honest representation of this source.
 
 import { writeFileSync, mkdirSync } from "node:fs";
+import { writeThemedPair } from "./theme-split.mjs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -579,7 +580,7 @@ async function main() {
 
   const svg = renderSVG(model);
   mkdirSync(dirname(OUT_PATH), { recursive: true });
-  writeFileSync(OUT_PATH, svg, "utf8");
+  writeThemedPair(OUT_PATH, svg);
   console.log(`[weekdays] wrote ${OUT_PATH} (${svg.length} bytes)`);
 }
 

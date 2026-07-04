@@ -25,6 +25,7 @@
 // uses), so the bar still renders with accurate data.
 
 import { writeFileSync, mkdirSync } from "node:fs";
+import { writeThemedPair } from "./theme-split.mjs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -576,7 +577,7 @@ async function main() {
 
   const svg = renderSVG(model);
   mkdirSync(dirname(OUT_PATH), { recursive: true });
-  writeFileSync(OUT_PATH, svg, "utf8");
+  writeThemedPair(OUT_PATH, svg);
   console.log(`[cumulative] wrote ${OUT_PATH} (${svg.length} bytes)`);
 }
 

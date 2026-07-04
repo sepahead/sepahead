@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 52" width="860" height="52" role="img" aria-label="more repositories">
+  <title>more repositories</title>
+  <defs>
+    <linearGradient id="sweep-more" gradientUnits="userSpaceOnUse" x1="12" y1="0" x2="132" y2="0">
+      <stop offset="0" stop-color="#a78bfa" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#a78bfa" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#a78bfa" stop-opacity="0"/>
+      <animate attributeName="x1" from="12" to="856" dur="3.2s" repeatCount="indefinite"/>
+      <animate attributeName="x2" from="132" to="976" dur="3.2s" repeatCount="indefinite"/>
+    </linearGradient>
+  </defs>
+  <style>
+    :root { }
+    .prompt { font: 600 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6e7681; }
+    .caret  { fill: #a78bfa; }
+    .label  { font: 700 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; letter-spacing: 4px; }
+    .cap    { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6e7681; letter-spacing: 2px; }
+    .spine  { stroke: #a78bfa; stroke-width: 4; stroke-linecap: round; }
+    .rule   { stroke: #30363d; stroke-width: 1; }
+    .cursor { fill: #a78bfa; animation: curblink 1s steps(1) 0.6s infinite; }
+    @keyframes curblink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
+    text { paint-order: stroke; stroke: #0d1117; stroke-width: 2.6; stroke-linejoin: round; }
+    text { stroke: #ffffff; }
+      .prompt { fill: #57606a; }
+      .caret  { fill: #7c3aed; }
+      .label  { fill: #1f2328; }
+      .cap    { fill: #57606a; }
+      .spine  { stroke: #7c3aed; }
+      .rule   { stroke: #d0d7de; }
+      .cursor { fill: #7c3aed; }
+    @media (prefers-reduced-motion: reduce) {
+      animate { display: none; }
+      .cursor { animation: none; visibility: hidden; }
+    }
+  </style>
+  <path d="M4 13 V39" class="spine"/>
+  <text x="22" y="33" class="prompt">~/sep <tspan class="caret">&#10095;</tspan></text>
+  <text x="132" y="33" class="label" textLength="207" lengthAdjust="spacingAndGlyphs">MORE REPOSITORIES</text>
+  <text x="856" y="33" text-anchor="end" class="cap"># 6 repos</text>
+  <line x1="132" y1="42.5" x2="856" y2="42.5" class="rule"/>
+  <rect x="132" y="41" width="724" height="3" rx="1.5" fill="url(#sweep-more)"/>
+  <rect x="349" y="22" width="9" height="14" rx="1" class="cursor"/>
+</svg>

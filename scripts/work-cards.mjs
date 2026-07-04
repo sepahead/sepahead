@@ -16,6 +16,7 @@
 // fallback. Run: `node scripts/work-cards.mjs`.
 
 import { writeFileSync, mkdirSync } from "node:fs";
+import { writeThemedPair } from "./theme-split.mjs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PROJECTS } from "./data.mjs";
@@ -346,6 +347,6 @@ ${body}
 
   const slug = p.name.toLowerCase();
   const outPath = resolve(ASSETS_DIR, `work-card-${slug}.svg`);
-  writeFileSync(outPath, svg, "utf8");
+  writeThemedPair(outPath, svg);
   console.log(`[work-cards] wrote ${outPath} (${svg.length} bytes)`);
 }

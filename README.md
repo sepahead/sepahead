@@ -3,7 +3,7 @@
      the SVG's internal prefers-color-scheme, with a reduced-motion fallback.
      Committed to the repo and served from raw.githubusercontent.com, so it always
      loads with no external card service. -->
-<img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/hero.svg" width="820" alt="Sepehr Mahmoudian, AI/ML engineer in Berlin building agentic systems, continual learning, knowledge graphs and RAG. Background spans neural networks, neurorobotics, information theory, and 3D vision and scene reconstruction for threat detection. Rust and Python; building since 2014."/>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/hero-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/hero-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/hero-light.svg" width="820" alt="Sepehr Mahmoudian, AI/ML engineer in Berlin building agentic systems, continual learning, knowledge graphs and RAG. Background spans neural networks, neurorobotics, information theory, and 3D vision and scene reconstruction for threat detection. Rust and Python; building since 2014."/></picture>
 </p>
 
 
@@ -15,18 +15,18 @@
      Theme-adaptive (prefers-color-scheme), reduced-motion safe, served from
      raw.githubusercontent.com so it never depends on an external badge service. -->
 <p align="center">
-<a href="https://www.linkedin.com/in/sepehr-mahmoudian-99367516/" title="LinkedIn — Sepehr Mahmoudian"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-linkedin.svg" width="58" height="48" alt="LinkedIn — Sepehr Mahmoudian"/></a>
+<a href="https://www.linkedin.com/in/sepehr-mahmoudian-99367516/" title="LinkedIn — Sepehr Mahmoudian"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-linkedin-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-linkedin-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-linkedin-light.svg" width="58" height="48" alt="LinkedIn — Sepehr Mahmoudian"/></picture></a>
 &nbsp;&nbsp;
-<a href="https://scholar.google.com/citations?user=t3PSg8kAAAAJ" title="Google Scholar — Sepehr Mahmoudian"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-scholar.svg" width="58" height="48" alt="Google Scholar — Sepehr Mahmoudian"/></a>
+<a href="https://scholar.google.com/citations?user=t3PSg8kAAAAJ" title="Google Scholar — Sepehr Mahmoudian"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-scholar-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-scholar-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-scholar-light.svg" width="58" height="48" alt="Google Scholar — Sepehr Mahmoudian"/></picture></a>
 &nbsp;&nbsp;
-<a href="https://substack.com/@torusprime" title="Substack — @torusprime"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-substack.svg" width="174" height="48" alt="Substack — @torusprime"/></a>
+<a href="https://substack.com/@torusprime" title="Substack — @torusprime"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-substack-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-substack-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-substack-light.svg" width="174" height="48" alt="Substack — @torusprime"/></picture></a>
 &nbsp;&nbsp;
-<a href="https://huggingface.co/torusprime" title="Hugging Face — @torusprime"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-huggingface.svg" width="174" height="48" alt="Hugging Face — @torusprime"/></a>
+<a href="https://huggingface.co/torusprime" title="Hugging Face — @torusprime"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-huggingface-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-huggingface-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-huggingface-light.svg" width="174" height="48" alt="Hugging Face — @torusprime"/></picture></a>
 &nbsp;&nbsp;
-<a href="https://x.com/SepAhead" title="X (Twitter) — @SepAhead"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-x.svg" width="157" height="48" alt="X (Twitter) — @SepAhead"/></a>
+<a href="https://x.com/SepAhead" title="X (Twitter) — @SepAhead"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-x-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-x-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-x-light.svg" width="157" height="48" alt="X (Twitter) — @SepAhead"/></picture></a>
 </p>
 
-<h3 align="center"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-pulse.svg" width="820" alt="The pulse"/></h3>
+<h3 align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-pulse-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-pulse-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-pulse-light.svg" width="820" alt="The pulse"/></picture></h3>
 
 <p align="center">
 <!-- Annual contribution totals (2020 to present) as a self-hosted SVG,
@@ -35,7 +35,7 @@
      unauthenticated host, not the rate-limited API). Served from
      raw.githubusercontent.com so it never depends on a third-party card.
      Clicking opens GitHub's native contribution heatmap. -->
-<a href="https://github.com/sepahead#js-contribution-activity-description"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/cumulative.svg" width="780" alt="Annual contributions from 2020 to present, with a running cumulative total; the peak year glows." loading="lazy"/></a>
+<a href="https://github.com/sepahead#js-contribution-activity-description"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/cumulative-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/cumulative-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/cumulative-light.svg" width="780" alt="Annual contributions from 2020 to present, with a running cumulative total; the peak year glows." loading="lazy"/></picture></a>
 </p>
 
 <p align="center">
@@ -45,10 +45,10 @@
      .github/workflows/weekdays.yml from the same server-rendered fragment. The
      glowing slice marks the peak day. Lives in-repo, so it works regardless of
      external card services. Clicking opens GitHub's native contribution heatmap. -->
-<a href="https://github.com/sepahead#js-contribution-activity-description"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/weekdays.svg" width="640" alt="Weekday contribution share: a donut of each weekday's percentage of the last ~16 months (500 days) of contributions; the glowing slice marks the peak day." loading="lazy"/></a>
+<a href="https://github.com/sepahead#js-contribution-activity-description"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/weekdays-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/weekdays-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/weekdays-light.svg" width="640" alt="Weekday contribution share: a donut of each weekday's percentage of the last ~16 months (500 days) of contributions; the glowing slice marks the peak day." loading="lazy"/></picture></a>
 </p>
 
-<h3 align="center"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-work.svg" width="820" alt="Selected work"/></h3>
+<h3 align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-work-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-work-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-work-light.svg" width="820" alt="Selected work"/></picture></h3>
 
 
 <!-- Self-hosted SVG project cards (generated by scripts/work-cards.mjs): each
@@ -63,20 +63,20 @@
      their repo pages too — they show a lock badge until they go public. -->
 <table align="center" cellspacing="20" cellpadding="0" border="0">
   <tr>
-    <td><a href="https://github.com/sepahead/engram"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-engram.svg" width="400" alt="engram (private): Engram Neural Modeling Labs, a NEST-based neural-modeling hub — the brain the rest of the stack connects to. Neural-network and neural-modeling experiments. Python, Rust, TypeScript, Metal, CUDA." loading="lazy"></a></td>
-    <td><a href="https://github.com/sepahead/NCP"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-ncp.svg" width="400" alt="NCP — Neuro-Cybernetic Protocol: a safety-gated, provenance-first wire protocol (Rust SDK) that lets a spiking neural simulation perceive and act through robots, UAVs and analysis clients. Rust." loading="lazy"></a></td>
+    <td><a href="https://github.com/sepahead/engram"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-engram-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-engram-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-engram-light.svg" width="400" alt="engram (private): Engram Neural Modeling Labs, a NEST-based neural-modeling hub — the brain the rest of the stack connects to. Neural-network and neural-modeling experiments. Python, Rust, TypeScript, Metal, CUDA." loading="lazy"></picture></a></td>
+    <td><a href="https://github.com/sepahead/NCP"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-ncp-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-ncp-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-ncp-light.svg" width="400" alt="NCP — Neuro-Cybernetic Protocol: a safety-gated, provenance-first wire protocol (Rust SDK) that lets a spiking neural simulation perceive and act through robots, UAVs and analysis clients. Rust." loading="lazy"></picture></a></td>
   </tr>
   <tr>
-    <td><a href="https://github.com/sepahead/prisoma"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-prisoma.svg" width="400" alt="prisoma (private): a prism for embodied agents, robotics and world models — Vision-Language-Action analysis via several native methods including Partial Information Decomposition. Rust, Python." loading="lazy"></a></td>
-    <td><a href="https://github.com/sepahead/crebain"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-crebain.svg" width="400" alt="crebain — Adaptive Response &amp; Awareness System (ARAS): tactical visualization and autonomy, sensor fusion, ML detection, drone physics, ROS / Gazebo. TypeScript, Rust, Nix." loading="lazy"></a></td>
+    <td><a href="https://github.com/sepahead/prisoma"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-prisoma-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-prisoma-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-prisoma-light.svg" width="400" alt="prisoma (private): a prism for embodied agents, robotics and world models — Vision-Language-Action analysis via several native methods including Partial Information Decomposition. Rust, Python." loading="lazy"></picture></a></td>
+    <td><a href="https://github.com/sepahead/crebain"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-crebain-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-crebain-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-crebain-light.svg" width="400" alt="crebain — Adaptive Response &amp; Awareness System (ARAS): tactical visualization and autonomy, sensor fusion, ML detection, drone physics, ROS / Gazebo. TypeScript, Rust, Nix." loading="lazy"></picture></a></td>
   </tr>
   <tr>
-    <td><a href="https://github.com/sepahead/melkor"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-melkor.svg" width="400" alt="melkor: Gaussian-splatting and depth-analysis pipelines for 3D scene reconstruction — multi-view capture to dense geometry, CUDA-accelerated. Python, C++, CUDA." loading="lazy"></a></td>
-    <td><a href="https://github.com/sepahead/cortexel"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-cortexel.svg" width="400" alt="cortexel: agent-consumable scientific-visualization library for neural simulations — VizSpec to spike rasters, Brunel networks and STDP curves with fail-closed provenance. TypeScript, React, Three.js." loading="lazy"></a></td>
+    <td><a href="https://github.com/sepahead/melkor"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-melkor-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-melkor-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-melkor-light.svg" width="400" alt="melkor: Gaussian-splatting and depth-analysis pipelines for 3D scene reconstruction — multi-view capture to dense geometry, CUDA-accelerated. Python, C++, CUDA." loading="lazy"></picture></a></td>
+    <td><a href="https://github.com/sepahead/cortexel"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-cortexel-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-cortexel-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-cortexel-light.svg" width="400" alt="cortexel: agent-consumable scientific-visualization library for neural simulations — VizSpec to spike rasters, Brunel networks and STDP curves with fail-closed provenance. TypeScript, React, Three.js." loading="lazy"></picture></a></td>
   </tr>
   <tr>
-    <td><a href="https://github.com/sepahead/pid-rs"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-pid-rs.svg" width="400" alt="pid-rs: Partial Information Decomposition with continuous mutual-information (KSG) estimators in safe Rust. The analysis client." loading="lazy"></a></td>
-    <td><a href="https://github.com/sepahead/cobot-atlas"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-cobot-atlas.svg" width="400" alt="cobot-atlas: 3D mesh-generation pipeline — 2,023 meshes for collaborative-robot simulation and embodied AI; dataset published on Hugging Face. Python." loading="lazy"></a></td>
+    <td><a href="https://github.com/sepahead/pid-rs"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-pid-rs-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-pid-rs-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-pid-rs-light.svg" width="400" alt="pid-rs: Partial Information Decomposition with continuous mutual-information (KSG) estimators in safe Rust. The analysis client." loading="lazy"></picture></a></td>
+    <td><a href="https://github.com/sepahead/cobot-atlas"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-cobot-atlas-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-cobot-atlas-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-card-cobot-atlas-light.svg" width="400" alt="cobot-atlas: 3D mesh-generation pipeline — 2,023 meshes for collaborative-robot simulation and embodied AI; dataset published on Hugging Face. Python." loading="lazy"></picture></a></td>
   </tr>
 </table>
 
@@ -90,10 +90,10 @@
      Clicking opens the engram repo — the neural-modeling hub at the centre
      of the graph. -->
 <p align="center">
-<a href="https://github.com/sepahead/engram"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-graph.svg" width="820" alt="Project graph: engram (private) and crebain connect through the always-on NCP protocol to prisoma, a private hub; pid-rs, cobot-atlas, melkor and relief-atlas connect to prisoma; cobot-atlas, melkor and relief-atlas also connect to crebain; cortexel connects to engram." loading="lazy"/></a>
+<a href="https://github.com/sepahead/engram"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-graph-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-graph-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-graph-light.svg" width="820" alt="Project graph: engram (private) and crebain connect through the always-on NCP protocol to prisoma, a private hub; pid-rs, cobot-atlas, melkor and relief-atlas connect to prisoma; cobot-atlas, melkor and relief-atlas also connect to crebain; cortexel connects to engram." loading="lazy"/></picture></a>
 </p>
 
-<h3 align="center"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-more.svg" width="820" alt="More repositories"/></h3>
+<h3 align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-more-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-more-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-more-light.svg" width="820" alt="More repositories"/></picture></h3>
 
 <br/>
 
@@ -104,20 +104,20 @@
      Clicking opens the GitHub profile, where the pinned repos are the
      first content section (GitHub exposes no stable anchor for it). -->
 <p align="center">
-<a href="https://github.com/sepahead"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/repo-tree.svg" width="820" alt="More repositories: a directory tree of six public repos under sepahead: brojapid-activationfunctions (4 stars), mahmoudian-2020-rescience (forked by 3), nest-simulator, relief-atlas, manwe, silmaril-vision-studio." loading="lazy"/></a>
+<a href="https://github.com/sepahead"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/repo-tree-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/repo-tree-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/repo-tree-light.svg" width="820" alt="More repositories: a directory tree of six public repos under sepahead: brojapid-activationfunctions (4 stars), mahmoudian-2020-rescience (forked by 3), nest-simulator, relief-atlas, manwe, silmaril-vision-studio." loading="lazy"/></picture></a>
 </p>
 
 <p align="center">
 <sub>&#8599;&nbsp;&nbsp;<a href="https://github.com/sepahead/brojapid-activationfunctions">brojapid-activationfunctions</a>&nbsp;&middot;&nbsp;<a href="https://github.com/sepahead/mahmoudian-2020-rescience">mahmoudian-2020-rescience</a>&nbsp;&middot;&nbsp;<a href="https://github.com/sepahead/nest-simulator">nest-simulator</a>&nbsp;&middot;&nbsp;<a href="https://github.com/sepahead/relief-atlas">relief-atlas</a>&nbsp;&middot;&nbsp;<a href="https://github.com/sepahead/manwe">manwe</a>&nbsp;&middot;&nbsp;<a href="https://github.com/sepahead/silmaril-vision-studio">silmaril-vision-studio</a></sub>
 </p>
 
-<h3 align="left"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-toolbox.svg" width="820" alt="The toolbox"/></h3>
+<h3 align="left"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-toolbox-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-toolbox-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-toolbox-light.svg" width="820" alt="The toolbox"/></picture></h3>
 
 <br/>
 
 <table>
 <tr><td>
-<img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/rail-aiml.svg" width="792" alt="AI / ML stack" loading="lazy"/>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/rail-aiml-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/rail-aiml-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/rail-aiml-light.svg" width="792" alt="AI / ML stack" loading="lazy"/></picture>
 <br/>
 <a href="https://python.org" title="Python"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="Python" height="44"/></a>&nbsp;&nbsp;&nbsp;
 <a href="https://github.com/pytorch/pytorch" title="PyTorch"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/pytorch/pytorch-original.svg" alt="PyTorch" height="44"/></a>&nbsp;&nbsp;&nbsp;
@@ -132,7 +132,7 @@
 
 <table>
 <tr><td>
-<img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/rail-backend.svg" width="792" alt="Backend &amp; Systems stack" loading="lazy"/>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/rail-backend-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/rail-backend-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/rail-backend-light.svg" width="792" alt="Backend &amp; Systems stack" loading="lazy"/></picture>
 <br/>
 <a href="https://www.rust-lang.org/" title="Rust"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/rust/rust-original.svg" alt="Rust" height="44"/></a>&nbsp;&nbsp;&nbsp;
 <a href="https://en.cppreference.com/w/c" title="C"><img src="pics/c-icon.svg" alt="C" height="44"/></a>&nbsp;&nbsp;&nbsp;
@@ -147,7 +147,7 @@
 
 <table>
 <tr><td>
-<img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/rail-cloud.svg" width="792" alt="Cloud &amp; DevOps stack" loading="lazy"/>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/rail-cloud-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/rail-cloud-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/rail-cloud-light.svg" width="792" alt="Cloud &amp; DevOps stack" loading="lazy"/></picture>
 <br/>
 <a href="https://www.cloudflare.com/" title="Cloudflare"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cloudflare/cloudflare-original.svg" alt="Cloudflare" height="44"/></a>&nbsp;&nbsp;&nbsp;
 <a href="https://cloud.google.com" title="Google Cloud"><img src="pics/gcp-icon.svg" alt="Google Cloud" height="44"/></a>&nbsp;&nbsp;&nbsp;
@@ -162,7 +162,7 @@
 
 <table>
 <tr><td>
-<img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/rail-frontend.svg" width="792" alt="Frontend &amp; Web stack" loading="lazy"/>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/rail-frontend-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/rail-frontend-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/rail-frontend-light.svg" width="792" alt="Frontend &amp; Web stack" loading="lazy"/></picture>
 <br/>
 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" title="JavaScript"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-plain.svg" alt="JavaScript" height="44"/></a>&nbsp;&nbsp;&nbsp;
 <a href="https://www.typescriptlang.org" title="TypeScript"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-plain.svg" alt="TypeScript" height="44"/></a>&nbsp;&nbsp;&nbsp;
@@ -174,19 +174,19 @@
 </td></tr>
 </table>
 
-<h3 align="center"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-agentic.svg" width="820" alt="Agentic engineering"/></h3>
+<h3 align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-agentic-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-agentic-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-agentic-light.svg" width="820" alt="Agentic engineering"/></picture></h3>
 
 <!-- AGENTIC STACK // MANIFEST panel (generated by scripts/agents.mjs): the agents
      and dev environment in the loop. -->
 <p align="center">
-<img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/agents.svg" width="820" alt="Agentic stack manifest: the agents and environment I build with: Ghostty (terminal), herdr (multiplexer), OMP (orchestrator platform, Pi upgraded), Devin (harness), Zed (editor, collaborative IDE). The loop never sleeps." loading="lazy"/>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/agents-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/agents-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/agents-light.svg" width="820" alt="Agentic stack manifest: the agents and environment I build with: Ghostty (terminal), herdr (multiplexer), OMP (orchestrator platform, Pi upgraded), Devin (harness), Zed (editor, collaborative IDE). The loop never sleeps." loading="lazy"/></picture>
 </p>
 
-<h3 align="center"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-elsewhere.svg" width="820" alt="Elsewhere"/></h3>
+<h3 align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-elsewhere-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-elsewhere-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-elsewhere-light.svg" width="820" alt="Elsewhere"/></picture></h3>
 
 <!-- OPEN CHANNEL sign-off (generated by scripts/connect.mjs). The panel is
      wrapped in a real mailto so clicking it opens a compose window (the social
      channels live in the badge strip at the top of the profile). -->
 <p align="center">
-<a href="mailto:sepmhn@gmail.com"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/connect.svg" width="820" alt="Open channel: reach me at sepmhn@gmail.com; always open to interesting problems." loading="lazy"/></a>
+<a href="mailto:sepmhn@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/connect-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/connect-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/connect-light.svg" width="820" alt="Open channel: reach me at sepmhn@gmail.com; always open to interesting problems." loading="lazy"/></picture></a>
 </p>

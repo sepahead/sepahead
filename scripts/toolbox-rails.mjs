@@ -9,6 +9,7 @@
 // Run: `node scripts/toolbox-rails.mjs`.
 
 import { writeFileSync, mkdirSync } from "node:fs";
+import { writeThemedPair } from "./theme-split.mjs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PALETTE, MONO, escapeXML, charLen, sweepDefs } from "./tokens.mjs";
@@ -71,6 +72,6 @@ function render(r) {
 mkdirSync(ASSETS, { recursive: true });
 for (const r of RAILS) {
   const out = resolve(ASSETS, `rail-${r.slug}.svg`);
-  writeFileSync(out, render(r), "utf8");
+  writeThemedPair(out, render(r));
   console.log(`[toolbox-rails] wrote ${out}`);
 }

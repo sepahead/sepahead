@@ -15,6 +15,7 @@
 // (prefers-color-scheme), reduced-motion safe, zero deps. Run: `node scripts/socials.mjs`.
 
 import { writeFileSync, mkdirSync } from "node:fs";
+import { writeThemedPair } from "./theme-split.mjs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PALETTE, MONO, escapeXML, charLen } from "./tokens.mjs";
@@ -125,6 +126,6 @@ mkdirSync(ASSETS, { recursive: true });
 for (const s of SOCIALS) {
   const out = resolve(ASSETS, `social-${s.slug}.svg`);
   const svg = render(s);
-  writeFileSync(out, svg, "utf8");
+  writeThemedPair(out, svg);
   console.log(`[socials] wrote ${out} (${svg.length} bytes)`);
 }
