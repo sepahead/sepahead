@@ -68,8 +68,8 @@ jobs:
           # the guard short-circuited and the chart stayed broken on the live
           # profile.) Staging then diffing the index catches both new and
           # modified files.
-          git add assets/weekdays.svg
-          if git diff --cached --quiet HEAD -- assets/weekdays.svg; then
+          git add assets/weekdays-dark.svg assets/weekdays-light.svg
+          if git diff --cached --quiet HEAD -- assets/weekdays-dark.svg assets/weekdays-light.svg; then
             echo "No changes to weekdays.svg; skipping commit."
             exit 0
           fi

@@ -63,8 +63,8 @@ jobs:
           # Stage FIRST, then diff the INDEX against HEAD (catches both new and
           # modified files; a bare `git diff <path>` would ignore an untracked
           # SVG and never push it).
-          git add assets/cumulative.svg
-          if git diff --cached --quiet HEAD -- assets/cumulative.svg; then
+          git add assets/cumulative-dark.svg assets/cumulative-light.svg
+          if git diff --cached --quiet HEAD -- assets/cumulative-dark.svg assets/cumulative-light.svg; then
             echo "No changes to cumulative.svg; skipping commit."
             exit 0
           fi
