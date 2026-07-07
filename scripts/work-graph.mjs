@@ -50,7 +50,7 @@ const H = 460;
 //   bespoke logos: gate (NCP) · voxel-net (cortexel) · raven (crebain) | chip
 // ---------------------------------------------------------------------------
 const nodes = {
-  engram:      { x: 110, y: 230, color: "#9fb3c8", kind: "logo", private: true },
+  engram:      { x: 110, y: 230, color: "#bcc6d1", kind: "logo", private: true },
   pidrs:       { x: 250, y: 98,  color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
   ncp:         { x: 250, y: 230, color: "#fbbf24", kind: "gate", label: "NCP" },
   prisoma:     { x: 460, y: 130, color: "#a78bfa", kind: "triangle", private: true },
@@ -292,36 +292,55 @@ const nodeEls = Object.values(nodes).map((n) => {
   </g>`;
   }
   if (n.kind === "logo") {
-    // engram: the torus-automations brand mark seated on a gunmetal disc whose
-    // metal is tinted cool-teal toward the rim and wrapped in a SOFT teal halo
-    // glow (both pure gradients — no hard ring), with a thin steel rim; the
-    // project label sits ABOVE the seat. The seat is lightened toward its centre
-    // so the logo's dark regions pop. The node colour is steel (#9fb3c8) so its
-    // live edges to NCP and cortexel resolve cool-steel via the edge gradient
-    // system; the teal is a subordinate, gradient-borne accent. Metal reads well
-    // in both themes, so the seat gradient is fixed; the halo recolours via
-    // currentColor (.logo-glow) and the rim + label recolour for contrast. No
-    // animation here → reduced-motion safe. One instance → unique ids.
-    const cx = n.x, cy = n.y, S = 64, r = 34;
+    // engram: the torus-automations brand mark inlaid on a MACHINED SILVER
+    // medallion — a chrome-banded face (bright crown → dark horizon → ground
+    // lift) under a cool offset sheen for a hint of convexity, a machined DOUBLE
+    // bezel (bright gradient rim + dark inner groove) plus a dark outer hairline
+    // that keeps the coin's edge crisp on WHITE (where a bright rim melts into the
+    // page), a clamped top reflection band and a whisper of warm bottom bounce,
+    // all seated on a soft drop shadow for depth in BOTH themes. The dark emblem
+    // pops on the silver in dark and light alike, so the metal is theme-FIXED (a
+    // real object); only the label recolours. The node colour is silver, so its
+    // live edges to NCP and cortexel resolve neutral via the edge-gradient system.
+    // Static → reduced-motion safe. One instance → unique ids.
+    const cx = n.x, cy = n.y, S = 54, r = 34;
+    const top = f1(cy - r), bot = f1(cy + r);
     return `<g>
     <defs>
-      <radialGradient id="engramSeat" cx="50%" cy="50%" r="80%">
-        <stop offset="0%" stop-color="#6c7787"/>
-        <stop offset="45%" stop-color="#3b4754"/>
-        <stop offset="72%" stop-color="#233a42"/>
-        <stop offset="100%" stop-color="#122026"/>
+      <linearGradient id="engramFace" x1="0" y1="${top}" x2="0" y2="${bot}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#f4f8fb"/>
+        <stop offset="18%" stop-color="#dae2ea"/>
+        <stop offset="42%" stop-color="#aab5c1"/>
+        <stop offset="54%" stop-color="#66717e"/>
+        <stop offset="70%" stop-color="#9aa5b1"/>
+        <stop offset="100%" stop-color="#6d7884"/>
+      </linearGradient>
+      <radialGradient id="engramSheen" gradientUnits="userSpaceOnUse" cx="${f1(cx - 10)}" cy="${f1(cy - 14)}" r="${f1(r * 1.35)}">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.30"/>
+        <stop offset="55%" stop-color="#ffffff" stop-opacity="0.05"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
       </radialGradient>
-      <radialGradient id="engramGlow" cx="50%" cy="50%" r="50%">
-        <stop offset="50%" stop-color="currentColor" stop-opacity="0"/>
-        <stop offset="78%" stop-color="currentColor" stop-opacity="0.22"/>
-        <stop offset="100%" stop-color="currentColor" stop-opacity="0"/>
-      </radialGradient>
+      <linearGradient id="engramBezel" x1="0" y1="${top}" x2="0" y2="${bot}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#ffffff"/>
+        <stop offset="46%" stop-color="#c6d0da"/>
+        <stop offset="100%" stop-color="#59646f"/>
+      </linearGradient>
+      <clipPath id="engramClip"><circle cx="${cx}" cy="${cy}" r="${r}"/></clipPath>
+      <filter id="engramShadow" x="-70%" y="-70%" width="240%" height="240%">
+        <feDropShadow dx="0" dy="1.5" stdDeviation="2.4" flood-color="#000000" flood-opacity="0.4"/>
+      </filter>
     </defs>
-    <circle cx="${cx}" cy="${cy}" r="${f1(r + 10)}" class="logo-glow" fill="url(#engramGlow)"/>
-    <circle cx="${cx}" cy="${cy}" r="${r}" class="logo-seat" fill="url(#engramSeat)"/>
-    <circle cx="${cx}" cy="${cy}" r="${r}" class="logo-seat-ring"/>
+    <g filter="url(#engramShadow)"><circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramFace)"/></g>
+    <g clip-path="url(#engramClip)">
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramSheen)"/>
+      <ellipse cx="${cx}" cy="${f1(cy - 24)}" rx="23" ry="6.5" fill="#ffffff" opacity="0.18"/>
+      <ellipse cx="${cx}" cy="${f1(cy + 27)}" rx="24" ry="9" fill="#f0ece2" opacity="0.07"/>
+    </g>
     <image href="${TORUS_LOGO}" x="${f1(cx - S / 2)}" y="${f1(cy - S / 2)}" width="${S}" height="${S}" preserveAspectRatio="xMidYMid meet"/>
-    <text x="${cx}" y="${f1(cy - 44)}" text-anchor="middle" class="logo-label">${escapeXML(n.label)}</text>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="url(#engramBezel)" stroke-width="2.6"/>
+    <circle cx="${cx}" cy="${cy}" r="${f1(r - 2.4)}" fill="none" stroke="#37414c" stroke-width="1.1" stroke-opacity="0.5"/>
+    <circle cx="${cx}" cy="${cy}" r="${f1(r + 1.4)}" fill="none" stroke="#2b333d" stroke-width="1" stroke-opacity="0.55"/>
+    <text x="${cx}" y="${f1(cy - 46)}" text-anchor="middle" class="logo-label">${escapeXML(n.label)}</text>
   </g>`;
   }
   if (n.kind === "triangle") {
@@ -581,10 +600,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .hub-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6ee7b7; }
     .cube       { fill: url(#cubeGrad); stroke: #fb923c; stroke-width: 2; filter: url(#soft); }
     .cube-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fdba74; }
-    .logo-seat      { filter: url(#soft); }
-    .logo-seat-ring { fill: none; stroke: #4a8a92; stroke-opacity: 0.7; stroke-width: 1.5; }
-    .logo-glow      { color: #4a8a92; }
-    .logo-label     { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #22d3ee; }
+    .logo-label     { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #cdd6e0; }
     .tri        { fill: url(#triGrad); stroke: #a78bfa; stroke-width: 2; filter: url(#soft); }
     .tri-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c4b5fd; }
     .gate-wire      { fill: none; stroke: #fbbf24; stroke-width: 2.6; stroke-linecap: round; opacity: 0.92; }
@@ -628,9 +644,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .hub-label { fill: #059669; }
       .cube { fill: #ffffff; stroke: #c2410c; }
       .cube-label { fill: #c2410c; }
-      .logo-seat-ring { stroke: #3a7a8a; }
-      .logo-glow { color: #3a7a8a; }
-      .logo-label { fill: #0891b2; }
+      .logo-label { fill: #57626f; }
       .tri { fill: #ffffff; stroke: #7c3aed; }
       .tri-label { fill: #6d28d9; }
       .gate-wire { stroke: #b45309; }

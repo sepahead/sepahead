@@ -152,9 +152,10 @@ function buildCard(p) {
   // Per-card accent wash: a faint radial bloom anchored at the top-left so the
   // card reads as "owned" by its colour without overpowering the text.
   const gid = "wash0";
-  // Engram (the only `hint` card) weaves teal in via GRADIENTS, not stuck-on
-  // shapes: a steel->teal spine gradient (dark + light variants) and a faint
-  // teal radial bloom from the opposite (bottom-right) corner.
+  // Engram (the only `hint` card) weaves a brighter SILVER sheen in via
+  // GRADIENTS, not stuck-on shapes: a mid->bright silver spine gradient (dark +
+  // light variants) and a faint silver-sheen radial bloom from the opposite
+  // (bottom-right) corner.
   // Spine gradients use userSpaceOnUse along the actual (zero-width, vertical)
   // spine path so they render reliably everywhere; objectBoundingBox over a
   // zero-area bbox is mishandled by some renderers (e.g. GitHub). The spine runs
@@ -214,24 +215,24 @@ function buildCard(p) {
     })
     .join("\n    ");
 
-  // Spine: a solid accent bar normally; for `hint` cards a steel->teal vertical
-  // gradient (dark/light variants toggled by prefers-color-scheme). Both carry
-  // the `spine` class so the hover lift still applies.
+  // Spine: a solid accent bar normally; for `hint` cards a mid->bright silver
+  // vertical gradient (dark/light variants toggled by prefers-color-scheme). Both
+  // carry the `spine` class so the hover lift still applies.
   const spineD = `M${x + 1.5} ${y + 14} v${CARD_H - 28}`;
   const spine = p.hint
     ? `<path d="${spineD}" class="spine spine-dark" stroke="url(#spine0)" stroke-width="${SPINE_W}" stroke-linecap="round"/>
     <path d="${spineD}" class="spine spine-light" stroke="url(#spine0L)" stroke-width="${SPINE_W}" stroke-linecap="round"/>`
     : `<path d="${spineD}" class="spine ${cls}" stroke-width="${SPINE_W}" stroke-linecap="round"/>`;
 
-  // Faint teal bloom from the bottom-right corner (hint cards only). It rides the
-  // same `.wash` class so it's hidden in light mode (a dark-mode bloom).
-  const tealWash = p.hint
-    ? `\n    <rect x="${x}" y="${y}" width="${CARD_W}" height="${CARD_H}" rx="14" fill="url(#wash1)" class="wash wash-teal"/>`
+  // Faint silver-sheen bloom from the bottom-right corner (hint cards only). It
+  // rides the same `.wash` class so it's hidden in light mode (a dark-mode bloom).
+  const sheenWash = p.hint
+    ? `\n    <rect x="${x}" y="${y}" width="${CARD_W}" height="${CARD_H}" rx="14" fill="url(#wash1)" class="wash wash-sheen"/>`
     : "";
 
   const body = `  <g class="card-group">
     <rect x="${x}" y="${y}" width="${CARD_W}" height="${CARD_H}" rx="14" class="card"/>
-    <rect x="${x}" y="${y}" width="${CARD_W}" height="${CARD_H}" rx="14" fill="url(#${gid})" class="wash"/>${tealWash}
+    <rect x="${x}" y="${y}" width="${CARD_W}" height="${CARD_H}" rx="14" fill="url(#${gid})" class="wash"/>${sheenWash}
     ${spine}
     ${title}
     ${rule}
