@@ -59,6 +59,7 @@ const nodes = {
   melkor:      { x: 690, y: 250, color: "#fb923c", kind: "cube" },
   reliefatlas: { x: 690, y: 350, color: "#fb7185", kind: "chip", label: "relief-atlas", dataset: true },
   cortexel:    { x: 110, y: 360, color: "#e879f9", kind: "voxel" },
+  manwe:       { x: 298, y: 386, color: "#38bdf8", kind: "radar", label: "manwe" },
 };
 // Uppercase every label in the SOURCE (not via CSS text-transform, which
 // librsvg and other SVG renderers ignore — content-case renders everywhere).
@@ -76,6 +77,7 @@ const edges = [
   { a: "crebain",     b: "melkor" },
   { a: "crebain",     b: "reliefatlas" },
   { a: "cortexel",    b: "engram" },
+  { a: "manwe",       b: "crebain" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -105,6 +107,7 @@ function halfExtents(n) {
   if (n.kind === "hub") return { hw: (n.r || HUB_R), hh: (n.r || HUB_R), circle: true };
   if (n.kind === "voxel") return { hw: NET_R, hh: NET_R, circle: true };
   if (n.kind === "raven") return { hw: 30, hh: 30, circle: true };
+  if (n.kind === "radar") return { hw: 32, hh: 32, circle: true };
   if (n.kind === "logo") return { hw: 30, hh: 30, circle: true };
   if (n.kind === "cube") return { hw: CUBE / 2, hh: CUBE / 2, circle: false };
   return { hw: nodeWidth(n) / 2, hh: CHIP_H / 2, circle: false };
@@ -470,6 +473,43 @@ const nodeEls = Object.values(nodes).map((n) => {
     </g>
   </g>`;
   }
+  if (n.kind === "radar") {
+    // manwe: a real-time UAV-detection SCOPE — concentric range rings + a
+    // crosshair, a slow rotating sweep with a soft hub-anchored afterglow beam,
+    // and a detected blip that pings. Sky-cyan mark for a sky-watching sensor.
+    // A bespoke SEATED mark (faint disc + label above, like engram) so manwe
+    // reads at the same tier as the other project nodes, not a bare chip; the
+    // scope form is deliberately distinct from crebain's raven-in-reticle and
+    // from cobot-atlas's pill. Reduced-motion parks the sweep and holds the blip
+    // lit (static attribute values). One instance → unique ids.
+    const cx = n.x, cy = n.y, R = 30;
+    const bx = f1(cx + 12), by = f1(cy - 15);          // detected blip (upper-right quadrant)
+    const aw = (46 * Math.PI) / 180;                    // trailing afterglow wedge angle
+    const wx = f1(cx + R * Math.cos(aw)), wy = f1(cy + R * Math.sin(aw));
+    return `<g class="radar">
+    <defs>
+      <radialGradient id="radarBeam" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${cy}" r="${R}">
+        <stop offset="0%" stop-color="currentColor" stop-opacity="0.34"/>
+        <stop offset="100%" stop-color="currentColor" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <circle cx="${cx}" cy="${cy}" r="34" class="radar-seat"/>
+    <circle cx="${cx}" cy="${cy}" r="11" class="radar-ring"/>
+    <circle cx="${cx}" cy="${cy}" r="21" class="radar-ring"/>
+    <circle cx="${cx}" cy="${cy}" r="30" class="radar-ring"/>
+    <line x1="${cx - 30}" y1="${cy}" x2="${cx + 30}" y2="${cy}" class="radar-ring"/>
+    <line x1="${cx}" y1="${cy - 30}" x2="${cx}" y2="${cy + 30}" class="radar-ring"/>
+    <g class="radar-sweep">
+      <path d="M${cx} ${cy} L${f1(cx + R)} ${cy} A${R} ${R} 0 0 1 ${wx} ${wy} Z" class="radar-beam" fill="url(#radarBeam)"/>
+      <line x1="${cx}" y1="${cy}" x2="${f1(cx + R)}" y2="${cy}" class="radar-line"/>
+      <animateTransform attributeName="transform" type="rotate" from="0 ${cx} ${cy}" to="360 ${cx} ${cy}" dur="5s" repeatCount="indefinite"/>
+    </g>
+    <circle cx="${bx}" cy="${by}" r="2.6" class="radar-blip">
+      <animate attributeName="opacity" values="1;0.15;1" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <text x="${cx}" y="${f1(cy - 46)}" text-anchor="middle" class="radar-label">${escapeXML(n.label)}</text>
+  </g>`;
+  }
   // small "chip" nodes
   const w = nodeWidth(n);
   const x = n.x - w / 2;
@@ -502,7 +542,7 @@ const frame = `<g class="frame">
 // Assemble.
 // ---------------------------------------------------------------------------
 const aria =
-  "Project graph: engram (private) and crebain connect through the always-on, two-way NCP protocol to prisoma, a private hub; pid-rs, cobot-atlas, melkor and relief-atlas connect to prisoma; cobot-atlas, melkor and relief-atlas also connect to crebain; cortexel connects to engram.";
+  "Project graph: engram (private) and crebain connect through the always-on, two-way NCP protocol to prisoma, a private hub; pid-rs, cobot-atlas, melkor and relief-atlas connect to prisoma; cobot-atlas, melkor and relief-atlas also connect to crebain, as does manwe, a real-time UAV-detection client; cortexel connects to engram.";
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
   <defs>
@@ -567,6 +607,12 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .raven-seat  { fill: #9caf88; fill-opacity: 0.08; filter: url(#soft); }
     .raven-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #9caf88; }
     .raven-cursor { fill: #9caf88; }
+    .radar        { color: #38bdf8; }
+    .radar-seat   { fill: #38bdf8; fill-opacity: 0.08; filter: url(#soft); }
+    .radar-ring   { fill: none; stroke: #38bdf8; stroke-opacity: 0.4; stroke-width: 1; }
+    .radar-line   { fill: none; stroke: #7dd3fc; stroke-width: 1.4; stroke-linecap: round; opacity: 0.95; }
+    .radar-blip   { fill: #7dd3fc; }
+    .radar-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #38bdf8; }
     .wg-rule    { stroke: #30363d; stroke-width: 1; stroke-opacity: 0.55; }
     .wg-bracket { fill: none; stroke: #fbbf24; stroke-width: 1.5; stroke-linecap: round; stroke-opacity: 0.85; }
     .panel      { fill: #ffffff; fill-opacity: 0.022; stroke: #ffffff; stroke-opacity: 0.07; }
@@ -604,6 +650,12 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .raven-seat { fill-opacity: 0.06; }
       .raven-label { fill: #4b5320; }
       .raven-cursor { fill: #4b5320; }
+      .radar { color: #0284c7; }
+      .radar-seat { fill: #0284c7; fill-opacity: 0.05; }
+      .radar-ring { stroke: #0284c7; }
+      .radar-line { stroke: #0284c7; }
+      .radar-blip { fill: #0284c7; }
+      .radar-label { fill: #0284c7; }
       .wg-rule { stroke: #d0d7de; stroke-opacity: 0.9; }
       .wg-bracket { stroke: #b45309; }
       .panel { fill: #0b1f2a; fill-opacity: 0.025; stroke: #0b1f2a; stroke-opacity: 0.08; }

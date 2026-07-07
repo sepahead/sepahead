@@ -67,6 +67,13 @@ export const PROJECTS = [
     desc: "3D mesh-generation pipeline: 2,023 meshes for robot simulation; dataset published on Hugging Face. Feeds simulation from pid-rs analysis.",
     stack: ["Python"],
   },
+  {
+    name: "manwe",
+    accent: "#38bdf8", light: "#0284c7", grad: "#08283a",
+    stars: 0, repo: "sepahead/manwe",
+    desc: "Real-time UAV detection from vision, in safe Rust: a camera feed to low-latency airspace awareness. Feeds crebain, the robotics client.",
+    stack: ["Rust"],
+  },
 ];
 
 // "More repositories" public repos (repo-tree.mjs --sort activity order); the
@@ -78,7 +85,6 @@ export const REPOS = [
   { name: "mahmoudian-2020-rescience",    area: "ReScience C: info-theoretic transfer fn",  full: "ReScience C info-theoretic transfer-function analysis", repo: "sepahead/mahmoudian-2020-rescience",    metric: "forks", count: 3 },
   { name: "nest-simulator",               area: "NEST simulator fork: orig. contributions", full: "NEST simulator fork with original contributions" },
   { name: "relief-atlas",                 area: "10K+ AI-gen 3D mesh assets for relief",       full: "10K+ AI-generated 3D mesh assets for disaster relief" },
-  { name: "manwe",                        area: "real-time UAV detection in Rust",             full: "real-time UAV detection from vision, in Rust" },
   { name: "silmaril-vision-studio",       area: "computer-vision studio & testbed",            full: "computer-vision studio and testbed" },
 ];
 
