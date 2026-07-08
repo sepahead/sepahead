@@ -32,8 +32,8 @@
     <linearGradient id="eg9" gradientUnits="userSpaceOnUse" x1="496.9" y1="334.9" x2="603" y2="343.2"><stop offset="0%" stop-color="#9caf88"/><stop offset="100%" stop-color="#fb7185"/></linearGradient>
     <linearGradient id="eg10" gradientUnits="userSpaceOnUse" x1="110" y1="327" x2="110" y2="267"><stop offset="0%" stop-color="#e879f9"/><stop offset="100%" stop-color="#bcc6d1"/></linearGradient>
     <linearGradient id="eg11" gradientUnits="userSpaceOnUse" x1="335" y1="373.7" x2="424.9" y2="343.7"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#9caf88"/></linearGradient>
-    <linearGradient id="eg12" gradientUnits="userSpaceOnUse" x1="488.6" y1="387.8" x2="476.9" y2="364.9"><stop offset="0%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#9caf88"/></linearGradient>
-    <linearGradient id="eg13" gradientUnits="userSpaceOnUse" x1="482.8" y1="388.5" x2="276.9" y2="131.6"><stop offset="0%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#34d399"/></linearGradient>
+    <linearGradient id="eg12" gradientUnits="userSpaceOnUse" x1="460" y1="255" x2="460" y2="295"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#9caf88"/></linearGradient>
+    <linearGradient id="eg13" gradientUnits="userSpaceOnUse" x1="429" y1="212.2" x2="286.2" y2="121.1"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#34d399"/></linearGradient>
   </defs>
   <style>
     :root { --hub-accent: #34d399; --cube-accent: #fb923c; --tri-accent: #a78bfa; }
@@ -97,8 +97,8 @@
     <path d="M 496.9 334.9 Q 548.6 356 603 343.2" fill="none" stroke="url(#eg9)" stroke-width="2" stroke-linecap="round" class="edge"/>
     <path d="M 110 327 Q 100.4 297 110 267" fill="none" stroke="url(#eg10)" stroke-width="2" stroke-linecap="round" class="edge"/>
     <path d="M 335 373.7 Q 384.7 373.1 424.9 343.7" fill="none" stroke="url(#eg11)" stroke-width="2" stroke-linecap="round" class="edge"/>
-    <path d="M 488.6 387.8 Q 486.4 374.5 476.9 364.9" fill="none" stroke="url(#eg12)" stroke-width="2" stroke-linecap="round" class="edge"/>
-    <path d="M 482.8 388.5 Q 359.6 276.3 276.9 131.6" fill="none" stroke="url(#eg13)" stroke-width="2" stroke-linecap="round" class="edge"/>
+    <path d="M 460 255 Q 466.4 275 460 295" fill="none" stroke="url(#eg12)" stroke-width="2" stroke-linecap="round" class="edge"/>
+    <path d="M 429 212.2 Q 371.6 144.8 286.2 121.1" fill="none" stroke="url(#eg13)" stroke-width="2" stroke-linecap="round" class="edge"/>
     <path d="M 147 230 Q 182.3 218.7 217.5 230" fill="none" stroke="url(#eg0)" stroke-width="3" stroke-linecap="round" class="edge-live"><animate attributeName="opacity" values="0.7;1;0.7" dur="2.8s" begin="0.00s" repeatCount="indefinite"/></path>
     <path d="M 281.8 214.8 Q 336.8 163.2 411.5 153.1" fill="none" stroke="url(#eg1)" stroke-width="3" stroke-linecap="round" class="edge-live"><animate attributeName="opacity" values="0.7;1;0.7" dur="2.8s" begin="0.30s" repeatCount="indefinite"/></path>
     <path d="M 281.8 245.4 Q 343 303.8 426.7 315.8" fill="none" stroke="url(#eg2)" stroke-width="3" stroke-linecap="round" class="edge-live"><animate attributeName="opacity" values="0.7;1;0.7" dur="2.8s" begin="0.60s" repeatCount="indefinite"/></path>
@@ -258,9 +258,9 @@
     <text x="298" y="340" text-anchor="middle" class="radar-label">MANWE</text>
   </g>
   <g>
-    <rect x="435.5" y="394" width="129" height="32" rx="8" class="chip" stroke="#22d3ee"/>
-    <g transform="translate(446.8 405.4) scale(0.62)"><path d="M2 6 V4.4 a4 4 0 0 1 8 0 V6" fill="none" stroke="#22d3ee" stroke-width="1.5"/><rect x="0" y="6" width="12" height="9" rx="1.6" fill="#22d3ee"/></g>
-    <text x="462.5" y="415" class="chip-label">GALADRIEL</text>
+    <rect x="395.5" y="216" width="129" height="32" rx="8" class="chip" stroke="#ef4444"/>
+    <g transform="translate(406.8 227.3) scale(0.62)"><path d="M2 6 V4.4 a4 4 0 0 1 8 0 V6" fill="none" stroke="#ef4444" stroke-width="1.5"/><rect x="0" y="6" width="12" height="9" rx="1.6" fill="#ef4444"/></g>
+    <text x="422.5" y="237" class="chip-label">GALADRIEL</text>
   </g>
   </g>
   <g class="frame">

@@ -76,7 +76,7 @@ export const PROJECTS = [
   },
   {
     name: "galadriel",
-    accent: "#22d3ee", light: "#0891b2", grad: "#07313a",
+    accent: "#ef4444", light: "#dc2626", grad: "#2a0a0a",
     private: true, repo: "sepahead/galadriel",
     desc: "Galadriel's Mirror: cross-sensor spoof detection via Partial Information Decomposition, watching crebain's sensor fusion. The security client.",
     stack: ["Rust"],
