@@ -74,6 +74,13 @@ export const PROJECTS = [
     desc: "Real-time UAV detection from vision, in safe Rust: a camera feed to low-latency airspace awareness. Feeds crebain, the robotics client.",
     stack: ["Rust"],
   },
+  {
+    name: "galadriel",
+    accent: "#22d3ee", light: "#0891b2", grad: "#07313a",
+    private: true, repo: "sepahead/galadriel",
+    desc: "Galadriel's Mirror: cross-sensor spoof detection via Partial Information Decomposition, watching crebain's sensor fusion. The security client.",
+    stack: ["Rust"],
+  },
 ];
 
 // "More repositories" public repos (repo-tree.mjs --sort activity order); the

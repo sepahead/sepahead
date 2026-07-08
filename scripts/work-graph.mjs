@@ -60,6 +60,7 @@ const nodes = {
   reliefatlas: { x: 690, y: 350, color: "#fb7185", kind: "chip", label: "relief-atlas", dataset: true },
   cortexel:    { x: 110, y: 360, color: "#e879f9", kind: "voxel" },
   manwe:       { x: 298, y: 386, color: "#38bdf8", kind: "radar", label: "manwe" },
+  galadriel:   { x: 500, y: 410, color: "#22d3ee", kind: "chip", label: "galadriel", private: true },
 };
 // Uppercase every label in the SOURCE (not via CSS text-transform, which
 // librsvg and other SVG renderers ignore — content-case renders everywhere).
@@ -78,6 +79,8 @@ const edges = [
   { a: "crebain",     b: "reliefatlas" },
   { a: "cortexel",    b: "engram" },
   { a: "manwe",       b: "crebain" },
+  { a: "galadriel",   b: "crebain" },
+  { a: "galadriel",   b: "pidrs" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -561,7 +564,7 @@ const frame = `<g class="frame">
 // Assemble.
 // ---------------------------------------------------------------------------
 const aria =
-  "Project graph: engram (private) and crebain connect through the always-on, two-way NCP protocol to prisoma, a private hub; pid-rs, cobot-atlas, melkor and relief-atlas connect to prisoma; cobot-atlas, melkor and relief-atlas also connect to crebain, as does manwe, a real-time UAV-detection client; cortexel connects to engram.";
+  "Project graph: engram (private) and crebain connect through the always-on, two-way NCP protocol to prisoma, a private hub; pid-rs, cobot-atlas, melkor and relief-atlas connect to prisoma; cobot-atlas, melkor and relief-atlas also connect to crebain, as does manwe, a real-time UAV-detection client; cortexel connects to engram; galadriel, a private cross-sensor spoof detector, connects to crebain and pid-rs.";
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
   <defs>
