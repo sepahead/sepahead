@@ -140,47 +140,6 @@ function star(cx, cy, r, cls) {
   return `<polygon points="${pts.join(" ")}" class="glyph-fill ${cls}"/>`;
 }
 
-// Project emblem: "reticle" (galadriel). A compact cross-sensor fusion scope —
-// muted sensor bearings converge on a locked consensus target, while ONE accent
-// channel decouples toward a phantom off the consensus (the caught spoof). It
-// echoes the galadriel repo's own logo (four channels lock, one red diverges) and
-// is the project's identity mark. Muted parts use `.em-mute`/`.em-mutef` (a
-// theme-adaptive neutral); the decoupled channel + phantom reuse the accent
-// `.glyph-*` classes so they track the card colour. Centred at (cx, cy), ring r.
-function reticle(cx, cy, r, cls) {
-  const pol = (deg, rad) => [cx + rad * Math.cos((deg * Math.PI) / 180), cy + rad * Math.sin((deg * Math.PI) / 180)];
-  const n = (v) => v.toFixed(1);
-  // Three corroborating sensor bearings (muted): a node on the ring + a stub
-  // pointing inward to the centre — the consensus that agrees.
-  const corr = [200, 158, 116]
-    .map((a) => {
-      const [nx, ny] = pol(a, r);
-      const [ix, iy] = pol(a, r * 0.46);
-      return `<line x1="${n(nx)}" y1="${n(ny)}" x2="${n(ix)}" y2="${n(iy)}" class="em-mute" stroke-width="1.2" stroke-opacity="0.7" stroke-linecap="round"/>` +
-        `<circle cx="${n(nx)}" cy="${n(ny)}" r="1.5" class="em-mutef" fill-opacity="0.85"/>`;
-    })
-    .join("");
-  // The decoupled channel (accent): a sensor whose bearing misses the centre and
-  // points at a phantom just outside the ring.
-  const [rnx, rny] = pol(-45, r);
-  const [phx, phy] = pol(-28, r * 1.72);
-  const hd = 2.6; // phantom diamond half-size
-  const decoupled =
-    `<line x1="${n(rnx)}" y1="${n(rny)}" x2="${n(phx)}" y2="${n(phy)}" class="glyph-stroke ${cls}" stroke-width="1.7" stroke-linecap="round"/>` +
-    `<circle cx="${n(rnx)}" cy="${n(rny)}" r="1.8" class="glyph-fill ${cls}"/>` +
-    `<path d="M${n(phx)} ${n(phy - hd)} L${n(phx + hd)} ${n(phy)} L${n(phx)} ${n(phy + hd)} L${n(phx - hd)} ${n(phy)} Z" class="glyph-fill ${cls}"/>`;
-  return (
-    `<g class="emblem" aria-hidden="true">` +
-    `<circle cx="${cx}" cy="${cy}" r="${r}" class="em-mute" stroke-width="1.2" stroke-opacity="0.5"/>` +
-    `<circle cx="${cx}" cy="${cy}" r="${n(r * 0.5)}" class="em-mute" stroke-width="1" stroke-opacity="0.3"/>` +
-    `<path d="M${cx - r + 2} ${cy} H${cx + r - 2} M${cx} ${cy - r + 2} V${cy + r - 2}" class="em-mute" stroke-width="1" stroke-opacity="0.22"/>` +
-    corr +
-    `<circle cx="${cx}" cy="${cy}" r="2" class="em-mutef" fill-opacity="0.95"/>` +
-    decoupled +
-    `</g>`
-  );
-}
-
 // ---------------------------------------------------------------------------
 // Build one card's inner SVG elements at local origin (PAD_X, 0).
 // Returns { gradDef, body }.
@@ -271,10 +230,6 @@ function buildCard(p) {
     ? `\n    <rect x="${x}" y="${y}" width="${CARD_W}" height="${CARD_H}" rx="14" fill="url(#wash1)" class="wash wash-sheen"/>`
     : "";
 
-  // Optional project emblem, bottom-right (clear of the badge, description and
-  // stack chip). Only projects that opt in via `emblem` get one.
-  const emblem = p.emblem === "reticle" ? `\n    ${reticle(x + CARD_W - 39, y + CARD_H - 30, 13, cls)}` : "";
-
   const body = `  <g class="card-group">
     <rect x="${x}" y="${y}" width="${CARD_W}" height="${CARD_H}" rx="14" class="card"/>
     <rect x="${x}" y="${y}" width="${CARD_W}" height="${CARD_H}" rx="14" fill="url(#${gid})" class="wash"/>${sheenWash}
@@ -283,7 +238,7 @@ function buildCard(p) {
     ${rule}
     ${badge}
     ${desc}
-    ${chips}${emblem}
+    ${chips}
   </g>`;
 
   return { gradDef, body };
@@ -294,25 +249,19 @@ function buildCard(p) {
 // use the c0 class and set its colours from this project's accent / light.
 // ---------------------------------------------------------------------------
 function accentRules(p) {
-  // Emblem's neutral tone: matches the muted `.desc` colour in each theme so the
-  // decoupled (accent) channel is the only colour that pops.
-  const emblemDark = p.emblem ? ` .em-mute { fill: none; stroke: #9da7b3; } .em-mutef { fill: #9da7b3; stroke: none; }` : "";
-  const emblemLight = p.emblem ? ` .em-mute { stroke: #57606a; } .em-mutef { fill: #57606a; }` : "";
   const dark = (
     `.c0.title { fill: ${p.hint || p.accent}; } .c0.rule { fill: ${p.accent}; } ` +
     `.c0.spine { stroke: ${p.accent}; } .c0.badge { fill: ${p.accent}; } ` +
     `.c0.chip { stroke: ${p.accent}; } .c0.chip-label { fill: ${p.accent}; } ` +
     `.c0.glyph-fill { fill: ${p.accent}; } .c0.glyph-stroke { stroke: ${p.accent}; }` +
-    (p.hint ? ` .spine-light { display: none; }` : "") +
-    emblemDark
+    (p.hint ? ` .spine-light { display: none; }` : "")
   );
   const light = (
     `.c0.title { fill: ${p.hintLight || p.light}; } .c0.rule { fill: ${p.light}; } ` +
     `.c0.spine { stroke: ${p.light}; } .c0.badge { fill: ${p.light}; } ` +
     `.c0.chip { stroke: ${p.light}; } .c0.chip-label { fill: ${p.light}; } ` +
     `.c0.glyph-fill { fill: ${p.light}; } .c0.glyph-stroke { stroke: ${p.light}; }` +
-    (p.hint ? ` .spine-dark { display: none; } .spine-light { display: inline; }` : "") +
-    emblemLight
+    (p.hint ? ` .spine-dark { display: none; } .spine-light { display: inline; }` : "")
   );
   return { dark, light };
 }

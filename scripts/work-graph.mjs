@@ -60,7 +60,7 @@ const nodes = {
   reliefatlas: { x: 690, y: 350, color: "#fb7185", kind: "chip", label: "relief-atlas", dataset: true },
   cortexel:    { x: 110, y: 360, color: "#e879f9", kind: "voxel" },
   manwe:       { x: 298, y: 386, color: "#38bdf8", kind: "radar", label: "manwe" },
-  galadriel:   { x: 460, y: 232, color: "#ef4444", kind: "chip", label: "galadriel", private: true },
+  galadriel:   { x: 460, y: 232, color: "#ef4444", kind: "reticle", label: "galadriel", private: true },
 };
 // Uppercase every label in the SOURCE (not via CSS text-transform, which
 // librsvg and other SVG renderers ignore — content-case renders everywhere).
@@ -111,6 +111,7 @@ function halfExtents(n) {
   if (n.kind === "voxel") return { hw: NET_R, hh: NET_R, circle: true };
   if (n.kind === "raven") return { hw: 30, hh: 30, circle: true };
   if (n.kind === "radar") return { hw: 32, hh: 32, circle: true };
+  if (n.kind === "reticle") return { hw: 30, hh: 30, circle: true };
   if (n.kind === "logo") return { hw: 30, hh: 30, circle: true };
   if (n.kind === "cube") return { hw: CUBE / 2, hh: CUBE / 2, circle: false };
   return { hw: nodeWidth(n) / 2, hh: CHIP_H / 2, circle: false };
@@ -532,6 +533,47 @@ const nodeEls = Object.values(nodes).map((n) => {
     <text x="${cx}" y="${f1(cy - 46)}" text-anchor="middle" class="radar-label">${escapeXML(n.label)}</text>
   </g>`;
   }
+  if (n.kind === "reticle") {
+    // galadriel: a cross-sensor FUSION RETICLE — several muted sensor bearings
+    // converge on a locked consensus target, while ONE accent-red channel
+    // decouples toward a phantom that pings (the caught spoof). A bespoke SEATED
+    // mark (faint disc + label above, like manwe/engram) so galadriel reads at the
+    // project tier. Deliberately distinct from manwe's single-sweep radar (this is
+    // MANY static bearings + one divergent) and crebain's raven-in-reticle. It
+    // echoes galadriel's own repo logo (channels lock, one red diverges). Reduced-
+    // motion parks the phantom ping (static values hold it lit). One instance.
+    const cx = n.x, cy = n.y, RO = 27;
+    const pol = (deg, rad) => [f1(cx + rad * Math.cos((deg * Math.PI) / 180)), f1(cy + rad * Math.sin((deg * Math.PI) / 180))];
+    // three corroborating sensor bearings: a node on the outer ring + a stub
+    // pointing inward to the locked centre — the consensus that agrees.
+    const corr = [70, 150, 225].map((a) => {
+      const [nx, ny] = pol(a, RO);
+      const [ix, iy] = pol(a, 8);
+      return `<line x1="${nx}" y1="${ny}" x2="${ix}" y2="${iy}" class="gal-chan"/><circle cx="${nx}" cy="${ny}" r="1.7" class="gal-node"/>`;
+    }).join("");
+    // the decoupled channel: a sensor whose bearing MISSES the centre and points
+    // outward at a phantom that pings just beyond the ring.
+    const [rnx, rny] = pol(-30, RO);
+    const [phx, phy] = pol(-16, 38);
+    const hd = 3;
+    const decoupled =
+      `<line x1="${rnx}" y1="${rny}" x2="${phx}" y2="${phy}" class="gal-hot"/>` +
+      `<circle cx="${rnx}" cy="${rny}" r="2" class="gal-hotf"/>` +
+      `<path d="M${phx} ${f1(phy - hd)} L${f1(phx + hd)} ${phy} L${phx} ${f1(phy + hd)} L${f1(phx - hd)} ${phy} Z" class="gal-hotf"><animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/></path>` +
+      `<circle cx="${phx}" cy="${phy}" r="5.5" fill="none" class="gal-hot" stroke-opacity="0.5"><animate attributeName="r" values="3;7.5;3" dur="2s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values="0.6;0;0.6" dur="2s" repeatCount="indefinite"/></circle>`;
+    return `<g class="gal">
+    <circle cx="${cx}" cy="${cy}" r="34" class="gal-seat"/>
+    <circle cx="${cx}" cy="${cy}" r="12" class="gal-ring"/>
+    <circle cx="${cx}" cy="${cy}" r="${RO}" class="gal-ring"/>
+    <circle cx="${cx}" cy="${cy}" r="30" class="gal-ring" stroke-dasharray="1.5 4"/>
+    <path d="M${cx - 7} ${cy} H${cx + 7} M${cx} ${cy - 7} V${cy + 7}" class="gal-ring"/>
+    ${corr}
+    <circle cx="${cx}" cy="${cy}" r="5" class="gal-ring"/>
+    <circle cx="${cx}" cy="${cy}" r="2" class="gal-node"/>
+    ${decoupled}
+    <text x="${cx}" y="${f1(cy - 46)}" text-anchor="middle" class="gal-label">${escapeXML(n.label)}</text>
+  </g>`;
+  }
   // small "chip" nodes
   const w = nodeWidth(n);
   const x = n.x - w / 2;
@@ -632,6 +674,13 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .radar-line   { fill: none; stroke: #7dd3fc; stroke-width: 1.4; stroke-linecap: round; opacity: 0.95; }
     .radar-blip   { fill: #7dd3fc; }
     .radar-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #38bdf8; }
+    .gal-seat   { fill: #ef4444; fill-opacity: 0.07; filter: url(#soft); }
+    .gal-ring   { fill: none; stroke: #8b97a6; stroke-opacity: 0.42; stroke-width: 1; }
+    .gal-chan   { fill: none; stroke: #b9c2cd; stroke-width: 1.4; stroke-linecap: round; stroke-opacity: 0.82; }
+    .gal-node   { fill: #b9c2cd; }
+    .gal-hot    { fill: none; stroke: #ef4444; stroke-width: 1.8; stroke-linecap: round; }
+    .gal-hotf   { fill: #ef4444; }
+    .gal-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #ef4444; }
     .wg-rule    { stroke: #30363d; stroke-width: 1; stroke-opacity: 0.55; }
     .wg-bracket { fill: none; stroke: #fbbf24; stroke-width: 1.5; stroke-linecap: round; stroke-opacity: 0.85; }
     .panel      { fill: #ffffff; fill-opacity: 0.022; stroke: #ffffff; stroke-opacity: 0.07; }
@@ -673,6 +722,13 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .radar-line { stroke: #0284c7; }
       .radar-blip { fill: #0284c7; }
       .radar-label { fill: #0284c7; }
+      .gal-seat { fill: #dc2626; fill-opacity: 0.05; }
+      .gal-ring { stroke: #6b7684; }
+      .gal-chan { stroke: #59636f; }
+      .gal-node { fill: #59636f; }
+      .gal-hot { stroke: #dc2626; }
+      .gal-hotf { fill: #dc2626; }
+      .gal-label { fill: #dc2626; }
       .wg-rule { stroke: #d0d7de; stroke-opacity: 0.9; }
       .wg-bracket { stroke: #b45309; }
       .panel { fill: #0b1f2a; fill-opacity: 0.025; stroke: #0b1f2a; stroke-opacity: 0.08; }

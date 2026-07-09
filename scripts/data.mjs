@@ -78,7 +78,6 @@ export const PROJECTS = [
     name: "galadriel",
     accent: "#ef4444", light: "#dc2626", grad: "#2a0a0a",
     private: true, repo: "sepahead/galadriel",
-    emblem: "reticle", // cross-sensor fusion reticle: consensus + one decoupled channel
     desc: "Galadriel's Mirror: cross-sensor spoof detection via Partial Information Decomposition, watching crebain's sensor fusion. The security client.",
     stack: ["Rust"],
   },
