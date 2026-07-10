@@ -47,11 +47,11 @@ export const PROJECTS = [
     stack: ["Python", "C++", "CUDA"],
   },
   {
-    name: "cortexel",
-    accent: "#e879f9", light: "#c026d3", grad: "#2a0a2e",
-    stars: 3, repo: "sepahead/cortexel",
-    desc: "Agent-consumable scientific-visualization library for neural simulations: VizSpec to spike rasters & STDP curves, provenance fail-closed.",
-    stack: ["TS", "React", "Three"],
+    name: "galadriel",
+    accent: "#ef4444", light: "#dc2626", grad: "#2a0a0a",
+    private: true, repo: "sepahead/galadriel",
+    desc: "Galadriel's Mirror: cross-sensor spoof detection via Partial Information Decomposition, watching crebain's sensor fusion. The sensor-integrity client.",
+    stack: ["Rust"],
   },
   {
     name: "pid-rs",
@@ -61,11 +61,11 @@ export const PROJECTS = [
     stack: ["Rust"],
   },
   {
-    name: "cobot-atlas",
-    accent: "#60a5fa", light: "#2563eb", grad: "#0b1f3a",
-    stars: 5, repo: "sepahead/cobot-atlas",
-    desc: "3D mesh-generation pipeline: 2,023 meshes for collaborative-robot simulation & embodied AI; dataset published on Hugging Face.",
-    stack: ["Python"],
+    name: "cortexel",
+    accent: "#e879f9", light: "#c026d3", grad: "#2a0a2e",
+    stars: 3, repo: "sepahead/cortexel",
+    desc: "Agent-consumable scientific-visualization library for neural simulations: VizSpec to spike rasters & STDP curves, provenance fail-closed.",
+    stack: ["TS", "React", "Three"],
   },
   {
     name: "manwe",
@@ -75,11 +75,11 @@ export const PROJECTS = [
     stack: ["Rust"],
   },
   {
-    name: "galadriel",
-    accent: "#ef4444", light: "#dc2626", grad: "#2a0a0a",
-    private: true, repo: "sepahead/galadriel",
-    desc: "Galadriel's Mirror: cross-sensor spoof detection via Partial Information Decomposition, watching crebain's sensor fusion. The sensor-integrity client.",
-    stack: ["Rust"],
+    name: "cobot-atlas",
+    accent: "#60a5fa", light: "#2563eb", grad: "#0b1f3a",
+    stars: 5, repo: "sepahead/cobot-atlas",
+    desc: "3D mesh-generation pipeline: 2,023 meshes for collaborative-robot simulation & embodied AI; dataset published on Hugging Face.",
+    stack: ["Python"],
   },
 ];
 
