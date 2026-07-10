@@ -53,15 +53,14 @@
     .chip       { fill: #0d1117; stroke-width: 1.5; }
     .chip-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; }
     .hub-fill   { fill: url(#hubGrad); }
-    .hub-ring   { fill: none; stroke: #34d399; stroke-width: 2; }
+    .hub-ring   { fill: none; stroke: url(#hubBezel); stroke-width: 2.2; }
     .hub-glow   { fill: none; stroke: #34d399; stroke-width: 6; stroke-opacity: 0.22; filter: url(#soft); }
     .hub-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6ee7b7; }
-    .seat-ring   { fill: none; stroke-width: 1.8; }
-    .seat-groove { fill: none; stroke: #05070b; stroke-opacity: 0.45; stroke-width: 1; }
-    .seat-gate   { fill: url(#gateGrad); }
-    .ring-gate   { stroke: #fbbf24; }
-    .seat-vox    { fill: url(#voxGrad); }
-    .ring-vox    { stroke: #e879f9; }
+    .seat-ring     { fill: none; stroke-width: 2.2; }
+    .seat-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
+    .seat-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
+    .seat-gate     { fill: url(#gateGrad); }
+    .seat-vox      { fill: url(#voxGrad); }
     .mel-plate    { fill: url(#melPlate); }
     .mel-scan     { fill: none; stroke: #fb923c; stroke-opacity: 0.09; stroke-width: 1; }
     .mel-rock     { fill: #050302; }
@@ -71,12 +70,10 @@
     .mel-edge     { fill: none; stroke: url(#melBezel); stroke-width: 2.4; stroke-linejoin: miter; }
     .mel-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .mel-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
-    .pz-beam    { stroke-width: 1.8; stroke-linecap: round; }
     .cube-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fdba74; stroke: #2b1a10; }
     .logo-label     { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #cdd6e0; }
     .prz-body     { fill: url(#przGlass); }
-    .prz-in       { stroke: #f4f7fa; stroke-width: 2; stroke-linecap: round; }
-    .prz-inseg    { stroke: #f4f7fa; stroke-opacity: 0.35; stroke-width: 2; stroke-linecap: round; }
+    .prz-core     { fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-opacity: 0.85; }
     .prz-edge     { fill: none; stroke: url(#przSilver); stroke-width: 2.4; }
     .prz-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .prz-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
@@ -136,34 +133,17 @@
       .chip { fill: #ffffff; }
       .chip-label { fill: #1f2328; }
       .hub-fill { fill: #ffffff; }
-      .hub-ring { stroke: #059669; }
       .hub-glow { stroke: #059669; stroke-opacity: 0.12; }
       .hub-label { fill: #059669; }
-      .prz-in { stroke: #475569; }
       .logo-label { fill: #57626f; }
       .tri-label { fill: #6d28d9; }
-      .gate-wire { stroke: #b45309; }
-      .gate-wire-perc { stroke: #b45309; }
-      .gate-bar { fill: #b45309; stroke: #b45309; }
-      .gate-port { fill: #b45309; }
-      .gate-tick { stroke: #b45309; }
-      .gate-packet { fill: #b45309; }
-      .gate-packet-perc { fill: #b45309; }
       .gate-label { fill: #b45309; }
-      .vox-top { fill: #c026d3; fill-opacity: 0.3; stroke: #c026d3; }
-      .vox-left { fill: #c026d3; fill-opacity: 0.16; stroke: #c026d3; }
-      .vox-right { fill: #c026d3; fill-opacity: 0.07; stroke: #c026d3; }
       .flag-edge { stroke: #000000; stroke-opacity: 0.25; }
       .vox-label { fill: #c026d3; }
-      .vox-net { color: #c026d3; }
       .raven-seat { fill-opacity: 0.06; }
       .raven-label { fill: #4b5320; }
       .raven-cursor { fill: #4b5320; }
       .radar-label { fill: #0284c7; }
-      .seat-gate, .seat-vox { fill: #ffffff; }
-      .ring-gate { stroke: #b45309; }
-      .ring-vox { stroke: #c026d3; }
-      .seat-groove { stroke: #1f2328; stroke-opacity: 0.1; }
       .gal-seat { fill: #dc2626; fill-opacity: 0.04; }
       .gal-orbit { stroke: #dc2626; stroke-opacity: 0.5; }
       .gal-tick { stroke: #dc2626; }
@@ -241,16 +221,29 @@
     <text x="110" y="184" text-anchor="middle" class="logo-label">ENGRAM</text>
   </g>
   <g>
+    <defs>
+      <linearGradient id="hubBezel" x1="0" y1="62" x2="0" y2="134" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#a7f3d0"/><stop offset="45%" stop-color="#34d399"/><stop offset="100%" stop-color="#065f46"/>
+      </linearGradient>
+    </defs>
     <circle cx="250" cy="98" r="36" class="hub-glow"><animate attributeName="r" values="36;38;36" dur="3.2s" repeatCount="indefinite"/></circle>
-    <g filter="url(#nodeShadow)"><circle cx="250" cy="98" r="36" class="hub-fill"><animate attributeName="r" values="36;38;36" dur="3.2s" repeatCount="indefinite"/></circle></g>
-    <circle cx="250" cy="98" r="36" class="hub-ring"><animate attributeName="r" values="36;38;36" dur="3.2s" repeatCount="indefinite"/></circle>
+    <g filter="url(#nodeShadow)"><circle cx="250" cy="98" r="36" class="hub-fill"/></g>
+    <circle cx="250" cy="98" r="36" class="hub-ring"/>
+    <circle cx="250" cy="98" r="33.8" class="seat-groove"/>
+    <circle cx="250" cy="98" r="37.4" class="seat-hairline"/>
     
     <text x="250" y="104" text-anchor="middle" class="hub-label">PID-RS</text>
   </g>
   <g>
+    <defs>
+      <linearGradient id="gateBezel" x1="0" y1="196" x2="0" y2="264" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#fde68a"/><stop offset="45%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#92400e"/>
+      </linearGradient>
+    </defs>
     <g filter="url(#nodeShadow)"><circle cx="250" cy="230" r="34" class="seat-gate"/></g>
-    <circle cx="250" cy="230" r="34" class="seat-ring ring-gate"/>
+    <circle cx="250" cy="230" r="34" stroke="url(#gateBezel)" class="seat-ring"/>
     <circle cx="250" cy="230" r="31.8" class="seat-groove"/>
+    <circle cx="250" cy="230" r="35.4" class="seat-hairline"/>
     <g filter="url(#soft)">
       <path d="M224 222 H243 M257 222 H276" class="gate-wire-perc"/>
       <path d="M224 238 H243 M257 238 H276" class="gate-wire"/>
@@ -290,9 +283,30 @@
       <linearGradient id="przSilver" x1="0" y1="77" x2="0" y2="156.5" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#f8fafc"/><stop offset="40%" stop-color="#c7d0da"/><stop offset="72%" stop-color="#8b96a3"/><stop offset="100%" stop-color="#525c66"/>
       </linearGradient>
-      <linearGradient id="przFan" x1="0" y1="110" x2="0" y2="154" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#34d399" stop-opacity="0.16"/><stop offset="50%" stop-color="#fbbf24" stop-opacity="0.1"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0.16"/>
+      <linearGradient id="przIn" x1="432.5" y1="124.7" x2="458" y2="134" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#f4f7fa" stop-opacity="0.5"/><stop offset="100%" stop-color="#f4f7fa" stop-opacity="0.1"/>
       </linearGradient>
+      <radialGradient id="przInGlow" gradientUnits="userSpaceOnUse" cx="432.5" cy="124.7" r="4.5">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="przRayG" x1="458" y1="134" x2="485.2" y2="120.7" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#34d399" stop-opacity="0.8"/><stop offset="100%" stop-color="#34d399" stop-opacity="0.12"/>
+      </linearGradient>
+      <radialGradient id="przRayGGlow" gradientUnits="userSpaceOnUse" cx="485.2" cy="120.7" r="5.5">
+        <stop offset="0%" stop-color="#34d399" stop-opacity="0.7"/><stop offset="100%" stop-color="#34d399" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="przRayA" x1="458" y1="134" x2="493" y2="134.2" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.8"/><stop offset="100%" stop-color="#fbbf24" stop-opacity="0.12"/>
+      </linearGradient>
+      <radialGradient id="przRayAGlow" gradientUnits="userSpaceOnUse" cx="493" cy="134.2" r="5.5">
+        <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.7"/><stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="przRayR" x1="458" y1="134" x2="500.4" y2="147" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#ef4444" stop-opacity="0.8"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0.12"/>
+      </linearGradient>
+      <radialGradient id="przRayRGlow" gradientUnits="userSpaceOnUse" cx="500.4" cy="147" r="5.5">
+        <stop offset="0%" stop-color="#ef4444" stop-opacity="0.7"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+      </radialGradient>
       <radialGradient id="przFlare" gradientUnits="userSpaceOnUse" cx="458" cy="134" r="9">
         <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/><stop offset="45%" stop-color="#e9d5ff" stop-opacity="0.5"/><stop offset="100%" stop-color="#e9d5ff" stop-opacity="0"/>
       </radialGradient>
@@ -302,26 +316,28 @@
     <g clip-path="url(#przClip)">
       <polygon points="460,77 505.9,156.5 414.1,156.5" fill="url(#przCore)"/>
       <polygon points="460,77 505.9,156.5 414.1,156.5" fill="url(#przSheen)"/>
-      <line class="prz-inseg" x1="432.5" y1="124.6" x2="458" y2="134"/>
+      <polygon points="431.2,127 433.8,122.4 458,134" fill="url(#przIn)"/>
+      <polygon points="458,134 487.7,125.1 482.7,116.4" fill="url(#przRayG)"/>
+      <polygon points="458,134 495.8,139 490.3,129.5" fill="url(#przRayA)"/>
+      <polygon points="458,134 502.9,151.3 497.9,142.6" fill="url(#przRayR)"/>
+      <g filter="url(#edgeGlow)">
+        <line class="prz-core" x1="432.5" y1="124.7" x2="456.5" y2="133.4" stroke="#f4f7fa"/>
+        <line class="prz-core" x1="458" y1="134" x2="485.2" y2="120.7" stroke="#34d399"/>
+        <line class="prz-core" x1="458" y1="134" x2="493" y2="134.2" stroke="#fbbf24"/>
+        <line class="prz-core" x1="458" y1="134" x2="500.4" y2="147" stroke="#ef4444"/>
+      </g>
+      <circle cx="485.2" cy="120.7" r="5.5" fill="url(#przRayGGlow)"/>
+      <circle cx="493" cy="134.2" r="5.5" fill="url(#przRayAGlow)"/>
+      <circle cx="500.4" cy="147" r="5.5" fill="url(#przRayRGlow)"/>
+      <circle cx="432.5" cy="124.7" r="4.5" fill="url(#przInGlow)"/>
     </g>
-    <line class="prz-in" x1="404" y1="114" x2="433" y2="124.8"/>
     <polygon points="460,77 505.9,156.5 414.1,156.5" class="prz-edge" stroke-linejoin="round"/>
     <polygon points="460,81.8 501.7,154.1 418.3,154.1" class="prz-groove" stroke-linejoin="round"/>
     <polygon points="460,74.2 508.3,157.9 411.7,157.9" class="prz-hairline" stroke-linejoin="round"/>
     <path class="prz-glint" d="M460 72.5 V81.5 M455.5 77 H464.5"/>
-    <polygon points="458,134 510,110 508,154" fill="url(#przFan)"/>
-    <g filter="url(#edgeGlow)">
-      <line class="pz-beam" x1="458" y1="134" x2="510" y2="110" stroke="#34d399"/>
-      <line class="pz-beam" x1="458" y1="134" x2="515" y2="134" stroke="#fbbf24"/>
-      <line class="pz-beam" x1="458" y1="134" x2="508" y2="154" stroke="#ef4444"/>
-      <circle cx="510" cy="110" r="1.8" fill="#34d399"/>
-      <circle cx="515" cy="134" r="1.8" fill="#fbbf24"/>
-      <circle cx="508" cy="154" r="1.8" fill="#ef4444"/>
-    </g>
     <circle cx="458" cy="134" r="8" fill="url(#przFlare)">
       <animate attributeName="opacity" values="0.8;1;0.8" dur="3.4s" repeatCount="indefinite"/>
     </circle>
-    <g opacity="0.85"><g transform="translate(455.8 96.8) scale(0.7)"><path d="M2 6 V4.4 a4 4 0 0 1 8 0 V6" fill="none" stroke="#c7d0da" stroke-width="1.5"/><rect x="0" y="6" width="12" height="9" rx="1.6" fill="#c7d0da"/></g></g>
     <text x="460" y="172.5" text-anchor="middle" class="tri-label">PRISOMA</text>
   </g>
   <g>
@@ -389,9 +405,15 @@
     <text x="637" y="355" class="chip-label">RELIEF-ATLAS</text>
   </g>
   <g class="vox-net">
+    <defs>
+      <linearGradient id="voxBezel" x1="0" y1="326" x2="0" y2="394" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#f5d0fe"/><stop offset="45%" stop-color="#e879f9"/><stop offset="100%" stop-color="#86198f"/>
+      </linearGradient>
+    </defs>
     <g filter="url(#nodeShadow)"><circle cx="110" cy="360" r="34" class="seat-vox"/></g>
-    <circle cx="110" cy="360" r="34" class="seat-ring ring-vox"/>
+    <circle cx="110" cy="360" r="34" stroke="url(#voxBezel)" class="seat-ring"/>
     <circle cx="110" cy="360" r="31.8" class="seat-groove"/>
+    <circle cx="110" cy="360" r="35.4" class="seat-hairline"/>
     <defs><linearGradient id="voxCalli0" gradientUnits="userSpaceOnUse" x1="110" y1="335" x2="90" y2="373"><stop offset="0" stop-color="currentColor" stop-opacity="0.45"/><stop offset="1" stop-color="currentColor" stop-opacity="0.725"/></linearGradient><linearGradient id="voxCalli1" gradientUnits="userSpaceOnUse" x1="110" y1="335" x2="130" y2="373"><stop offset="0" stop-color="currentColor" stop-opacity="0.45"/><stop offset="1" stop-color="currentColor" stop-opacity="1"/></linearGradient><linearGradient id="voxCalli2" gradientUnits="userSpaceOnUse" x1="90" y1="373" x2="130" y2="373"><stop offset="0" stop-color="currentColor" stop-opacity="0.725"/><stop offset="1" stop-color="currentColor" stop-opacity="1"/></linearGradient></defs>
     <g filter="url(#soft)">
       <path d="M110 335 Q92.7 350.2 90 373 Q96.6 352.2 110 335 Z" fill="url(#voxCalli0)"/> <path d="M110 335 Q123.4 352.2 130 373 Q127.3 350.2 110 335 Z" fill="url(#voxCalli1)"/> <path d="M90 373 Q110 381.2 130 373 Q110 376.8 90 373 Z" fill="url(#voxCalli2)"/>

@@ -284,25 +284,42 @@ function germanFlag(cxf, top, w) {
 }
 
 // Solid badge seat shared by the seated marks (NCP's gate, cortexel's voxel
-// net): an accent-tinted machined disc — crisp accent ring, dark inner groove,
-// soft drop shadow — the same "real object" tier as engram's medallion and
-// crebain's white badge, replacing the old barely-there glow discs.
-function seat(cx, cy, name) {
-  return `<g filter="url(#nodeShadow)"><circle cx="${cx}" cy="${cy}" r="${SEAT_R}" class="seat-${name}"/></g>
-    <circle cx="${cx}" cy="${cy}" r="${SEAT_R}" class="seat-ring ring-${name}"/>
-    <circle cx="${cx}" cy="${cy}" r="${f1(SEAT_R - 2.2)}" class="seat-groove"/>`;
+// net): an accent-tinted machined disc at manwe's border grade — a chrome
+// gradient bezel in the project hue (lit crown → accent → shadowed base), a
+// dark inner groove, an outer hairline that keeps the edge crisp on white,
+// and a soft drop shadow. `stops` are the bezel's [lit, accent, dark] colours;
+// the gradient def is emitted per seat (unique id, userSpaceOnUse coords).
+function seat(cx, cy, name, stops) {
+  return `<defs>
+      <linearGradient id="${name}Bezel" x1="0" y1="${f1(cy - SEAT_R)}" x2="0" y2="${f1(cy + SEAT_R)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="${stops[0]}"/><stop offset="45%" stop-color="${stops[1]}"/><stop offset="100%" stop-color="${stops[2]}"/>
+      </linearGradient>
+    </defs>
+    <g filter="url(#nodeShadow)"><circle cx="${cx}" cy="${cy}" r="${SEAT_R}" class="seat-${name}"/></g>
+    <circle cx="${cx}" cy="${cy}" r="${SEAT_R}" stroke="url(#${name}Bezel)" class="seat-ring"/>
+    <circle cx="${cx}" cy="${cy}" r="${f1(SEAT_R - 2.2)}" class="seat-groove"/>
+    <circle cx="${cx}" cy="${cy}" r="${f1(SEAT_R + 1.4)}" class="seat-hairline"/>`;
 }
 
 const nodeEls = Object.values(nodes).map((n) => {
   if (n.kind === "hub") {
-    // pid-rs: the crisp instrument dial — glow demoted to a soft underlay so
-    // the ring itself stays sharp; the slow radial breath is kept on all layers.
+    // pid-rs: the crisp instrument dial at manwe's border grade — a rigid
+    // chrome-emerald bezel with inner groove and outer hairline over a drop
+    // shadow; only the soft glow underlay breathes (the dial itself is a
+    // machined object, so it doesn't flex).
     const r = n.r || HUB_R;
     const breathe = `<animate attributeName="r" values="${r};${r + 2};${r}" dur="3.2s" repeatCount="indefinite"/>`;
     return `<g>
+    <defs>
+      <linearGradient id="hubBezel" x1="0" y1="${f1(n.y - r)}" x2="0" y2="${f1(n.y + r)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#a7f3d0"/><stop offset="45%" stop-color="#34d399"/><stop offset="100%" stop-color="#065f46"/>
+      </linearGradient>
+    </defs>
     <circle cx="${n.x}" cy="${n.y}" r="${r}" class="hub-glow">${breathe}</circle>
-    <g filter="url(#nodeShadow)"><circle cx="${n.x}" cy="${n.y}" r="${r}" class="hub-fill">${breathe}</circle></g>
-    <circle cx="${n.x}" cy="${n.y}" r="${r}" class="hub-ring">${breathe}</circle>
+    <g filter="url(#nodeShadow)"><circle cx="${n.x}" cy="${n.y}" r="${r}" class="hub-fill"/></g>
+    <circle cx="${n.x}" cy="${n.y}" r="${r}" class="hub-ring"/>
+    <circle cx="${n.x}" cy="${n.y}" r="${f1(r - 2.2)}" class="seat-groove"/>
+    <circle cx="${n.x}" cy="${n.y}" r="${f1(r + 1.4)}" class="seat-hairline"/>
     ${n.private ? lock(n.x, n.y - 24, 1, "var(--hub-accent)") : ""}
     <text x="${n.x}" y="${n.y + (n.private ? 12 : 6)}" text-anchor="middle" class="hub-label">${escapeXML(n.label)}</text>
   </g>`;
@@ -420,20 +437,57 @@ const nodeEls = Object.values(nodes).map((n) => {
     // prisoma: the INFORMATION PRISM recut in SMOKED GLASS — a dark violet
     // glass body with an inner luminance core, a diagonal window-light sheen
     // and LIQUID-SILVER edges (chrome-gradient bezel + dark inner groove +
-    // outer hairline: engram's machining applied to a prism). One white beam
-    // of raw information enters, refracts through the glass, flares at the
-    // point of incidence and disperses into the three PID component beams
-    // (unique / redundant / synergistic) through a faint spectral fan. Glass
-    // and silver are theme-FIXED (a real object); only the label ink adapts.
-    // Static apart from a slow flare breath → reduced-motion safe. One
-    // instance → unique ids.
+    // outer hairline: engram's machining applied to a prism). ALL light lives
+    // INSIDE the glass: a white ray enters through the left face, focuses to
+    // a flare at the point of incidence, and disperses as three tapered RAYS
+    // (unique / redundant / synergistic — the PID components) that land as
+    // soft glows on the inner right face. Glass and silver are theme-FIXED
+    // (a real object); only the label ink adapts. Static apart from a slow
+    // flare breath → reduced-motion safe. One instance → unique ids.
     const cx = n.x, cy = n.y, R = TRI_CIRCUM;
     const tri = (r) => {
       const dx = (r * Math.sqrt(3)) / 2;
       return `${f1(cx)},${f1(cy - r)} ${f1(cx + dx)},${f1(cy + r / 2)} ${f1(cx - dx)},${f1(cy + r / 2)}`;
     };
     const topY = f1(cy - R), botY = f1(cy + R / 2);
-    const sx = cx - 2, sy = cy + 4; // point of incidence
+    const sx = cx - 2, sy = cy + 4; // point of incidence (the flare)
+    // Faces: apex → bottom-right (rays land here), apex → bottom-left (the
+    // white ray enters here). fu/lu are unit vectors along each face.
+    const apex = { x: cx, y: cy - R };
+    const brv = { x: cx + (R * Math.sqrt(3)) / 2, y: cy + R / 2 };
+    const blv = { x: cx - (R * Math.sqrt(3)) / 2, y: cy + R / 2 };
+    const fl = Math.hypot(brv.x - apex.x, brv.y - apex.y);
+    const fu = { x: (brv.x - apex.x) / fl, y: (brv.y - apex.y) / fl };
+    const lu = { x: (blv.x - apex.x) / fl, y: (blv.y - apex.y) / fl };
+    const land = (t) => ({ x: apex.x + (brv.x - apex.x) * t, y: apex.y + (brv.y - apex.y) * t });
+    const RAYS = [
+      { t: 0.55, hw: 5, c: "#34d399", id: "przRayG" },
+      { t: 0.72, hw: 5.5, c: "#fbbf24", id: "przRayA" },
+      { t: 0.88, hw: 5, c: "#ef4444", id: "przRayR" },
+    ];
+    const rayDefs = RAYS.map(({ t, c, id }) => {
+      const L = land(t);
+      return `<linearGradient id="${id}" x1="${f1(sx)}" y1="${f1(sy)}" x2="${f1(L.x)}" y2="${f1(L.y)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="${c}" stop-opacity="0.8"/><stop offset="100%" stop-color="${c}" stop-opacity="0.12"/>
+      </linearGradient>
+      <radialGradient id="${id}Glow" gradientUnits="userSpaceOnUse" cx="${f1(L.x)}" cy="${f1(L.y)}" r="5.5">
+        <stop offset="0%" stop-color="${c}" stop-opacity="0.7"/><stop offset="100%" stop-color="${c}" stop-opacity="0"/>
+      </radialGradient>`;
+    }).join("\n      ");
+    const rayWedges = RAYS.map(({ t, hw, id }) => {
+      const L = land(t);
+      return `<polygon points="${f1(sx)},${f1(sy)} ${f1(L.x + fu.x * hw)},${f1(L.y + fu.y * hw)} ${f1(L.x - fu.x * hw)},${f1(L.y - fu.y * hw)}" fill="url(#${id})"/>`;
+    }).join("\n      ");
+    const rayCores = RAYS.map(({ t, c }) => {
+      const L = land(t);
+      return `<line class="prz-core" x1="${f1(sx)}" y1="${f1(sy)}" x2="${f1(L.x)}" y2="${f1(L.y)}" stroke="${c}"/>`;
+    }).join("\n        ");
+    const rayGlows = RAYS.map(({ t, id }) => {
+      const L = land(t);
+      return `<circle cx="${f1(L.x)}" cy="${f1(L.y)}" r="5.5" fill="url(#${id}Glow)"/>`;
+    }).join("\n      ");
+    // White in-ray: enters mid-left-face, converges on the flare.
+    const e = { x: apex.x + (blv.x - apex.x) * 0.6, y: apex.y + (blv.y - apex.y) * 0.6 };
     return `<g>
     <defs>
       <linearGradient id="przGlass" x1="0" y1="${topY}" x2="0" y2="${botY}" gradientUnits="userSpaceOnUse">
@@ -448,9 +502,13 @@ const nodeEls = Object.values(nodes).map((n) => {
       <linearGradient id="przSilver" x1="0" y1="${topY}" x2="0" y2="${botY}" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#f8fafc"/><stop offset="40%" stop-color="#c7d0da"/><stop offset="72%" stop-color="#8b96a3"/><stop offset="100%" stop-color="#525c66"/>
       </linearGradient>
-      <linearGradient id="przFan" x1="0" y1="${f1(cy - 20)}" x2="0" y2="${f1(cy + 24)}" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#34d399" stop-opacity="0.16"/><stop offset="50%" stop-color="#fbbf24" stop-opacity="0.1"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0.16"/>
+      <linearGradient id="przIn" x1="${f1(e.x)}" y1="${f1(e.y)}" x2="${f1(sx)}" y2="${f1(sy)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#f4f7fa" stop-opacity="0.5"/><stop offset="100%" stop-color="#f4f7fa" stop-opacity="0.1"/>
       </linearGradient>
+      <radialGradient id="przInGlow" gradientUnits="userSpaceOnUse" cx="${f1(e.x)}" cy="${f1(e.y)}" r="4.5">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+      ${rayDefs}
       <radialGradient id="przFlare" gradientUnits="userSpaceOnUse" cx="${f1(sx)}" cy="${f1(sy)}" r="9">
         <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/><stop offset="45%" stop-color="#e9d5ff" stop-opacity="0.5"/><stop offset="100%" stop-color="#e9d5ff" stop-opacity="0"/>
       </radialGradient>
@@ -460,26 +518,22 @@ const nodeEls = Object.values(nodes).map((n) => {
     <g clip-path="url(#przClip)">
       <polygon points="${tri(R)}" fill="url(#przCore)"/>
       <polygon points="${tri(R)}" fill="url(#przSheen)"/>
-      <line class="prz-inseg" x1="${f1(cx - 27.5)}" y1="${f1(cy - 5.4)}" x2="${f1(sx)}" y2="${f1(sy)}"/>
+      <polygon points="${f1(e.x + lu.x * 2.6)},${f1(e.y + lu.y * 2.6)} ${f1(e.x - lu.x * 2.6)},${f1(e.y - lu.y * 2.6)} ${f1(sx)},${f1(sy)}" fill="url(#przIn)"/>
+      ${rayWedges}
+      <g filter="url(#edgeGlow)">
+        <line class="prz-core" x1="${f1(e.x)}" y1="${f1(e.y)}" x2="${f1(sx - 1.5)}" y2="${f1(sy - 0.6)}" stroke="#f4f7fa"/>
+        ${rayCores}
+      </g>
+      ${rayGlows}
+      <circle cx="${f1(e.x)}" cy="${f1(e.y)}" r="4.5" fill="url(#przInGlow)"/>
     </g>
-    <line class="prz-in" x1="${f1(cx - 56)}" y1="${f1(cy - 16)}" x2="${f1(cx - 27)}" y2="${f1(cy - 5.2)}"/>
     <polygon points="${tri(R)}" class="prz-edge" stroke-linejoin="round"/>
     <polygon points="${tri(R - 4.8)}" class="prz-groove" stroke-linejoin="round"/>
     <polygon points="${tri(R + 2.8)}" class="prz-hairline" stroke-linejoin="round"/>
     <path class="prz-glint" d="M${cx} ${f1(cy - R - 4.5)} V${f1(cy - R + 4.5)} M${f1(cx - 4.5)} ${f1(cy - R)} H${f1(cx + 4.5)}"/>
-    <polygon points="${f1(sx)},${f1(sy)} ${f1(cx + 50)},${f1(cy - 20)} ${f1(cx + 48)},${f1(cy + 24)}" fill="url(#przFan)"/>
-    <g filter="url(#edgeGlow)">
-      <line class="pz-beam" x1="${f1(sx)}" y1="${f1(sy)}" x2="${f1(cx + 50)}" y2="${f1(cy - 20)}" stroke="#34d399"/>
-      <line class="pz-beam" x1="${f1(sx)}" y1="${f1(sy)}" x2="${f1(cx + 55)}" y2="${f1(cy + 4)}" stroke="#fbbf24"/>
-      <line class="pz-beam" x1="${f1(sx)}" y1="${f1(sy)}" x2="${f1(cx + 48)}" y2="${f1(cy + 24)}" stroke="#ef4444"/>
-      <circle cx="${f1(cx + 50)}" cy="${f1(cy - 20)}" r="1.8" fill="#34d399"/>
-      <circle cx="${f1(cx + 55)}" cy="${f1(cy + 4)}" r="1.8" fill="#fbbf24"/>
-      <circle cx="${f1(cx + 48)}" cy="${f1(cy + 24)}" r="1.8" fill="#ef4444"/>
-    </g>
     <circle cx="${f1(sx)}" cy="${f1(sy)}" r="8" fill="url(#przFlare)">
       <animate attributeName="opacity" values="0.8;1;0.8" dur="3.4s" repeatCount="indefinite"/>
     </circle>
-    ${n.private ? `<g opacity="0.85">${lock(n.x, n.y - 28, 0.7, "#c7d0da")}</g>` : ""}
     <text x="${n.x}" y="${f1(n.y + R / 2 + 16)}" text-anchor="middle" class="tri-label">${escapeXML(n.label)}</text>
   </g>`;
   }
@@ -491,7 +545,7 @@ const nodeEls = Object.values(nodes).map((n) => {
     // dashed-vs-solid = the QoS asymmetry. The lanes fan straight into the live
     // edges (prisoma=perception/top, crebain=action/bottom, engram=centre trunk).
     return `<g>
-    ${seat(n.x, n.y, "gate")}
+    ${seat(n.x, n.y, "gate", ["#fde68a", "#fbbf24", "#92400e"])}
     <g filter="url(#soft)">
       <path d="M224 222 H243 M257 222 H276" class="gate-wire-perc"/>
       <path d="M224 238 H243 M257 238 H276" class="gate-wire"/>
@@ -569,7 +623,7 @@ const nodeEls = Object.values(nodes).map((n) => {
     };
     const conns = `${calli(T, L, 6)} ${calli(T, R, -6)} ${calli(L, R, 6)}`;
     return `<g class="vox-net">
-    ${seat(n.x, n.y, "vox")}
+    ${seat(n.x, n.y, "vox", ["#f5d0fe", "#e879f9", "#86198f"])}
     <defs>${grads.join("")}</defs>
     <g filter="url(#soft)">
       ${conns}
@@ -827,15 +881,14 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .chip       { fill: #0d1117; stroke-width: 1.5; }
     .chip-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; }
     .hub-fill   { fill: url(#hubGrad); }
-    .hub-ring   { fill: none; stroke: #34d399; stroke-width: 2; }
+    .hub-ring   { fill: none; stroke: url(#hubBezel); stroke-width: 2.2; }
     .hub-glow   { fill: none; stroke: #34d399; stroke-width: 6; stroke-opacity: 0.22; filter: url(#soft); }
     .hub-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6ee7b7; }
-    .seat-ring   { fill: none; stroke-width: 1.8; }
-    .seat-groove { fill: none; stroke: #05070b; stroke-opacity: 0.45; stroke-width: 1; }
-    .seat-gate   { fill: url(#gateGrad); }
-    .ring-gate   { stroke: #fbbf24; }
-    .seat-vox    { fill: url(#voxGrad); }
-    .ring-vox    { stroke: #e879f9; }
+    .seat-ring     { fill: none; stroke-width: 2.2; }
+    .seat-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
+    .seat-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
+    .seat-gate     { fill: url(#gateGrad); }
+    .seat-vox      { fill: url(#voxGrad); }
     .mel-plate    { fill: url(#melPlate); }
     .mel-scan     { fill: none; stroke: #fb923c; stroke-opacity: 0.09; stroke-width: 1; }
     .mel-rock     { fill: #050302; }
@@ -845,12 +898,10 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mel-edge     { fill: none; stroke: url(#melBezel); stroke-width: 2.4; stroke-linejoin: miter; }
     .mel-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .mel-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
-    .pz-beam    { stroke-width: 1.8; stroke-linecap: round; }
     .cube-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fdba74; stroke: #2b1a10; }
     .logo-label     { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #cdd6e0; }
     .prz-body     { fill: url(#przGlass); }
-    .prz-in       { stroke: #f4f7fa; stroke-width: 2; stroke-linecap: round; }
-    .prz-inseg    { stroke: #f4f7fa; stroke-opacity: 0.35; stroke-width: 2; stroke-linecap: round; }
+    .prz-core     { fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-opacity: 0.85; }
     .prz-edge     { fill: none; stroke: url(#przSilver); stroke-width: 2.4; }
     .prz-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .prz-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
@@ -911,34 +962,17 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .chip { fill: #ffffff; }
       .chip-label { fill: #1f2328; }
       .hub-fill { fill: #ffffff; }
-      .hub-ring { stroke: #059669; }
       .hub-glow { stroke: #059669; stroke-opacity: 0.12; }
       .hub-label { fill: #059669; }
-      .prz-in { stroke: #475569; }
       .logo-label { fill: #57626f; }
       .tri-label { fill: #6d28d9; }
-      .gate-wire { stroke: #b45309; }
-      .gate-wire-perc { stroke: #b45309; }
-      .gate-bar { fill: #b45309; stroke: #b45309; }
-      .gate-port { fill: #b45309; }
-      .gate-tick { stroke: #b45309; }
-      .gate-packet { fill: #b45309; }
-      .gate-packet-perc { fill: #b45309; }
       .gate-label { fill: #b45309; }
-      .vox-top { fill: #c026d3; fill-opacity: 0.3; stroke: #c026d3; }
-      .vox-left { fill: #c026d3; fill-opacity: 0.16; stroke: #c026d3; }
-      .vox-right { fill: #c026d3; fill-opacity: 0.07; stroke: #c026d3; }
       .flag-edge { stroke: #000000; stroke-opacity: 0.25; }
       .vox-label { fill: #c026d3; }
-      .vox-net { color: #c026d3; }
       .raven-seat { fill-opacity: 0.06; }
       .raven-label { fill: #4b5320; }
       .raven-cursor { fill: #4b5320; }
       .radar-label { fill: #0284c7; }
-      .seat-gate, .seat-vox { fill: #ffffff; }
-      .ring-gate { stroke: #b45309; }
-      .ring-vox { stroke: #c026d3; }
-      .seat-groove { stroke: #1f2328; stroke-opacity: 0.1; }
       .gal-seat { fill: #dc2626; fill-opacity: 0.04; }
       .gal-orbit { stroke: #dc2626; stroke-opacity: 0.5; }
       .gal-tick { stroke: #dc2626; }
