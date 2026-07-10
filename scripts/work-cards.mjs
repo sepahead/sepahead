@@ -37,7 +37,9 @@ async function hydrateStars(list) {
     return;
   }
   for (const p of list) {
-    if (p.private || !p.repo) continue;
+    // `phase` projects (design-stage repos) carry a status word, not a star
+    // count — skip the refresh so the badge never becomes a "★ 0".
+    if (p.private || p.phase || !p.repo) continue;
     try {
       const res = await fetch(`https://api.github.com/repos/${p.repo}`, {
         headers: {
@@ -174,13 +176,19 @@ function buildCard(p) {
       `<stop offset="60%" stop-color="${p.grad}" stop-opacity="0"/></radialGradient>` +
       hintDefs;
 
-  // Status badge (top-right): stars (★ + count) or a lock for private repos.
+  // Status badge (top-right): stars (★ + count), a lock for private repos, or
+  // a compass-point glyph + phase word for design-stage repos (no "★ 0").
   let badge = "";
   const bx = x + CARD_W - PADR;
   if (p.private) {
     badge =
       lock(bx - 11, y + 16, 0.78, cls) +
       `<text x="${bx - 16}" y="${y + 28}" text-anchor="end" class="badge ${cls}">private</text>`;
+  } else if (p.phase) {
+    badge =
+      `<circle cx="${bx - 10}" cy="${y + 22}" r="5" fill="none" stroke-width="1.4" class="glyph-stroke ${cls}"/>` +
+      `<circle cx="${bx - 10}" cy="${y + 22}" r="1.6" class="glyph-fill ${cls}"/>` +
+      `<text x="${bx - 21}" y="${y + 27}" text-anchor="end" class="badge ${cls}">${escapeXML(p.phase)}</text>`;
   } else if (p.stars != null) {
     badge =
       star(bx - 6, y + 22, 6, cls) +

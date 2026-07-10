@@ -75,11 +75,11 @@ export const PROJECTS = [
     stack: ["Rust"],
   },
   {
-    name: "cobot-atlas",
-    accent: "#60a5fa", light: "#2563eb", grad: "#0b1f3a",
-    stars: 5, repo: "sepahead/cobot-atlas",
-    desc: "3D mesh-generation pipeline: 2,023 meshes for collaborative-robot simulation & embodied AI; dataset published on Hugging Face.",
-    stack: ["Python"],
+    name: "haldir",
+    accent: "#2dd4bf", light: "#0d9488", grad: "#042f2a",
+    phase: "in design", repo: "sepahead/haldir",
+    desc: "Security & guardian layer for the NCP ecosystem: per-frame provenance, fail-closed authorization gates & attestation. Design catalog.",
+    stack: ["Rust"],
   },
 ];
 
