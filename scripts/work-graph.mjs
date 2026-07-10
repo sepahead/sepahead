@@ -762,34 +762,40 @@ const nodeEls = Object.values(nodes).map((n) => {
     // galadriel: its real brand mark in miniature — the SENTINEL SHIELD. An
     // angular chamfered crest whose visor slit carries a red scanning eye that
     // sweeps side to side (the watcher that looks for the channel that lies),
-    // with three sensor-channel traces feeding the visor from below, seated on
-    // a machined badge at manwe's border grade (theme-FIXED): a GUNMETAL steel
-    // bezel matching the shield's armor — red reads as plastic at bezel scale,
-    // so the project hue lives in a thin red SIGNAL RING inlaid in the groove
-    // (grey armor, red light, like the scanning eye) — plus four reticle ticks
-    // outside the rim echoing crebain's crosshair. Echoes assets/galadriel-logo.svg in the galadriel
-    // repo. Reduced-motion parks the eye centred (static attribute values
-    // hold it). One instance -> unique ids.
-    const cx = n.x, cy = n.y, s = 0.26;
+    // seated with clear air on a machined badge at manwe's border grade
+    // (theme-FIXED): a GUNMETAL steel bezel matching the shield's armor — red
+    // reads as plastic at bezel scale, so the project hue lives in a thin red
+    // SIGNAL RING inlaid in the groove (grey armor, red light, like the eye).
+    // Below the visor, COMPARATOR CIRCUITRY in real PCB language: three
+    // channel stubs drop from the slit, the outer pair bends 45° (vias at the
+    // bends) into an annular comparator pad whose centre LED carries the red
+    // verdict, and one trunk runs down to a chamfered terminal pad that echoes
+    // the shield's corners — three sensors in, one judgement out. Echoes
+    // assets/galadriel-logo.svg in the galadriel repo. Reduced-motion parks
+    // the eye centred (static attribute values hold it). One instance ->
+    // unique ids.
+    const cx = n.x, cy = n.y, s = 0.23;
     const m = (px, py) => `${f1(cx + (px - 120) * s)} ${f1(cy + (py - 122) * s)}`;
     const poly = (pts) => `M${pts.map(([px, py]) => m(px, py)).join(" L")} Z`;
     const shield = poly([[36, 44], [68, 18], [172, 18], [204, 44], [204, 122], [188, 164], [120, 226], [52, 164], [36, 122]]);
     const slit = poly([[46, 89], [60, 76], [180, 76], [194, 89], [180, 102], [60, 102]]);
-    const traces =
-      `<path d="M${m(120, 204)} L${m(120, 104)}" class="gal-chan"/>` +
-      `<path d="M${m(84, 168)} L${m(84, 142)} L${m(104, 122)} L${m(136, 122)} L${m(156, 142)} L${m(156, 168)}" class="gal-chan" fill="none"/>`;
-    const roots = [[120, 204], [84, 168], [156, 168]]
-      .map(([px, py]) => `<circle cx="${f1(cx + (px - 120) * s)}" cy="${f1(cy + (py - 122) * s)}" r="1.5" class="gal-node"/>`)
-      .join("");
+    // Comparator circuitry (real-px offsets from the node centre; visor slit
+    // bottom sits at −4.6). All bends are 45°, PCB-style.
+    const p = (x, y) => `${f1(cx + x)} ${f1(cy + y)}`;
+    const circuit =
+      `<path class="gal-chan" fill="none" d="M${p(-10, -4.2)} V${f1(cy + 1)} L${p(-2.3, 8.7)} M${p(10, -4.2)} V${f1(cy + 1)} L${p(2.3, 8.7)} M${p(0, -4.2)} V${f1(cy + 7.8)} M${p(0, 14.2)} V${f1(cy + 16.9)}"/>` +
+      `<circle cx="${f1(cx - 10)}" cy="${f1(cy + 1)}" r="1" class="gal-node"/>` +
+      `<circle cx="${f1(cx + 10)}" cy="${f1(cy + 1)}" r="1" class="gal-node"/>` +
+      `<circle cx="${f1(cx - 8.5)}" cy="${f1(cy + 11)}" r="0.8" class="gal-node"/>` +
+      `<circle cx="${f1(cx + 8.5)}" cy="${f1(cy + 11)}" r="0.8" class="gal-node"/>` +
+      `<circle cx="${cx}" cy="${f1(cy + 11)}" r="3.2" class="gal-pad"/>` +
+      `<circle cx="${cx}" cy="${f1(cy + 11)}" r="1" class="gal-led"/>` +
+      `<path class="gal-pad" d="M${p(0, 16.9)} L${p(2, 18.9)} L${p(0, 20.9)} L${p(-2, 18.9)} Z"/>`;
     const [ex, ey] = [cx + (120 - 120) * s, cy + (89 - 122) * s];
     const amp = f1(42 * s);
-    const ticks = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
-      .map(([tx, ty]) => `<line x1="${f1(cx + tx * 27)}" y1="${f1(cy + ty * 27)}" x2="${f1(cx + tx * 31)}" y2="${f1(cy + ty * 31)}" class="gal-tick"/>`)
-      .join("");
     return `<g class="gal">
     ${seat(cx, cy, "gal", ["#e8eef4", "#8d99a6", "#2b3542"])}
     <circle cx="${cx}" cy="${cy}" r="${f1(SEAT_R - 2.2)}" class="gal-signal"/>
-    ${ticks}
     <defs>
       <radialGradient id="galEye" gradientUnits="userSpaceOnUse" cx="${f1(ex)}" cy="${f1(ey)}" r="8">
         <stop offset="0%" stop-color="#ff6b5e" stop-opacity="0.9"/>
@@ -799,7 +805,7 @@ const nodeEls = Object.values(nodes).map((n) => {
       <clipPath id="galSlit" clipPathUnits="userSpaceOnUse"><path d="${slit}"/></clipPath>
     </defs>
     <path d="${shield}" class="gal-plate"/>
-    ${traces}${roots}
+    ${circuit}
     <path d="${slit}" class="gal-slit"/>
     <g clip-path="url(#galSlit)">
       <g>
@@ -950,7 +956,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mw-hairline  { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
     .seat-gal   { fill: url(#galGrad); }
     .gal-signal { fill: none; stroke: #ef4444; stroke-opacity: 0.7; stroke-width: 1.1; }
-    .gal-tick   { stroke: #ef4444; stroke-opacity: 0.6; stroke-width: 1.6; stroke-linecap: round; }
+    .gal-pad    { fill: #05070b; stroke: #b9c2cd; stroke-width: 1.1; stroke-opacity: 0.8; }
+    .gal-led    { fill: #ef4444; }
     .gal-plate  { fill: #131c28; stroke: #8b97a6; stroke-opacity: 0.6; stroke-width: 1.3; stroke-linejoin: miter; }
     .gal-slit   { fill: #05070b; stroke: #8b97a6; stroke-opacity: 0.5; stroke-width: 0.8; stroke-linejoin: miter; }
     .gal-chan   { fill: none; stroke: #b9c2cd; stroke-width: 1.2; stroke-linecap: round; stroke-opacity: 0.72; }
@@ -981,7 +988,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .raven-label { fill: #4b5320; }
       .raven-cursor { fill: #4b5320; }
       .radar-label { fill: #0284c7; }
-      .gal-tick { stroke: #dc2626; }
       .gal-label { fill: #dc2626; }
       .wg-rule { stroke: #d0d7de; stroke-opacity: 0.9; }
       .wg-bracket { stroke: #b45309; }
