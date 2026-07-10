@@ -17,10 +17,17 @@ sensor fusion and airspace awareness.
 - melkor: Gaussian-splatting & depth-analysis pipelines for 3D scene reconstruction; multi-view capture to dense geometry, CUDA-accelerated (Python/C++): https://github.com/sepahead/melkor
 - cortexel: agent-consumable scientific-visualization library for neural simulations; an agent emits a declarative VizSpec and Cortexel renders spike rasters, Brunel networks and STDP curves, with provenance enforced fail-closed (TypeScript): https://github.com/sepahead/cortexel
 - pid-rs: Partial Information Decomposition with continuous mutual-information (KSG) estimators, in safe Rust: https://github.com/sepahead/pid-rs
-- cobot-atlas: 3D mesh-generation pipeline; 2,023 meshes for collaborative-robot simulation and embodied AI; dataset on Hugging Face (Python): https://github.com/sepahead/cobot-atlas
+- cobot-atlas: 3D mesh-generation pipeline; 2,023 meshes for collaborative-robot simulation and embodied AI (Python): https://github.com/sepahead/cobot-atlas — dataset on Hugging Face (DOI 10.57967/hf/9199): https://huggingface.co/datasets/torusprime/cobot-atlas
 - manwe: real-time UAV detection from vision in safe Rust; a camera feed to low-latency airspace awareness, feeding crebain: https://github.com/sepahead/manwe
 - engram: Engram Neural Modeling Labs; NEST-based neural-modeling hub (the "brain" the rest of the stack connects to); code opens fully after publication: https://github.com/sepahead/engram
 - prisoma (private): a prism for embodied agents, robotics and world models; refracts Vision-Language-Action policies through several natively-implemented analysis methods, Partial Information Decomposition among them
+- galadriel (private): Galadriel's Mirror; cross-sensor spoof detection via Partial Information Decomposition, watching crebain's sensor fusion (Rust)
+
+## More repositories
+- brojapid-activationfunctions: Partial Information Decomposition (PID) analysis of neural-network activation functions: https://github.com/sepahead/brojapid-activationfunctions
+- nest-simulator: NEST simulator fork with original contributions: https://github.com/sepahead/nest-simulator
+- relief-atlas: 10K+ AI-generated 3D mesh assets for disaster relief: https://github.com/sepahead/relief-atlas
+- silmaril-vision-studio: computer-vision studio and testbed: https://github.com/sepahead/silmaril-vision-studio
 
 ## Research & writing
 - ReScience C replication: information-theoretic analysis of transfer functions: https://github.com/sepahead/mahmoudian-2020-rescience
@@ -28,6 +35,7 @@ sensor fusion and airspace awareness.
 - Substack: https://substack.com/@torusprime
 
 ## Links
+- Web: https://sepahead.github.io/sepahead/
 - GitHub: https://github.com/sepahead
 - LinkedIn: https://www.linkedin.com/in/sepehr-mahmoudian-99367516/
 - Hugging Face: https://huggingface.co/torusprime

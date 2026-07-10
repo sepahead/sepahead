@@ -14,10 +14,13 @@
 
 <!-- Open Graph -->
 <meta property="og:type" content="profile">
+<meta property="og:site_name" content="Sepehr Mahmoudian">
+<meta property="og:locale" content="en_US">
 <meta property="og:title" content="Sepehr Mahmoudian, AI/ML Engineer (Agentic Systems, Berlin)">
 <meta property="og:description" content="AI/ML engineer in Berlin: agentic systems, continual learning, knowledge graphs and RAG; neural networks, information theory, neurorobotics and 3D vision.">
 <meta property="og:url" content="https://sepahead.github.io/sepahead/">
 <meta property="og:image" content="https://github.com/sepahead.png">
+<meta property="og:image:alt" content="GitHub avatar of Sepehr Mahmoudian (@sepahead)">
 <meta property="profile:first_name" content="Sepehr">
 <meta property="profile:last_name" content="Mahmoudian">
 <meta property="profile:username" content="sepahead">
@@ -28,6 +31,7 @@
 <meta name="twitter:title" content="Sepehr Mahmoudian, AI/ML Engineer">
 <meta name="twitter:description" content="AI/ML engineer in Berlin: agentic systems, continual learning, knowledge graphs and RAG; neural networks, information theory, neurorobotics and 3D vision.">
 <meta name="twitter:image" content="https://github.com/sepahead.png">
+<meta name="twitter:image:alt" content="GitHub avatar of Sepehr Mahmoudian (@sepahead)">
 
 <style>
   :root { color-scheme: dark light; }
@@ -85,13 +89,25 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "ProfilePage",
+      "@id": "https://sepahead.github.io/sepahead/#profilepage",
+      "url": "https://sepahead.github.io/sepahead/",
+      "name": "Sepehr Mahmoudian — AI/ML Engineer (Berlin)",
+      "dateModified": "2026-07-10",
+      "inLanguage": "en",
+      "mainEntity": { "@id": "https://sepahead.github.io/sepahead/#person" }
+    },
+    {
       "@type": "Person",
       "@id": "https://sepahead.github.io/sepahead/#person",
       "name": "Sepehr Mahmoudian",
+      "givenName": "Sepehr",
+      "familyName": "Mahmoudian",
       "alternateName": "sepahead",
       "url": "https://sepahead.github.io/sepahead/",
       "mainEntityOfPage": "https://sepahead.github.io/sepahead/",
       "image": "https://github.com/sepahead.png",
+      "email": "mailto:sepmhn@gmail.com",
       "jobTitle": "AI/ML Engineer",
       "description": "AI/ML engineer in Berlin building agentic systems, continual learning, knowledge graphs and RAG, with a background in computational neuroscience, information theory, neurorobotics and 3D vision.",
       "address": { "@type": "PostalAddress", "addressLocality": "Berlin", "addressCountry": "DE" },
@@ -99,8 +115,11 @@
         "Agentic Engineering", "Continual Learning", "Knowledge Graphs",
         "Retrieval-Augmented Generation", "World Models", "Machine Learning", "Neural Networks",
         "Neurorobotics", "Information Theory", "Computational Neuroscience",
-        "Spiking Neural Networks", "3D Vision", "Scene Reconstruction", "Gaussian Splatting",
-        "Robotics", "Sensor Fusion", "Drone Detection", "Airspace Awareness", "Rust", "Python"
+        "Spiking Neural Networks", "NEST Simulator", "Partial Information Decomposition",
+        "3D Vision", "Scene Reconstruction", "Gaussian Splatting",
+        "Robotics", "Embodied AI", "Vision-Language-Action Models",
+        "Sensor Fusion", "Multi-Object Tracking", "Drone Detection", "Airspace Awareness",
+        "Multi-UAV Simulation", "ROS", "Gazebo", "CUDA", "Rust", "Python", "TypeScript"
       ],
       "sameAs": [
         "https://github.com/sepahead",
@@ -171,6 +190,19 @@
       "author": { "@id": "https://sepahead.github.io/sepahead/#person" }
     },
     {
+      "@type": "Dataset",
+      "@id": "https://huggingface.co/datasets/torusprime/cobot-atlas#dataset",
+      "name": "cobot-atlas",
+      "alternateName": "cobot-atlas: A Large-Scale 3D Mesh Dataset for Robot Simulation",
+      "url": "https://huggingface.co/datasets/torusprime/cobot-atlas",
+      "identifier": "https://doi.org/10.57967/hf/9199",
+      "description": "2,023 unique 3D meshes (glTF 2.0 Binary) for collaborative-robot simulation, manipulation research, vision-language-action (VLA) model training and robotics benchmarking; generated via text-to-image and image-to-3D pipelines.",
+      "keywords": ["robotics", "simulation", "3D meshes", "embodied AI", "glTF", "synthetic data"],
+      "license": "https://spdx.org/licenses/MIT.html",
+      "isBasedOn": "https://github.com/sepahead/cobot-atlas",
+      "creator": { "@id": "https://sepahead.github.io/sepahead/#person" }
+    },
+    {
       "@type": "SoftwareSourceCode",
       "name": "melkor",
       "codeRepository": "https://github.com/sepahead/melkor",
@@ -187,6 +219,38 @@
       "description": "An agent-consumable scientific-visualization library for neural simulations: an agent emits a declarative VizSpec and Cortexel renders spike rasters, Brunel networks and STDP curves, with scientific-honesty provenance enforced fail-closed.",
       "programmingLanguage": "TypeScript",
       "license": "https://spdx.org/licenses/MIT.html",
+      "author": { "@id": "https://sepahead.github.io/sepahead/#person" }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "name": "relief-atlas",
+      "codeRepository": "https://github.com/sepahead/relief-atlas",
+      "url": "https://github.com/sepahead/relief-atlas",
+      "description": "10K+ AI-generated 3D mesh assets for disaster relief.",
+      "author": { "@id": "https://sepahead.github.io/sepahead/#person" }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "name": "silmaril-vision-studio",
+      "codeRepository": "https://github.com/sepahead/silmaril-vision-studio",
+      "url": "https://github.com/sepahead/silmaril-vision-studio",
+      "description": "Computer-vision studio and testbed.",
+      "author": { "@id": "https://sepahead.github.io/sepahead/#person" }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "name": "brojapid-activationfunctions",
+      "codeRepository": "https://github.com/sepahead/brojapid-activationfunctions",
+      "url": "https://github.com/sepahead/brojapid-activationfunctions",
+      "description": "Partial Information Decomposition (PID) analysis of neural-network activation functions.",
+      "author": { "@id": "https://sepahead.github.io/sepahead/#person" }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "name": "mahmoudian-2020-rescience",
+      "codeRepository": "https://github.com/sepahead/mahmoudian-2020-rescience",
+      "url": "https://github.com/sepahead/mahmoudian-2020-rescience",
+      "description": "ReScience C replication: information-theoretic analysis of transfer functions.",
       "author": { "@id": "https://sepahead.github.io/sepahead/#person" }
     },
     {

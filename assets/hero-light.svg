@@ -1,4 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 176" width="860" height="176" role="img" aria-label="Sepehr Mahmoudian: agentic engineering, continual learning, knowledge graphs and RAG; AI/ML, neural networks, neurorobotics and information theory; sensor fusion, drone detection, 3D vision and scene reconstruction. Berlin.">
+  <title>Sepehr Mahmoudian — AI/ML Engineer, Berlin</title>
+  <desc>Sepehr Mahmoudian is an AI/ML engineer in Berlin, Germany, building agentic systems, continual learning, knowledge graphs and retrieval-augmented generation (RAG), with a background in neural networks, neurorobotics, information theory, sensor fusion and airspace awareness, and 3D vision and scene reconstruction. Primary languages: Rust and Python. Building on GitHub since 2014.</desc>
   <style>
     /* Theme colors mirror assets/weekdays.svg so the page reads as one system. */
     .wordmark { font: 700 40px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #22d3ee; letter-spacing: -1px; }
