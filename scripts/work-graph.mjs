@@ -766,12 +766,12 @@ const nodeEls = Object.values(nodes).map((n) => {
     // SYMMETRIC harness sweep up from connector ports at the shield's foot
     // and jack into the visor's underside, each carrying a cool light pulse
     // toward the eye — the sensor channels streaming into the watcher. Above
-    // the visor, an UPLINK BUS: a thin bar across the shield's brow with
-    // three drops feeding the visor's top edge and via dots at its ends. The
-    // light is cold white-blue so the red verdict stays the eye's alone.
-    // Echoes assets/galadriel-logo.svg in the galadriel repo. Reduced-motion
-    // parks the eye centred and holds a lit pulse at each port. One instance
-    // -> unique ids.
+    // the visor, the ORIGINAL logo's top section (assets/galadriel-logo.svg
+    // in the galadriel repo, same 240×240 coordinate space): the CROWN PANEL
+    // and the crest ridge descending to the visor, on the original's TEAL-
+    // rimmed navy plate. The light is cold white-blue so the red verdict
+    // stays the eye's alone. Reduced-motion parks the eye centred and holds
+    // a lit pulse at each port. One instance -> unique ids.
     const cx = n.x, cy = n.y, s = 0.23;
     const m = (px, py) => `${f1(cx + (px - 120) * s)} ${f1(cy + (py - 122) * s)}`;
     const poly = (pts) => `M${pts.map(([px, py]) => m(px, py)).join(" L")} Z`;
@@ -791,10 +791,10 @@ const nodeEls = Object.values(nodes).map((n) => {
       `<path class="gal-pulse" d="${d}"><animate attributeName="stroke-dashoffset" from="43" to="0" dur="2.6s" begin="${beg}" repeatCount="indefinite"/></path>` +
       `<circle class="gal-port" cx="${f1(cx + port[0])}" cy="${f1(cy + port[1])}" r="1.4"/>` +
       `<circle class="gal-jack" cx="${f1(cx + jack[0])}" cy="${f1(cy + jack[1])}" r="0.9"/>`
-    ).join("") +
-      `<path class="gal-fiber" d="M${p(-8, -14.5)} H${f1(cx + 8)} M${p(-6, -14.5)} V${f1(cy - 10.8)} M${p(0, -14.5)} V${f1(cy - 10.8)} M${p(6, -14.5)} V${f1(cy - 10.8)}"/>` +
-      `<circle class="gal-jack" cx="${f1(cx - 8)}" cy="${f1(cy - 14.5)}" r="0.8"/>` +
-      `<circle class="gal-jack" cx="${f1(cx + 8)}" cy="${f1(cy - 14.5)}" r="0.8"/>`;
+    ).join("");
+    const crown =
+      `<path d="${poly([[44, 48], [71, 26], [169, 26], [196, 48], [196, 70], [44, 70]])}" fill="url(#galCrownG)" opacity="0.65"/>` +
+      `<path d="${poly([[112, 18], [128, 18], [124, 74], [116, 74]])}" fill="url(#galCrownG)" opacity="0.9" class="gal-crest"/>`;
     const [ex, ey] = [cx + (120 - 120) * s, cy + (89 - 122) * s];
     const amp = f1(42 * s);
     return `<g class="gal">
@@ -806,9 +806,16 @@ const nodeEls = Object.values(nodes).map((n) => {
         <stop offset="55%" stop-color="#ef4444" stop-opacity="0.45"/>
         <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
       </radialGradient>
+      <linearGradient id="galPlateG" x1="0" y1="${f1(cy - 23.9)}" x2="0" y2="${f1(cy + 23.9)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#10202f"/><stop offset="45%" stop-color="#0a1420"/><stop offset="100%" stop-color="#050a11"/>
+      </linearGradient>
+      <linearGradient id="galCrownG" x1="0" y1="${f1(cy - 22.1)}" x2="0" y2="${f1(cy - 12)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#2a3a4d"/><stop offset="100%" stop-color="#101a26"/>
+      </linearGradient>
       <clipPath id="galSlit" clipPathUnits="userSpaceOnUse"><path d="${slit}"/></clipPath>
     </defs>
     <path d="${shield}" class="gal-plate"/>
+    ${crown}
     ${circuit}
     <path d="${slit}" class="gal-slit"/>
     <g clip-path="url(#galSlit)">
@@ -961,8 +968,9 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .gal-pulse  { fill: none; stroke: #e0f2fe; stroke-opacity: 0.9; stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 3 40; }
     .gal-port   { fill: #05070b; stroke: #9fb0bf; stroke-opacity: 0.8; stroke-width: 1; }
     .gal-jack   { fill: #e0f2fe; fill-opacity: 0.75; }
-    .gal-plate  { fill: #131c28; stroke: #8b97a6; stroke-opacity: 0.6; stroke-width: 1.3; stroke-linejoin: miter; }
-    .gal-slit   { fill: #05070b; stroke: #8b97a6; stroke-opacity: 0.5; stroke-width: 0.8; stroke-linejoin: miter; }
+    .gal-plate  { fill: url(#galPlateG); stroke: #22d3ee; stroke-opacity: 0.9; stroke-width: 1.2; stroke-linejoin: miter; }
+    .gal-crest  { stroke: #22d3ee; stroke-opacity: 0.28; stroke-width: 0.6; stroke-linejoin: miter; }
+    .gal-slit   { fill: #05070b; stroke: #22d3ee; stroke-opacity: 0.55; stroke-width: 0.8; stroke-linejoin: miter; }
     .gal-hotf   { fill: #ef4444; }
     .gal-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #ef4444; }
     .wg-rule    { stroke: #30363d; stroke-width: 1; stroke-opacity: 0.55; }
