@@ -18,8 +18,8 @@
 // cortexel is a voxel NEURAL NETWORK on a fuchsia badge seat; crebain is its
 // own raven-in-crosshair brand mark; engram a machined silver medallion;
 // prisoma a smoked-glass prism with liquid-silver edges dispersing one beam
-// into the three PID components; melkor an obsidian forge plate where a black
-// massif condenses out of Gaussian splats; manwe a lens barrel whose six-blade
+// into the three PID components; melkor an obsidian forge plate whose black
+// massif wears an uneven tactical survey mesh; manwe a lens barrel whose six-blade
 // iris frames a quadcopter caught in lock-on brackets; galadriel the sentinel
 // shield; pid-rs a crisp instrument dial. The whole panel is wrapped in a
 // "provenance instrument" frame (amber corner brackets).
@@ -327,12 +327,12 @@ const nodeEls = Object.values(nodes).map((n) => {
   if (n.kind === "cube") {
     // melkor: the OBSIDIAN FORGE PLATE — a machined dark hexagonal plate with a
     // heated-metal bezel (lit crown → cooled base), forge light rising from
-    // below, and a black twin-peak massif being RECONSTRUCTED against it: the
-    // ridge carries an ember rim light and the right flank condenses out of
-    // oriented Gaussian splats (3D Gaussian Splatting mid-solve). Plate + rock
-    // are theme-FIXED (a real object, like engram's medallion); only the label
-    // stroke adapts. The peak spark breathes; reduced-motion holds it lit.
-    // One instance → unique ids.
+    // below, and a black twin-peak massif being SURVEYED against it: the ridge
+    // carries an ember rim light and the surface wears an uneven tactical
+    // reconstruction mesh (contours + drop lines at irregular spacing, ember
+    // survey nodes). Plate + rock are theme-FIXED (a real object, like
+    // engram's medallion); only the label ink adapts. The peak spark breathes;
+    // reduced-motion holds it lit. One instance → unique ids.
     const cx = n.x, cy = n.y;
     const hex = (s) =>
       `M${f1(cx)} ${f1(cy - 48 * s)} L${f1(cx + 41.6 * s)} ${f1(cy - 24 * s)} L${f1(cx + 41.6 * s)} ${f1(cy + 24 * s)} L${f1(cx)} ${f1(cy + 48 * s)} L${f1(cx - 41.6 * s)} ${f1(cy + 24 * s)} L${f1(cx - 41.6 * s)} ${f1(cy - 24 * s)} Z`;
@@ -341,19 +341,17 @@ const nodeEls = Object.values(nodes).map((n) => {
     // where the splats condense.
     const solid = `M${f1(cx - 30)} ${f1(cy + 24)} L${f1(cx - 12)} ${f1(cy - 22)} L${f1(cx)} ${f1(cy - 2)} L${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)} Z`;
     const ridgeLine = `M${f1(cx - 30)} ${f1(cy + 24)} L${f1(cx - 12)} ${f1(cy - 22)} L${f1(cx)} ${f1(cy - 2)} L${f1(cx + 12)} ${f1(cy - 34)}`;
-    // Gaussian splats straddling the right slope (peak → foot), oriented along
-    // it, condensing onto the surface: opacity falls off downslope.
-    const px = cx + 12, py = cy - 34, qx = cx + 30, qy = cy + 24;
-    const sang = f1((Math.atan2(qy - py, qx - px) * 180) / Math.PI);
-    const snx = -(qy - py) / Math.hypot(qx - px, qy - py), sny = (qx - px) / Math.hypot(qx - px, qy - py);
-    const splats = [
-      [0.12, -2.5, 4, 1.6, 1], [0.28, 2.8, 4.8, 1.9, 0.9], [0.35, 7.5, 2.4, 1, 0.35],
-      [0.45, -3.2, 4.2, 1.7, 0.78], [0.62, 3.6, 5.2, 2, 0.62], [0.7, 8.5, 2, 0.9, 0.28],
-      [0.8, -3, 3.8, 1.5, 0.5], [0.94, 4, 3.2, 1.2, 0.4],
-    ].map(([t, off, rx, ry, op]) => {
-      const ex = px + (qx - px) * t + snx * off, ey = py + (qy - py) * t + sny * off;
-      return `<ellipse cx="${f1(ex)}" cy="${f1(ey)}" rx="${rx}" ry="${ry}" transform="rotate(${sang} ${f1(ex)} ${f1(ey)})" fill="url(#melSplat)" opacity="${op}"/>`;
-    }).join("");
+    // Tactical survey mesh draped over the massif: contour lines at UNEVEN
+    // elevations and drop lines at UNEVEN eastings, both clipped to the rock
+    // silhouette so they read as an irregular reconstruction tessellation on
+    // the surface, with a few ember survey nodes at chosen intersections.
+    const meshH = [-28, -16, -9, 1, 14]
+      .map((dy2) => `M${f1(cx - 31)} ${f1(cy + dy2)} H${f1(cx + 31)}`).join(" ");
+    const meshV = [-26, -15, -9, 0, 4, 11, 21]
+      .map((dx2) => `M${f1(cx + dx2)} ${f1(cy - 36)} V${f1(cy + 24)}`).join(" ");
+    const meshNodes = [[-12, -15], [-6, -6], [8, -15], [16, 4], [-24, 15]]
+      .map(([nx2, ny2]) => `<circle cx="${f1(cx + nx2)}" cy="${f1(cy + ny2)}" r="0.9" class="mel-node"/>`)
+      .join("");
     return `<g>
     <defs>
       <linearGradient id="melPlate" x1="0" y1="${f1(cy - 48)}" x2="0" y2="${f1(cy + 48)}" gradientUnits="userSpaceOnUse">
@@ -366,6 +364,7 @@ const nodeEls = Object.values(nodes).map((n) => {
         <stop offset="0%" stop-color="#fed7aa"/><stop offset="45%" stop-color="#b45309"/><stop offset="100%" stop-color="#571c07"/>
       </linearGradient>
       <clipPath id="melClip"><path d="${hex(1)}"/></clipPath>
+      <clipPath id="melRockClip"><path d="${solid}"/></clipPath>
     </defs>
     <g filter="url(#nodeShadow)"><path d="${hex(1)}" class="mel-plate"/></g>
     <g clip-path="url(#melClip)">
@@ -373,8 +372,12 @@ const nodeEls = Object.values(nodes).map((n) => {
       <path class="mel-scan" d="M${f1(cx - 42)} ${f1(cy - 14)} H${f1(cx + 42)} M${f1(cx - 42)} ${f1(cy + 2)} H${f1(cx + 42)} M${f1(cx - 42)} ${f1(cy + 18)} H${f1(cx + 42)}"/>
       <path d="${solid}" class="mel-rock"/>
       <path d="M${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 16)} ${f1(cy + 24)} L${f1(cx + 4)} ${f1(cy + 24)} Z" class="mel-facet"/>
+      <g clip-path="url(#melRockClip)">
+        <path d="${meshH}" class="mel-mesh"/>
+        <path d="${meshV}" class="mel-mesh"/>
+        ${meshNodes}
+      </g>
       <path d="${ridgeLine}" class="mel-ridge"/>
-      ${splats}
       <circle cx="${f1(cx + 12)}" cy="${f1(cy - 34)}" r="1.8" class="mel-spark" filter="url(#soft)">
         <animate attributeName="opacity" values="0.55;1;0.55" dur="3.2s" repeatCount="indefinite"/>
       </circle>
@@ -760,9 +763,11 @@ const nodeEls = Object.values(nodes).map((n) => {
     // angular chamfered crest whose visor slit carries a red scanning eye that
     // sweeps side to side (the watcher that looks for the channel that lies),
     // with three sensor-channel traces feeding the visor from below, seated on
-    // a machined badge (red chrome bezel + groove + hairline, manwe's border
-    // grade, theme-FIXED) with four reticle ticks outside the rim echoing
-    // crebain's crosshair. Echoes assets/galadriel-logo.svg in the galadriel
+    // a machined badge at manwe's border grade (theme-FIXED): a GUNMETAL steel
+    // bezel matching the shield's armor — red reads as plastic at bezel scale,
+    // so the project hue lives in a thin red SIGNAL RING inlaid in the groove
+    // (grey armor, red light, like the scanning eye) — plus four reticle ticks
+    // outside the rim echoing crebain's crosshair. Echoes assets/galadriel-logo.svg in the galadriel
     // repo. Reduced-motion parks the eye centred (static attribute values
     // hold it). One instance -> unique ids.
     const cx = n.x, cy = n.y, s = 0.26;
@@ -782,7 +787,8 @@ const nodeEls = Object.values(nodes).map((n) => {
       .map(([tx, ty]) => `<line x1="${f1(cx + tx * 27)}" y1="${f1(cy + ty * 27)}" x2="${f1(cx + tx * 31)}" y2="${f1(cy + ty * 31)}" class="gal-tick"/>`)
       .join("");
     return `<g class="gal">
-    ${seat(cx, cy, "gal", ["#fecaca", "#ef4444", "#7f1d1d"])}
+    ${seat(cx, cy, "gal", ["#e8eef4", "#8d99a6", "#2b3542"])}
+    <circle cx="${cx}" cy="${cy}" r="${f1(SEAT_R - 2.2)}" class="gal-signal"/>
     ${ticks}
     <defs>
       <radialGradient id="galEye" gradientUnits="userSpaceOnUse" cx="${f1(ex)}" cy="${f1(ey)}" r="8">
@@ -845,11 +851,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       <stop offset="0%" stop-color="#06281d"/>
       <stop offset="100%" stop-color="#0a1117"/>
     </radialGradient>
-    <radialGradient id="melSplat" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#fdba74" stop-opacity="0.95"/>
-      <stop offset="55%" stop-color="#fb923c" stop-opacity="0.55"/>
-      <stop offset="100%" stop-color="#fb923c" stop-opacity="0"/>
-    </radialGradient>
     <radialGradient id="gateGrad" cx="50%" cy="40%" r="68%">
       <stop offset="0%" stop-color="#332408"/>
       <stop offset="100%" stop-color="#10131a"/>
@@ -898,6 +899,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mel-rock     { fill: #050302; }
     .mel-ridge    { fill: none; stroke: #fdba74; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
     .mel-facet    { fill: #211008; }
+    .mel-mesh     { fill: none; stroke: #fdba74; stroke-opacity: 0.32; stroke-width: 0.9; }
+    .mel-node     { fill: #fde68a; fill-opacity: 0.8; }
     .mel-spark    { fill: #fde68a; }
     .mel-edge     { fill: none; stroke: url(#melBezel); stroke-width: 2.4; stroke-linejoin: miter; }
     .mel-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
@@ -946,6 +949,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mw-groove    { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .mw-hairline  { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
     .seat-gal   { fill: url(#galGrad); }
+    .gal-signal { fill: none; stroke: #ef4444; stroke-opacity: 0.7; stroke-width: 1.1; }
     .gal-tick   { stroke: #ef4444; stroke-opacity: 0.6; stroke-width: 1.6; stroke-linecap: round; }
     .gal-plate  { fill: #131c28; stroke: #8b97a6; stroke-opacity: 0.6; stroke-width: 1.3; stroke-linejoin: miter; }
     .gal-slit   { fill: #05070b; stroke: #8b97a6; stroke-opacity: 0.5; stroke-width: 0.8; stroke-linejoin: miter; }

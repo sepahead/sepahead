@@ -4,11 +4,6 @@
       <stop offset="0%" stop-color="#06281d"/>
       <stop offset="100%" stop-color="#0a1117"/>
     </radialGradient>
-    <radialGradient id="melSplat" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#fdba74" stop-opacity="0.95"/>
-      <stop offset="55%" stop-color="#fb923c" stop-opacity="0.55"/>
-      <stop offset="100%" stop-color="#fb923c" stop-opacity="0"/>
-    </radialGradient>
     <radialGradient id="gateGrad" cx="50%" cy="40%" r="68%">
       <stop offset="0%" stop-color="#332408"/>
       <stop offset="100%" stop-color="#10131a"/>
@@ -70,6 +65,8 @@
     .mel-rock     { fill: #050302; }
     .mel-ridge    { fill: none; stroke: #fdba74; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
     .mel-facet    { fill: #211008; }
+    .mel-mesh     { fill: none; stroke: #fdba74; stroke-opacity: 0.32; stroke-width: 0.9; }
+    .mel-node     { fill: #fde68a; fill-opacity: 0.8; }
     .mel-spark    { fill: #fde68a; }
     .mel-edge     { fill: none; stroke: url(#melBezel); stroke-width: 2.4; stroke-linejoin: miter; }
     .mel-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
@@ -118,6 +115,7 @@
     .mw-groove    { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .mw-hairline  { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
     .seat-gal   { fill: url(#galGrad); }
+    .gal-signal { fill: none; stroke: #ef4444; stroke-opacity: 0.7; stroke-width: 1.1; }
     .gal-tick   { stroke: #ef4444; stroke-opacity: 0.6; stroke-width: 1.6; stroke-linecap: round; }
     .gal-plate  { fill: #131c28; stroke: #8b97a6; stroke-opacity: 0.6; stroke-width: 1.3; stroke-linejoin: miter; }
     .gal-slit   { fill: #05070b; stroke: #8b97a6; stroke-opacity: 0.5; stroke-width: 0.8; stroke-linejoin: miter; }
@@ -378,6 +376,7 @@
         <stop offset="0%" stop-color="#fed7aa"/><stop offset="45%" stop-color="#b45309"/><stop offset="100%" stop-color="#571c07"/>
       </linearGradient>
       <clipPath id="melClip"><path d="M690 202 L731.6 226 L731.6 274 L690 298 L648.4 274 L648.4 226 Z"/></clipPath>
+      <clipPath id="melRockClip"><path d="M660 274 L678 228 L690 248 L702 216 L720 274 Z"/></clipPath>
     </defs>
     <g filter="url(#nodeShadow)"><path d="M690 202 L731.6 226 L731.6 274 L690 298 L648.4 274 L648.4 226 Z" class="mel-plate"/></g>
     <g clip-path="url(#melClip)">
@@ -385,8 +384,12 @@
       <path class="mel-scan" d="M648 236 H732 M648 252 H732 M648 268 H732"/>
       <path d="M660 274 L678 228 L690 248 L702 216 L720 274 Z" class="mel-rock"/>
       <path d="M702 216 L706 274 L694 274 Z" class="mel-facet"/>
+      <g clip-path="url(#melRockClip)">
+        <path d="M659 222 H721 M659 234 H721 M659 241 H721 M659 251 H721 M659 264 H721" class="mel-mesh"/>
+        <path d="M664 214 V274 M675 214 V274 M681 214 V274 M690 214 V274 M694 214 V274 M701 214 V274 M711 214 V274" class="mel-mesh"/>
+        <circle cx="678" cy="235" r="0.9" class="mel-node"/><circle cx="684" cy="244" r="0.9" class="mel-node"/><circle cx="698" cy="235" r="0.9" class="mel-node"/><circle cx="706" cy="254" r="0.9" class="mel-node"/><circle cx="666" cy="265" r="0.9" class="mel-node"/>
+      </g>
       <path d="M660 274 L678 228 L690 248 L702 216" class="mel-ridge"/>
-      <ellipse cx="706.5" cy="222.2" rx="4" ry="1.6" transform="rotate(72.8 706.5 222.2)" fill="url(#melSplat)" opacity="1"/><ellipse cx="704.4" cy="233.1" rx="4.8" ry="1.9" transform="rotate(72.8 704.4 233.1)" fill="url(#melSplat)" opacity="0.9"/><ellipse cx="701.1" cy="238.5" rx="2.4" ry="1" transform="rotate(72.8 701.1 238.5)" fill="url(#melSplat)" opacity="0.35"/><ellipse cx="713.2" cy="241.2" rx="4.2" ry="1.7" transform="rotate(72.8 713.2 241.2)" fill="url(#melSplat)" opacity="0.78"/><ellipse cx="709.7" cy="253" rx="5.2" ry="2" transform="rotate(72.8 709.7 253)" fill="url(#melSplat)" opacity="0.62"/><ellipse cx="706.5" cy="259.1" rx="2" ry="0.9" transform="rotate(72.8 706.5 259.1)" fill="url(#melSplat)" opacity="0.28"/><ellipse cx="719.3" cy="261.5" rx="3.8" ry="1.5" transform="rotate(72.8 719.3 261.5)" fill="url(#melSplat)" opacity="0.5"/><ellipse cx="715.1" cy="271.7" rx="3.2" ry="1.2" transform="rotate(72.8 715.1 271.7)" fill="url(#melSplat)" opacity="0.4"/>
       <circle cx="702" cy="216" r="1.8" class="mel-spark" filter="url(#soft)">
         <animate attributeName="opacity" values="0.55;1;0.55" dur="3.2s" repeatCount="indefinite"/>
       </circle>
@@ -449,13 +452,14 @@
   <g class="gal">
     <defs>
       <linearGradient id="galBezel" x1="0" y1="216" x2="0" y2="284" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#fecaca"/><stop offset="45%" stop-color="#ef4444"/><stop offset="100%" stop-color="#7f1d1d"/>
+        <stop offset="0%" stop-color="#e8eef4"/><stop offset="45%" stop-color="#8d99a6"/><stop offset="100%" stop-color="#2b3542"/>
       </linearGradient>
     </defs>
     <g filter="url(#nodeShadow)"><circle cx="375" cy="250" r="34" class="seat-gal"/></g>
     <circle cx="375" cy="250" r="34" stroke="url(#galBezel)" class="seat-ring"/>
     <circle cx="375" cy="250" r="31.8" class="seat-groove"/>
     <circle cx="375" cy="250" r="35.4" class="seat-hairline"/>
+    <circle cx="375" cy="250" r="31.8" class="gal-signal"/>
     <line x1="402" y1="277" x2="406" y2="281" class="gal-tick"/><line x1="402" y1="223" x2="406" y2="219" class="gal-tick"/><line x1="348" y1="277" x2="344" y2="281" class="gal-tick"/><line x1="348" y1="223" x2="344" y2="219" class="gal-tick"/>
     <defs>
       <radialGradient id="galEye" gradientUnits="userSpaceOnUse" cx="375" cy="241.4" r="8">
