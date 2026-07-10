@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 150" width="395" height="150" role="img" aria-label="manwe (1 star): Real-time UAV detection from vision, in safe Rust: a camera feed to low-latency airspace awareness. Feeds crebain, the robotics client.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 150" width="395" height="150" role="img" aria-label="manwe (1 star): Real-time UAV detection from vision, in safe Rust: a camera feed to low-latency airspace awareness. Feeds crebain&apos;s air picture.">
   <defs>
     <radialGradient id="wash0" cx="8%" cy="0%" r="120%"><stop offset="0%" stop-color="#08283a" stop-opacity="0.9"/><stop offset="60%" stop-color="#08283a" stop-opacity="0"/></radialGradient>
   </defs>
@@ -65,7 +65,7 @@
     <polygon points="370.0,16.0 371.5,20.0 375.7,20.1 372.4,22.8 373.5,26.9 370.0,24.5 366.5,26.9 367.6,22.8 364.3,20.1 368.5,20.0" class="glyph-fill c0"/><text x="360" y="27" text-anchor="end" class="badge c0">1</text>
     <text x="23" y="60" class="desc">Real-time UAV detection from vision, in safe</text>
     <text x="23" y="78" class="desc">Rust: a camera feed to low-latency airspace</text>
-    <text x="23" y="96" class="desc">awareness. Feeds crebain, the robotics client.</text>
+    <text x="23" y="96" class="desc">awareness. Feeds crebain&apos;s air picture.</text>
     <g><rect x="23" y="110" width="50" height="22" rx="6" class="chip c0"/><text x="48" y="125" text-anchor="middle" class="chip-label c0">Rust</text></g>
   </g>
 </svg>

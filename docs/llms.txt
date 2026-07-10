@@ -8,22 +8,24 @@
 ## Focus
 Agentic engineering, continual learning, knowledge graphs, RAG, world models,
 neural networks, spiking neural networks, neurorobotics, information theory, computational
-neuroscience, 3D vision and scene reconstruction, robotics.
+neuroscience, 3D vision and scene reconstruction, robotics, UAV detection,
+sensor fusion and counter-UAS awareness.
 
 ## Selected work
 - NCP (Neuro-Cybernetic Protocol): safety-gated, provenance-first wire protocol that lets a spiking neural simulation (NEST) perceive and act through robots, UAVs and analysis clients; Rust SDK with Python, C/C++ and TypeScript peers: https://github.com/sepahead/NCP
-- crebain: Adaptive Response & Awareness System (ARAS); tactical visualization & autonomy: sensor fusion, ML detection, drone physics, ROS/Gazebo; Tauri + React + Rust: https://github.com/sepahead/crebain
+- crebain: Adaptive Response & Awareness System (ARAS); a research prototype for detailed multi-UAV simulation and counter-UAS tactical awareness: multi-modal sensor fusion (KF/EKF/UKF/PF/IMM tracking), ML drone detection, 120 Hz drone physics, ROS/Gazebo; Tauri + React + Rust: https://github.com/sepahead/crebain
 - melkor: Gaussian-splatting & depth-analysis pipelines for 3D scene reconstruction; multi-view capture to dense geometry, CUDA-accelerated (Python/C++): https://github.com/sepahead/melkor
 - cortexel: agent-consumable scientific-visualization library for neural simulations; an agent emits a declarative VizSpec and Cortexel renders spike rasters, Brunel networks and STDP curves, with provenance enforced fail-closed (TypeScript): https://github.com/sepahead/cortexel
 - pid-rs: Partial Information Decomposition with continuous mutual-information (KSG) estimators, in safe Rust: https://github.com/sepahead/pid-rs
 - cobot-atlas: 3D mesh-generation pipeline; 2,023 meshes for collaborative-robot simulation and embodied AI; dataset on Hugging Face (Python): https://github.com/sepahead/cobot-atlas
-- engram (private): NEST-based neural-modeling hub (the "brain" the rest of the stack connects to)
+- manwe: real-time UAV detection from vision in safe Rust; a camera feed to low-latency airspace awareness, feeding crebain: https://github.com/sepahead/manwe
+- engram: Engram Neural Modeling Labs; NEST-based neural-modeling hub (the "brain" the rest of the stack connects to); code opens fully after publication: https://github.com/sepahead/engram
 - prisoma (private): a prism for embodied agents, robotics and world models; refracts Vision-Language-Action policies through several natively-implemented analysis methods, Partial Information Decomposition among them
 
 ## Research & writing
 - ReScience C replication: information-theoretic analysis of transfer functions: https://github.com/sepahead/mahmoudian-2020-rescience
 - Google Scholar: https://scholar.google.com/citations?user=t3PSg8kAAAAJ
-- Substack: https://substack.com/@thetorus
+- Substack: https://substack.com/@torusprime
 
 ## Links
 - GitHub: https://github.com/sepahead

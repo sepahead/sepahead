@@ -11,7 +11,7 @@
 //
 // Live star counts: with a token (GitHub Actions provides GITHUB_TOKEN) each
 // public repo's stargazerCount is refreshed; the baked-in `stars` in data.mjs
-// is the no-token fallback. Private repos (engram, prisoma) keep their lock
+// is the no-token fallback. Private repos (prisoma, galadriel) keep their lock
 // badge. Run by the work-cards.yml cron; a local run without a token uses the
 // fallback. Run: `node scripts/work-cards.mjs`.
 
@@ -26,8 +26,8 @@ const ASSETS_DIR = resolve(__dirname, "..", "assets");
 
 const projects = PROJECTS;
 // each public repo's current stargazerCount so the badges auto-update; the
-// `stars` in data.mjs is the no-token fallback. Private repos (engram, prisoma)
-// have no `repo` and keep their lock badge. Run by the work-cards.yml cron; a
+// `stars` in data.mjs is the no-token fallback. Private repos (prisoma,
+// galadriel) keep their lock badge. Run by the work-cards.yml cron; a
 // local run without a token just uses the fallback.
 // ---------------------------------------------------------------------------
 async function hydrateStars(list) {

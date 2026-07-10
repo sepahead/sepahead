@@ -50,7 +50,7 @@ const H = 460;
 //   bespoke logos: gate (NCP) · voxel-net (cortexel) · raven (crebain) | chip
 // ---------------------------------------------------------------------------
 const nodes = {
-  engram:      { x: 110, y: 230, color: "#bcc6d1", kind: "logo", private: true },
+  engram:      { x: 110, y: 230, color: "#bcc6d1", kind: "logo" },
   pidrs:       { x: 250, y: 98,  color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
   ncp:         { x: 250, y: 230, color: "#fbbf24", kind: "gate", label: "NCP" },
   prisoma:     { x: 460, y: 130, color: "#a78bfa", kind: "triangle", private: true },
@@ -645,7 +645,7 @@ const frame = `<g class="frame">
 // Assemble.
 // ---------------------------------------------------------------------------
 const aria =
-  "Project graph: engram (private) and crebain connect through the always-on, two-way NCP protocol to prisoma, a private hub; pid-rs, cobot-atlas, melkor and relief-atlas connect to prisoma; cobot-atlas, melkor and relief-atlas also connect to crebain, as does manwe, the perception training ground behind crebain; cortexel connects to engram; galadriel, a private cross-sensor spoof detector, connects to crebain and pid-rs.";
+  "Project graph: engram, the neural-modeling hub, and crebain, the multi-UAV simulation and counter-UAS awareness system, connect through the always-on, two-way NCP protocol to prisoma, a private hub; pid-rs, cobot-atlas, melkor and relief-atlas connect to prisoma; cobot-atlas, melkor and relief-atlas also connect to crebain, as does manwe, the UAV-detection eye feeding crebain; cortexel connects to engram; galadriel, a private cross-sensor spoof detector, connects to crebain and pid-rs.";
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
   <defs>

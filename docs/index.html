@@ -99,13 +99,14 @@
         "Agentic Engineering", "Continual Learning", "Knowledge Graphs",
         "Retrieval-Augmented Generation", "World Models", "Machine Learning", "Neural Networks",
         "Neurorobotics", "Information Theory", "Computational Neuroscience",
-        "Spiking Neural Networks", "3D Vision", "Scene Reconstruction", "Robotics", "Rust", "Python"
+        "Spiking Neural Networks", "3D Vision", "Scene Reconstruction", "Gaussian Splatting",
+        "Robotics", "Sensor Fusion", "UAV Detection", "Counter-UAS", "Rust", "Python"
       ],
       "sameAs": [
         "https://github.com/sepahead",
         "https://www.linkedin.com/in/sepehr-mahmoudian-99367516/",
         "https://scholar.google.com/citations?user=t3PSg8kAAAAJ",
-        "https://substack.com/@thetorus",
+        "https://substack.com/@torusprime",
         "https://huggingface.co/torusprime",
         "https://x.com/SepAhead"
       ]
@@ -127,8 +128,27 @@
       "alternateName": "Adaptive Response and Awareness System (ARAS)",
       "codeRepository": "https://github.com/sepahead/crebain",
       "url": "https://github.com/sepahead/crebain",
-      "description": "A tactical visualization and autonomy prototype: sensor fusion, ML detection, drone physics and ROS/Gazebo. Tauri + React + Rust.",
+      "description": "A research prototype for detailed multi-UAV simulation and counter-UAS tactical awareness: multi-modal sensor fusion (KF/EKF/UKF/PF/IMM tracking), ML drone detection, 120 Hz drone physics and ROS/Gazebo. Tauri + React + Rust.",
       "programmingLanguage": ["TypeScript", "Rust"],
+      "author": { "@id": "https://sepahead.github.io/sepahead/#person" }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "name": "manwe",
+      "codeRepository": "https://github.com/sepahead/manwe",
+      "url": "https://github.com/sepahead/manwe",
+      "description": "Real-time UAV detection from vision, in safe Rust: a camera feed to low-latency airspace awareness, feeding crebain.",
+      "programmingLanguage": "Rust",
+      "author": { "@id": "https://sepahead.github.io/sepahead/#person" }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "name": "engram",
+      "alternateName": "Engram Neural Modeling Labs",
+      "codeRepository": "https://github.com/sepahead/engram",
+      "url": "https://github.com/sepahead/engram",
+      "description": "Engram Neural Modeling Labs: a NEST-based neural-modeling hub for spiking-network and neural-modeling experiments; the hub the rest of the stack connects to. Code opens fully after publication.",
+      "programmingLanguage": "Python",
       "author": { "@id": "https://sepahead.github.io/sepahead/#person" }
     },
     {
@@ -174,7 +194,7 @@
       "@id": "https://sepahead.github.io/sepahead/#website",
       "url": "https://sepahead.github.io/sepahead/",
       "name": "Sepehr Mahmoudian",
-      "dateModified": "2026-06-22",
+      "dateModified": "2026-07-10",
       "about": { "@id": "https://sepahead.github.io/sepahead/#person" }
     },
     {
@@ -202,7 +222,7 @@
           "name": "What are Sepehr Mahmoudian's main projects?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "NCP (Neuro-Cybernetic Protocol), a safety-gated, provenance-first wire protocol that lets a spiking neural simulation perceive and act through robots and UAVs, with a Rust SDK and Python, C/C++ and TypeScript peers; crebain, an Adaptive Response & Awareness System for sensor fusion, ML detection and drone autonomy; pid-rs, Partial Information Decomposition estimators in safe Rust; and cobot-atlas, a 3D mesh dataset (2,023 meshes) for robot simulation, published on Hugging Face. He also builds the private engram (a NEST-based neural-modeling hub) and prisoma (a prism for embodied agents, robotics and world models, with several natively-implemented analysis methods including Partial Information Decomposition)."
+            "text": "NCP (Neuro-Cybernetic Protocol), a safety-gated, provenance-first wire protocol that lets a spiking neural simulation perceive and act through robots and UAVs, with a Rust SDK and Python, C/C++ and TypeScript peers; crebain, an Adaptive Response & Awareness System — a research prototype for detailed multi-UAV simulation and counter-UAS tactical awareness with multi-modal sensor fusion and ML drone detection; manwe, real-time UAV detection from vision in Rust; pid-rs, Partial Information Decomposition estimators in safe Rust; cobot-atlas, a 3D mesh dataset (2,023 meshes) for robot simulation, published on Hugging Face; and engram, a NEST-based neural-modeling hub. He also builds the private prisoma (a prism for embodied agents, robotics and world models, with several natively-implemented analysis methods including Partial Information Decomposition)."
           }
         },
         {
@@ -262,12 +282,13 @@
   <h2>Selected work</h2>
   <ul>
     <li class="proj"><a href="https://github.com/sepahead/NCP"><b>NCP</b></a> <span>: Neuro-Cybernetic Protocol: a safety-gated, provenance-first wire contract that lets a spiking neural simulation (NEST) perceive and act through robots, UAVs and analysis clients. Rust SDK with Python, C/C++ and TypeScript peers.</span></li>
-    <li class="proj"><a href="https://github.com/sepahead/crebain"><b>crebain</b></a> <span>: Adaptive Response &amp; Awareness System (ARAS): tactical visualization &amp; autonomy: sensor fusion, ML detection, drone physics, ROS / Gazebo. Tauri + React + Rust.</span></li>
+    <li class="proj"><a href="https://github.com/sepahead/crebain"><b>crebain</b></a> <span>: Adaptive Response &amp; Awareness System (ARAS): detailed multi-UAV simulation &amp; counter-UAS tactical awareness: multi-modal sensor fusion, ML drone detection, drone physics, ROS / Gazebo. Tauri + React + Rust.</span></li>
     <li class="proj"><a href="https://github.com/sepahead/melkor"><b>melkor</b></a> <span>: Gaussian-splatting &amp; depth-analysis pipelines for 3D scene reconstruction: multi-view capture to dense geometry, CUDA-accelerated. Python &amp; C++.</span></li>
     <li class="proj"><a href="https://github.com/sepahead/cortexel"><b>cortexel</b></a> <span>: agent-consumable scientific-visualization library for neural simulations: emit a declarative VizSpec and render spike rasters, Brunel networks &amp; STDP curves, with provenance enforced fail-closed. TypeScript.</span></li>
     <li class="proj"><a href="https://github.com/sepahead/pid-rs"><b>pid-rs</b></a> <span>: Partial Information Decomposition with continuous mutual-information (KSG) estimators, in safe Rust.</span></li>
     <li class="proj"><a href="https://github.com/sepahead/cobot-atlas"><b>cobot-atlas</b></a> <span>: 3D mesh-generation pipeline: 2,023 meshes for collaborative-robot simulation and embodied AI; dataset published on Hugging Face. Python.</span></li>
-    <li class="proj"><b>engram</b><span class="priv">private</span> <span>: a NEST-based neural-modeling hub: the "brain" the rest of the stack connects to.</span></li>
+    <li class="proj"><a href="https://github.com/sepahead/manwe"><b>manwe</b></a> <span>: real-time UAV detection from vision, in safe Rust: a camera feed to low-latency airspace awareness, feeding crebain.</span></li>
+    <li class="proj"><a href="https://github.com/sepahead/engram"><b>engram</b></a> <span>: a NEST-based neural-modeling hub: the "brain" the rest of the stack connects to; code opens fully after publication.</span></li>
     <li class="proj"><b>prisoma</b><span class="priv">private</span> <span>: a prism for embodied agents, robotics and world models: refracts Vision-Language-Action policies through several natively-implemented analysis methods, Partial Information Decomposition among them.</span></li>
   </ul>
 
@@ -275,7 +296,7 @@
   <ul>
     <li class="proj"><a href="https://github.com/sepahead/mahmoudian-2020-rescience"><b>ReScience C replication</b></a> <span>: information-theoretic analysis of transfer functions.</span></li>
     <li class="proj"><a href="https://scholar.google.com/citations?user=t3PSg8kAAAAJ"><b>Google Scholar</b></a> <span>: publications.</span></li>
-    <li class="proj"><a href="https://substack.com/@thetorus"><b>Substack</b></a> <span>: notes &amp; essays.</span></li>
+    <li class="proj"><a href="https://substack.com/@torusprime"><b>Substack</b></a> <span>: notes &amp; essays.</span></li>
   </ul>
 
   <h2>FAQ</h2>
@@ -289,7 +310,7 @@
   </details>
   <details>
     <summary>What are his main projects?</summary>
-    <p><a href="https://github.com/sepahead/NCP">NCP</a> (Neuro-Cybernetic Protocol), a safety-gated, provenance-first wire protocol that lets a spiking neural simulation perceive and act through robots and UAVs; <a href="https://github.com/sepahead/crebain">crebain</a>, an Adaptive Response &amp; Awareness System for sensor fusion, ML detection and drone autonomy; <a href="https://github.com/sepahead/pid-rs">pid-rs</a>, Partial Information Decomposition estimators in safe Rust; and <a href="https://github.com/sepahead/cobot-atlas">cobot-atlas</a>, a 3D mesh dataset for robot simulation. Plus the private engram (NEST neural-modeling hub) and prisoma (a prism for embodied agents, robotics and world models, with several native analysis methods including PID).</p>
+    <p><a href="https://github.com/sepahead/NCP">NCP</a> (Neuro-Cybernetic Protocol), a safety-gated, provenance-first wire protocol that lets a spiking neural simulation perceive and act through robots and UAVs; <a href="https://github.com/sepahead/crebain">crebain</a>, an Adaptive Response &amp; Awareness System — detailed multi-UAV simulation and counter-UAS tactical awareness with multi-modal sensor fusion and ML drone detection; <a href="https://github.com/sepahead/manwe">manwe</a>, real-time UAV detection from vision in Rust; <a href="https://github.com/sepahead/pid-rs">pid-rs</a>, Partial Information Decomposition estimators in safe Rust; <a href="https://github.com/sepahead/cobot-atlas">cobot-atlas</a>, a 3D mesh dataset for robot simulation; and <a href="https://github.com/sepahead/engram">engram</a>, a NEST-based neural-modeling hub. Plus the private prisoma (a prism for embodied agents, robotics and world models, with several native analysis methods including PID).</p>
   </details>
   <details>
     <summary>Has he published research?</summary>
@@ -305,7 +326,7 @@
     <a href="https://github.com/sepahead">GitHub</a>
     <a href="https://www.linkedin.com/in/sepehr-mahmoudian-99367516/">LinkedIn</a>
     <a href="https://scholar.google.com/citations?user=t3PSg8kAAAAJ">Google Scholar</a>
-    <a href="https://substack.com/@thetorus">Substack</a>
+    <a href="https://substack.com/@torusprime">Substack</a>
     <a href="https://huggingface.co/torusprime">Hugging Face</a>
     <a href="https://x.com/SepAhead">X</a>
     <a href="mailto:sepmhn@gmail.com">Email</a>
