@@ -339,11 +339,11 @@ const nodeEls = Object.values(nodes).map((n) => {
     // Massif: left foot → left peak → saddle → main peak → right foot. The
     // solid rock keeps the whole silhouette; the right flank's surface is
     // where the splats condense.
-    const solid = `M${f1(cx - 30)} ${f1(cy + 20)} L${f1(cx - 12)} ${f1(cy - 26)} L${f1(cx)} ${f1(cy - 6)} L${f1(cx + 12)} ${f1(cy - 38)} L${f1(cx + 30)} ${f1(cy + 20)} Z`;
-    const ridgeLine = `M${f1(cx - 30)} ${f1(cy + 20)} L${f1(cx - 12)} ${f1(cy - 26)} L${f1(cx)} ${f1(cy - 6)} L${f1(cx + 12)} ${f1(cy - 38)}`;
+    const solid = `M${f1(cx - 30)} ${f1(cy + 24)} L${f1(cx - 12)} ${f1(cy - 22)} L${f1(cx)} ${f1(cy - 2)} L${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)} Z`;
+    const ridgeLine = `M${f1(cx - 30)} ${f1(cy + 24)} L${f1(cx - 12)} ${f1(cy - 22)} L${f1(cx)} ${f1(cy - 2)} L${f1(cx + 12)} ${f1(cy - 34)}`;
     // Gaussian splats straddling the right slope (peak → foot), oriented along
     // it, condensing onto the surface: opacity falls off downslope.
-    const px = cx + 12, py = cy - 38, qx = cx + 30, qy = cy + 20;
+    const px = cx + 12, py = cy - 34, qx = cx + 30, qy = cy + 24;
     const sang = f1((Math.atan2(qy - py, qx - px) * 180) / Math.PI);
     const snx = -(qy - py) / Math.hypot(qx - px, qy - py), sny = (qx - px) / Math.hypot(qx - px, qy - py);
     const splats = [
@@ -372,17 +372,17 @@ const nodeEls = Object.values(nodes).map((n) => {
       <path d="${hex(1)}" fill="url(#melHeat)"/>
       <path class="mel-scan" d="M${f1(cx - 42)} ${f1(cy - 14)} H${f1(cx + 42)} M${f1(cx - 42)} ${f1(cy + 2)} H${f1(cx + 42)} M${f1(cx - 42)} ${f1(cy + 18)} H${f1(cx + 42)}"/>
       <path d="${solid}" class="mel-rock"/>
-      <path d="M${f1(cx + 12)} ${f1(cy - 38)} L${f1(cx + 16)} ${f1(cy + 20)} L${f1(cx + 4)} ${f1(cy + 20)} Z" class="mel-facet"/>
+      <path d="M${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 16)} ${f1(cy + 24)} L${f1(cx + 4)} ${f1(cy + 24)} Z" class="mel-facet"/>
       <path d="${ridgeLine}" class="mel-ridge"/>
       ${splats}
-      <circle cx="${f1(cx + 12)}" cy="${f1(cy - 38)}" r="1.8" class="mel-spark" filter="url(#soft)">
+      <circle cx="${f1(cx + 12)}" cy="${f1(cy - 34)}" r="1.8" class="mel-spark" filter="url(#soft)">
         <animate attributeName="opacity" values="0.55;1;0.55" dur="3.2s" repeatCount="indefinite"/>
       </circle>
     </g>
     <path d="${hex(1)}" class="mel-edge"/>
     <path d="${hex(0.9423)}" class="mel-groove"/>
     <path d="${hex(1.0337)}" class="mel-hairline"/>
-    <text x="${cx}" y="${f1(cy + 34)}" text-anchor="middle" class="cube-label">${escapeXML(n.label)}</text>
+    <text x="${cx}" y="${f1(cy + 62)}" text-anchor="middle" class="cube-label">${escapeXML(n.label)}</text>
   </g>`;
   }
   if (n.kind === "logo") {
@@ -579,10 +579,10 @@ const nodeEls = Object.values(nodes).map((n) => {
     // CALLIGRAPHIC connections: static, tapered pen-strokes that bow and fade into
     // the distance (no moving packets), echoing the script wordmark below and
     // distinct from the SVG's other live wired edges.
-    const vw = 9, vbh = 8, rh = vw / 2;
-    const T = { x: n.x,      y: n.y - 25, depth: 1.0 }; // farthest, up/back
-    const L = { x: n.x - 20, y: n.y + 13, depth: 0.5 }; // mid
-    const R = { x: n.x + 20, y: n.y + 13, depth: 0.0 }; // nearest, front
+    const vw = 8, vbh = 7, rh = vw / 2;
+    const T = { x: n.x,      y: n.y - 22, depth: 1.0 }; // farthest, up/back
+    const L = { x: n.x - 17, y: n.y + 11, depth: 0.5 }; // mid
+    const R = { x: n.x + 17, y: n.y + 11, depth: 0.0 }; // nearest, front
     // Perspective: depth 0 (near)..1 (far) → opacity 1.0..0.45 AND scale 1.2..0.8.
     const dop = (d) => Number((1 - d * 0.55).toFixed(3));
     const dsc = (d) => 1.2 - d * 0.4;
@@ -759,11 +759,12 @@ const nodeEls = Object.values(nodes).map((n) => {
     // galadriel: its real brand mark in miniature — the SENTINEL SHIELD. An
     // angular chamfered crest whose visor slit carries a red scanning eye that
     // sweeps side to side (the watcher that looks for the channel that lies),
-    // with three sensor-channel traces feeding the visor from below. A bespoke
-    // SEATED mark (faint disc + label above, like manwe/engram) so galadriel
-    // reads at the project tier. Echoes assets/galadriel-logo.svg in the
-    // galadriel repo. Reduced-motion parks the eye centred (static attribute
-    // values hold it). One instance -> unique ids.
+    // with three sensor-channel traces feeding the visor from below, seated on
+    // a machined badge (red chrome bezel + groove + hairline, manwe's border
+    // grade, theme-FIXED) with four reticle ticks outside the rim echoing
+    // crebain's crosshair. Echoes assets/galadriel-logo.svg in the galadriel
+    // repo. Reduced-motion parks the eye centred (static attribute values
+    // hold it). One instance -> unique ids.
     const cx = n.x, cy = n.y, s = 0.26;
     const m = (px, py) => `${f1(cx + (px - 120) * s)} ${f1(cy + (py - 122) * s)}`;
     const poly = (pts) => `M${pts.map(([px, py]) => m(px, py)).join(" L")} Z`;
@@ -778,11 +779,10 @@ const nodeEls = Object.values(nodes).map((n) => {
     const [ex, ey] = [cx + (120 - 120) * s, cy + (89 - 122) * s];
     const amp = f1(42 * s);
     const ticks = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
-      .map(([tx, ty]) => `<line x1="${f1(cx + tx * 23.3)}" y1="${f1(cy + ty * 23.3)}" x2="${f1(cx + tx * 29)}" y2="${f1(cy + ty * 29)}" class="gal-tick"/>`)
+      .map(([tx, ty]) => `<line x1="${f1(cx + tx * 27)}" y1="${f1(cy + ty * 27)}" x2="${f1(cx + tx * 31)}" y2="${f1(cy + ty * 31)}" class="gal-tick"/>`)
       .join("");
     return `<g class="gal">
-    <circle cx="${cx}" cy="${cy}" r="34" class="gal-seat"/>
-    <circle cx="${cx}" cy="${cy}" r="36.5" class="gal-orbit"/>
+    ${seat(cx, cy, "gal", ["#fecaca", "#ef4444", "#7f1d1d"])}
     ${ticks}
     <defs>
       <radialGradient id="galEye" gradientUnits="userSpaceOnUse" cx="${f1(ex)}" cy="${f1(ey)}" r="8">
@@ -858,6 +858,10 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       <stop offset="0%" stop-color="#2a0a2e"/>
       <stop offset="100%" stop-color="#10131a"/>
     </radialGradient>
+    <radialGradient id="galGrad" cx="50%" cy="40%" r="68%">
+      <stop offset="0%" stop-color="#2a0a0a"/>
+      <stop offset="100%" stop-color="#10131a"/>
+    </radialGradient>
     <filter id="nodeShadow" x="-40%" y="-40%" width="180%" height="180%">
       <feDropShadow dx="0" dy="1.5" stdDeviation="2.4" flood-color="#000000" flood-opacity="0.38"/>
     </filter>
@@ -898,7 +902,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mel-edge     { fill: none; stroke: url(#melBezel); stroke-width: 2.4; stroke-linejoin: miter; }
     .mel-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .mel-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
-    .cube-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fdba74; stroke: #2b1a10; }
+    .cube-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fdba74; }
     .logo-label     { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #cdd6e0; }
     .prz-body     { fill: url(#przGlass); }
     .prz-core     { fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-opacity: 0.85; }
@@ -941,8 +945,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mw-ring      { fill: none; stroke: url(#mwBezel); stroke-width: 2.2; }
     .mw-groove    { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .mw-hairline  { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
-    .gal-seat   { fill: #ef4444; fill-opacity: 0.05; filter: url(#soft); }
-    .gal-orbit  { fill: none; stroke: #ef4444; stroke-opacity: 0.45; stroke-width: 1.2; }
+    .seat-gal   { fill: url(#galGrad); }
     .gal-tick   { stroke: #ef4444; stroke-opacity: 0.6; stroke-width: 1.6; stroke-linecap: round; }
     .gal-plate  { fill: #131c28; stroke: #8b97a6; stroke-opacity: 0.6; stroke-width: 1.3; stroke-linejoin: miter; }
     .gal-slit   { fill: #05070b; stroke: #8b97a6; stroke-opacity: 0.5; stroke-width: 0.8; stroke-linejoin: miter; }
@@ -967,20 +970,14 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .logo-label { fill: #57626f; }
       .tri-label { fill: #6d28d9; }
       .gate-label { fill: #b45309; }
+      .cube-label { fill: #c2410c; }
       .flag-edge { stroke: #000000; stroke-opacity: 0.25; }
       .vox-label { fill: #c026d3; }
       .raven-seat { fill-opacity: 0.06; }
       .raven-label { fill: #4b5320; }
       .raven-cursor { fill: #4b5320; }
       .radar-label { fill: #0284c7; }
-      .gal-seat { fill: #dc2626; fill-opacity: 0.04; }
-      .gal-orbit { stroke: #dc2626; stroke-opacity: 0.5; }
       .gal-tick { stroke: #dc2626; }
-      .gal-plate { fill: #ffffff; stroke: #6b7684; }
-      .gal-slit { fill: #111827; stroke: #6b7684; }
-      .gal-chan { stroke: #59636f; }
-      .gal-node { fill: #59636f; }
-      .gal-hotf { fill: #dc2626; }
       .gal-label { fill: #dc2626; }
       .wg-rule { stroke: #d0d7de; stroke-opacity: 0.9; }
       .wg-bracket { stroke: #b45309; }
