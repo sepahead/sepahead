@@ -778,13 +778,15 @@ const nodeEls = Object.values(nodes).map((n) => {
     const shield = poly([[36, 44], [68, 18], [172, 18], [204, 44], [204, 122], [188, 164], [120, 226], [52, 164], [36, 122]]);
     const slit = poly([[46, 89], [60, 76], [180, 76], [194, 89], [180, 102], [60, 102]]);
     // Fiber runs (real-px offsets from the node centre; visor slit bottom
-    // sits at −4.6). Each fibre: base guide + travelling pulse + connector
-    // port at the foot + light jack where it enters the visor.
+    // sits at −4.6). Ports sit at the shield's LOWER CORNERS + bottom point
+    // (echoing its taper); jacks SPREAD across the visor's width; each fibre
+    // is one monotonic inward sweep that leaves its port and enters the
+    // visor vertically — plugged in, no outward wander.
     const p = (x, y) => `${f1(cx + x)} ${f1(cy + y)}`;
     const FIBERS = [
-      { d: `M${p(-7, 14.5)} C${p(-10.5, 7)} ${p(-7.5, -0.5)} ${p(-4, -4.2)}`, port: [-7, 14.5], jack: [-4, -4.2], beg: "0.9s" },
-      { d: `M${p(0, 19)} C${p(0, 11.5)} ${p(0, 3.5)} ${p(0, -4.2)}`, port: [0, 19], jack: [0, -4.2], beg: "0s" },
-      { d: `M${p(7, 14.5)} C${p(10.5, 7)} ${p(7.5, -0.5)} ${p(4, -4.2)}`, port: [7, 14.5], jack: [4, -4.2], beg: "0.9s" },
+      { d: `M${p(-10.5, 9.5)} C${p(-10.5, 4)} ${p(-7.5, 1)} ${p(-7.5, -4.2)}`, port: [-10.5, 9.5], jack: [-7.5, -4.2], beg: "0.9s" },
+      { d: `M${p(0, 18.5)} C${p(0, 11)} ${p(0, 3)} ${p(0, -4.2)}`, port: [0, 18.5], jack: [0, -4.2], beg: "0s" },
+      { d: `M${p(10.5, 9.5)} C${p(10.5, 4)} ${p(7.5, 1)} ${p(7.5, -4.2)}`, port: [10.5, 9.5], jack: [7.5, -4.2], beg: "0.9s" },
     ];
     const circuit = FIBERS.map(({ d, port, jack, beg }) =>
       `<path class="gal-fiber" d="${d}"/>` +
