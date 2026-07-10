@@ -8,12 +8,12 @@
 ## Focus
 Agentic engineering, continual learning, knowledge graphs, RAG, world models,
 neural networks, spiking neural networks, neurorobotics, information theory, computational
-neuroscience, 3D vision and scene reconstruction, robotics, UAV detection,
-sensor fusion and counter-UAS awareness.
+neuroscience, 3D vision and scene reconstruction, robotics, drone detection,
+sensor fusion and airspace awareness.
 
 ## Selected work
 - NCP (Neuro-Cybernetic Protocol): safety-gated, provenance-first wire protocol that lets a spiking neural simulation (NEST) perceive and act through robots, UAVs and analysis clients; Rust SDK with Python, C/C++ and TypeScript peers: https://github.com/sepahead/NCP
-- crebain: Adaptive Response & Awareness System (ARAS); a research prototype for detailed multi-UAV simulation and counter-UAS tactical awareness: multi-modal sensor fusion (KF/EKF/UKF/PF/IMM tracking), ML drone detection, 120 Hz drone physics, ROS/Gazebo; Tauri + React + Rust: https://github.com/sepahead/crebain
+- crebain: Airspace Research & Awareness System (ARAS); a research prototype for detailed multi-UAV simulation and airspace situational awareness: multi-modal sensor fusion (KF/EKF/UKF/PF/IMM tracking), ML drone detection, 120 Hz drone physics, ROS/Gazebo; Tauri + React + Rust: https://github.com/sepahead/crebain
 - melkor: Gaussian-splatting & depth-analysis pipelines for 3D scene reconstruction; multi-view capture to dense geometry, CUDA-accelerated (Python/C++): https://github.com/sepahead/melkor
 - cortexel: agent-consumable scientific-visualization library for neural simulations; an agent emits a declarative VizSpec and Cortexel renders spike rasters, Brunel networks and STDP curves, with provenance enforced fail-closed (TypeScript): https://github.com/sepahead/cortexel
 - pid-rs: Partial Information Decomposition with continuous mutual-information (KSG) estimators, in safe Rust: https://github.com/sepahead/pid-rs

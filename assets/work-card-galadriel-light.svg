@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 150" width="395" height="150" role="img" aria-label="galadriel (private): Galadriel&apos;s Mirror: cross-sensor spoof detection via Partial Information Decomposition, watching crebain&apos;s sensor fusion. The security client.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 150" width="395" height="150" role="img" aria-label="galadriel (private): Galadriel&apos;s Mirror: cross-sensor spoof detection via Partial Information Decomposition, watching crebain&apos;s sensor fusion. The sensor-integrity client.">
   <defs>
     <radialGradient id="wash0" cx="8%" cy="0%" r="120%"><stop offset="0%" stop-color="#2a0a0a" stop-opacity="0.9"/><stop offset="60%" stop-color="#2a0a0a" stop-opacity="0"/></radialGradient>
   </defs>
@@ -65,7 +65,7 @@
     <g transform="translate(365 16) scale(0.78)"><path d="M2 6 V4.4 a4 4 0 0 1 8 0 V6" fill="none" class="glyph-stroke c0" stroke-width="1.6"/><rect x="0" y="6" width="12" height="9" rx="1.6" class="glyph-fill c0"/></g><text x="360" y="28" text-anchor="end" class="badge c0">private</text>
     <text x="23" y="60" class="desc">Galadriel&apos;s Mirror: cross-sensor spoof detection</text>
     <text x="23" y="78" class="desc">via Partial Information Decomposition, watching</text>
-    <text x="23" y="96" class="desc">crebain&apos;s sensor fusion. The security client.</text>
+    <text x="23" y="96" class="desc">crebain&apos;s sensor fusion. The sensor-integrity…</text>
     <g><rect x="23" y="110" width="50" height="22" rx="6" class="chip c0"/><text x="48" y="125" text-anchor="middle" class="chip-label c0">Rust</text></g>
   </g>
 </svg>

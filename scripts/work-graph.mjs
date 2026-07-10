@@ -645,7 +645,7 @@ const frame = `<g class="frame">
 // Assemble.
 // ---------------------------------------------------------------------------
 const aria =
-  "Project graph: engram, the neural-modeling hub, and crebain, the multi-UAV simulation and counter-UAS awareness system, connect through the always-on, two-way NCP protocol to prisoma, a private hub; pid-rs, cobot-atlas, melkor and relief-atlas connect to prisoma; cobot-atlas, melkor and relief-atlas also connect to crebain, as does manwe, the UAV-detection eye feeding crebain; cortexel connects to engram; galadriel, a private cross-sensor spoof detector, connects to crebain and pid-rs.";
+  "Project graph: engram, the neural-modeling hub, and crebain, the multi-UAV simulation and airspace-awareness testbed, connect through the always-on, two-way NCP protocol to prisoma, a private hub; pid-rs, cobot-atlas, melkor and relief-atlas connect to prisoma; cobot-atlas, melkor and relief-atlas also connect to crebain, as does manwe, the drone-detection eye feeding crebain; cortexel connects to engram; galadriel, a private cross-sensor spoof detector, connects to crebain and pid-rs.";
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
   <defs>

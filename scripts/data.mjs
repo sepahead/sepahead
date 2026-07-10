@@ -36,7 +36,7 @@ export const PROJECTS = [
     name: "crebain",
     accent: "#9caf88", light: "#4b5320", grad: "#1f2913",
     stars: 16, repo: "sepahead/crebain",
-    desc: "Adaptive Response & Awareness System: detailed multi-UAV simulation & counter-UAS awareness. Sensor fusion, ML detection, ROS / Gazebo.",
+    desc: "Multi-UAV simulation & airspace-awareness research testbed: multi-modal sensor fusion, ML drone detection, drone physics. ROS / Gazebo.",
     stack: ["TS", "Rust", "Nix"],
   },
   {
@@ -71,14 +71,14 @@ export const PROJECTS = [
     name: "manwe",
     accent: "#38bdf8", light: "#0284c7", grad: "#08283a",
     stars: 1, repo: "sepahead/manwe",
-    desc: "Real-time UAV detection from vision, in safe Rust: a camera feed to low-latency airspace awareness. Feeds crebain's air picture.",
+    desc: "Real-time drone detection from vision, in safe Rust: a camera feed to low-latency airspace awareness. Feeds crebain's airspace view.",
     stack: ["Rust"],
   },
   {
     name: "galadriel",
     accent: "#ef4444", light: "#dc2626", grad: "#2a0a0a",
     private: true, repo: "sepahead/galadriel",
-    desc: "Galadriel's Mirror: cross-sensor spoof detection via Partial Information Decomposition, watching crebain's sensor fusion. The security client.",
+    desc: "Galadriel's Mirror: cross-sensor spoof detection via Partial Information Decomposition, watching crebain's sensor fusion. The sensor-integrity client.",
     stack: ["Rust"],
   },
 ];
