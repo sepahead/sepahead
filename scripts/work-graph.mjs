@@ -328,9 +328,9 @@ const nodeEls = Object.values(nodes).map((n) => {
     // melkor: the OBSIDIAN FORGE PLATE — a machined dark hexagonal plate with a
     // heated-metal bezel (lit crown → cooled base), forge light rising from
     // below, and a black twin-peak massif being SURVEYED against it: the ridge
-    // carries an ember rim light and the surface wears an uneven tactical
-    // reconstruction mesh (contours + drop lines at irregular spacing, ember
-    // survey nodes). Plate + rock are theme-FIXED (a real object, like
+    // carries an ember rim light and the surface wears a 3-D draped wireframe
+    // — sagging elevation contours crossed by radial fall lines, with ember
+    // survey nodes. Plate + rock are theme-FIXED (a real object, like
     // engram's medallion); only the label ink adapts. The peak spark breathes;
     // reduced-motion holds it lit. One instance → unique ids.
     const cx = n.x, cy = n.y;
@@ -341,16 +341,32 @@ const nodeEls = Object.values(nodes).map((n) => {
     // where the splats condense.
     const solid = `M${f1(cx - 30)} ${f1(cy + 24)} L${f1(cx - 12)} ${f1(cy - 22)} L${f1(cx)} ${f1(cy - 2)} L${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)} Z`;
     const ridgeLine = `M${f1(cx - 30)} ${f1(cy + 24)} L${f1(cx - 12)} ${f1(cy - 22)} L${f1(cx)} ${f1(cy - 2)} L${f1(cx + 12)} ${f1(cy - 34)}`;
-    // Tactical survey mesh draped over the massif: contour lines at UNEVEN
-    // elevations and drop lines at UNEVEN eastings, both clipped to the rock
-    // silhouette so they read as an irregular reconstruction tessellation on
-    // the surface, with a few ember survey nodes at chosen intersections.
-    const meshH = [-28, -16, -9, 1, 14]
-      .map((dy2) => `M${f1(cx - 31)} ${f1(cy + dy2)} H${f1(cx + 31)}`).join(" ");
-    const meshV = [-26, -15, -9, 0, 4, 11, 21]
-      .map((dx2) => `M${f1(cx + dx2)} ${f1(cy - 36)} V${f1(cy + 24)}`).join(" ");
-    const meshNodes = [[-12, -15], [-6, -6], [8, -15], [16, 4], [-24, 15]]
-      .map(([nx2, ny2]) => `<circle cx="${f1(cx + nx2)}" cy="${f1(cy + ny2)}" r="0.9" class="mel-node"/>`)
+    // 3-D draped survey mesh: elevation CONTOURS built by scaling the ridge
+    // profile toward the base and bowing each one toward the viewer (lower
+    // contours sag more, like the rings of a wireframe cone seen from above),
+    // crossed by radial FALL LINES fanning from each peak to the base — the
+    // classic wireframe-terrain read. Contour levels are UNEVEN; the sag term
+    // vanishes at x = ±30 so every contour terminates exactly on the
+    // silhouette. Ember survey nodes sit on chosen contour stations.
+    const BASE = 24;
+    const prof = [[-30, 24], [-12, -22], [0, -2], [12, -34], [30, 24]];
+    const P = (x) => {
+      for (let i = 0; i < prof.length - 1; i++) {
+        const [x1, y1] = prof[i], [x2, y2] = prof[i + 1];
+        if (x >= x1 && x <= x2) return y1 + ((y2 - y1) * (x - x1)) / (x2 - x1);
+      }
+      return BASE;
+    };
+    const conY = (x, k) => BASE + (P(x) - BASE) * k + (1 + 3 * (1 - k)) * (1 - (x / 30) ** 2);
+    const STATIONS = [-30, -24, -18, -12, -6, 0, 6, 12, 18, 24, 30];
+    const contours = [0.3, 0.52, 0.7, 0.86]
+      .map((k) => `M${STATIONS.map((x) => `${f1(cx + x)} ${f1(cy + conY(x, k))}`).join(" L")}`)
+      .join(" ");
+    const falls = [[-12, -22, [-22, -12, -3]], [12, -34, [2, 12, 22]]]
+      .flatMap(([pxx, pyy, tgts]) => tgts.map((tx) => `M${f1(cx + pxx)} ${f1(cy + pyy)} L${f1(cx + tx)} ${f1(cy + BASE)}`))
+      .join(" ");
+    const meshNodes = [[-12, 0.52], [12, 0.7], [21, 0.3], [-6, 0.86]]
+      .map(([x, k]) => `<circle cx="${f1(cx + x)}" cy="${f1(cy + conY(x, k))}" r="0.9" class="mel-node"/>`)
       .join("");
     return `<g>
     <defs>
@@ -369,12 +385,11 @@ const nodeEls = Object.values(nodes).map((n) => {
     <g filter="url(#nodeShadow)"><path d="${hex(1)}" class="mel-plate"/></g>
     <g clip-path="url(#melClip)">
       <path d="${hex(1)}" fill="url(#melHeat)"/>
-      <path class="mel-scan" d="M${f1(cx - 42)} ${f1(cy - 14)} H${f1(cx + 42)} M${f1(cx - 42)} ${f1(cy + 2)} H${f1(cx + 42)} M${f1(cx - 42)} ${f1(cy + 18)} H${f1(cx + 42)}"/>
       <path d="${solid}" class="mel-rock"/>
       <path d="M${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 16)} ${f1(cy + 24)} L${f1(cx + 4)} ${f1(cy + 24)} Z" class="mel-facet"/>
       <g clip-path="url(#melRockClip)">
-        <path d="${meshH}" class="mel-mesh"/>
-        <path d="${meshV}" class="mel-mesh"/>
+        <path d="${contours}" class="mel-mesh"/>
+        <path d="${falls}" class="mel-mesh"/>
         ${meshNodes}
       </g>
       <path d="${ridgeLine}" class="mel-ridge"/>
@@ -901,11 +916,10 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .seat-gate     { fill: url(#gateGrad); }
     .seat-vox      { fill: url(#voxGrad); }
     .mel-plate    { fill: url(#melPlate); }
-    .mel-scan     { fill: none; stroke: #fb923c; stroke-opacity: 0.09; stroke-width: 1; }
     .mel-rock     { fill: #050302; }
     .mel-ridge    { fill: none; stroke: #fdba74; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
     .mel-facet    { fill: #211008; }
-    .mel-mesh     { fill: none; stroke: #fdba74; stroke-opacity: 0.32; stroke-width: 0.9; }
+    .mel-mesh     { fill: none; stroke: #fdba74; stroke-opacity: 0.32; stroke-width: 0.9; stroke-linejoin: round; }
     .mel-node     { fill: #fde68a; fill-opacity: 0.8; }
     .mel-spark    { fill: #fde68a; }
     .mel-edge     { fill: none; stroke: url(#melBezel); stroke-width: 2.4; stroke-linejoin: miter; }

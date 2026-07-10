@@ -61,11 +61,10 @@
     .seat-gate     { fill: url(#gateGrad); }
     .seat-vox      { fill: url(#voxGrad); }
     .mel-plate    { fill: url(#melPlate); }
-    .mel-scan     { fill: none; stroke: #fb923c; stroke-opacity: 0.09; stroke-width: 1; }
     .mel-rock     { fill: #050302; }
     .mel-ridge    { fill: none; stroke: #fdba74; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
     .mel-facet    { fill: #211008; }
-    .mel-mesh     { fill: none; stroke: #fdba74; stroke-opacity: 0.32; stroke-width: 0.9; }
+    .mel-mesh     { fill: none; stroke: #fdba74; stroke-opacity: 0.32; stroke-width: 0.9; stroke-linejoin: round; }
     .mel-node     { fill: #fde68a; fill-opacity: 0.8; }
     .mel-spark    { fill: #fde68a; }
     .mel-edge     { fill: none; stroke: url(#melBezel); stroke-width: 2.4; stroke-linejoin: miter; }
@@ -381,13 +380,12 @@
     <g filter="url(#nodeShadow)"><path d="M690 202 L731.6 226 L731.6 274 L690 298 L648.4 274 L648.4 226 Z" class="mel-plate"/></g>
     <g clip-path="url(#melClip)">
       <path d="M690 202 L731.6 226 L731.6 274 L690 298 L648.4 274 L648.4 226 Z" fill="url(#melHeat)"/>
-      <path class="mel-scan" d="M648 236 H732 M648 252 H732 M648 268 H732"/>
       <path d="M660 274 L678 228 L690 248 L702 216 L720 274 Z" class="mel-rock"/>
       <path d="M702 216 L706 274 L694 274 Z" class="mel-facet"/>
       <g clip-path="url(#melRockClip)">
-        <path d="M659 222 H721 M659 234 H721 M659 241 H721 M659 251 H721 M659 264 H721" class="mel-mesh"/>
-        <path d="M664 214 V274 M675 214 V274 M681 214 V274 M690 214 V274 M694 214 V274 M701 214 V274 M711 214 V274" class="mel-mesh"/>
-        <circle cx="678" cy="235" r="0.9" class="mel-node"/><circle cx="684" cy="244" r="0.9" class="mel-node"/><circle cx="698" cy="235" r="0.9" class="mel-node"/><circle cx="706" cy="254" r="0.9" class="mel-node"/><circle cx="666" cy="265" r="0.9" class="mel-node"/>
+        <path d="M660 274 L666 270.5 L672 266.8 L678 262.8 L684 266.2 L690 269.3 L696 264.4 L702 259.2 L708 264.4 L714 269.3 L720 274 M660 274 L666 266.9 L672 259.6 L678 252.1 L684 257.6 L690 262.9 L696 254.5 L702 245.9 L708 255.5 L714 264.8 L720 274 M660 274 L666 264 L672 253.7 L678 243.4 L684 250.6 L690 257.7 L696 246.4 L702 235 L708 248.1 L714 261.2 L720 274 M660 274 L666 261.3 L672 248.5 L678 235.6 L684 244.4 L690 253.1 L696 239.2 L702 225.3 L708 241.7 L714 257.9 L720 274" class="mel-mesh"/>
+        <path d="M678 228 L668 274 M678 228 L678 274 M678 228 L687 274 M702 216 L692 274 M702 216 L702 274 M702 216 L712 274" class="mel-mesh"/>
+        <circle cx="678" cy="252.1" r="0.9" class="mel-node"/><circle cx="702" cy="235" r="0.9" class="mel-node"/><circle cx="711" cy="266.9" r="0.9" class="mel-node"/><circle cx="684" cy="244.4" r="0.9" class="mel-node"/>
       </g>
       <path d="M660 274 L678 228 L690 248 L702 216" class="mel-ridge"/>
       <circle cx="702" cy="216" r="1.8" class="mel-spark" filter="url(#soft)">
