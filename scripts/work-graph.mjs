@@ -337,10 +337,10 @@ const nodeEls = Object.values(nodes).map((n) => {
     const hex = (s) =>
       `M${f1(cx)} ${f1(cy - 48 * s)} L${f1(cx + 41.6 * s)} ${f1(cy - 24 * s)} L${f1(cx + 41.6 * s)} ${f1(cy + 24 * s)} L${f1(cx)} ${f1(cy + 48 * s)} L${f1(cx - 41.6 * s)} ${f1(cy + 24 * s)} L${f1(cx - 41.6 * s)} ${f1(cy - 24 * s)} Z`;
     // Massif: left foot → left peak → saddle → main peak → right foot. The
-    // solid rock keeps the whole silhouette; the right flank's surface is
-    // where the splats condense.
+    // ember ridge light runs the FULL silhouette so the letterform reads as a
+    // complete M, final downstroke included.
     const solid = `M${f1(cx - 30)} ${f1(cy + 24)} L${f1(cx - 12)} ${f1(cy - 22)} L${f1(cx)} ${f1(cy - 2)} L${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)} Z`;
-    const ridgeLine = `M${f1(cx - 30)} ${f1(cy + 24)} L${f1(cx - 12)} ${f1(cy - 22)} L${f1(cx)} ${f1(cy - 2)} L${f1(cx + 12)} ${f1(cy - 34)}`;
+    const ridgeLine = `M${f1(cx - 30)} ${f1(cy + 24)} L${f1(cx - 12)} ${f1(cy - 22)} L${f1(cx)} ${f1(cy - 2)} L${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)}`;
     // Low-poly FACETS over the front face — few and LARGE, no two alike, with
     // strong tonal steps from the forge underlight (facets nearer the heat
     // run warmer) and hairline dark seams; no drawn wireframe, the edges are

@@ -385,7 +385,7 @@
       <polygon class="mel-tin" points="690,248 692,274 684,274" fill="#241109"/>
       <polygon class="mel-tin" points="690,248 702,216 692,274" fill="#140a05"/>
       <polygon class="mel-tin" points="702,216 702,274 692,274" fill="#0e0603"/>
-      <path d="M660 274 L678 228 L690 248 L702 216" class="mel-ridge"/>
+      <path d="M660 274 L678 228 L690 248 L702 216 L720 274" class="mel-ridge"/>
       <circle cx="702" cy="216" r="1.8" class="mel-spark" filter="url(#soft)">
         <animate attributeName="opacity" values="0.55;1;0.55" dur="3.2s" repeatCount="indefinite"/>
       </circle>
