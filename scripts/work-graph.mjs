@@ -964,10 +964,10 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mw-hairline  { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
     .seat-gal   { fill: url(#galGrad); }
     .gal-signal { fill: none; stroke: #ef4444; stroke-opacity: 0.7; stroke-width: 1.1; }
-    .gal-fiber  { fill: none; stroke: #9fb0bf; stroke-opacity: 0.65; stroke-width: 1.4; stroke-linecap: round; }
-    .gal-pulse  { fill: none; stroke: #e0f2fe; stroke-opacity: 0.9; stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 3 40; }
-    .gal-port   { fill: #05070b; stroke: #9fb0bf; stroke-opacity: 0.8; stroke-width: 1; }
-    .gal-jack   { fill: #e0f2fe; fill-opacity: 0.75; }
+    .gal-fiber  { fill: none; stroke: #22d3ee; stroke-opacity: 0.75; stroke-width: 1.4; stroke-linecap: round; }
+    .gal-pulse  { fill: none; stroke: #a5f3fc; stroke-opacity: 0.95; stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 3 40; }
+    .gal-port   { fill: #0a121c; stroke: #22d3ee; stroke-opacity: 0.9; stroke-width: 1; }
+    .gal-jack   { fill: #a5f3fc; fill-opacity: 0.85; }
     .gal-plate  { fill: url(#galPlateG); stroke: #22d3ee; stroke-opacity: 0.9; stroke-width: 1.2; stroke-linejoin: miter; }
     .gal-crest  { stroke: #22d3ee; stroke-opacity: 0.28; stroke-width: 0.6; stroke-linejoin: miter; }
     .gal-slit   { fill: #05070b; stroke: #22d3ee; stroke-opacity: 0.55; stroke-width: 0.8; stroke-linejoin: miter; }
