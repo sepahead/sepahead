@@ -328,9 +328,9 @@ const nodeEls = Object.values(nodes).map((n) => {
     // melkor: the OBSIDIAN FORGE PLATE — a machined dark hexagonal plate with a
     // heated-metal bezel (lit crown → cooled base), forge light rising from
     // below, and a black twin-peak massif being SURVEYED against it: the ridge
-    // carries an ember rim light and the surface wears a 3-D draped wireframe
-    // — sagging elevation contours crossed by radial fall lines, with ember
-    // survey nodes. Plate + rock are theme-FIXED (a real object, like
+    // carries an ember rim light and the front face is a low-poly TIN of
+    // irregular shaded facets with a hairline ember wireframe, while the
+    // right flank stays solid. Plate + rock are theme-FIXED (a real object, like
     // engram's medallion); only the label ink adapts. The peak spark breathes;
     // reduced-motion holds it lit. One instance → unique ids.
     const cx = n.x, cy = n.y;
@@ -341,38 +341,22 @@ const nodeEls = Object.values(nodes).map((n) => {
     // where the splats condense.
     const solid = `M${f1(cx - 30)} ${f1(cy + 24)} L${f1(cx - 12)} ${f1(cy - 22)} L${f1(cx)} ${f1(cy - 2)} L${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)} Z`;
     const ridgeLine = `M${f1(cx - 30)} ${f1(cy + 24)} L${f1(cx - 12)} ${f1(cy - 22)} L${f1(cx)} ${f1(cy - 2)} L${f1(cx + 12)} ${f1(cy - 34)}`;
-    // 3-D draped survey mesh: elevation CONTOURS built by scaling the ridge
-    // profile toward the base and bowing each one toward the viewer (lower
-    // contours sag more, like the rings of a wireframe cone seen from above),
-    // crossed by radial FALL LINES fanning from each peak to the base — the
-    // classic wireframe-terrain read. Contour levels are UNEVEN; the sag term
-    // vanishes at x = ±30 so every contour terminates exactly on the
-    // silhouette. Ember survey nodes sit on chosen contour stations.
-    const BASE = 24;
-    const prof = [[-30, 24], [-12, -22], [0, -2], [12, -34], [30, 24]];
-    const P = (x) => {
-      for (let i = 0; i < prof.length - 1; i++) {
-        const [x1, y1] = prof[i], [x2, y2] = prof[i + 1];
-        if (x >= x1 && x <= x2) return y1 + ((y2 - y1) * (x - x1)) / (x2 - x1);
-      }
-      return BASE;
+    // Low-poly FACETS over the front face — few and LARGE, no two alike, with
+    // strong tonal steps from the forge underlight (facets nearer the heat
+    // run warmer) and hairline dark seams; no drawn wireframe, the edges are
+    // implied by tone like proper low-poly artwork. The right flank stays one
+    // SOLID near-black facet — the split is what sells the volume.
+    const V = {
+      A: [-30, 24], B: [-12, -22], C: [0, -2], D: [12, -34],
+      E: [12, 24], K: [-6, 24], L: [2, 24],
     };
-    const conY = (x, k) => BASE + (P(x) - BASE) * k + (1 + 3 * (1 - k)) * (1 - (x / 30) ** 2);
-    const STATIONS = [-30, -24, -18, -12, -6, 0, 6, 12];
-    // Contour levels and fall-line targets are deliberately IRREGULAR so no
-    // two mesh cells match, and the mesh lives on the LEFT/front face only —
-    // the clip ends at the x=+12 crease fall line, so the right flank stays a
-    // SOLID shadowed facet, which is what sells the volume.
-    const contours = [0.24, 0.4, 0.72, 0.88]
-      .map((k) => `M${STATIONS.map((x) => `${f1(cx + x)} ${f1(cy + conY(x, k))}`).join(" L")}`)
-      .join(" ");
-    const falls = [[-12, -22, [-24, -15, -5]], [12, -34, [1, 7, 12]]]
-      .flatMap(([pxx, pyy, tgts]) => tgts.map((tx) => `M${f1(cx + pxx)} ${f1(cy + pyy)} L${f1(cx + tx)} ${f1(cy + BASE)}`))
-      .join(" ");
-    const meshNodes = [[-20, 0.24], [-12, 0.4], [0, 0.72], [6, 0.88]]
-      .map(([x, k]) => `<circle cx="${f1(cx + x)}" cy="${f1(cy + conY(x, k))}" r="0.9" class="mel-node"/>`)
-      .join("");
-    const meshRegion = `M${f1(cx - 30)} ${f1(cy + 24)} L${f1(cx - 12)} ${f1(cy - 22)} L${f1(cx)} ${f1(cy - 2)} L${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 12)} ${f1(cy + 24)} Z`;
+    const TIN = [
+      ["A", "B", "K", "#2e150a"], ["B", "C", "K", "#1a0c06"], ["C", "L", "K", "#241109"],
+      ["C", "D", "L", "#140a05"], ["D", "E", "L", "#0e0603"],
+    ];
+    const pt = (k) => `${f1(cx + V[k][0])},${f1(cy + V[k][1])}`;
+    const facets = TIN.map(([a, b, c, tone]) =>
+      `<polygon class="mel-tin" points="${pt(a)} ${pt(b)} ${pt(c)}" fill="${tone}"/>`).join("\n      ");
     return `<g>
     <defs>
       <linearGradient id="melPlate" x1="0" y1="${f1(cy - 48)}" x2="0" y2="${f1(cy + 48)}" gradientUnits="userSpaceOnUse">
@@ -385,18 +369,13 @@ const nodeEls = Object.values(nodes).map((n) => {
         <stop offset="0%" stop-color="#fed7aa"/><stop offset="45%" stop-color="#b45309"/><stop offset="100%" stop-color="#571c07"/>
       </linearGradient>
       <clipPath id="melClip"><path d="${hex(1)}"/></clipPath>
-      <clipPath id="melRockClip"><path d="${meshRegion}"/></clipPath>
     </defs>
     <g filter="url(#nodeShadow)"><path d="${hex(1)}" class="mel-plate"/></g>
     <g clip-path="url(#melClip)">
       <path d="${hex(1)}" fill="url(#melHeat)"/>
       <path d="${solid}" class="mel-rock"/>
       <path d="M${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)} L${f1(cx + 12)} ${f1(cy + 24)} Z" class="mel-facet"/>
-      <g clip-path="url(#melRockClip)">
-        <path d="${contours}" class="mel-mesh"/>
-        <path d="${falls}" class="mel-mesh"/>
-        ${meshNodes}
-      </g>
+      ${facets}
       <path d="${ridgeLine}" class="mel-ridge"/>
       <circle cx="${f1(cx + 12)}" cy="${f1(cy - 34)}" r="1.8" class="mel-spark" filter="url(#soft)">
         <animate attributeName="opacity" values="0.55;1;0.55" dur="3.2s" repeatCount="indefinite"/>
@@ -925,9 +904,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mel-plate    { fill: url(#melPlate); }
     .mel-rock     { fill: #050302; }
     .mel-ridge    { fill: none; stroke: #fdba74; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
-    .mel-facet    { fill: #1a0d07; }
-    .mel-mesh     { fill: none; stroke: #fdba74; stroke-opacity: 0.32; stroke-width: 0.9; stroke-linejoin: round; }
-    .mel-node     { fill: #fde68a; fill-opacity: 0.8; }
+    .mel-facet    { fill: #070302; }
+    .mel-tin      { stroke: #000000; stroke-opacity: 0.4; stroke-width: 0.6; stroke-linejoin: round; }
     .mel-spark    { fill: #fde68a; }
     .mel-edge     { fill: none; stroke: url(#melBezel); stroke-width: 2.4; stroke-linejoin: miter; }
     .mel-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
