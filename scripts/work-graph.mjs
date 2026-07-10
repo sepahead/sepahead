@@ -113,7 +113,7 @@ function halfExtents(n) {
   if (n.kind === "radar") return { hw: 32, hh: 32, circle: true };
   if (n.kind === "sentinel") return { hw: 34, hh: 34, circle: true };
   if (n.kind === "logo") return { hw: 30, hh: 30, circle: true };
-  if (n.kind === "cube") return { hw: CUBE / 2, hh: CUBE / 2, circle: false };
+  if (n.kind === "cube") return { hw: 48, hh: 48, circle: true };
   return { hw: nodeWidth(n) / 2, hh: CHIP_H / 2, circle: false };
 }
 
@@ -288,11 +288,27 @@ const nodeEls = Object.values(nodes).map((n) => {
   </g>`;
   }
   if (n.kind === "cube") {
-    const x = n.x - CUBE / 2, y = n.y - CUBE / 2;
+    // melkor: the SPLAT FORGE (echoes assets/melkor-logo.svg in the melkor
+    // repo) — an ember hexagon (the old cube's isometric shadow, recast) in
+    // which anisotropic Gaussian splats coalesce onto a half-reconstructed
+    // wireframe peak: 3D Gaussian Splatting doing scene completion. Static →
+    // reduced-motion safe.
+    const cx = n.x, cy = n.y, R = 48, w = 41.6, h = 24;
+    const hex = `M${cx} ${f1(cy - R)} L${f1(cx + w)} ${f1(cy - h)} L${f1(cx + w)} ${f1(cy + h)} L${cx} ${f1(cy + R)} L${f1(cx - w)} ${f1(cy + h)} L${f1(cx - w)} ${f1(cy - h)} Z`;
+    const splats = [
+      [-22, 6, -28, 6, 2.4, 0.8], [-14, -6, -38, 5, 2, 0.9], [-7, -18, -46, 4, 1.6, 1],
+      [-16, 10, 18, 5.5, 2.2, 0.7], [-4, -1, -12, 4.5, 1.8, 0.85], [9, -12, -30, 3.6, 1.5, 0.6],
+      [16, 4, 14, 3.4, 1.4, 0.35],
+    ].map(([dx2, dy2, rot, rx, ry, op]) =>
+      `<ellipse cx="${f1(cx + dx2)}" cy="${f1(cy + dy2)}" rx="${rx}" ry="${ry}" transform="rotate(${rot} ${f1(cx + dx2)} ${f1(cy + dy2)})" fill="url(#melSplat)" opacity="${op}"/>`
+    ).join("");
     return `<g>
-    <rect x="${x}" y="${y}" width="${CUBE}" height="${CUBE}" rx="16" class="cube"/>
-    ${n.private ? lock(n.x, n.y - 22, 1, "var(--cube-accent)") : ""}
-    <text x="${n.x}" y="${n.y}" text-anchor="middle" dominant-baseline="central" class="cube-label">${escapeXML(n.label)}</text>
+    <path d="${hex}" class="mel-hex"/>
+    <path class="mel-grid" d="M${f1(cx - 30)} ${f1(cy + 24)} L${cx} ${f1(cy + 8)} L${f1(cx + 30)} ${f1(cy + 24)}"/>
+    <path class="mel-wire" d="M${f1(cx - 28)} ${f1(cy + 14)} L${f1(cx - 9)} ${f1(cy - 22)} L${cx} ${f1(cy - 8)} L${f1(cx + 10)} ${f1(cy - 30)} L${f1(cx + 30)} ${f1(cy + 14)}"/>
+    <path class="mel-wired" d="M${f1(cx - 9)} ${f1(cy - 22)} L${f1(cx + 2)} ${f1(cy + 14)} M${f1(cx + 10)} ${f1(cy - 30)} L${f1(cx - 1)} ${f1(cy + 14)}"/>
+    ${splats}
+    <text x="${cx}" y="${f1(cy + 34)}" text-anchor="middle" class="cube-label">${escapeXML(n.label)}</text>
   </g>`;
   }
   if (n.kind === "logo") {
@@ -312,12 +328,10 @@ const nodeEls = Object.values(nodes).map((n) => {
     return `<g>
     <defs>
       <linearGradient id="engramFace" x1="0" y1="${top}" x2="0" y2="${bot}" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#f4f8fb"/>
-        <stop offset="18%" stop-color="#dae2ea"/>
-        <stop offset="42%" stop-color="#aab5c1"/>
-        <stop offset="54%" stop-color="#66717e"/>
-        <stop offset="70%" stop-color="#9aa5b1"/>
-        <stop offset="100%" stop-color="#6d7884"/>
+        <stop offset="0%" stop-color="#f2f6fa"/>
+        <stop offset="32%" stop-color="#cbd4dd"/>
+        <stop offset="64%" stop-color="#96a1ad"/>
+        <stop offset="100%" stop-color="#79848f"/>
       </linearGradient>
       <radialGradient id="engramSheen" gradientUnits="userSpaceOnUse" cx="${f1(cx - 10)}" cy="${f1(cy - 14)}" r="${f1(r * 1.35)}">
         <stop offset="0%" stop-color="#ffffff" stop-opacity="0.30"/>
@@ -337,8 +351,6 @@ const nodeEls = Object.values(nodes).map((n) => {
     <g filter="url(#engramShadow)"><circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramFace)"/></g>
     <g clip-path="url(#engramClip)">
       <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramSheen)"/>
-      <ellipse cx="${cx}" cy="${f1(cy - 24)}" rx="23" ry="6.5" fill="#ffffff" opacity="0.18"/>
-      <ellipse cx="${cx}" cy="${f1(cy + 27)}" rx="24" ry="9" fill="#f0ece2" opacity="0.07"/>
     </g>
     <image href="${TORUS_LOGO}" x="${f1(cx - S / 2)}" y="${f1(cy - S / 2)}" width="${S}" height="${S}" preserveAspectRatio="xMidYMid meet"/>
     <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="url(#engramBezel)" stroke-width="2.6"/>
@@ -348,14 +360,30 @@ const nodeEls = Object.values(nodes).map((n) => {
   </g>`;
   }
   if (n.kind === "triangle") {
+    // prisoma: the INFORMATION PRISM (echoes assets/prisoma-logo.svg in the
+    // prisoma repo) — one white beam of raw information enters, the prism
+    // splits it into three component beams in sibling accent colours (unique /
+    // redundant / synergistic): partial information decomposition at a glance.
+    // Static → reduced-motion safe.
     const dx = TRI_CIRCUM * Math.sqrt(3) / 2; // half base width
     const top = `${n.x},${f1(n.y - TRI_CIRCUM)}`;
     const bl = `${f1(n.x - dx)},${f1(n.y + TRI_CIRCUM / 2)}`;
     const br = `${f1(n.x + dx)},${f1(n.y + TRI_CIRCUM / 2)}`;
+    const sx = n.x - 2, sy = n.y + 4;
     return `<g>
     <polygon points="${top} ${br} ${bl}" class="tri" stroke-linejoin="round"/>
-    ${n.private ? lock(n.x, n.y - 8, 1, "var(--tri-accent)") : ""}
-    <text x="${n.x}" y="${n.y + 20}" text-anchor="middle" class="tri-label">${escapeXML(n.label)}</text>
+    <line class="pz-in" x1="${f1(n.x - 56)}" y1="${f1(n.y - 16)}" x2="${f1(sx)}" y2="${f1(sy)}"/>
+    <g filter="url(#edgeGlow)">
+      <line class="pz-beam" x1="${f1(sx)}" y1="${f1(sy)}" x2="${f1(n.x + 50)}" y2="${f1(n.y - 20)}" stroke="#34d399"/>
+      <line class="pz-beam" x1="${f1(sx)}" y1="${f1(sy)}" x2="${f1(n.x + 55)}" y2="${f1(n.y + 4)}" stroke="#fbbf24"/>
+      <line class="pz-beam" x1="${f1(sx)}" y1="${f1(sy)}" x2="${f1(n.x + 48)}" y2="${f1(n.y + 24)}" stroke="#ef4444"/>
+      <circle cx="${f1(n.x + 50)}" cy="${f1(n.y - 20)}" r="1.8" fill="#34d399"/>
+      <circle cx="${f1(n.x + 55)}" cy="${f1(n.y + 4)}" r="1.8" fill="#fbbf24"/>
+      <circle cx="${f1(n.x + 48)}" cy="${f1(n.y + 24)}" r="1.8" fill="#ef4444"/>
+    </g>
+    <path class="pz-split" d="M${f1(sx)} ${f1(sy - 4)} L${f1(sx + 4)} ${f1(sy)} L${f1(sx)} ${f1(sy + 4)} L${f1(sx - 4)} ${f1(sy)} Z"/>
+    ${n.private ? lock(n.x, n.y - 18, 0.9, "var(--tri-accent)") : ""}
+    <text x="${n.x}" y="${f1(n.y + TRI_CIRCUM / 2 + 16)}" text-anchor="middle" class="tri-label">${escapeXML(n.label)}</text>
   </g>`;
   }
   if (n.kind === "gate") {
@@ -366,6 +394,7 @@ const nodeEls = Object.values(nodes).map((n) => {
     // dashed-vs-solid = the QoS asymmetry. The lanes fan straight into the live
     // edges (prisoma=perception/top, crebain=action/bottom, engram=centre trunk).
     return `<g>
+    <circle cx="${n.x}" cy="${n.y}" r="34" class="gate-seat"/>
     <g filter="url(#soft)">
       <path d="M224 222 H243 M257 222 H276" class="gate-wire-perc"/>
       <path d="M224 238 H243 M257 238 H276" class="gate-wire"/>
@@ -443,6 +472,7 @@ const nodeEls = Object.values(nodes).map((n) => {
     };
     const conns = `${calli(T, L, 6)} ${calli(T, R, -6)} ${calli(L, R, 6)}`;
     return `<g class="vox-net">
+    <circle cx="${n.x}" cy="${n.y}" r="34" class="vox-seat"/>
     <defs>${grads.join("")}</defs>
     <g filter="url(#soft)">
       ${conns}
@@ -627,6 +657,11 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       <stop offset="0%" stop-color="#2a1608"/>
       <stop offset="100%" stop-color="#0a1117"/>
     </radialGradient>
+    <radialGradient id="melSplat" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fdba74" stop-opacity="0.95"/>
+      <stop offset="55%" stop-color="#fb923c" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#fb923c" stop-opacity="0"/>
+    </radialGradient>
     <radialGradient id="triGrad" cx="50%" cy="56%" r="70%">
       <stop offset="0%" stop-color="#241a44"/>
       <stop offset="100%" stop-color="#0a1117"/>
@@ -653,6 +688,13 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .hub        { fill: url(#hubGrad); stroke: #34d399; stroke-width: 2; filter: url(#soft); }
     .hub-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6ee7b7; }
     .cube       { fill: url(#cubeGrad); stroke: #fb923c; stroke-width: 2; filter: url(#soft); }
+    .mel-hex    { fill: url(#cubeGrad); stroke: #fb923c; stroke-width: 2; stroke-linejoin: miter; filter: url(#soft); }
+    .mel-grid   { fill: none; stroke: #fb923c; stroke-opacity: 0.16; stroke-width: 1; }
+    .mel-wire   { fill: none; stroke: #fdba74; stroke-opacity: 0.75; stroke-width: 1.4; stroke-linejoin: round; }
+    .mel-wired  { fill: none; stroke: #fdba74; stroke-opacity: 0.4; stroke-width: 1.1; stroke-dasharray: 3 3; }
+    .pz-in      { stroke: #e2faff; stroke-width: 2; stroke-linecap: round; }
+    .pz-beam    { stroke-width: 1.8; stroke-linecap: round; }
+    .pz-split   { fill: #0a0918; stroke: #e2faff; stroke-width: 1.3; }
     .cube-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fdba74; }
     .logo-label     { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #cdd6e0; }
     .tri        { fill: url(#triGrad); stroke: #a78bfa; stroke-width: 2; filter: url(#soft); }
@@ -686,6 +728,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mw-bracket   { fill: none; stroke: #38bdf8; stroke-width: 1.6; stroke-linecap: round; }
     .mw-ray       { stroke: #7dd3fc; stroke-width: 1; stroke-opacity: 0.55; stroke-linecap: round; }
     .mw-doa       { fill: none; stroke: #7dd3fc; stroke-width: 1.2; stroke-linecap: round; }
+    .gate-seat  { fill: #fbbf24; fill-opacity: 0.06; filter: url(#soft); }
+    .vox-seat   { fill: #e879f9; fill-opacity: 0.06; filter: url(#soft); }
     .gal-seat   { fill: #ef4444; fill-opacity: 0.05; filter: url(#soft); }
     .gal-orbit  { fill: none; stroke: #ef4444; stroke-opacity: 0.45; stroke-width: 1.2; }
     .gal-tick   { stroke: #ef4444; stroke-opacity: 0.6; stroke-width: 1.6; stroke-linecap: round; }
@@ -709,6 +753,12 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .hub { fill: #ffffff; stroke: #059669; }
       .hub-label { fill: #059669; }
       .cube { fill: #ffffff; stroke: #c2410c; }
+      .mel-hex { fill: #ffffff; stroke: #c2410c; }
+      .mel-grid { stroke: #c2410c; }
+      .mel-wire { stroke: #b45309; }
+      .mel-wired { stroke: #b45309; }
+      .pz-in { stroke: #155e75; }
+      .pz-split { fill: #ffffff; stroke: #155e75; }
       .cube-label { fill: #c2410c; }
       .logo-label { fill: #57626f; }
       .tri { fill: #ffffff; stroke: #7c3aed; }
@@ -739,6 +789,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .mw-bracket { stroke: #0284c7; }
       .mw-ray { stroke: #0284c7; }
       .mw-doa { stroke: #0284c7; }
+      .gate-seat { fill: #b45309; fill-opacity: 0.05; }
+      .vox-seat { fill: #c026d3; fill-opacity: 0.05; }
       .gal-seat { fill: #dc2626; fill-opacity: 0.04; }
       .gal-orbit { stroke: #dc2626; stroke-opacity: 0.5; }
       .gal-tick { stroke: #dc2626; }
