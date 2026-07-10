@@ -762,15 +762,16 @@ const nodeEls = Object.values(nodes).map((n) => {
     // (theme-FIXED): a GUNMETAL steel bezel matching the shield's armor — red
     // reads as plastic at bezel scale, so the project hue lives in a thin red
     // SIGNAL RING inlaid in the groove (grey armor, red light, like the eye).
-    // Below the visor, FIBER-OPTIC sensor feeds: three light-guides sweep up
-    // from small connector ports at the shield's foot and jack into the
-    // visor's underside, each carrying a cool light pulse toward the eye —
-    // the sensor channels streaming into the watcher. Smooth asymmetric
-    // curves (nothing rectilinear, nothing emblem-like); the light is cold
-    // white-blue so the red verdict stays the eye's alone. Echoes
-    // assets/galadriel-logo.svg in the galadriel repo. Reduced-motion parks
-    // the eye centred and holds a lit pulse at each port. One instance ->
-    // unique ids.
+    // FIBER-OPTIC sensor feeds below the visor: three light-guides in a
+    // SYMMETRIC harness sweep up from connector ports at the shield's foot
+    // and jack into the visor's underside, each carrying a cool light pulse
+    // toward the eye — the sensor channels streaming into the watcher. Above
+    // the visor, an UPLINK BUS: a thin bar across the shield's brow with
+    // three drops feeding the visor's top edge and via dots at its ends. The
+    // light is cold white-blue so the red verdict stays the eye's alone.
+    // Echoes assets/galadriel-logo.svg in the galadriel repo. Reduced-motion
+    // parks the eye centred and holds a lit pulse at each port. One instance
+    // -> unique ids.
     const cx = n.x, cy = n.y, s = 0.23;
     const m = (px, py) => `${f1(cx + (px - 120) * s)} ${f1(cy + (py - 122) * s)}`;
     const poly = (pts) => `M${pts.map(([px, py]) => m(px, py)).join(" L")} Z`;
@@ -781,16 +782,19 @@ const nodeEls = Object.values(nodes).map((n) => {
     // port at the foot + light jack where it enters the visor.
     const p = (x, y) => `${f1(cx + x)} ${f1(cy + y)}`;
     const FIBERS = [
-      { d: `M${p(-8, 13)} C${p(-11, 6)} ${p(-8, -1)} ${p(-4, -4.2)}`, port: [-8, 13], jack: [-4, -4.2], beg: "0s" },
-      { d: `M${p(-2, 19)} C${p(-2, 11)} ${p(1, 3)} ${p(1, -4.2)}`, port: [-2, 19], jack: [1, -4.2], beg: "0.9s" },
-      { d: `M${p(7, 15)} C${p(10, 8)} ${p(6, 1)} ${p(4.5, -4.2)}`, port: [7, 15], jack: [4.5, -4.2], beg: "1.6s" },
+      { d: `M${p(-7, 14.5)} C${p(-10.5, 7)} ${p(-7.5, -0.5)} ${p(-4, -4.2)}`, port: [-7, 14.5], jack: [-4, -4.2], beg: "0.9s" },
+      { d: `M${p(0, 19)} C${p(0, 11.5)} ${p(0, 3.5)} ${p(0, -4.2)}`, port: [0, 19], jack: [0, -4.2], beg: "0s" },
+      { d: `M${p(7, 14.5)} C${p(10.5, 7)} ${p(7.5, -0.5)} ${p(4, -4.2)}`, port: [7, 14.5], jack: [4, -4.2], beg: "0.9s" },
     ];
     const circuit = FIBERS.map(({ d, port, jack, beg }) =>
       `<path class="gal-fiber" d="${d}"/>` +
       `<path class="gal-pulse" d="${d}"><animate attributeName="stroke-dashoffset" from="43" to="0" dur="2.6s" begin="${beg}" repeatCount="indefinite"/></path>` +
       `<circle class="gal-port" cx="${f1(cx + port[0])}" cy="${f1(cy + port[1])}" r="1.4"/>` +
       `<circle class="gal-jack" cx="${f1(cx + jack[0])}" cy="${f1(cy + jack[1])}" r="0.9"/>`
-    ).join("");
+    ).join("") +
+      `<path class="gal-fiber" d="M${p(-8, -14.5)} H${f1(cx + 8)} M${p(-6, -14.5)} V${f1(cy - 10.8)} M${p(0, -14.5)} V${f1(cy - 10.8)} M${p(6, -14.5)} V${f1(cy - 10.8)}"/>` +
+      `<circle class="gal-jack" cx="${f1(cx - 8)}" cy="${f1(cy - 14.5)}" r="0.8"/>` +
+      `<circle class="gal-jack" cx="${f1(cx + 8)}" cy="${f1(cy - 14.5)}" r="0.8"/>`;
     const [ex, ey] = [cx + (120 - 120) * s, cy + (89 - 122) * s];
     const amp = f1(42 * s);
     return `<g class="gal">
