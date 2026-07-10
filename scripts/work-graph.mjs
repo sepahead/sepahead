@@ -358,16 +358,21 @@ const nodeEls = Object.values(nodes).map((n) => {
       return BASE;
     };
     const conY = (x, k) => BASE + (P(x) - BASE) * k + (1 + 3 * (1 - k)) * (1 - (x / 30) ** 2);
-    const STATIONS = [-30, -24, -18, -12, -6, 0, 6, 12, 18, 24, 30];
-    const contours = [0.3, 0.52, 0.7, 0.86]
+    const STATIONS = [-30, -24, -18, -12, -6, 0, 6, 12];
+    // Contour levels and fall-line targets are deliberately IRREGULAR so no
+    // two mesh cells match, and the mesh lives on the LEFT/front face only —
+    // the clip ends at the x=+12 crease fall line, so the right flank stays a
+    // SOLID shadowed facet, which is what sells the volume.
+    const contours = [0.24, 0.4, 0.72, 0.88]
       .map((k) => `M${STATIONS.map((x) => `${f1(cx + x)} ${f1(cy + conY(x, k))}`).join(" L")}`)
       .join(" ");
-    const falls = [[-12, -22, [-22, -12, -3]], [12, -34, [2, 12, 22]]]
+    const falls = [[-12, -22, [-24, -15, -5]], [12, -34, [1, 7, 12]]]
       .flatMap(([pxx, pyy, tgts]) => tgts.map((tx) => `M${f1(cx + pxx)} ${f1(cy + pyy)} L${f1(cx + tx)} ${f1(cy + BASE)}`))
       .join(" ");
-    const meshNodes = [[-12, 0.52], [12, 0.7], [21, 0.3], [-6, 0.86]]
+    const meshNodes = [[-20, 0.24], [-12, 0.4], [0, 0.72], [6, 0.88]]
       .map(([x, k]) => `<circle cx="${f1(cx + x)}" cy="${f1(cy + conY(x, k))}" r="0.9" class="mel-node"/>`)
       .join("");
+    const meshRegion = `M${f1(cx - 30)} ${f1(cy + 24)} L${f1(cx - 12)} ${f1(cy - 22)} L${f1(cx)} ${f1(cy - 2)} L${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 12)} ${f1(cy + 24)} Z`;
     return `<g>
     <defs>
       <linearGradient id="melPlate" x1="0" y1="${f1(cy - 48)}" x2="0" y2="${f1(cy + 48)}" gradientUnits="userSpaceOnUse">
@@ -380,13 +385,13 @@ const nodeEls = Object.values(nodes).map((n) => {
         <stop offset="0%" stop-color="#fed7aa"/><stop offset="45%" stop-color="#b45309"/><stop offset="100%" stop-color="#571c07"/>
       </linearGradient>
       <clipPath id="melClip"><path d="${hex(1)}"/></clipPath>
-      <clipPath id="melRockClip"><path d="${solid}"/></clipPath>
+      <clipPath id="melRockClip"><path d="${meshRegion}"/></clipPath>
     </defs>
     <g filter="url(#nodeShadow)"><path d="${hex(1)}" class="mel-plate"/></g>
     <g clip-path="url(#melClip)">
       <path d="${hex(1)}" fill="url(#melHeat)"/>
       <path d="${solid}" class="mel-rock"/>
-      <path d="M${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 16)} ${f1(cy + 24)} L${f1(cx + 4)} ${f1(cy + 24)} Z" class="mel-facet"/>
+      <path d="M${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)} L${f1(cx + 12)} ${f1(cy + 24)} Z" class="mel-facet"/>
       <g clip-path="url(#melRockClip)">
         <path d="${contours}" class="mel-mesh"/>
         <path d="${falls}" class="mel-mesh"/>
@@ -781,31 +786,33 @@ const nodeEls = Object.values(nodes).map((n) => {
     // (theme-FIXED): a GUNMETAL steel bezel matching the shield's armor — red
     // reads as plastic at bezel scale, so the project hue lives in a thin red
     // SIGNAL RING inlaid in the groove (grey armor, red light, like the eye).
-    // Below the visor, COMPARATOR CIRCUITRY in real PCB language: three
-    // channel stubs drop from the slit, the outer pair bends 45° (vias at the
-    // bends) into an annular comparator pad whose centre LED carries the red
-    // verdict, and one trunk runs down to a chamfered terminal pad that echoes
-    // the shield's corners — three sensors in, one judgement out. Echoes
-    // assets/galadriel-logo.svg in the galadriel repo. Reduced-motion parks
-    // the eye centred (static attribute values hold it). One instance ->
-    // unique ids.
+    // Below the visor, COMPARATOR CIRCUITRY that reads unmistakably as
+    // electronics (deliberately ASYMMETRIC routing — no centred ring / axis /
+    // diamond stack, which reads as an emblem rather than a board): an SMD
+    // comparator chip with a pin-1 dot, three channels routed in PCB idiom
+    // (left + centre into the top pins over 45° bends with vias, the right
+    // channel wrapping into the chip's side), a stub via, and an off-centre
+    // output trace to a round pad; the red verdict LED sits offset on the
+    // chip's corner. Echoes assets/galadriel-logo.svg in the galadriel repo.
+    // Reduced-motion parks the eye centred (static attribute values hold it).
+    // One instance -> unique ids.
     const cx = n.x, cy = n.y, s = 0.23;
     const m = (px, py) => `${f1(cx + (px - 120) * s)} ${f1(cy + (py - 122) * s)}`;
     const poly = (pts) => `M${pts.map(([px, py]) => m(px, py)).join(" L")} Z`;
     const shield = poly([[36, 44], [68, 18], [172, 18], [204, 44], [204, 122], [188, 164], [120, 226], [52, 164], [36, 122]]);
     const slit = poly([[46, 89], [60, 76], [180, 76], [194, 89], [180, 102], [60, 102]]);
     // Comparator circuitry (real-px offsets from the node centre; visor slit
-    // bottom sits at −4.6). All bends are 45°, PCB-style.
+    // bottom sits at −4.6). All bends are 45°, PCB-style; routing asymmetric.
     const p = (x, y) => `${f1(cx + x)} ${f1(cy + y)}`;
     const circuit =
-      `<path class="gal-chan" fill="none" d="M${p(-10, -4.2)} V${f1(cy + 1)} L${p(-2.3, 8.7)} M${p(10, -4.2)} V${f1(cy + 1)} L${p(2.3, 8.7)} M${p(0, -4.2)} V${f1(cy + 7.8)} M${p(0, 14.2)} V${f1(cy + 16.9)}"/>` +
+      `<path class="gal-chan" fill="none" d="M${p(-10, -4.2)} V${f1(cy + 1)} L${p(-3, 8)} M${p(0, -4.2)} V${f1(cy + 8)} M${p(10, -4.2)} V${f1(cy + 9)} L${p(8, 11)} H${f1(cx + 5)} M${p(2, 14)} V${f1(cy + 17.5)} M${p(-2, 14)} V${f1(cy + 16)}"/>` +
       `<circle cx="${f1(cx - 10)}" cy="${f1(cy + 1)}" r="1" class="gal-node"/>` +
-      `<circle cx="${f1(cx + 10)}" cy="${f1(cy + 1)}" r="1" class="gal-node"/>` +
-      `<circle cx="${f1(cx - 8.5)}" cy="${f1(cy + 11)}" r="0.8" class="gal-node"/>` +
-      `<circle cx="${f1(cx + 8.5)}" cy="${f1(cy + 11)}" r="0.8" class="gal-node"/>` +
-      `<circle cx="${cx}" cy="${f1(cy + 11)}" r="3.2" class="gal-pad"/>` +
-      `<circle cx="${cx}" cy="${f1(cy + 11)}" r="1" class="gal-led"/>` +
-      `<path class="gal-pad" d="M${p(0, 16.9)} L${p(2, 18.9)} L${p(0, 20.9)} L${p(-2, 18.9)} Z"/>`;
+      `<circle cx="${f1(cx + 10)}" cy="${f1(cy + 9)}" r="1" class="gal-node"/>` +
+      `<circle cx="${f1(cx - 2)}" cy="${f1(cy + 16)}" r="0.8" class="gal-node"/>` +
+      `<rect x="${f1(cx - 5)}" y="${f1(cy + 8)}" width="10" height="6" rx="0.8" class="gal-pad"/>` +
+      `<circle cx="${f1(cx - 3.6)}" cy="${f1(cy + 9.4)}" r="0.5" class="gal-node"/>` +
+      `<rect x="${f1(cx + 3.2)}" y="${f1(cy + 8.7)}" width="1.7" height="1.7" rx="0.3" class="gal-led"/>` +
+      `<circle cx="${f1(cx + 2)}" cy="${f1(cy + 18.7)}" r="1.2" class="gal-pad"/>`;
     const [ex, ey] = [cx + (120 - 120) * s, cy + (89 - 122) * s];
     const amp = f1(42 * s);
     return `<g class="gal">
@@ -918,7 +925,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mel-plate    { fill: url(#melPlate); }
     .mel-rock     { fill: #050302; }
     .mel-ridge    { fill: none; stroke: #fdba74; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
-    .mel-facet    { fill: #211008; }
+    .mel-facet    { fill: #1a0d07; }
     .mel-mesh     { fill: none; stroke: #fdba74; stroke-opacity: 0.32; stroke-width: 0.9; stroke-linejoin: round; }
     .mel-node     { fill: #fde68a; fill-opacity: 0.8; }
     .mel-spark    { fill: #fde68a; }
