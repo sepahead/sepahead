@@ -55,6 +55,10 @@
     .hub-ring   { fill: none; stroke: url(#hubBezel); stroke-width: 2.2; }
     .hub-glow   { fill: none; stroke: #34d399; stroke-width: 6; stroke-opacity: 0.22; filter: url(#soft); }
     .hub-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6ee7b7; }
+    .pid-set    { fill: none; stroke: #34d399; stroke-opacity: 0.75; stroke-width: 1.3; }
+    .pid-lens   { fill: #34d399; fill-opacity: 0.4; }
+    .pid-syn    { fill: none; stroke: #34d399; stroke-opacity: 0.35; stroke-width: 1; stroke-dasharray: 3 4; }
+    .pid-uniq   { fill: #34d399; fill-opacity: 0.6; }
     .seat-ring     { fill: none; stroke-width: 2.2; }
     .seat-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .seat-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
@@ -201,8 +205,16 @@
     <circle cx="250" cy="98" r="36" class="hub-ring"/>
     <circle cx="250" cy="98" r="33.8" class="seat-groove"/>
     <circle cx="250" cy="98" r="37.4" class="seat-hairline"/>
+    <circle cx="250" cy="90" r="17" class="pid-syn"/>
+    <path d="M250 81.6 A10 10 0 0 1 250 98.4 A10 10 0 0 1 250 81.6 Z" class="pid-lens" filter="url(#soft)">
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="3.2s" repeatCount="indefinite"/>
+    </path>
+    <circle cx="244.5" cy="90" r="10" class="pid-set"/>
+    <circle cx="255.5" cy="90" r="10" class="pid-set"/>
+    <circle cx="240.5" cy="90" r="1.1" class="pid-uniq"/>
+    <circle cx="259.5" cy="90" r="1.1" class="pid-uniq"/>
     
-    <text x="250" y="104" text-anchor="middle" class="hub-label">PID-RS</text>
+    <text x="250" y="118" text-anchor="middle" class="hub-label">PID-RS</text>
   </g>
   <g>
     <defs>

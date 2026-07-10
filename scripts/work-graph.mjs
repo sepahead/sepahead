@@ -303,12 +303,22 @@ function seat(cx, cy, name, stops) {
 
 const nodeEls = Object.values(nodes).map((n) => {
   if (n.kind === "hub") {
-    // pid-rs: the crisp instrument dial at manwe's border grade — a rigid
-    // chrome-emerald bezel with inner groove and outer hairline over a drop
-    // shadow; only the soft glow underlay breathes (the dial itself is a
-    // machined object, so it doesn't flex).
+    // pid-rs: the ESTIMATOR DIAL — a rigid chrome-emerald bezel with inner
+    // groove and outer hairline over a drop shadow (manwe's border grade;
+    // only the soft glow underlay breathes, the dial itself is machined).
+    // Etched on the face, the PID VENN: two overlapping information sources
+    // whose shared REDUNDANCY lens is lit — the very quantity the estimators
+    // measure — with a unique-information dot in each exclusive lobe and a
+    // dashed SYNERGY ring enclosing both (the part no single source holds).
+    // The lens breathes with the glow; the label sits beneath like an
+    // instrument engraving. Reduced-motion holds the lens lit.
     const r = n.r || HUB_R;
     const breathe = `<animate attributeName="r" values="${r};${r + 2};${r}" dur="3.2s" repeatCount="indefinite"/>`;
+    const vx = 5.5, vr = 10, vy = n.y - 8; // Venn: centre offset · set radius · axis
+    const iy = Math.sqrt(vr * vr - vx * vx); // lens tip offset from the axis
+    const lens =
+      `M${f1(n.x)} ${f1(vy - iy)} A${vr} ${vr} 0 0 1 ${f1(n.x)} ${f1(vy + iy)}` +
+      ` A${vr} ${vr} 0 0 1 ${f1(n.x)} ${f1(vy - iy)} Z`;
     return `<g>
     <defs>
       <linearGradient id="hubBezel" x1="0" y1="${f1(n.y - r)}" x2="0" y2="${f1(n.y + r)}" gradientUnits="userSpaceOnUse">
@@ -320,8 +330,16 @@ const nodeEls = Object.values(nodes).map((n) => {
     <circle cx="${n.x}" cy="${n.y}" r="${r}" class="hub-ring"/>
     <circle cx="${n.x}" cy="${n.y}" r="${f1(r - 2.2)}" class="seat-groove"/>
     <circle cx="${n.x}" cy="${n.y}" r="${f1(r + 1.4)}" class="seat-hairline"/>
+    <circle cx="${n.x}" cy="${f1(vy)}" r="17" class="pid-syn"/>
+    <path d="${lens}" class="pid-lens" filter="url(#soft)">
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="3.2s" repeatCount="indefinite"/>
+    </path>
+    <circle cx="${f1(n.x - vx)}" cy="${f1(vy)}" r="${vr}" class="pid-set"/>
+    <circle cx="${f1(n.x + vx)}" cy="${f1(vy)}" r="${vr}" class="pid-set"/>
+    <circle cx="${f1(n.x - 9.5)}" cy="${f1(vy)}" r="1.1" class="pid-uniq"/>
+    <circle cx="${f1(n.x + 9.5)}" cy="${f1(vy)}" r="1.1" class="pid-uniq"/>
     ${n.private ? lock(n.x, n.y - 24, 1, "var(--hub-accent)") : ""}
-    <text x="${n.x}" y="${n.y + (n.private ? 12 : 6)}" text-anchor="middle" class="hub-label">${escapeXML(n.label)}</text>
+    <text x="${n.x}" y="${f1(n.y + 20)}" text-anchor="middle" class="hub-label">${escapeXML(n.label)}</text>
   </g>`;
   }
   if (n.kind === "cube") {
@@ -908,6 +926,10 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .hub-ring   { fill: none; stroke: url(#hubBezel); stroke-width: 2.2; }
     .hub-glow   { fill: none; stroke: #34d399; stroke-width: 6; stroke-opacity: 0.22; filter: url(#soft); }
     .hub-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6ee7b7; }
+    .pid-set    { fill: none; stroke: #34d399; stroke-opacity: 0.75; stroke-width: 1.3; }
+    .pid-lens   { fill: #34d399; fill-opacity: 0.4; }
+    .pid-syn    { fill: none; stroke: #34d399; stroke-opacity: 0.35; stroke-width: 1; stroke-dasharray: 3 4; }
+    .pid-uniq   { fill: #34d399; fill-opacity: 0.6; }
     .seat-ring     { fill: none; stroke-width: 2.2; }
     .seat-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .seat-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
@@ -989,6 +1011,10 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .hub-fill { fill: #ffffff; }
       .hub-glow { stroke: #059669; stroke-opacity: 0.12; }
       .hub-label { fill: #059669; }
+      .pid-set { stroke: #059669; }
+      .pid-lens { fill: #059669; fill-opacity: 0.3; }
+      .pid-syn { stroke: #059669; }
+      .pid-uniq { fill: #059669; }
       .logo-label { fill: #57626f; }
       .tri-label { fill: #6d28d9; }
       .gate-label { fill: #b45309; }
