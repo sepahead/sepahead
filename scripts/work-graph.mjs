@@ -60,7 +60,7 @@ const nodes = {
   reliefatlas: { x: 690, y: 350, color: "#fb7185", kind: "chip", label: "relief-atlas", dataset: true },
   cortexel:    { x: 110, y: 360, color: "#e879f9", kind: "voxel" },
   manwe:       { x: 298, y: 386, color: "#38bdf8", kind: "radar", label: "manwe" },
-  galadriel:   { x: 460, y: 232, color: "#ef4444", kind: "sentinel", label: "galadriel", private: true },
+  galadriel:   { x: 375, y: 250, color: "#ef4444", kind: "sentinel", label: "galadriel", private: true },
 };
 // Uppercase every label in the SOURCE (not via CSS text-transform, which
 // librsvg and other SVG renderers ignore — content-case renders everywhere).
@@ -111,7 +111,7 @@ function halfExtents(n) {
   if (n.kind === "voxel") return { hw: NET_R, hh: NET_R, circle: true };
   if (n.kind === "raven") return { hw: 30, hh: 30, circle: true };
   if (n.kind === "radar") return { hw: 32, hh: 32, circle: true };
-  if (n.kind === "sentinel") return { hw: 30, hh: 30, circle: true };
+  if (n.kind === "sentinel") return { hw: 34, hh: 34, circle: true };
   if (n.kind === "logo") return { hw: 30, hh: 30, circle: true };
   if (n.kind === "cube") return { hw: CUBE / 2, hh: CUBE / 2, circle: false };
   return { hw: nodeWidth(n) / 2, hh: CHIP_H / 2, circle: false };
@@ -497,47 +497,39 @@ const nodeEls = Object.values(nodes).map((n) => {
   </g>`;
   }
   if (n.kind === "radar") {
-    // manwe: a real-time UAV-detection SCOPE — concentric range rings + a
-    // crosshair, a slow rotating sweep with a soft hub-anchored afterglow beam,
-    // a WING of three wind-swept arcs (echoing assets/manwe-logo.svg in the
-    // manwe repo: the three sensing modalities), and two tracked blips that
-    // ping in counterphase. Sky-cyan mark for a sky-watching sensor.
-    // A bespoke SEATED mark (faint disc + label above, like engram) so manwe
-    // reads at the same tier as the other project nodes, not a bare chip; the
-    // scope form is deliberately distinct from crebain's raven-in-reticle and
-    // from cobot-atlas's pill. Reduced-motion parks the sweep and holds the blip
-    // lit (static attribute values). One instance → unique ids.
-    const cx = n.x, cy = n.y, R = 30;
-    const bx = f1(cx + 12), by = f1(cy - 15);          // detected blip (upper-right quadrant)
-    const aw = (46 * Math.PI) / 180;                    // trailing afterglow wedge angle
-    const wx = f1(cx + R * Math.cos(aw)), wy = f1(cy + R * Math.sin(aw));
+    // manwe: the perception PROVING GROUND behind crebain (echoes
+    // assets/manwe-logo.svg in the manwe repo) — a target drone held in
+    // detection brackets, a camera pair triangulating it from below, and a
+    // rippling direction-of-arrival arc from an acoustic node: models are
+    // trained, evaluated and exported here, not deployed. A bespoke SEATED
+    // mark (faint disc + label above, like engram) so manwe reads at the
+    // project tier. Reduced-motion holds the DOA arc lit (static attribute
+    // values). One instance.
+    const cx = n.x, cy = n.y, dy = -6;
+    const drone =
+      `<path class="mw-drone" d="M${f1(cx - 7)} ${f1(cy + dy - 7)} L${f1(cx + 7)} ${f1(cy + dy + 7)} M${f1(cx + 7)} ${f1(cy + dy - 7)} L${f1(cx - 7)} ${f1(cy + dy + 7)}"/>` +
+      [[-7, -7], [7, -7], [-7, 7], [7, 7]]
+        .map(([rx, ry]) => `<circle class="mw-rotor" cx="${f1(cx + rx)}" cy="${f1(cy + dy + ry)}" r="3.4"/>`)
+        .join("") +
+      `<circle class="mw-dot" cx="${cx}" cy="${f1(cy + dy)}" r="2"/>`;
+    const bk = 5, bx1 = cx - 14, bx2 = cx + 14, by1 = cy + dy - 14, by2 = cy + dy + 14;
+    const brackets =
+      `<path class="mw-bracket" d="M${f1(bx1)} ${f1(by1 + bk)} V${f1(by1)} H${f1(bx1 + bk)}"/>` +
+      `<path class="mw-bracket" d="M${f1(bx2 - bk)} ${f1(by1)} H${f1(bx2)} V${f1(by1 + bk)}"/>` +
+      `<path class="mw-bracket" d="M${f1(bx2)} ${f1(by2 - bk)} V${f1(by2)} H${f1(bx2 - bk)}"/>` +
+      `<path class="mw-bracket" d="M${f1(bx1 + bk)} ${f1(by2)} H${f1(bx1)} V${f1(by2 - bk)}"/>`;
+    const rays =
+      `<line class="mw-ray" x1="${f1(cx - 17)}" y1="${f1(cy + 24)}" x2="${f1(cx - 5)}" y2="${f1(cy + 9)}"/>` +
+      `<line class="mw-ray" x1="${f1(cx + 17)}" y1="${f1(cy + 24)}" x2="${f1(cx + 5)}" y2="${f1(cy + 9)}"/>` +
+      `<circle class="mw-dot" cx="${f1(cx - 17)}" cy="${f1(cy + 24)}" r="1.7"/>` +
+      `<circle class="mw-dot" cx="${f1(cx + 17)}" cy="${f1(cy + 24)}" r="1.7"/>` +
+      `<circle class="mw-dot" cx="${cx}" cy="${f1(cy + 24)}" r="1.4"/>`;
     return `<g class="radar">
-    <defs>
-      <radialGradient id="radarBeam" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${cy}" r="${R}">
-        <stop offset="0%" stop-color="currentColor" stop-opacity="0.34"/>
-        <stop offset="100%" stop-color="currentColor" stop-opacity="0"/>
-      </radialGradient>
-    </defs>
     <circle cx="${cx}" cy="${cy}" r="34" class="radar-seat"/>
-    <circle cx="${cx}" cy="${cy}" r="11" class="radar-ring"/>
-    <circle cx="${cx}" cy="${cy}" r="21" class="radar-ring"/>
-    <circle cx="${cx}" cy="${cy}" r="30" class="radar-ring"/>
-    <line x1="${cx - 30}" y1="${cy}" x2="${cx + 30}" y2="${cy}" class="radar-ring"/>
-    <line x1="${cx}" y1="${cy - 30}" x2="${cx}" y2="${cy + 30}" class="radar-ring"/>
-    <g class="radar-sweep">
-      <path d="M${cx} ${cy} L${f1(cx + R)} ${cy} A${R} ${R} 0 0 1 ${wx} ${wy} Z" class="radar-beam" fill="url(#radarBeam)"/>
-      <line x1="${cx}" y1="${cy}" x2="${f1(cx + R)}" y2="${cy}" class="radar-line"/>
-      <animateTransform attributeName="transform" type="rotate" from="0 ${cx} ${cy}" to="360 ${cx} ${cy}" dur="5s" repeatCount="indefinite"/>
-    </g>
-    <path d="M${f1(cx - 21.6)} ${f1(cy + 10.8)} Q${f1(cx - 5.4)} ${f1(cy + 5.4)} ${f1(cx + 15.1)} ${f1(cy - 11.9)}" class="radar-wing" stroke-width="2.2" stroke-opacity="0.95"/>
-    <path d="M${f1(cx - 18.4)} ${f1(cy + 15.7)} Q${f1(cx - 1.1)} ${f1(cy + 10.3)} ${f1(cx + 18.4)} ${f1(cy - 6.5)}" class="radar-wing" stroke-width="1.6" stroke-opacity="0.7"/>
-    <path d="M${f1(cx - 14.6)} ${f1(cy + 20)} Q${f1(cx + 2.7)} ${f1(cy + 14.6)} ${f1(cx + 20.5)} ${f1(cy - 1.1)}" class="radar-wing" stroke-width="1.1" stroke-opacity="0.5"/>
-    <circle cx="${bx}" cy="${by}" r="2.6" class="radar-blip">
-      <animate attributeName="opacity" values="1;0.15;1" dur="2s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="${f1(cx - 9.2)}" cy="${f1(cy - 15.7)}" r="1.8" class="radar-blip">
-      <animate attributeName="opacity" values="0.15;1;0.15" dur="2s" repeatCount="indefinite"/>
-    </circle>
+    ${drone}${brackets}${rays}
+    <path class="mw-doa" d="M${f1(cx - 8)} ${f1(cy + 21)} A10.5 10.5 0 0 1 ${f1(cx + 8)} ${f1(cy + 21)}">
+      <animate attributeName="opacity" values="0.9;0.25;0.9" dur="2.8s" repeatCount="indefinite"/>
+    </path>
     <text x="${cx}" y="${f1(cy - 46)}" text-anchor="middle" class="radar-label">${escapeXML(n.label)}</text>
   </g>`;
   }
@@ -563,8 +555,13 @@ const nodeEls = Object.values(nodes).map((n) => {
       .join("");
     const [ex, ey] = [cx + (120 - 120) * s, cy + (89 - 122) * s];
     const amp = f1(42 * s);
+    const ticks = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
+      .map(([tx, ty]) => `<line x1="${f1(cx + tx * 23.3)}" y1="${f1(cy + ty * 23.3)}" x2="${f1(cx + tx * 29)}" y2="${f1(cy + ty * 29)}" class="gal-tick"/>`)
+      .join("");
     return `<g class="gal">
     <circle cx="${cx}" cy="${cy}" r="34" class="gal-seat"/>
+    <circle cx="${cx}" cy="${cy}" r="36.5" class="gal-orbit"/>
+    ${ticks}
     <defs>
       <radialGradient id="galEye" gradientUnits="userSpaceOnUse" cx="${f1(ex)}" cy="${f1(ey)}" r="8">
         <stop offset="0%" stop-color="#ff6b5e" stop-opacity="0.9"/>
@@ -618,7 +615,7 @@ const frame = `<g class="frame">
 // Assemble.
 // ---------------------------------------------------------------------------
 const aria =
-  "Project graph: engram (private) and crebain connect through the always-on, two-way NCP protocol to prisoma, a private hub; pid-rs, cobot-atlas, melkor and relief-atlas connect to prisoma; cobot-atlas, melkor and relief-atlas also connect to crebain, as does manwe, a real-time UAV-detection client; cortexel connects to engram; galadriel, a private cross-sensor spoof detector, connects to crebain and pid-rs.";
+  "Project graph: engram (private) and crebain connect through the always-on, two-way NCP protocol to prisoma, a private hub; pid-rs, cobot-atlas, melkor and relief-atlas connect to prisoma; cobot-atlas, melkor and relief-atlas also connect to crebain, as does manwe, the perception training ground behind crebain; cortexel connects to engram; galadriel, a private cross-sensor spoof detector, connects to crebain and pid-rs.";
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
   <defs>
@@ -682,12 +679,16 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .raven-cursor { fill: #9caf88; }
     .radar        { color: #38bdf8; }
     .radar-seat   { fill: #38bdf8; fill-opacity: 0.08; filter: url(#soft); }
-    .radar-ring   { fill: none; stroke: #38bdf8; stroke-opacity: 0.4; stroke-width: 1; }
-    .radar-line   { fill: none; stroke: #7dd3fc; stroke-width: 1.4; stroke-linecap: round; opacity: 0.95; }
-    .radar-blip   { fill: #7dd3fc; }
-    .radar-wing   { fill: none; stroke: #7dd3fc; stroke-linecap: round; }
     .radar-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #38bdf8; }
-    .gal-seat   { fill: #ef4444; fill-opacity: 0.07; filter: url(#soft); }
+    .mw-drone     { fill: none; stroke: #bfe9ff; stroke-width: 2; stroke-linecap: round; }
+    .mw-rotor     { fill: none; stroke: #7dd3fc; stroke-width: 1.3; }
+    .mw-dot       { fill: #bfe9ff; }
+    .mw-bracket   { fill: none; stroke: #38bdf8; stroke-width: 1.6; stroke-linecap: round; }
+    .mw-ray       { stroke: #7dd3fc; stroke-width: 1; stroke-opacity: 0.55; stroke-linecap: round; }
+    .mw-doa       { fill: none; stroke: #7dd3fc; stroke-width: 1.2; stroke-linecap: round; }
+    .gal-seat   { fill: #ef4444; fill-opacity: 0.05; filter: url(#soft); }
+    .gal-orbit  { fill: none; stroke: #ef4444; stroke-opacity: 0.45; stroke-width: 1.2; }
+    .gal-tick   { stroke: #ef4444; stroke-opacity: 0.6; stroke-width: 1.6; stroke-linecap: round; }
     .gal-plate  { fill: #131c28; stroke: #8b97a6; stroke-opacity: 0.6; stroke-width: 1.3; stroke-linejoin: miter; }
     .gal-slit   { fill: #05070b; stroke: #8b97a6; stroke-opacity: 0.5; stroke-width: 0.8; stroke-linejoin: miter; }
     .gal-chan   { fill: none; stroke: #b9c2cd; stroke-width: 1.2; stroke-linecap: round; stroke-opacity: 0.72; }
@@ -731,12 +732,16 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .raven-cursor { fill: #4b5320; }
       .radar { color: #0284c7; }
       .radar-seat { fill: #0284c7; fill-opacity: 0.05; }
-      .radar-ring { stroke: #0284c7; }
-      .radar-line { stroke: #0284c7; }
-      .radar-blip { fill: #0284c7; }
-      .radar-wing { stroke: #0284c7; }
       .radar-label { fill: #0284c7; }
-      .gal-seat { fill: #dc2626; fill-opacity: 0.05; }
+      .mw-drone { stroke: #075985; }
+      .mw-rotor { stroke: #0284c7; }
+      .mw-dot { fill: #075985; }
+      .mw-bracket { stroke: #0284c7; }
+      .mw-ray { stroke: #0284c7; }
+      .mw-doa { stroke: #0284c7; }
+      .gal-seat { fill: #dc2626; fill-opacity: 0.04; }
+      .gal-orbit { stroke: #dc2626; stroke-opacity: 0.5; }
+      .gal-tick { stroke: #dc2626; }
       .gal-plate { fill: #ffffff; stroke: #6b7684; }
       .gal-slit { fill: #111827; stroke: #6b7684; }
       .gal-chan { stroke: #59636f; }
