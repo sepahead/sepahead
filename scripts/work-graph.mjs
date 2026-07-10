@@ -60,7 +60,7 @@ const nodes = {
   reliefatlas: { x: 690, y: 350, color: "#fb7185", kind: "chip", label: "relief-atlas", dataset: true },
   cortexel:    { x: 110, y: 360, color: "#e879f9", kind: "voxel" },
   manwe:       { x: 298, y: 386, color: "#38bdf8", kind: "radar", label: "manwe" },
-  galadriel:   { x: 460, y: 232, color: "#ef4444", kind: "reticle", label: "galadriel", private: true },
+  galadriel:   { x: 460, y: 232, color: "#ef4444", kind: "sentinel", label: "galadriel", private: true },
 };
 // Uppercase every label in the SOURCE (not via CSS text-transform, which
 // librsvg and other SVG renderers ignore — content-case renders everywhere).
@@ -111,7 +111,7 @@ function halfExtents(n) {
   if (n.kind === "voxel") return { hw: NET_R, hh: NET_R, circle: true };
   if (n.kind === "raven") return { hw: 30, hh: 30, circle: true };
   if (n.kind === "radar") return { hw: 32, hh: 32, circle: true };
-  if (n.kind === "reticle") return { hw: 30, hh: 30, circle: true };
+  if (n.kind === "sentinel") return { hw: 30, hh: 30, circle: true };
   if (n.kind === "logo") return { hw: 30, hh: 30, circle: true };
   if (n.kind === "cube") return { hw: CUBE / 2, hh: CUBE / 2, circle: false };
   return { hw: nodeWidth(n) / 2, hh: CHIP_H / 2, circle: false };
@@ -499,7 +499,9 @@ const nodeEls = Object.values(nodes).map((n) => {
   if (n.kind === "radar") {
     // manwe: a real-time UAV-detection SCOPE — concentric range rings + a
     // crosshair, a slow rotating sweep with a soft hub-anchored afterglow beam,
-    // and a detected blip that pings. Sky-cyan mark for a sky-watching sensor.
+    // a WING of three wind-swept arcs (echoing assets/manwe-logo.svg in the
+    // manwe repo: the three sensing modalities), and two tracked blips that
+    // ping in counterphase. Sky-cyan mark for a sky-watching sensor.
     // A bespoke SEATED mark (faint disc + label above, like engram) so manwe
     // reads at the same tier as the other project nodes, not a bare chip; the
     // scope form is deliberately distinct from crebain's raven-in-reticle and
@@ -527,50 +529,60 @@ const nodeEls = Object.values(nodes).map((n) => {
       <line x1="${cx}" y1="${cy}" x2="${f1(cx + R)}" y2="${cy}" class="radar-line"/>
       <animateTransform attributeName="transform" type="rotate" from="0 ${cx} ${cy}" to="360 ${cx} ${cy}" dur="5s" repeatCount="indefinite"/>
     </g>
+    <path d="M${f1(cx - 21.6)} ${f1(cy + 10.8)} Q${f1(cx - 5.4)} ${f1(cy + 5.4)} ${f1(cx + 15.1)} ${f1(cy - 11.9)}" class="radar-wing" stroke-width="2.2" stroke-opacity="0.95"/>
+    <path d="M${f1(cx - 18.4)} ${f1(cy + 15.7)} Q${f1(cx - 1.1)} ${f1(cy + 10.3)} ${f1(cx + 18.4)} ${f1(cy - 6.5)}" class="radar-wing" stroke-width="1.6" stroke-opacity="0.7"/>
+    <path d="M${f1(cx - 14.6)} ${f1(cy + 20)} Q${f1(cx + 2.7)} ${f1(cy + 14.6)} ${f1(cx + 20.5)} ${f1(cy - 1.1)}" class="radar-wing" stroke-width="1.1" stroke-opacity="0.5"/>
     <circle cx="${bx}" cy="${by}" r="2.6" class="radar-blip">
       <animate attributeName="opacity" values="1;0.15;1" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="${f1(cx - 9.2)}" cy="${f1(cy - 15.7)}" r="1.8" class="radar-blip">
+      <animate attributeName="opacity" values="0.15;1;0.15" dur="2s" repeatCount="indefinite"/>
     </circle>
     <text x="${cx}" y="${f1(cy - 46)}" text-anchor="middle" class="radar-label">${escapeXML(n.label)}</text>
   </g>`;
   }
-  if (n.kind === "reticle") {
-    // galadriel: a cross-sensor FUSION RETICLE — several muted sensor bearings
-    // converge on a locked consensus target, while ONE accent-red channel
-    // decouples toward a phantom that pings (the caught spoof). A bespoke SEATED
-    // mark (faint disc + label above, like manwe/engram) so galadriel reads at the
-    // project tier. Deliberately distinct from manwe's single-sweep radar (this is
-    // MANY static bearings + one divergent) and crebain's raven-in-reticle. It
-    // echoes galadriel's own repo logo (channels lock, one red diverges). Reduced-
-    // motion parks the phantom ping (static values hold it lit). One instance.
-    const cx = n.x, cy = n.y, RO = 27;
-    const pol = (deg, rad) => [f1(cx + rad * Math.cos((deg * Math.PI) / 180)), f1(cy + rad * Math.sin((deg * Math.PI) / 180))];
-    // three corroborating sensor bearings: a node on the outer ring + a stub
-    // pointing inward to the locked centre — the consensus that agrees.
-    const corr = [70, 150, 225].map((a) => {
-      const [nx, ny] = pol(a, RO);
-      const [ix, iy] = pol(a, 8);
-      return `<line x1="${nx}" y1="${ny}" x2="${ix}" y2="${iy}" class="gal-chan"/><circle cx="${nx}" cy="${ny}" r="1.7" class="gal-node"/>`;
-    }).join("");
-    // the decoupled channel: a sensor whose bearing MISSES the centre and points
-    // outward at a phantom that pings just beyond the ring.
-    const [rnx, rny] = pol(-30, RO);
-    const [phx, phy] = pol(-16, 38);
-    const hd = 3;
-    const decoupled =
-      `<line x1="${rnx}" y1="${rny}" x2="${phx}" y2="${phy}" class="gal-hot"/>` +
-      `<circle cx="${rnx}" cy="${rny}" r="2" class="gal-hotf"/>` +
-      `<path d="M${phx} ${f1(phy - hd)} L${f1(phx + hd)} ${phy} L${phx} ${f1(phy + hd)} L${f1(phx - hd)} ${phy} Z" class="gal-hotf"><animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/></path>` +
-      `<circle cx="${phx}" cy="${phy}" r="5.5" fill="none" class="gal-hot" stroke-opacity="0.5"><animate attributeName="r" values="3;7.5;3" dur="2s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values="0.6;0;0.6" dur="2s" repeatCount="indefinite"/></circle>`;
+  if (n.kind === "sentinel") {
+    // galadriel: its real brand mark in miniature — the SENTINEL SHIELD. An
+    // angular chamfered crest whose visor slit carries a red scanning eye that
+    // sweeps side to side (the watcher that looks for the channel that lies),
+    // with three sensor-channel traces feeding the visor from below. A bespoke
+    // SEATED mark (faint disc + label above, like manwe/engram) so galadriel
+    // reads at the project tier. Echoes assets/galadriel-logo.svg in the
+    // galadriel repo. Reduced-motion parks the eye centred (static attribute
+    // values hold it). One instance -> unique ids.
+    const cx = n.x, cy = n.y, s = 0.26;
+    const m = (px, py) => `${f1(cx + (px - 120) * s)} ${f1(cy + (py - 122) * s)}`;
+    const poly = (pts) => `M${pts.map(([px, py]) => m(px, py)).join(" L")} Z`;
+    const shield = poly([[36, 44], [68, 18], [172, 18], [204, 44], [204, 122], [188, 164], [120, 226], [52, 164], [36, 122]]);
+    const slit = poly([[46, 89], [60, 76], [180, 76], [194, 89], [180, 102], [60, 102]]);
+    const traces =
+      `<path d="M${m(120, 204)} L${m(120, 104)}" class="gal-chan"/>` +
+      `<path d="M${m(84, 168)} L${m(84, 142)} L${m(104, 122)} L${m(136, 122)} L${m(156, 142)} L${m(156, 168)}" class="gal-chan" fill="none"/>`;
+    const roots = [[120, 204], [84, 168], [156, 168]]
+      .map(([px, py]) => `<circle cx="${f1(cx + (px - 120) * s)}" cy="${f1(cy + (py - 122) * s)}" r="1.5" class="gal-node"/>`)
+      .join("");
+    const [ex, ey] = [cx + (120 - 120) * s, cy + (89 - 122) * s];
+    const amp = f1(42 * s);
     return `<g class="gal">
     <circle cx="${cx}" cy="${cy}" r="34" class="gal-seat"/>
-    <circle cx="${cx}" cy="${cy}" r="12" class="gal-ring"/>
-    <circle cx="${cx}" cy="${cy}" r="${RO}" class="gal-ring"/>
-    <circle cx="${cx}" cy="${cy}" r="30" class="gal-ring" stroke-dasharray="1.5 4"/>
-    <path d="M${cx - 7} ${cy} H${cx + 7} M${cx} ${cy - 7} V${cy + 7}" class="gal-ring"/>
-    ${corr}
-    <circle cx="${cx}" cy="${cy}" r="5" class="gal-ring"/>
-    <circle cx="${cx}" cy="${cy}" r="2" class="gal-node"/>
-    ${decoupled}
+    <defs>
+      <radialGradient id="galEye" gradientUnits="userSpaceOnUse" cx="${f1(ex)}" cy="${f1(ey)}" r="8">
+        <stop offset="0%" stop-color="#ff6b5e" stop-opacity="0.9"/>
+        <stop offset="55%" stop-color="#ef4444" stop-opacity="0.45"/>
+        <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+      </radialGradient>
+      <clipPath id="galSlit" clipPathUnits="userSpaceOnUse"><path d="${slit}"/></clipPath>
+    </defs>
+    <path d="${shield}" class="gal-plate"/>
+    ${traces}${roots}
+    <path d="${slit}" class="gal-slit"/>
+    <g clip-path="url(#galSlit)">
+      <g>
+        <ellipse cx="${f1(ex)}" cy="${f1(ey)}" rx="8" ry="3" fill="url(#galEye)"/>
+        <rect x="${f1(ex - 3.6)}" y="${f1(ey - 1.2)}" width="7.2" height="2.4" rx="1.2" class="gal-hotf"/>
+        <animateTransform attributeName="transform" type="translate" values="0 0;${amp} 0;-${amp} 0;0 0" keyTimes="0;0.25;0.75;1" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1" dur="3.6s" repeatCount="indefinite"/>
+      </g>
+    </g>
     <text x="${cx}" y="${f1(cy - 46)}" text-anchor="middle" class="gal-label">${escapeXML(n.label)}</text>
   </g>`;
   }
@@ -673,12 +685,13 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .radar-ring   { fill: none; stroke: #38bdf8; stroke-opacity: 0.4; stroke-width: 1; }
     .radar-line   { fill: none; stroke: #7dd3fc; stroke-width: 1.4; stroke-linecap: round; opacity: 0.95; }
     .radar-blip   { fill: #7dd3fc; }
+    .radar-wing   { fill: none; stroke: #7dd3fc; stroke-linecap: round; }
     .radar-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #38bdf8; }
     .gal-seat   { fill: #ef4444; fill-opacity: 0.07; filter: url(#soft); }
-    .gal-ring   { fill: none; stroke: #8b97a6; stroke-opacity: 0.42; stroke-width: 1; }
-    .gal-chan   { fill: none; stroke: #b9c2cd; stroke-width: 1.4; stroke-linecap: round; stroke-opacity: 0.82; }
+    .gal-plate  { fill: #131c28; stroke: #8b97a6; stroke-opacity: 0.6; stroke-width: 1.3; stroke-linejoin: miter; }
+    .gal-slit   { fill: #05070b; stroke: #8b97a6; stroke-opacity: 0.5; stroke-width: 0.8; stroke-linejoin: miter; }
+    .gal-chan   { fill: none; stroke: #b9c2cd; stroke-width: 1.2; stroke-linecap: round; stroke-opacity: 0.72; }
     .gal-node   { fill: #b9c2cd; }
-    .gal-hot    { fill: none; stroke: #ef4444; stroke-width: 1.8; stroke-linecap: round; }
     .gal-hotf   { fill: #ef4444; }
     .gal-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #ef4444; }
     .wg-rule    { stroke: #30363d; stroke-width: 1; stroke-opacity: 0.55; }
@@ -721,12 +734,13 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .radar-ring { stroke: #0284c7; }
       .radar-line { stroke: #0284c7; }
       .radar-blip { fill: #0284c7; }
+      .radar-wing { stroke: #0284c7; }
       .radar-label { fill: #0284c7; }
       .gal-seat { fill: #dc2626; fill-opacity: 0.05; }
-      .gal-ring { stroke: #6b7684; }
+      .gal-plate { fill: #ffffff; stroke: #6b7684; }
+      .gal-slit { fill: #111827; stroke: #6b7684; }
       .gal-chan { stroke: #59636f; }
       .gal-node { fill: #59636f; }
-      .gal-hot { stroke: #dc2626; }
       .gal-hotf { fill: #dc2626; }
       .gal-label { fill: #dc2626; }
       .wg-rule { stroke: #d0d7de; stroke-opacity: 0.9; }
