@@ -351,8 +351,8 @@ const nodeEls = Object.values(nodes).map((n) => {
       E: [12, 24], K: [-6, 24], L: [2, 24],
     };
     const TIN = [
-      ["A", "B", "K", "#2e150a"], ["B", "C", "K", "#1a0c06"], ["C", "L", "K", "#241109"],
-      ["C", "D", "L", "#140a05"], ["D", "E", "L", "#0e0603"],
+      ["A", "B", "K", "#170b05"], ["B", "C", "K", "#0e0703"], ["C", "L", "K", "#241109"],
+      ["C", "D", "L", "#331A0d"], ["D", "E", "L", "#20100a"],
     ];
     const pt = (k) => `${f1(cx + V[k][0])},${f1(cy + V[k][1])}`;
     const facets = TIN.map(([a, b, c, tone]) =>
@@ -377,9 +377,6 @@ const nodeEls = Object.values(nodes).map((n) => {
       <path d="M${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)} L${f1(cx + 12)} ${f1(cy + 24)} Z" class="mel-facet"/>
       ${facets}
       <path d="${ridgeLine}" class="mel-ridge"/>
-      <circle cx="${f1(cx + 12)}" cy="${f1(cy - 34)}" r="1.8" class="mel-spark" filter="url(#soft)">
-        <animate attributeName="opacity" values="0.55;1;0.55" dur="3.2s" repeatCount="indefinite"/>
-      </circle>
     </g>
     <path d="${hex(1)}" class="mel-edge"/>
     <path d="${hex(0.9423)}" class="mel-groove"/>
@@ -765,33 +762,35 @@ const nodeEls = Object.values(nodes).map((n) => {
     // (theme-FIXED): a GUNMETAL steel bezel matching the shield's armor — red
     // reads as plastic at bezel scale, so the project hue lives in a thin red
     // SIGNAL RING inlaid in the groove (grey armor, red light, like the eye).
-    // Below the visor, COMPARATOR CIRCUITRY that reads unmistakably as
-    // electronics (deliberately ASYMMETRIC routing — no centred ring / axis /
-    // diamond stack, which reads as an emblem rather than a board): an SMD
-    // comparator chip with a pin-1 dot, three channels routed in PCB idiom
-    // (left + centre into the top pins over 45° bends with vias, the right
-    // channel wrapping into the chip's side), a stub via, and an off-centre
-    // output trace to a round pad; the red verdict LED sits offset on the
-    // chip's corner. Echoes assets/galadriel-logo.svg in the galadriel repo.
-    // Reduced-motion parks the eye centred (static attribute values hold it).
-    // One instance -> unique ids.
+    // Below the visor, FIBER-OPTIC sensor feeds: three light-guides sweep up
+    // from small connector ports at the shield's foot and jack into the
+    // visor's underside, each carrying a cool light pulse toward the eye —
+    // the sensor channels streaming into the watcher. Smooth asymmetric
+    // curves (nothing rectilinear, nothing emblem-like); the light is cold
+    // white-blue so the red verdict stays the eye's alone. Echoes
+    // assets/galadriel-logo.svg in the galadriel repo. Reduced-motion parks
+    // the eye centred and holds a lit pulse at each port. One instance ->
+    // unique ids.
     const cx = n.x, cy = n.y, s = 0.23;
     const m = (px, py) => `${f1(cx + (px - 120) * s)} ${f1(cy + (py - 122) * s)}`;
     const poly = (pts) => `M${pts.map(([px, py]) => m(px, py)).join(" L")} Z`;
     const shield = poly([[36, 44], [68, 18], [172, 18], [204, 44], [204, 122], [188, 164], [120, 226], [52, 164], [36, 122]]);
     const slit = poly([[46, 89], [60, 76], [180, 76], [194, 89], [180, 102], [60, 102]]);
-    // Comparator circuitry (real-px offsets from the node centre; visor slit
-    // bottom sits at −4.6). All bends are 45°, PCB-style; routing asymmetric.
+    // Fiber runs (real-px offsets from the node centre; visor slit bottom
+    // sits at −4.6). Each fibre: base guide + travelling pulse + connector
+    // port at the foot + light jack where it enters the visor.
     const p = (x, y) => `${f1(cx + x)} ${f1(cy + y)}`;
-    const circuit =
-      `<path class="gal-chan" fill="none" d="M${p(-10, -4.2)} V${f1(cy + 1)} L${p(-3, 8)} M${p(0, -4.2)} V${f1(cy + 8)} M${p(10, -4.2)} V${f1(cy + 9)} L${p(8, 11)} H${f1(cx + 5)} M${p(2, 14)} V${f1(cy + 17.5)} M${p(-2, 14)} V${f1(cy + 16)}"/>` +
-      `<circle cx="${f1(cx - 10)}" cy="${f1(cy + 1)}" r="1" class="gal-node"/>` +
-      `<circle cx="${f1(cx + 10)}" cy="${f1(cy + 9)}" r="1" class="gal-node"/>` +
-      `<circle cx="${f1(cx - 2)}" cy="${f1(cy + 16)}" r="0.8" class="gal-node"/>` +
-      `<rect x="${f1(cx - 5)}" y="${f1(cy + 8)}" width="10" height="6" rx="0.8" class="gal-pad"/>` +
-      `<circle cx="${f1(cx - 3.6)}" cy="${f1(cy + 9.4)}" r="0.5" class="gal-node"/>` +
-      `<rect x="${f1(cx + 3.2)}" y="${f1(cy + 8.7)}" width="1.7" height="1.7" rx="0.3" class="gal-led"/>` +
-      `<circle cx="${f1(cx + 2)}" cy="${f1(cy + 18.7)}" r="1.2" class="gal-pad"/>`;
+    const FIBERS = [
+      { d: `M${p(-8, 13)} C${p(-11, 6)} ${p(-8, -1)} ${p(-4, -4.2)}`, port: [-8, 13], jack: [-4, -4.2], beg: "0s" },
+      { d: `M${p(-2, 19)} C${p(-2, 11)} ${p(1, 3)} ${p(1, -4.2)}`, port: [-2, 19], jack: [1, -4.2], beg: "0.9s" },
+      { d: `M${p(7, 15)} C${p(10, 8)} ${p(6, 1)} ${p(4.5, -4.2)}`, port: [7, 15], jack: [4.5, -4.2], beg: "1.6s" },
+    ];
+    const circuit = FIBERS.map(({ d, port, jack, beg }) =>
+      `<path class="gal-fiber" d="${d}"/>` +
+      `<path class="gal-pulse" d="${d}"><animate attributeName="stroke-dashoffset" from="43" to="0" dur="2.6s" begin="${beg}" repeatCount="indefinite"/></path>` +
+      `<circle class="gal-port" cx="${f1(cx + port[0])}" cy="${f1(cy + port[1])}" r="1.4"/>` +
+      `<circle class="gal-jack" cx="${f1(cx + jack[0])}" cy="${f1(cy + jack[1])}" r="0.9"/>`
+    ).join("");
     const [ex, ey] = [cx + (120 - 120) * s, cy + (89 - 122) * s];
     const amp = f1(42 * s);
     return `<g class="gal">
@@ -906,7 +905,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mel-ridge    { fill: none; stroke: #fdba74; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
     .mel-facet    { fill: #070302; }
     .mel-tin      { stroke: #000000; stroke-opacity: 0.4; stroke-width: 0.6; stroke-linejoin: round; }
-    .mel-spark    { fill: #fde68a; }
     .mel-edge     { fill: none; stroke: url(#melBezel); stroke-width: 2.4; stroke-linejoin: miter; }
     .mel-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .mel-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
@@ -955,12 +953,12 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mw-hairline  { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
     .seat-gal   { fill: url(#galGrad); }
     .gal-signal { fill: none; stroke: #ef4444; stroke-opacity: 0.7; stroke-width: 1.1; }
-    .gal-pad    { fill: #05070b; stroke: #b9c2cd; stroke-width: 1.1; stroke-opacity: 0.8; }
-    .gal-led    { fill: #ef4444; }
+    .gal-fiber  { fill: none; stroke: #9fb0bf; stroke-opacity: 0.65; stroke-width: 1.4; stroke-linecap: round; }
+    .gal-pulse  { fill: none; stroke: #e0f2fe; stroke-opacity: 0.9; stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 3 40; }
+    .gal-port   { fill: #05070b; stroke: #9fb0bf; stroke-opacity: 0.8; stroke-width: 1; }
+    .gal-jack   { fill: #e0f2fe; fill-opacity: 0.75; }
     .gal-plate  { fill: #131c28; stroke: #8b97a6; stroke-opacity: 0.6; stroke-width: 1.3; stroke-linejoin: miter; }
     .gal-slit   { fill: #05070b; stroke: #8b97a6; stroke-opacity: 0.5; stroke-width: 0.8; stroke-linejoin: miter; }
-    .gal-chan   { fill: none; stroke: #b9c2cd; stroke-width: 1.2; stroke-linecap: round; stroke-opacity: 0.72; }
-    .gal-node   { fill: #b9c2cd; }
     .gal-hotf   { fill: #ef4444; }
     .gal-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #ef4444; }
     .wg-rule    { stroke: #30363d; stroke-width: 1; stroke-opacity: 0.55; }
