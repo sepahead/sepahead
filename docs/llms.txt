@@ -22,7 +22,7 @@ sensor fusion and airspace awareness.
 - engram: Engram Neural Modeling Labs; NEST-based neural-modeling hub (the "brain" the rest of the stack connects to); code opens fully after publication: https://github.com/sepahead/engram
 - haldir: security & guardian layer for the NCP ecosystem (design catalog): per-frame sensor provenance, fail-closed authorization gates, attestation and cross-sensor integrity for UAVs and embodied agents: https://github.com/sepahead/haldir
 - prisoma (private): a prism for embodied agents, robotics and world models; refracts Vision-Language-Action policies through several natively-implemented analysis methods, Partial Information Decomposition among them
-- galadriel (private): Galadriel's Mirror; cross-sensor spoof detection via Partial Information Decomposition, watching crebain's sensor fusion (Rust)
+- galadriel: Galadriel's Mirror; fail-closed cross-sensor statistical-consistency monitoring with NIS/CUSUM, signed correlation, and optional PID evidence (Rust research prototype)
 
 ## More repositories
 - brojapid-activationfunctions: Partial Information Decomposition (PID) analysis of neural-network activation functions: https://github.com/sepahead/brojapid-activationfunctions
