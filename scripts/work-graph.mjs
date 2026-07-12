@@ -448,23 +448,29 @@ export function nodeMark(n) {
     const rnd = (k) => { const s = (k * 2654435761 >>> 0) % 2147483647; return ((s >>> 9) & 0x7fff) / 0x8000; };
     const splatHomes = [];
     let sk = 0;
-    for (let gy = -30; gy <= 22; gy += 7) for (let gx = -26; gx <= 26; gx += 7.5) {
+    for (let gy = -30; gy <= 22; gy += 5.5) for (let gx = -26; gx <= 26; gx += 5.5) {
       if (!inMassif(gx, gy)) continue;
-      const hx = gx + (rnd(sk * 2 + 1) - 0.5) * 3, hy = gy + (rnd(sk * 2 + 2) - 0.5) * 3;
-      splatHomes.push({ hx: f1(hx), hy: f1(hy), i: sk });
+      const hx = gx + (rnd(sk * 2 + 1) - 0.5) * 2.4, hy = gy + (rnd(sk * 2 + 2) - 0.5) * 2.4;
+      splatHomes.push({ hx: f1(hx), hy: f1(hy) });
       sk++;
     }
-    const ys = splatHomes.map((s) => s.hy);
-    const yMin = Math.min(...ys), yMax = Math.max(...ys), ySpan = (yMax - yMin) || 1;
-    // Even-sized splats that ASSEMBLE the scene: they fade in in sequence, a few groups
-    // at a time (base -> peak), HOLD fully rendered, then FADE OUT together; loop. Base
-    // (t=0) = fully assembled, so librsvg / reduced-motion show the complete scene.
-    const splats = splatHomes.map(({ hx, hy }) => {
-      const g = Math.min(4, Math.floor(((yMax - hy) / ySpan) * 5)); // 0 = base row, 4 = peak
-      const a = f1(0.3 + g * 0.06), b = f1(0.3 + g * 0.06 + 0.07);
-      return `<circle class="mel-splat" cx="${f1(cx + hx)}" cy="${f1(cy + hy)}" r="2.6" opacity="1">` +
-        `<animate attributeName="opacity" values="1;1;0;0;1;1" keyTimes="0;0.14;0.24;${a};${b};1" dur="${MEL}" repeatCount="indefinite"/></circle>`;
+    // BEING CONSTRUCTED: a DENSE splat surface that materialises the massif from the
+    // base UP in one continuous sweep — each splat GROWS in (radius, so it reads as
+    // built, not a light switching on) strictly ordered by height, a bright build-line
+    // riding the front. It clears, holds bare, reconstructs, holds; seamless loop. Base
+    // (t=0) = the finished surface, so librsvg / reduced-motion show the complete scene.
+    const ordered = splatHomes.slice().sort((p, q) => q.hy - p.hy); // base first
+    const nS = ordered.length || 1;
+    const splats = ordered.map((s, k) => {
+      const a = f1(0.32 + (k / nS) * 0.4), b = f1(0.32 + (k / nS) * 0.4 + 0.045);
+      return `<circle class="mel-splat" cx="${f1(cx + s.hx)}" cy="${f1(cy + s.hy)}" r="1.7">` +
+        `<animate attributeName="r" values="1.7;1.7;0;0;1.7;1.7" keyTimes="0;0.12;0.2;${a};${b};1" dur="${MEL}" repeatCount="indefinite"/></circle>`;
     }).join("\n      ");
+    // The construction FRONT: an amber build-line sweeping base -> peak, clipped to the
+    // massif so it rides the mountain (invisible except while building; opacity 0 at rest).
+    const front = `<g clip-path="url(#melMassif)"><rect class="mel-front" x="${f1(cx - 34)}" y="${f1(cy + 24)}" width="68" height="3.4" opacity="0">` +
+      `<animate attributeName="y" values="${f1(cy + 24)};${f1(cy + 24)};${f1(cy - 35)};${f1(cy - 35)};${f1(cy + 24)}" keyTimes="0;0.32;0.72;0.74;1" dur="${MEL}" repeatCount="indefinite"/>` +
+      `<animate attributeName="opacity" values="0;0;0.9;0.9;0;0" keyTimes="0;0.32;0.37;0.67;0.72;1" dur="${MEL}" repeatCount="indefinite"/></rect></g>`;
     return `<g>
     <defs>
       <linearGradient id="melPlate" x1="0" y1="${f1(cy - 48)}" x2="0" y2="${f1(cy + 48)}" gradientUnits="userSpaceOnUse">
@@ -480,6 +486,7 @@ export function nodeMark(n) {
         <stop offset="0%" stop-color="#fed7aa"/><stop offset="45%" stop-color="#b45309"/><stop offset="100%" stop-color="#571c07"/>
       </linearGradient>
       <clipPath id="melClip"><path d="${hex(1)}"/></clipPath>
+      <clipPath id="melMassif"><path d="${solid}"/></clipPath>
     </defs>
     <g filter="url(#nodeShadow)"><path d="${hex(1)}" class="mel-plate"/></g>
     <g clip-path="url(#melClip)">
@@ -489,6 +496,7 @@ export function nodeMark(n) {
       ${facets}
       <path d="${ridgeLine}" class="mel-ridge"/>
       ${splats}
+      ${front}
     </g>
     <path d="${hex(1)}" class="mel-edge"/>
     <path d="${hex(0.9423)}" class="mel-groove"/>
@@ -582,13 +590,15 @@ export function nodeMark(n) {
     // fans are held in the upper "sky" (t <= 0.58) so no ray dips below the hill crest.
     const LEFT = [[0.40, "#ddd6fe"], [0.49, "#c4b5fd"], [0.58, "#a5b4fc"]];
     const RIGHT = [[0.26, "#a5b4fc"], [0.31, "#818cf8"], [0.37, "#60a5fa"], [0.43, "#38bdf8"], [0.49, "#2dd4bf"], [0.54, "#c084fc"], [0.58, "#e879f9"]];
-    const ray = (edgeFn, [t, color], i, dur) => {
+    // flow = dashoffset values: RIGHT rays stream OUTWARD (dispersing), LEFT rays
+    // stream INWARD (incoming light converging on the prism) — opposite directions.
+    const ray = (edgeFn, [t, color], i, dur, flow) => {
       const P = edgeFn(t);
       return `<line class="prz-ray" x1="${F[0]}" y1="${F[1]}" x2="${P[0]}" y2="${P[1]}" stroke="${color}"/>` +
-        `<line class="prz-ray-flow" x1="${F[0]}" y1="${F[1]}" x2="${P[0]}" y2="${P[1]}" stroke="${color}" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;-26" dur="${dur}" begin="${f1(-i * 0.3)}s" repeatCount="indefinite"/></line>`;
+        `<line class="prz-ray-flow" x1="${F[0]}" y1="${F[1]}" x2="${P[0]}" y2="${P[1]}" stroke="${color}" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="${flow}" dur="${dur}" begin="${f1(-i * 0.3)}s" repeatCount="indefinite"/></line>`;
     };
-    const rightRays = RIGHT.map((r, i) => ray(rEdge, r, i, "2.6s")).join("\n        ");
-    const leftRays = LEFT.map((r, i) => ray(lEdge, r, i, "3s")).join("\n        ");
+    const rightRays = RIGHT.map((r, i) => ray(rEdge, r, i, "2.6s", "0;-26")).join("\n        ");
+    const leftRays = LEFT.map((r, i) => ray(lEdge, r, i, "3s", "0;26")).join("\n        ");
     // Hill: a 3-D mound whose crest is the strong "bended line"; clipped to the glass.
     const crest = "M -49,27 Q -24,-3 0,-4 Q 24,-3 49,27";
     const hill = "M -49,27 Q -24,-3 0,-4 Q 24,-3 49,27 L 56,62 L -56,62 Z";
@@ -907,6 +917,12 @@ export function nodeMark(n) {
       `<path class="mw-inner" d="M${p(gA, NR)} A${NR} ${NR} 0 1 1 ${p(gB, NR)}"/>`;
     const notch =
       `<path class="mw-notch" d="M${p(gA, NR)} L${p(rad(90), NR - 3)} L${p(gB, NR)}"/>`;
+    // Twelve fine index NOTCHES graduating the channel between the inner ring (30)
+    // and the bezel (34) — a machined lens scale.
+    const ticks = Array.from({ length: 12 }, (_, i) => {
+      const A = rad(i * 30), ca = Math.cos(A), sa = Math.sin(A);
+      return `<line class="mw-tick" x1="${f1(cx + 30.6 * ca)}" y1="${f1(cy + 30.6 * sa)}" x2="${f1(cx + 33.4 * ca)}" y2="${f1(cy + 33.4 * sa)}"/>`;
+    }).join("");
     // Structured optic (galadriel/haldir grammar): a top-lit lens WELL, a controlled
     // blue core HALO (radial falloff, NO blur), a crisp quadcopter with an OPEN centre
     // gap, and a single WHITE-HOT hub pinpoint through a tight bloom — the sole
@@ -943,9 +959,13 @@ export function nodeMark(n) {
       <radialGradient id="mwCore" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${cy}" r="6">
         <stop offset="0%" stop-color="#cfeafe" stop-opacity="0.7"/><stop offset="45%" stop-color="#38bdf8" stop-opacity="0.42"/><stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
       </radialGradient>
+      <pattern id="mwDots" width="5.5" height="5.5" patternUnits="userSpaceOnUse" patternTransform="translate(${f1(cx)} ${f1(cy)})">
+        <circle cx="1.4" cy="1.4" r="0.5" class="mw-dot"/>
+      </pattern>
     </defs>
     <g filter="url(#nodeShadow)"><circle cx="${cx}" cy="${cy}" r="${SEAT_R}" fill="url(#mwBarrel)"/></g>
     <circle cx="${cx}" cy="${cy}" r="${IR}" class="mw-iris"/>
+    <circle cx="${cx}" cy="${cy}" r="26.5" fill="url(#mwDots)"/>
     <polygon points="${hexAp}" class="mw-well"/>
     <circle cx="${cx}" cy="${cy}" r="6" class="mw-core">
       <animate attributeName="opacity" values="1;0.82;1" dur="3.4s" repeatCount="indefinite"/>
@@ -954,7 +974,7 @@ export function nodeMark(n) {
     <g class="mw-trigger" opacity="1">${trigFade}${lock}</g>
     <polygon points="${hexAp}" class="mw-aphex"/>
     <g class="mw-blades">${bladeSpin}${blades}</g>
-    ${innerRing}${notch}
+    ${innerRing}${notch}${ticks}
     <circle cx="${cx}" cy="${cy}" r="${SEAT_R}" class="mw-ring"/>
     <circle cx="${cx}" cy="${cy}" r="31.8" class="mw-groove"/>
     <circle cx="${cx}" cy="${cy}" r="35.4" class="mw-hairline"/>
@@ -1280,6 +1300,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mel-facet    { fill: #070302; }
     .mel-tin      { stroke: #000000; stroke-opacity: 0.4; stroke-width: 0.6; stroke-linejoin: round; }
     .mel-splat    { fill: url(#melSplat); }
+    .mel-front    { fill: #ffedd5; filter: url(#edgeGlow); }
     .mel-edge     { fill: none; stroke: url(#melBezel); stroke-width: 2.4; stroke-linejoin: miter; }
     .mel-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .mel-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
@@ -1336,6 +1357,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mw-blade-sh  { fill: none; stroke: #05070b; stroke-opacity: 0.7; stroke-width: 1.2; }
     .mw-inner     { fill: none; stroke: url(#mwBezel); stroke-width: 1.6; stroke-opacity: 0.9; stroke-linecap: round; }
     .mw-notch     { fill: none; stroke: #bae6fd; stroke-width: 1.4; stroke-linejoin: round; stroke-linecap: round; }
+    .mw-tick      { stroke: #38bdf8; stroke-opacity: 0.4; stroke-width: 1; }
+    .mw-dot       { fill: #7dd3fc; fill-opacity: 0.16; }
     .mw-lock      { fill: none; stroke: #ef4444; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
     .mw-lock-dot  { fill: #ff6b5e; }
     .mw-drone-arm { fill: none; stroke: #7dd3fc; stroke-width: 1.4; stroke-linecap: round; }
