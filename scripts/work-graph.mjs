@@ -423,51 +423,26 @@ export function nodeMark(n) {
       E: [12, 24], K: [-6, 24], L: [2, 24],
     };
     const TIN = [
-      ["A", "B", "K", "#170b05"], ["B", "C", "K", "#0e0703"], ["C", "L", "K", "#241109"],
-      ["C", "D", "L", "#331A0d"], ["D", "E", "L", "#20100a"],
+      ["A", "B", "K", "#4a2712"], ["B", "C", "K", "#2a1509"], ["C", "L", "K", "#1c0e07"],
+      ["C", "D", "L", "#5c3117"], ["D", "E", "L", "#331a0c"],
     ];
     const pt = (k) => `${f1(cx + V[k][0])},${f1(cy + V[k][1])}`;
     const facets = TIN.map(([a, b, c, tone]) =>
       `<polygon class="mel-tin" points="${pt(a)} ${pt(b)} ${pt(c)}" fill="${tone}"/>`).join("\n      ");
-    // GAUSSIAN-SPLAT DISINTEGRATION / REINTEGRATION (3DGS): the surveyed massif is a
-    // cloud of soft splats resting ON the mountain (t=0 = the integrated scene, held by
-    // librsvg / reduced-motion). They blow OUTWARD into a diffuse cloud (disintegrate),
-    // hover, then snap back onto the surface (reintegrate) on a seamless loop. Motion is
-    // pure translate (no opacity fade). Deterministic pseudo-random sampling keeps the
-    // generated output stable across regenerations.
+    // BEING CONSTRUCTED (3D FULL FILL): the massif's 3-D-shaded surface is REVEALED from
+    // the base UP behind a bright build-line — a solid low-poly fill materialising in one
+    // sweep, not a scatter of dots. It clears top-down, holds bare on the ridge scaffold,
+    // reconstructs bottom-up, and holds. The reveal is an animated clip; the ridge stays
+    // the always-visible frame. Base (t=0) = the finished surface, so librsvg / reduced-
+    // motion show the complete mountain. Seamless loop.
     const MEL = "6s";
-    const massif = [[-30, 24], [-12, -22], [0, -2], [12, -34], [30, 24]];
-    const inMassif = (px, py) => { // ray-cast point-in-polygon
-      let inside = false;
-      for (let i = 0, j = massif.length - 1; i < massif.length; j = i++) {
-        const [xi, yi] = massif[i], [xj, yj] = massif[j];
-        if ((yi > py) !== (yj > py) && px < ((xj - xi) * (py - yi)) / (yj - yi) + xi) inside = !inside;
-      }
-      return inside;
-    };
-    const rnd = (k) => { const s = (k * 2654435761 >>> 0) % 2147483647; return ((s >>> 9) & 0x7fff) / 0x8000; };
-    const splatHomes = [];
-    let sk = 0;
-    for (let gy = -30; gy <= 22; gy += 5.5) for (let gx = -26; gx <= 26; gx += 5.5) {
-      if (!inMassif(gx, gy)) continue;
-      const hx = gx + (rnd(sk * 2 + 1) - 0.5) * 2.4, hy = gy + (rnd(sk * 2 + 2) - 0.5) * 2.4;
-      splatHomes.push({ hx: f1(hx), hy: f1(hy) });
-      sk++;
-    }
-    // BEING CONSTRUCTED: a DENSE splat surface that materialises the massif from the
-    // base UP in one continuous sweep — each splat GROWS in (radius, so it reads as
-    // built, not a light switching on) strictly ordered by height, a bright build-line
-    // riding the front. It clears, holds bare, reconstructs, holds; seamless loop. Base
-    // (t=0) = the finished surface, so librsvg / reduced-motion show the complete scene.
-    const ordered = splatHomes.slice().sort((p, q) => q.hy - p.hy); // base first
-    const nS = ordered.length || 1;
-    const splats = ordered.map((s, k) => {
-      const a = f1(0.32 + (k / nS) * 0.4), b = f1(0.32 + (k / nS) * 0.4 + 0.045);
-      return `<circle class="mel-splat" cx="${f1(cx + s.hx)}" cy="${f1(cy + s.hy)}" r="1.7">` +
-        `<animate attributeName="r" values="1.7;1.7;0;0;1.7;1.7" keyTimes="0;0.12;0.2;${a};${b};1" dur="${MEL}" repeatCount="indefinite"/></circle>`;
-    }).join("\n      ");
-    // The construction FRONT: an amber build-line sweeping base -> peak, clipped to the
-    // massif so it rides the mountain (invisible except while building; opacity 0 at rest).
+    const KT = "0;0.12;0.2;0.32;0.72;1"; // hold-full · clear(top-down) · bare · construct(base-up) · hold
+    // Bottom-up reveal rect (fixed bottom at cy+52; its top edge rises to construct).
+    const buildRect = `<rect x="${f1(cx - 52)}" y="${f1(cy - 40)}" width="104" height="92">` +
+      `<animate attributeName="y" values="${f1(cy - 40)};${f1(cy - 40)};${f1(cy + 26)};${f1(cy + 26)};${f1(cy - 40)};${f1(cy - 40)}" keyTimes="${KT}" dur="${MEL}" repeatCount="indefinite"/>` +
+      `<animate attributeName="height" values="92;92;26;26;92;92" keyTimes="${KT}" dur="${MEL}" repeatCount="indefinite"/></rect>`;
+    // The construction FRONT: a bright build-line riding the reveal edge (base -> peak),
+    // clipped to the massif (invisible except while building; opacity 0 at rest).
     const front = `<g clip-path="url(#melMassif)"><rect class="mel-front" x="${f1(cx - 34)}" y="${f1(cy + 24)}" width="68" height="3.4" opacity="0">` +
       `<animate attributeName="y" values="${f1(cy + 24)};${f1(cy + 24)};${f1(cy - 35)};${f1(cy - 35)};${f1(cy + 24)}" keyTimes="0;0.32;0.72;0.74;1" dur="${MEL}" repeatCount="indefinite"/>` +
       `<animate attributeName="opacity" values="0;0;0.9;0.9;0;0" keyTimes="0;0.32;0.37;0.67;0.72;1" dur="${MEL}" repeatCount="indefinite"/></rect></g>`;
@@ -476,9 +451,9 @@ export function nodeMark(n) {
       <linearGradient id="melPlate" x1="0" y1="${f1(cy - 48)}" x2="0" y2="${f1(cy + 48)}" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#2b1a10"/><stop offset="55%" stop-color="#170d07"/><stop offset="100%" stop-color="#0b0604"/>
       </linearGradient>
-      <radialGradient id="melSplat">
-        <stop offset="0%" stop-color="#fed7aa" stop-opacity="0.9"/><stop offset="42%" stop-color="#f97316" stop-opacity="0.5"/><stop offset="100%" stop-color="#ea580c" stop-opacity="0"/>
-      </radialGradient>
+      <linearGradient id="melRock" x1="0" y1="${f1(cy - 36)}" x2="0" y2="${f1(cy + 24)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#241209"/><stop offset="55%" stop-color="#3a1e0e"/><stop offset="100%" stop-color="#582d15"/>
+      </linearGradient>
       <radialGradient id="melHeat" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${f1(cy + 22)}" r="62">
         <stop offset="0%" stop-color="#c2410c" stop-opacity="0.72"/><stop offset="45%" stop-color="#9a3412" stop-opacity="0.38"/><stop offset="100%" stop-color="#7c2d12" stop-opacity="0"/>
       </radialGradient>
@@ -487,15 +462,17 @@ export function nodeMark(n) {
       </linearGradient>
       <clipPath id="melClip"><path d="${hex(1)}"/></clipPath>
       <clipPath id="melMassif"><path d="${solid}"/></clipPath>
+      <clipPath id="melBuild">${buildRect}</clipPath>
     </defs>
     <g filter="url(#nodeShadow)"><path d="${hex(1)}" class="mel-plate"/></g>
     <g clip-path="url(#melClip)">
       <path d="${hex(1)}" fill="url(#melHeat)"/>
-      <path d="${solid}" class="mel-rock"/>
-      <path d="M${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)} L${f1(cx + 12)} ${f1(cy + 24)} Z" class="mel-facet"/>
-      ${facets}
+      <g clip-path="url(#melBuild)">
+        <path d="${solid}" class="mel-rock"/>
+        <path d="M${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)} L${f1(cx + 12)} ${f1(cy + 24)} Z" class="mel-facet"/>
+        ${facets}
+      </g>
       <path d="${ridgeLine}" class="mel-ridge"/>
-      ${splats}
       ${front}
     </g>
     <path d="${hex(1)}" class="mel-edge"/>
@@ -622,9 +599,12 @@ export function nodeMark(n) {
         <stop offset="0%" stop-color="#9f88e8"/><stop offset="42%" stop-color="#5f4ea8"/><stop offset="100%" stop-color="#211840"/>
       </linearGradient>
       <radialGradient id="przHillHi" cx="-7" cy="-1" r="30" gradientUnits="userSpaceOnUse">
+        <animate attributeName="cx" values="-7;-16;8;-7" keyTimes="0;0.33;0.66;1" dur="9s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="-1;-4;-3;-1" keyTimes="0;0.33;0.66;1" dur="9s" repeatCount="indefinite"/>
         <stop offset="0%" stop-color="#e6ddff" stop-opacity="0.6"/><stop offset="52%" stop-color="#a78bfa" stop-opacity="0.14"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
       </radialGradient>
       <radialGradient id="przHillAo" cx="0" cy="32" r="44" gradientUnits="userSpaceOnUse">
+        <animate attributeName="cx" values="0;9;-6;0" keyTimes="0;0.33;0.66;1" dur="9s" repeatCount="indefinite"/>
         <stop offset="48%" stop-color="#140d28" stop-opacity="0"/><stop offset="100%" stop-color="#140d28" stop-opacity="0.85"/>
       </radialGradient>
       <radialGradient id="przSpill" cx="0" cy="-3" r="17" gradientUnits="userSpaceOnUse">
@@ -1295,11 +1275,10 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .seat-gate     { fill: url(#gateGrad); }
     .seat-vox      { fill: url(#voxGrad); }
     .mel-plate    { fill: url(#melPlate); }
-    .mel-rock     { fill: #050302; }
+    .mel-rock     { fill: url(#melRock); }
     .mel-ridge    { fill: none; stroke: #fdba74; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
-    .mel-facet    { fill: #070302; }
-    .mel-tin      { stroke: #000000; stroke-opacity: 0.4; stroke-width: 0.6; stroke-linejoin: round; }
-    .mel-splat    { fill: url(#melSplat); }
+    .mel-facet    { fill: #1a0e08; }
+    .mel-tin      { stroke: #000000; stroke-opacity: 0.35; stroke-width: 0.6; stroke-linejoin: round; }
     .mel-front    { fill: #ffedd5; filter: url(#edgeGlow); }
     .mel-edge     { fill: none; stroke: url(#melBezel); stroke-width: 2.4; stroke-linejoin: miter; }
     .mel-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
