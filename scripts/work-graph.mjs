@@ -429,6 +429,27 @@ export function nodeMark(n) {
     const pt = (k) => `${f1(cx + V[k][0])},${f1(cy + V[k][1])}`;
     const facets = TIN.map(([a, b, c, tone]) =>
       `<polygon class="mel-tin" points="${pt(a)} ${pt(b)} ${pt(c)}" fill="${tone}"/>`).join("\n      ");
+    // MESH RECONSTRUCTION overlay: the low-poly surface is actively re-triangulated —
+    // the facet WIREFRAME draws on (stroke-dashoffset) and vertex points pop in (radius,
+    // NOT opacity), bottom -> top, like a 3-D scan assembling the mesh; it holds
+    // reconstructed, then resets and rebuilds. Base (t=0) = un-built, so librsvg /
+    // reduced-motion show the clean surveyed massif; the loop is seamless (first==last).
+    const MEL = "5s";
+    const dist = (a, b) => Math.hypot(V[a][0] - V[b][0], V[a][1] - V[b][1]);
+    const order = TIN.map((t, i) => ({ i, y: (V[t[0]][1] + V[t[1]][1] + V[t[2]][1]) / 3 }))
+      .sort((p, q) => q.y - p.y); // base (higher screen-y) reconstructs first
+    const rank = {}; order.forEach((o, k) => { rank[o.i] = k; });
+    const meshTris = TIN.map(([a, b, c], i) => {
+      const P = f1(dist(a, b) + dist(b, c) + dist(c, a));
+      const b0 = f1(0.05 + rank[i] * 0.09), b1 = f1(0.05 + rank[i] * 0.09 + 0.16);
+      return `<polygon class="mel-mesh" points="${pt(a)} ${pt(b)} ${pt(c)}" stroke-dasharray="${P} ${P}" stroke-dashoffset="${P}">` +
+        `<animate attributeName="stroke-dashoffset" values="${P};${P};0;0;${P}" keyTimes="0;${b0};${b1};0.9;1" dur="${MEL}" repeatCount="indefinite"/></polygon>`;
+    }).join("\n      ");
+    const meshVerts = Object.keys(V).map((k) => {
+      const ph = f1(0.05 + (24 - V[k][1]) / 58 * 0.5); // base earliest, peak latest
+      return `<circle class="mel-vert" cx="${f1(cx + V[k][0])}" cy="${f1(cy + V[k][1])}" r="0">` +
+        `<animate attributeName="r" values="0;0;1.6;1.6;0" keyTimes="0;${ph};${f1(ph + 0.05)};0.9;1" dur="${MEL}" repeatCount="indefinite"/></circle>`;
+    }).join("\n      ");
     return `<g>
     <defs>
       <linearGradient id="melPlate" x1="0" y1="${f1(cy - 48)}" x2="0" y2="${f1(cy + 48)}" gradientUnits="userSpaceOnUse">
@@ -449,6 +470,8 @@ export function nodeMark(n) {
       <path d="M${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)} L${f1(cx + 12)} ${f1(cy + 24)} Z" class="mel-facet"/>
       ${facets}
       <path d="${ridgeLine}" class="mel-ridge"/>
+      ${meshTris}
+      ${meshVerts}
     </g>
     <path d="${hex(1)}" class="mel-edge"/>
     <path d="${hex(0.9423)}" class="mel-groove"/>
@@ -520,34 +543,46 @@ export function nodeMark(n) {
   </g>`;
   }
   if (n.kind === "triangle") {
-    // prisoma: THE FIGURE IN THE GLASS — the information prism recut as an
-    // embodied agent's SOMA. The smoked-violet glass triangle IS a standing
-    // humanoid robot: apex = helmeted head/crown, midline = a liquid spine, the
-    // chest = a white-hot REACTOR that is itself a mini apex-up prism-in-prism,
-    // base corners = planted feet. Liquid light pours crown -> spine -> reactor
-    // and wells out as the body; a short spectral micro-fan keeps dispersion a
-    // visible event. Glass + liquid-silver are theme-FIXED (a real object); only
-    // the label ink adapts. Civilian violet — the ONLY figure + ONLY glass in
-    // the graph. Browser motion is liquid (flowing veins, molten core, breathing
-    // aura); librsvg / reduced-motion hold the complete standing still.
+    // prisoma: THE SUMMIT PRISM — the information prism recut as a HILL crowned by a
+    // rising mirror BLADE (He-Man-on-the-summit). A stronger-violet 3-D hill fills the
+    // lower triangle to its edges; from the hill crest a shining silver/glass sword
+    // rises to the apex and SPLITS the prism in two. LEFT of the blade a couple of cool
+    // input rays enter; RIGHT they disperse into many spectral rays (2-3 in -> many
+    // out). Rays stream and the blade's mirror-glint sweeps up; glass + silver stay
+    // theme-FIXED (a real object), only the label recolours. librsvg / reduced-motion
+    // hold the complete summit still.
     const cx = n.x, cy = n.y, R = TRI_CIRCUM;
     const tri = (r) => {
       const dx = (r * Math.sqrt(3)) / 2;
       return `${f1(cx)},${f1(cy - r)} ${f1(cx + dx)},${f1(cy + r / 2)} ${f1(cx - dx)},${f1(cy + r / 2)}`;
     };
     const topY = f1(cy - R), botY = f1(cy + R / 2);
-    // Chest-reactor molten blob: base D0 and morph target D1 (matched M + 4C + Z).
-    const D0 = "M 0,-22 C 5,-21 8,-17 8,-14 C 8,-11 5,-7 0,-6 C -5,-7 -8,-11 -8,-14 C -8,-17 -5,-21 0,-22 Z";
-    const D1 = "M 0,-21.5 C 5.5,-20.5 7.5,-17.5 8.5,-14 C 8,-10.5 4.5,-7.5 0,-6.5 C -4.5,-7.5 -8,-10.5 -8.5,-14 C -7.5,-17.5 -5.5,-20.5 0,-21.5 Z";
-    // Standing soma silhouette (single closed filled path, offset space).
-    const somaPath = "M 0,-40.5 C 4.8,-40.2 5.6,-34 4.6,-31.5 C 9,-29 11,-24 9.5,-18 C 8.5,-10 8,-3 7,1 C 20,6 32,13 36,22 L 32,22.5 C 24,14 14,9 2,8 L 0,8 L -2,8 C -14,9 -24,14 -32,22.5 L -36,22 C -32,13 -20,6 -7,1 C -8,-3 -8.5,-10 -9.5,-18 C -11,-24 -9,-29 -4.6,-31.5 C -5.6,-34 -4.8,-40.2 0,-40.5 Z";
+    // Offset-space geometry (origin = node centre). Edge param t: 0 = apex, 1 = base.
+    const F = [0, -6];                                        // focal: blade foot / hill crest
+    const lEdge = (t) => [f1(-45.9 * t), f1(-53 + 79.5 * t)]; // apex -> base-left
+    const rEdge = (t) => [f1(45.9 * t), f1(-53 + 79.5 * t)];  // apex -> base-right
+    // LEFT = few cool input rays (1-2 hues); RIGHT = many spectral output rays.
+    const LEFT = [[0.42, "#ddd6fe"], [0.58, "#c4b5fd"], [0.72, "#a5b4fc"]];
+    const RIGHT = [[0.30, "#a5b4fc"], [0.39, "#818cf8"], [0.48, "#60a5fa"], [0.57, "#38bdf8"], [0.66, "#2dd4bf"], [0.74, "#c084fc"], [0.82, "#e879f9"]];
+    const ray = (edgeFn, [t, color], i, dur) => {
+      const P = edgeFn(t);
+      return `<line class="prz-ray" x1="${F[0]}" y1="${F[1]}" x2="${P[0]}" y2="${P[1]}" stroke="${color}"/>` +
+        `<line class="prz-ray-flow" x1="${F[0]}" y1="${F[1]}" x2="${P[0]}" y2="${P[1]}" stroke="${color}" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;-26" dur="${dur}" begin="${f1(-i * 0.3)}s" repeatCount="indefinite"/></line>`;
+    };
+    const rightRays = RIGHT.map((r, i) => ray(rEdge, r, i, "2.6s")).join("\n        ");
+    const leftRays = LEFT.map((r, i) => ray(lEdge, r, i, "3s")).join("\n        ");
+    // Hill: a 3-D mound whose crest is the strong "bended line"; clipped to the glass.
+    const crest = "M -49,27 Q -24,-3 0,-4 Q 24,-3 49,27";
+    const hill = "M -49,27 Q -24,-3 0,-4 Q 24,-3 49,27 L 56,62 L -56,62 Z";
+    // Rising mirror blade (tapered, pointed at the apex; no crossguard rectangle).
+    const blade = "M -2.3,-5 L -0.7,-45 L 0,-52 L 0.7,-45 L 2.3,-5 Z";
     return `<g>
     <defs>
       <linearGradient id="przGlass" x1="0" y1="${topY}" x2="0" y2="${botY}" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#4c4370"/><stop offset="45%" stop-color="#262047"/><stop offset="100%" stop-color="#120e26"/>
       </linearGradient>
-      <radialGradient id="przCore" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${f1(cy - 14)}" r="34">
-        <stop offset="0%" stop-color="#c4b5fd" stop-opacity="0.34"/><stop offset="55%" stop-color="#a78bfa" stop-opacity="0.12"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+      <radialGradient id="przCore" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${f1(cy - 26)}" r="32">
+        <stop offset="0%" stop-color="#c4b5fd" stop-opacity="0.3"/><stop offset="55%" stop-color="#a78bfa" stop-opacity="0.1"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
       </radialGradient>
       <linearGradient id="przSheen" x1="${f1(cx - 46)}" y1="${topY}" x2="${f1(cx + 46)}" y2="${botY}" gradientUnits="userSpaceOnUse">
         <stop offset="0.3" stop-color="#ffffff" stop-opacity="0"/><stop offset="0.42" stop-color="#ffffff" stop-opacity="0.2"/><stop offset="0.52" stop-color="#ffffff" stop-opacity="0.03"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
@@ -555,35 +590,21 @@ export function nodeMark(n) {
       <linearGradient id="przSilver" x1="0" y1="${topY}" x2="0" y2="${botY}" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#f8fafc"/><stop offset="40%" stop-color="#c7d0da"/><stop offset="72%" stop-color="#8b96a3"/><stop offset="100%" stop-color="#525c66"/>
       </linearGradient>
-      <linearGradient id="przSoma" x1="0" y1="-40" x2="0" y2="22" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#e9d5ff"/><stop offset="25%" stop-color="#c4b5fd"/><stop offset="60%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#8b7bd8"/>
+      <linearGradient id="przHill" x1="0" y1="-6" x2="0" y2="27" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#9f88e8"/><stop offset="42%" stop-color="#5f4ea8"/><stop offset="100%" stop-color="#211840"/>
       </linearGradient>
-      <radialGradient id="przAura" cx="0" cy="-8" r="24" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.4"/><stop offset="60%" stop-color="#7c6ad0" stop-opacity="0.16"/><stop offset="100%" stop-color="#7c6ad0" stop-opacity="0"/>
+      <radialGradient id="przHillHi" cx="-7" cy="-1" r="30" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#e6ddff" stop-opacity="0.6"/><stop offset="52%" stop-color="#a78bfa" stop-opacity="0.14"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
       </radialGradient>
-      <radialGradient id="przGround">
-        <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.5"/><stop offset="70%" stop-color="#8b7bd8" stop-opacity="0.14"/><stop offset="100%" stop-color="#8b7bd8" stop-opacity="0"/>
+      <radialGradient id="przHillAo" cx="0" cy="32" r="44" gradientUnits="userSpaceOnUse">
+        <stop offset="48%" stop-color="#140d28" stop-opacity="0"/><stop offset="100%" stop-color="#140d28" stop-opacity="0.85"/>
       </radialGradient>
-      <linearGradient id="przSpine" x1="0" y1="-30" x2="0" y2="2" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#e9d5ff"/><stop offset="50%" stop-color="#c4b5fd"/><stop offset="100%" stop-color="#a78bfa"/>
+      <radialGradient id="przSpill" cx="0" cy="-3" r="17" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#f2ecff" stop-opacity="0.6"/><stop offset="55%" stop-color="#c4b5fd" stop-opacity="0.16"/><stop offset="100%" stop-color="#c4b5fd" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="przBlade" x1="-2.4" y1="0" x2="2.4" y2="0" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#5a636d"/><stop offset="28%" stop-color="#e7ecf1"/><stop offset="50%" stop-color="#ffffff"/><stop offset="72%" stop-color="#c2ccd6"/><stop offset="100%" stop-color="#525c66"/>
       </linearGradient>
-      <linearGradient id="przLeg" x1="0" y1="2" x2="0" y2="22" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#c4b5fd"/><stop offset="100%" stop-color="#8b7bd8"/>
-      </linearGradient>
-      <radialGradient id="przReactor" cx="0" cy="-14" r="9" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
-        <stop offset="0.45" stop-color="#dcd0ff" stop-opacity="0.5"><animate attributeName="offset" values="0.45;0.55;0.45" keyTimes="0;0.5;1" dur="3.6s" repeatCount="indefinite"/></stop>
-        <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
-      </radialGradient>
-      <linearGradient id="przGem" x1="0" y1="-21" x2="0" y2="-10.5" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85"/><stop offset="50%" stop-color="#c4b5fd" stop-opacity="0.7"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0.55"/>
-      </linearGradient>
-      <radialGradient id="przHead" cx="0" cy="-37" r="7" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#c4b5fd" stop-opacity="0.5"/><stop offset="55%" stop-color="#a78bfa" stop-opacity="0.12"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
-      </radialGradient>
-      <radialGradient id="przFoot">
-        <stop offset="0%" stop-color="#c4b5fd" stop-opacity="0.6"/><stop offset="60%" stop-color="#a78bfa" stop-opacity="0.2"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
-      </radialGradient>
       <clipPath id="przClip"><polygon points="${tri(R)}"/></clipPath>
     </defs>
     <g filter="url(#nodeShadow)"><polygon points="${tri(R)}" class="prz-body"/></g>
@@ -591,29 +612,25 @@ export function nodeMark(n) {
       <polygon points="${tri(R)}" fill="url(#przCore)"/>
       <polygon points="${tri(R)}" fill="url(#przSheen)"/>
       <g transform="translate(${cx},${cy})">
-        <ellipse cx="0" cy="20" rx="28" ry="3.2" class="prz-ground"/>
-        <g class="prz-aura-g" opacity="0.42"><ellipse cx="0" cy="-8" rx="13" ry="22" class="prz-aura" filter="url(#soft)"/><animate attributeName="opacity" values="0.42;0.5;0.42" keyTimes="0;0.5;1" dur="7s" repeatCount="indefinite"/></g>
-        <path class="prz-soma" d="${somaPath}"/>
-        <circle cx="-34" cy="22" r="3.5" class="prz-foot"/><circle cx="34" cy="22" r="3.5" class="prz-foot"/>
-        <path class="prz-leg" d="M 0,2 Q -30,9 -34,22"/><path class="prz-leg" d="M 0,2 Q 30,9 34,22"/>
-        <path class="prz-flow-leg" stroke-dashoffset="-9" d="M 0,2 Q -30,9 -34,22"><animate attributeName="stroke-dashoffset" values="-9;-27" dur="5s" begin="-1.4s" repeatCount="indefinite"/></path>
-        <path class="prz-flow-leg" stroke-dashoffset="-9" d="M 0,2 Q 30,9 34,22"><animate attributeName="stroke-dashoffset" values="-9;-27" dur="4.7s" begin="-1.8s" repeatCount="indefinite"/></path>
-        <path class="prz-spine" d="M 0,-30 C -0.6,-25 0.6,-19 0,-14 C -0.6,-9 0.6,-4 0,2"/>
-        <g filter="url(#edgeGlow)"><path class="prz-flow" stroke-dashoffset="-9" d="M 0,-30 C -0.6,-25 0.6,-19 0,-14 C -0.6,-9 0.6,-4 0,2"><animate attributeName="stroke-dashoffset" values="-9;-27" dur="4.6s" repeatCount="indefinite"/></path></g>
-        <g class="prz-fan-g" opacity="0.35"><path class="prz-fan" stroke="#c4b5fd" d="M 0,-14 L -5,-8"/><path class="prz-fan" stroke="#e9d5ff" d="M 0,-14 L 0,-6.5"/><path class="prz-fan" stroke="#c4b5fd" d="M 0,-14 L 5,-8"/><animate attributeName="opacity" values="0.35;0.7;0.35" keyTimes="0;0.5;1" dur="3.2s" repeatCount="indefinite"/></g>
-        <path class="prz-well" d="${D0}"><animate attributeName="d" values="${D0};${D1};${D0}" keyTimes="0;0.5;1" dur="3.2s" repeatCount="indefinite"/></path>
-        <polygon class="prz-gem" points="0,-21 6.06,-10.5 -6.06,-10.5"/>
-        <path class="prz-head" d="M -4.6,-34 C -5.2,-37 -3.4,-40.4 0,-40.5 C 3.4,-40.4 5.2,-37 4.6,-34 Z"/>
-        <path class="prz-antenna" d="M 0,-40.5 L 0,-43"/>
-        <circle class="prz-eye" cx="0" cy="-37" r="1.4" opacity="0.7"><animate attributeName="opacity" values="0.7;0.9;0.7" keyTimes="0;0.5;1" dur="3.4s" repeatCount="indefinite"/></circle>
-        <circle class="prz-hot" cx="0" cy="-14" r="1.4" filter="url(#mwBloom)"><animate attributeName="r" values="1.4;1.4;2.8;1.6;1.4" keyTimes="0;0.16;0.2;0.24;1" dur="4.6s" repeatCount="indefinite"/></circle>
-        <circle class="prz-hot-in" cx="0" cy="-14" r="0.7"/>
+        <g filter="url(#edgeGlow)">
+        ${leftRays}
+        ${rightRays}
+        </g>
+        <path class="prz-hill" d="${hill}"/>
+        <path class="prz-hill-hi" d="${hill}"/>
+        <path class="prz-spill" d="${hill}"/>
+        <path class="prz-hill-ao" d="${hill}"/>
+        <g filter="url(#edgeGlow)"><path class="prz-crest" d="${crest}"/></g>
+        <path class="prz-crest" d="${crest}"/>
+        <path class="prz-blade" d="${blade}"/>
+        <line class="prz-blade-core" x1="0" y1="-6" x2="0" y2="-51"/>
+        <line class="prz-blade-glint" x1="0" y1="-6" x2="0" y2="-51" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;-49" dur="3.2s" repeatCount="indefinite"/></line>
+        <circle class="prz-foot-hot" cx="0" cy="-6" r="2" filter="url(#mwBloom)"><animate attributeName="r" values="2;2;2.9;2.2;2" keyTimes="0;0.2;0.26;0.32;1" dur="3.2s" repeatCount="indefinite"/></circle>
       </g>
     </g>
     <polygon points="${tri(R)}" class="prz-edge" stroke-linejoin="round"/>
     <polygon points="${tri(R - 4.8)}" class="prz-groove" stroke-linejoin="round"/>
     <polygon points="${tri(R + 2.8)}" class="prz-hairline" stroke-linejoin="round"/>
-    <path class="prz-glint" d="M${cx} ${f1(cy - R - 4.5)} V${f1(cy - R + 4.5)} M${f1(cx - 4.5)} ${f1(cy - R)} H${f1(cx + 4.5)}"/>
     <text x="${n.x}" y="${f1(n.y + R / 2 + 16)}" text-anchor="middle" class="tri-label">${escapeXML(n.label)}</text>
   </g>`;
   }
@@ -721,13 +738,15 @@ export function nodeMark(n) {
     };
     const firing = `${fire(T, 0.12)}${fire(L, 0.42)}${fire(R, 0.7)}`;
     const sparks = `${spark(T, L, 0.16, 0.38)}${spark(T, R, 0.16, 0.38)}${spark(L, R, 0.46, 0.66)}`;
-    // Agentic-viz "code tag" motif baked into the border: fuchsia chevrons straddle
-    // the seat ring at 9 and 3 o'clock — a < ... /> wrapping the visualization (the
-    // right bracket carries a forward-slash to read as a self-closing tag = a viz lib).
-    const chevL = `<path class="vox-code" d="M${f1(n.x - 29.5)} ${f1(n.y - 8)} L${f1(n.x - 37.8)} ${n.y} L${f1(n.x - 29.5)} ${f1(n.y + 8)}"/>`;
-    const chevR = `<path class="vox-code" d="M${f1(n.x + 29.5)} ${f1(n.y - 8)} L${f1(n.x + 37.8)} ${n.y} L${f1(n.x + 29.5)} ${f1(n.y + 8)}"/>`;
-    const slashR = `<path class="vox-slash" d="M${f1(n.x + 27.5)} ${f1(n.y + 7.5)} L${f1(n.x + 33.5)} ${f1(n.y - 7.5)}"/>`;
-    const codeTag = `${chevL}${slashR}${chevR}`;
+    // Agentic-viz "code tag" motif: fuchsia chevrons sit just OUTSIDE the border at
+    // the top-left and bottom-right corners — a < ... > diagonally wrapping the whole
+    // visualization (an agentic viz library).
+    const dl = 31; // diagonal offset (corner centres land at radius ~44, outside r35.4)
+    const clx = f1(n.x - dl), cly = f1(n.y - dl); // top-left
+    const crx = f1(n.x + dl), cry = f1(n.y + dl); // bottom-right
+    const chevTL = `<path class="vox-code" d="M${f1(clx + 5)} ${f1(cly - 8)} L${f1(clx - 4)} ${cly} L${f1(clx + 5)} ${f1(cly + 8)}"/>`;
+    const chevBR = `<path class="vox-code" d="M${f1(crx - 5)} ${f1(cry - 8)} L${f1(crx + 4)} ${cry} L${f1(crx - 5)} ${f1(cry + 8)}"/>`;
+    const codeTag = `${chevTL}${chevBR}`;
     return `<g class="vox-net">
     ${seat(n.x, n.y, "vox", ["#f5d0fe", "#e879f9", "#86198f"])}
     ${codeTag}
@@ -915,7 +934,7 @@ export function nodeMark(n) {
     <circle cx="${cx}" cy="${cy}" r="${SEAT_R}" class="mw-ring"/>
     <circle cx="${cx}" cy="${cy}" r="31.8" class="mw-groove"/>
     <circle cx="${cx}" cy="${cy}" r="35.4" class="mw-hairline"/>
-    <text x="${cx}" y="${f1(cy - 46)}" text-anchor="middle" class="radar-label">${escapeXML(n.label)}</text>
+    <text x="${cx}" y="${f1(cy + 48)}" text-anchor="middle" class="radar-label">${escapeXML(n.label)}</text>
   </g>`;
   }
   if (n.kind === "sentinel") {
@@ -1236,6 +1255,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mel-ridge    { fill: none; stroke: #fdba74; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
     .mel-facet    { fill: #070302; }
     .mel-tin      { stroke: #000000; stroke-opacity: 0.4; stroke-width: 0.6; stroke-linejoin: round; }
+    .mel-mesh     { fill: none; stroke: #f59e0b; stroke-width: 0.9; stroke-opacity: 0.85; stroke-linejoin: round; }
+    .mel-vert     { fill: #fde68a; }
     .mel-edge     { fill: none; stroke: url(#melBezel); stroke-width: 2.4; stroke-linejoin: miter; }
     .mel-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .mel-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
@@ -1245,23 +1266,17 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .prz-edge     { fill: none; stroke: url(#przSilver); stroke-width: 2.4; }
     .prz-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .prz-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
-    .prz-glint    { fill: none; stroke: #ffffff; stroke-width: 0.9; stroke-opacity: 0.7; stroke-linecap: round; }
-    .prz-ground   { fill: url(#przGround); }
-    .prz-aura     { fill: url(#przAura); }
-    .prz-soma     { fill: url(#przSoma); opacity: 0.3; }
-    .prz-foot     { fill: url(#przFoot); }
-    .prz-leg      { fill: none; stroke: url(#przLeg); stroke-width: 2.2; stroke-linecap: round; stroke-opacity: 0.72; }
-    .prz-spine    { fill: none; stroke: url(#przSpine); stroke-width: 2.4; stroke-linecap: round; stroke-opacity: 0.9; }
-    .prz-flow     { fill: none; stroke: #f5f3ff; stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 3 15; stroke-opacity: 0.9; }
-    .prz-flow-leg { fill: none; stroke: #e9d5ff; stroke-width: 1.3; stroke-linecap: round; stroke-dasharray: 3 15; stroke-opacity: 0.6; }
-    .prz-fan      { fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-opacity: 0.6; }
-    .prz-well     { fill: url(#przReactor); }
-    .prz-gem      { fill: url(#przGem); stroke: url(#przSilver); stroke-width: 0.8; stroke-linejoin: round; }
-    .prz-head     { fill: url(#przHead); stroke: #c4b5fd; stroke-width: 1.3; stroke-linejoin: round; }
-    .prz-antenna  { fill: none; stroke: #c4b5fd; stroke-width: 1; stroke-linecap: round; stroke-opacity: 0.75; }
-    .prz-eye      { fill: #c4b5fd; }
-    .prz-hot      { fill: #ffffff; }
-    .prz-hot-in   { fill: #ffffff; }
+    .prz-hill     { fill: url(#przHill); }
+    .prz-hill-hi  { fill: url(#przHillHi); }
+    .prz-hill-ao  { fill: url(#przHillAo); }
+    .prz-spill    { fill: url(#przSpill); }
+    .prz-crest    { fill: none; stroke: #d8ccff; stroke-width: 1.8; stroke-linecap: round; stroke-opacity: 0.95; }
+    .prz-ray      { fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-opacity: 0.5; }
+    .prz-ray-flow { fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-dasharray: 4 22; stroke-opacity: 0.92; }
+    .prz-blade    { fill: url(#przBlade); stroke: #cbd3db; stroke-width: 0.4; stroke-linejoin: round; }
+    .prz-blade-core { stroke: #f8fafc; stroke-width: 0.8; stroke-linecap: round; stroke-opacity: 0.85; }
+    .prz-blade-glint { stroke: #ffffff; stroke-width: 1.3; stroke-linecap: round; stroke-dasharray: 5 44; stroke-opacity: 0.95; }
+    .prz-foot-hot { fill: #ffffff; }
     .tri-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c4b5fd; }
     .gate-wire      { fill: none; stroke: #fbbf24; stroke-width: 2.6; stroke-linecap: round; opacity: 0.92; }
     .gate-wire-perc { fill: none; stroke: #fbbf24; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 5 4; opacity: 0.6; }
@@ -1281,7 +1296,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .vox-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #f0abfc; }
     .vox-net    { color: #e879f9; }
     .vox-code   { fill: none; stroke: #f0abfc; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-    .vox-slash  { fill: none; stroke: #f0abfc; stroke-width: 2; stroke-linecap: round; stroke-opacity: 0.85; }
     .seat-creb     { fill: url(#crebGrad); }
     .creb-signal   { fill: none; stroke: #b6cf86; stroke-opacity: 0.7; stroke-width: 1.2; }
     .creb-tick     { fill: none; stroke: #b6cf86; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }

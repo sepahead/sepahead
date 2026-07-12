@@ -106,6 +106,8 @@
     .mel-ridge    { fill: none; stroke: #fdba74; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
     .mel-facet    { fill: #070302; }
     .mel-tin      { stroke: #000000; stroke-opacity: 0.4; stroke-width: 0.6; stroke-linejoin: round; }
+    .mel-mesh     { fill: none; stroke: #f59e0b; stroke-width: 0.9; stroke-opacity: 0.85; stroke-linejoin: round; }
+    .mel-vert     { fill: #fde68a; }
     .mel-edge     { fill: none; stroke: url(#melBezel); stroke-width: 2.4; stroke-linejoin: miter; }
     .mel-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .mel-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
@@ -115,23 +117,17 @@
     .prz-edge     { fill: none; stroke: url(#przSilver); stroke-width: 2.4; }
     .prz-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .prz-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
-    .prz-glint    { fill: none; stroke: #ffffff; stroke-width: 0.9; stroke-opacity: 0.7; stroke-linecap: round; }
-    .prz-ground   { fill: url(#przGround); }
-    .prz-aura     { fill: url(#przAura); }
-    .prz-soma     { fill: url(#przSoma); opacity: 0.3; }
-    .prz-foot     { fill: url(#przFoot); }
-    .prz-leg      { fill: none; stroke: url(#przLeg); stroke-width: 2.2; stroke-linecap: round; stroke-opacity: 0.72; }
-    .prz-spine    { fill: none; stroke: url(#przSpine); stroke-width: 2.4; stroke-linecap: round; stroke-opacity: 0.9; }
-    .prz-flow     { fill: none; stroke: #f5f3ff; stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 3 15; stroke-opacity: 0.9; }
-    .prz-flow-leg { fill: none; stroke: #e9d5ff; stroke-width: 1.3; stroke-linecap: round; stroke-dasharray: 3 15; stroke-opacity: 0.6; }
-    .prz-fan      { fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-opacity: 0.6; }
-    .prz-well     { fill: url(#przReactor); }
-    .prz-gem      { fill: url(#przGem); stroke: url(#przSilver); stroke-width: 0.8; stroke-linejoin: round; }
-    .prz-head     { fill: url(#przHead); stroke: #c4b5fd; stroke-width: 1.3; stroke-linejoin: round; }
-    .prz-antenna  { fill: none; stroke: #c4b5fd; stroke-width: 1; stroke-linecap: round; stroke-opacity: 0.75; }
-    .prz-eye      { fill: #c4b5fd; }
-    .prz-hot      { fill: #ffffff; }
-    .prz-hot-in   { fill: #ffffff; }
+    .prz-hill     { fill: url(#przHill); }
+    .prz-hill-hi  { fill: url(#przHillHi); }
+    .prz-hill-ao  { fill: url(#przHillAo); }
+    .prz-spill    { fill: url(#przSpill); }
+    .prz-crest    { fill: none; stroke: #d8ccff; stroke-width: 1.8; stroke-linecap: round; stroke-opacity: 0.95; }
+    .prz-ray      { fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-opacity: 0.5; }
+    .prz-ray-flow { fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-dasharray: 4 22; stroke-opacity: 0.92; }
+    .prz-blade    { fill: url(#przBlade); stroke: #cbd3db; stroke-width: 0.4; stroke-linejoin: round; }
+    .prz-blade-core { stroke: #f8fafc; stroke-width: 0.8; stroke-linecap: round; stroke-opacity: 0.85; }
+    .prz-blade-glint { stroke: #ffffff; stroke-width: 1.3; stroke-linecap: round; stroke-dasharray: 5 44; stroke-opacity: 0.95; }
+    .prz-foot-hot { fill: #ffffff; }
     .tri-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c4b5fd; }
     .gate-wire      { fill: none; stroke: #fbbf24; stroke-width: 2.6; stroke-linecap: round; opacity: 0.92; }
     .gate-wire-perc { fill: none; stroke: #fbbf24; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 5 4; opacity: 0.6; }
@@ -151,7 +147,6 @@
     .vox-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #f0abfc; }
     .vox-net    { color: #e879f9; }
     .vox-code   { fill: none; stroke: #f0abfc; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-    .vox-slash  { fill: none; stroke: #f0abfc; stroke-width: 2; stroke-linecap: round; stroke-opacity: 0.85; }
     .seat-creb     { fill: url(#crebGrad); }
     .creb-signal   { fill: none; stroke: #b6cf86; stroke-opacity: 0.7; stroke-width: 1.2; }
     .creb-tick     { fill: none; stroke: #b6cf86; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
@@ -357,8 +352,8 @@
       <linearGradient id="przGlass" x1="0" y1="77" x2="0" y2="156.5" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#4c4370"/><stop offset="45%" stop-color="#262047"/><stop offset="100%" stop-color="#120e26"/>
       </linearGradient>
-      <radialGradient id="przCore" gradientUnits="userSpaceOnUse" cx="460" cy="116" r="34">
-        <stop offset="0%" stop-color="#c4b5fd" stop-opacity="0.34"/><stop offset="55%" stop-color="#a78bfa" stop-opacity="0.12"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+      <radialGradient id="przCore" gradientUnits="userSpaceOnUse" cx="460" cy="104" r="32">
+        <stop offset="0%" stop-color="#c4b5fd" stop-opacity="0.3"/><stop offset="55%" stop-color="#a78bfa" stop-opacity="0.1"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
       </radialGradient>
       <linearGradient id="przSheen" x1="414" y1="77" x2="506" y2="156.5" gradientUnits="userSpaceOnUse">
         <stop offset="0.3" stop-color="#ffffff" stop-opacity="0"/><stop offset="0.42" stop-color="#ffffff" stop-opacity="0.2"/><stop offset="0.52" stop-color="#ffffff" stop-opacity="0.03"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
@@ -366,35 +361,21 @@
       <linearGradient id="przSilver" x1="0" y1="77" x2="0" y2="156.5" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#f8fafc"/><stop offset="40%" stop-color="#c7d0da"/><stop offset="72%" stop-color="#8b96a3"/><stop offset="100%" stop-color="#525c66"/>
       </linearGradient>
-      <linearGradient id="przSoma" x1="0" y1="-40" x2="0" y2="22" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#e9d5ff"/><stop offset="25%" stop-color="#c4b5fd"/><stop offset="60%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#8b7bd8"/>
+      <linearGradient id="przHill" x1="0" y1="-6" x2="0" y2="27" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#9f88e8"/><stop offset="42%" stop-color="#5f4ea8"/><stop offset="100%" stop-color="#211840"/>
       </linearGradient>
-      <radialGradient id="przAura" cx="0" cy="-8" r="24" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.4"/><stop offset="60%" stop-color="#7c6ad0" stop-opacity="0.16"/><stop offset="100%" stop-color="#7c6ad0" stop-opacity="0"/>
+      <radialGradient id="przHillHi" cx="-7" cy="-1" r="30" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#e6ddff" stop-opacity="0.6"/><stop offset="52%" stop-color="#a78bfa" stop-opacity="0.14"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
       </radialGradient>
-      <radialGradient id="przGround">
-        <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.5"/><stop offset="70%" stop-color="#8b7bd8" stop-opacity="0.14"/><stop offset="100%" stop-color="#8b7bd8" stop-opacity="0"/>
+      <radialGradient id="przHillAo" cx="0" cy="32" r="44" gradientUnits="userSpaceOnUse">
+        <stop offset="48%" stop-color="#140d28" stop-opacity="0"/><stop offset="100%" stop-color="#140d28" stop-opacity="0.85"/>
       </radialGradient>
-      <linearGradient id="przSpine" x1="0" y1="-30" x2="0" y2="2" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#e9d5ff"/><stop offset="50%" stop-color="#c4b5fd"/><stop offset="100%" stop-color="#a78bfa"/>
+      <radialGradient id="przSpill" cx="0" cy="-3" r="17" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#f2ecff" stop-opacity="0.6"/><stop offset="55%" stop-color="#c4b5fd" stop-opacity="0.16"/><stop offset="100%" stop-color="#c4b5fd" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="przBlade" x1="-2.4" y1="0" x2="2.4" y2="0" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#5a636d"/><stop offset="28%" stop-color="#e7ecf1"/><stop offset="50%" stop-color="#ffffff"/><stop offset="72%" stop-color="#c2ccd6"/><stop offset="100%" stop-color="#525c66"/>
       </linearGradient>
-      <linearGradient id="przLeg" x1="0" y1="2" x2="0" y2="22" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#c4b5fd"/><stop offset="100%" stop-color="#8b7bd8"/>
-      </linearGradient>
-      <radialGradient id="przReactor" cx="0" cy="-14" r="9" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
-        <stop offset="0.45" stop-color="#dcd0ff" stop-opacity="0.5"><animate attributeName="offset" values="0.45;0.55;0.45" keyTimes="0;0.5;1" dur="3.6s" repeatCount="indefinite"/></stop>
-        <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
-      </radialGradient>
-      <linearGradient id="przGem" x1="0" y1="-21" x2="0" y2="-10.5" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85"/><stop offset="50%" stop-color="#c4b5fd" stop-opacity="0.7"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0.55"/>
-      </linearGradient>
-      <radialGradient id="przHead" cx="0" cy="-37" r="7" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#c4b5fd" stop-opacity="0.5"/><stop offset="55%" stop-color="#a78bfa" stop-opacity="0.12"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
-      </radialGradient>
-      <radialGradient id="przFoot">
-        <stop offset="0%" stop-color="#c4b5fd" stop-opacity="0.6"/><stop offset="60%" stop-color="#a78bfa" stop-opacity="0.2"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
-      </radialGradient>
       <clipPath id="przClip"><polygon points="460,77 505.9,156.5 414.1,156.5"/></clipPath>
     </defs>
     <g filter="url(#nodeShadow)"><polygon points="460,77 505.9,156.5 414.1,156.5" class="prz-body"/></g>
@@ -402,29 +383,33 @@
       <polygon points="460,77 505.9,156.5 414.1,156.5" fill="url(#przCore)"/>
       <polygon points="460,77 505.9,156.5 414.1,156.5" fill="url(#przSheen)"/>
       <g transform="translate(460,130)">
-        <ellipse cx="0" cy="20" rx="28" ry="3.2" class="prz-ground"/>
-        <g class="prz-aura-g" opacity="0.42"><ellipse cx="0" cy="-8" rx="13" ry="22" class="prz-aura" filter="url(#soft)"/><animate attributeName="opacity" values="0.42;0.5;0.42" keyTimes="0;0.5;1" dur="7s" repeatCount="indefinite"/></g>
-        <path class="prz-soma" d="M 0,-40.5 C 4.8,-40.2 5.6,-34 4.6,-31.5 C 9,-29 11,-24 9.5,-18 C 8.5,-10 8,-3 7,1 C 20,6 32,13 36,22 L 32,22.5 C 24,14 14,9 2,8 L 0,8 L -2,8 C -14,9 -24,14 -32,22.5 L -36,22 C -32,13 -20,6 -7,1 C -8,-3 -8.5,-10 -9.5,-18 C -11,-24 -9,-29 -4.6,-31.5 C -5.6,-34 -4.8,-40.2 0,-40.5 Z"/>
-        <circle cx="-34" cy="22" r="3.5" class="prz-foot"/><circle cx="34" cy="22" r="3.5" class="prz-foot"/>
-        <path class="prz-leg" d="M 0,2 Q -30,9 -34,22"/><path class="prz-leg" d="M 0,2 Q 30,9 34,22"/>
-        <path class="prz-flow-leg" stroke-dashoffset="-9" d="M 0,2 Q -30,9 -34,22"><animate attributeName="stroke-dashoffset" values="-9;-27" dur="5s" begin="-1.4s" repeatCount="indefinite"/></path>
-        <path class="prz-flow-leg" stroke-dashoffset="-9" d="M 0,2 Q 30,9 34,22"><animate attributeName="stroke-dashoffset" values="-9;-27" dur="4.7s" begin="-1.8s" repeatCount="indefinite"/></path>
-        <path class="prz-spine" d="M 0,-30 C -0.6,-25 0.6,-19 0,-14 C -0.6,-9 0.6,-4 0,2"/>
-        <g filter="url(#edgeGlow)"><path class="prz-flow" stroke-dashoffset="-9" d="M 0,-30 C -0.6,-25 0.6,-19 0,-14 C -0.6,-9 0.6,-4 0,2"><animate attributeName="stroke-dashoffset" values="-9;-27" dur="4.6s" repeatCount="indefinite"/></path></g>
-        <g class="prz-fan-g" opacity="0.35"><path class="prz-fan" stroke="#c4b5fd" d="M 0,-14 L -5,-8"/><path class="prz-fan" stroke="#e9d5ff" d="M 0,-14 L 0,-6.5"/><path class="prz-fan" stroke="#c4b5fd" d="M 0,-14 L 5,-8"/><animate attributeName="opacity" values="0.35;0.7;0.35" keyTimes="0;0.5;1" dur="3.2s" repeatCount="indefinite"/></g>
-        <path class="prz-well" d="M 0,-22 C 5,-21 8,-17 8,-14 C 8,-11 5,-7 0,-6 C -5,-7 -8,-11 -8,-14 C -8,-17 -5,-21 0,-22 Z"><animate attributeName="d" values="M 0,-22 C 5,-21 8,-17 8,-14 C 8,-11 5,-7 0,-6 C -5,-7 -8,-11 -8,-14 C -8,-17 -5,-21 0,-22 Z;M 0,-21.5 C 5.5,-20.5 7.5,-17.5 8.5,-14 C 8,-10.5 4.5,-7.5 0,-6.5 C -4.5,-7.5 -8,-10.5 -8.5,-14 C -7.5,-17.5 -5.5,-20.5 0,-21.5 Z;M 0,-22 C 5,-21 8,-17 8,-14 C 8,-11 5,-7 0,-6 C -5,-7 -8,-11 -8,-14 C -8,-17 -5,-21 0,-22 Z" keyTimes="0;0.5;1" dur="3.2s" repeatCount="indefinite"/></path>
-        <polygon class="prz-gem" points="0,-21 6.06,-10.5 -6.06,-10.5"/>
-        <path class="prz-head" d="M -4.6,-34 C -5.2,-37 -3.4,-40.4 0,-40.5 C 3.4,-40.4 5.2,-37 4.6,-34 Z"/>
-        <path class="prz-antenna" d="M 0,-40.5 L 0,-43"/>
-        <circle class="prz-eye" cx="0" cy="-37" r="1.4" opacity="0.7"><animate attributeName="opacity" values="0.7;0.9;0.7" keyTimes="0;0.5;1" dur="3.4s" repeatCount="indefinite"/></circle>
-        <circle class="prz-hot" cx="0" cy="-14" r="1.4" filter="url(#mwBloom)"><animate attributeName="r" values="1.4;1.4;2.8;1.6;1.4" keyTimes="0;0.16;0.2;0.24;1" dur="4.6s" repeatCount="indefinite"/></circle>
-        <circle class="prz-hot-in" cx="0" cy="-14" r="0.7"/>
+        <g filter="url(#edgeGlow)">
+        <line class="prz-ray" x1="0" y1="-6" x2="-19.3" y2="-19.6" stroke="#ddd6fe"/><line class="prz-ray-flow" x1="0" y1="-6" x2="-19.3" y2="-19.6" stroke="#ddd6fe" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;-26" dur="3s" begin="0s" repeatCount="indefinite"/></line>
+        <line class="prz-ray" x1="0" y1="-6" x2="-26.6" y2="-6.9" stroke="#c4b5fd"/><line class="prz-ray-flow" x1="0" y1="-6" x2="-26.6" y2="-6.9" stroke="#c4b5fd" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;-26" dur="3s" begin="-0.3s" repeatCount="indefinite"/></line>
+        <line class="prz-ray" x1="0" y1="-6" x2="-33" y2="4.2" stroke="#a5b4fc"/><line class="prz-ray-flow" x1="0" y1="-6" x2="-33" y2="4.2" stroke="#a5b4fc" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;-26" dur="3s" begin="-0.6s" repeatCount="indefinite"/></line>
+        <line class="prz-ray" x1="0" y1="-6" x2="13.8" y2="-29.2" stroke="#a5b4fc"/><line class="prz-ray-flow" x1="0" y1="-6" x2="13.8" y2="-29.2" stroke="#a5b4fc" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;-26" dur="2.6s" begin="0s" repeatCount="indefinite"/></line>
+        <line class="prz-ray" x1="0" y1="-6" x2="17.9" y2="-22" stroke="#818cf8"/><line class="prz-ray-flow" x1="0" y1="-6" x2="17.9" y2="-22" stroke="#818cf8" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;-26" dur="2.6s" begin="-0.3s" repeatCount="indefinite"/></line>
+        <line class="prz-ray" x1="0" y1="-6" x2="22" y2="-14.8" stroke="#60a5fa"/><line class="prz-ray-flow" x1="0" y1="-6" x2="22" y2="-14.8" stroke="#60a5fa" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;-26" dur="2.6s" begin="-0.6s" repeatCount="indefinite"/></line>
+        <line class="prz-ray" x1="0" y1="-6" x2="26.2" y2="-7.7" stroke="#38bdf8"/><line class="prz-ray-flow" x1="0" y1="-6" x2="26.2" y2="-7.7" stroke="#38bdf8" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;-26" dur="2.6s" begin="-0.9s" repeatCount="indefinite"/></line>
+        <line class="prz-ray" x1="0" y1="-6" x2="30.3" y2="-0.5" stroke="#2dd4bf"/><line class="prz-ray-flow" x1="0" y1="-6" x2="30.3" y2="-0.5" stroke="#2dd4bf" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;-26" dur="2.6s" begin="-1.2s" repeatCount="indefinite"/></line>
+        <line class="prz-ray" x1="0" y1="-6" x2="34" y2="5.8" stroke="#c084fc"/><line class="prz-ray-flow" x1="0" y1="-6" x2="34" y2="5.8" stroke="#c084fc" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;-26" dur="2.6s" begin="-1.5s" repeatCount="indefinite"/></line>
+        <line class="prz-ray" x1="0" y1="-6" x2="37.6" y2="12.2" stroke="#e879f9"/><line class="prz-ray-flow" x1="0" y1="-6" x2="37.6" y2="12.2" stroke="#e879f9" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;-26" dur="2.6s" begin="-1.8s" repeatCount="indefinite"/></line>
+        </g>
+        <path class="prz-hill" d="M -49,27 Q -24,-3 0,-4 Q 24,-3 49,27 L 56,62 L -56,62 Z"/>
+        <path class="prz-hill-hi" d="M -49,27 Q -24,-3 0,-4 Q 24,-3 49,27 L 56,62 L -56,62 Z"/>
+        <path class="prz-spill" d="M -49,27 Q -24,-3 0,-4 Q 24,-3 49,27 L 56,62 L -56,62 Z"/>
+        <path class="prz-hill-ao" d="M -49,27 Q -24,-3 0,-4 Q 24,-3 49,27 L 56,62 L -56,62 Z"/>
+        <g filter="url(#edgeGlow)"><path class="prz-crest" d="M -49,27 Q -24,-3 0,-4 Q 24,-3 49,27"/></g>
+        <path class="prz-crest" d="M -49,27 Q -24,-3 0,-4 Q 24,-3 49,27"/>
+        <path class="prz-blade" d="M -2.3,-5 L -0.7,-45 L 0,-52 L 0.7,-45 L 2.3,-5 Z"/>
+        <line class="prz-blade-core" x1="0" y1="-6" x2="0" y2="-51"/>
+        <line class="prz-blade-glint" x1="0" y1="-6" x2="0" y2="-51" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;-49" dur="3.2s" repeatCount="indefinite"/></line>
+        <circle class="prz-foot-hot" cx="0" cy="-6" r="2" filter="url(#mwBloom)"><animate attributeName="r" values="2;2;2.9;2.2;2" keyTimes="0;0.2;0.26;0.32;1" dur="3.2s" repeatCount="indefinite"/></circle>
       </g>
     </g>
     <polygon points="460,77 505.9,156.5 414.1,156.5" class="prz-edge" stroke-linejoin="round"/>
     <polygon points="460,81.8 501.7,154.1 418.3,154.1" class="prz-groove" stroke-linejoin="round"/>
     <polygon points="460,74.2 508.3,157.9 411.7,157.9" class="prz-hairline" stroke-linejoin="round"/>
-    <path class="prz-glint" d="M460 72.5 V81.5 M455.5 77 H464.5"/>
     <text x="460" y="172.5" text-anchor="middle" class="tri-label">PRISOMA</text>
   </g>
   <g>
@@ -493,6 +478,18 @@
       <polygon class="mel-tin" points="690,248 702,216 692,274" fill="#331A0d"/>
       <polygon class="mel-tin" points="702,216 702,274 692,274" fill="#20100a"/>
       <path d="M660 274 L678 228 L690 248 L702 216 L720 274" class="mel-ridge"/>
+      <polygon class="mel-mesh" points="660,274 678,228 684,274" stroke-dasharray="119.8 119.8" stroke-dashoffset="119.8"><animate attributeName="stroke-dashoffset" values="119.8;119.8;0;0;119.8" keyTimes="0;0.1;0.3;0.9;1" dur="5s" repeatCount="indefinite"/></polygon>
+      <polygon class="mel-mesh" points="678,228 690,248 684,274" stroke-dasharray="96.4 96.4" stroke-dashoffset="96.4"><animate attributeName="stroke-dashoffset" values="96.4;96.4;0;0;96.4" keyTimes="0;0.3;0.5;0.9;1" dur="5s" repeatCount="indefinite"/></polygon>
+      <polygon class="mel-mesh" points="690,248 692,274 684,274" stroke-dasharray="60.8 60.8" stroke-dashoffset="60.8"><animate attributeName="stroke-dashoffset" values="60.8;60.8;0;0;60.8" keyTimes="0;0.1;0.2;0.9;1" dur="5s" repeatCount="indefinite"/></polygon>
+      <polygon class="mel-mesh" points="690,248 702,216 692,274" stroke-dasharray="119.1 119.1" stroke-dashoffset="119.1"><animate attributeName="stroke-dashoffset" values="119.1;119.1;0;0;119.1" keyTimes="0;0.4;0.6;0.9;1" dur="5s" repeatCount="indefinite"/></polygon>
+      <polygon class="mel-mesh" points="702,216 702,274 692,274" stroke-dasharray="126.9 126.9" stroke-dashoffset="126.9"><animate attributeName="stroke-dashoffset" values="126.9;126.9;0;0;126.9" keyTimes="0;0.2;0.4;0.9;1" dur="5s" repeatCount="indefinite"/></polygon>
+      <circle class="mel-vert" cx="660" cy="274" r="0"><animate attributeName="r" values="0;0;1.6;1.6;0" keyTimes="0;0.1;0.2;0.9;1" dur="5s" repeatCount="indefinite"/></circle>
+      <circle class="mel-vert" cx="678" cy="228" r="0"><animate attributeName="r" values="0;0;1.6;1.6;0" keyTimes="0;0.4;0.5;0.9;1" dur="5s" repeatCount="indefinite"/></circle>
+      <circle class="mel-vert" cx="690" cy="248" r="0"><animate attributeName="r" values="0;0;1.6;1.6;0" keyTimes="0;0.3;0.3;0.9;1" dur="5s" repeatCount="indefinite"/></circle>
+      <circle class="mel-vert" cx="702" cy="216" r="0"><animate attributeName="r" values="0;0;1.6;1.6;0" keyTimes="0;0.6;0.7;0.9;1" dur="5s" repeatCount="indefinite"/></circle>
+      <circle class="mel-vert" cx="702" cy="274" r="0"><animate attributeName="r" values="0;0;1.6;1.6;0" keyTimes="0;0.1;0.2;0.9;1" dur="5s" repeatCount="indefinite"/></circle>
+      <circle class="mel-vert" cx="684" cy="274" r="0"><animate attributeName="r" values="0;0;1.6;1.6;0" keyTimes="0;0.1;0.2;0.9;1" dur="5s" repeatCount="indefinite"/></circle>
+      <circle class="mel-vert" cx="692" cy="274" r="0"><animate attributeName="r" values="0;0;1.6;1.6;0" keyTimes="0;0.1;0.2;0.9;1" dur="5s" repeatCount="indefinite"/></circle>
     </g>
     <path d="M690 202 L731.6 226 L731.6 274 L690 298 L648.4 274 L648.4 226 Z" class="mel-edge"/>
     <path d="M690 204.8 L729.2 227.4 L729.2 272.6 L690 295.2 L650.8 272.6 L650.8 227.4 Z" class="mel-groove"/>
@@ -514,7 +511,7 @@
     <circle cx="110" cy="360" r="34" stroke="url(#voxBezel)" class="seat-ring"/>
     <circle cx="110" cy="360" r="31.8" class="seat-groove"/>
     <circle cx="110" cy="360" r="35.4" class="seat-hairline"/>
-    <path class="vox-code" d="M80.5 352 L72.2 360 L80.5 368"/><path class="vox-slash" d="M137.5 367.5 L143.5 352.5"/><path class="vox-code" d="M139.5 352 L147.8 360 L139.5 368"/>
+    <path class="vox-code" d="M84 321 L75 329 L84 337"/><path class="vox-code" d="M136 383 L145 391 L136 399"/>
     <defs><linearGradient id="voxCalli0" gradientUnits="userSpaceOnUse" x1="110" y1="338" x2="93" y2="371"><stop offset="0" stop-color="currentColor" stop-opacity="0.45"/><stop offset="1" stop-color="currentColor" stop-opacity="0.725"/></linearGradient><linearGradient id="voxCalli1" gradientUnits="userSpaceOnUse" x1="110" y1="338" x2="127" y2="371"><stop offset="0" stop-color="currentColor" stop-opacity="0.45"/><stop offset="1" stop-color="currentColor" stop-opacity="1"/></linearGradient><linearGradient id="voxCalli2" gradientUnits="userSpaceOnUse" x1="93" y1="371" x2="127" y2="371"><stop offset="0" stop-color="currentColor" stop-opacity="0.725"/><stop offset="1" stop-color="currentColor" stop-opacity="1"/></linearGradient>
       <radialGradient id="voxFire"><stop offset="0%" stop-color="#fbcfe8" stop-opacity="0.95"/><stop offset="45%" stop-color="#e879f9" stop-opacity="0.4"/><stop offset="100%" stop-color="#e879f9" stop-opacity="0"/></radialGradient>
     </defs>
@@ -555,7 +552,7 @@
     <circle cx="298" cy="386" r="34" class="mw-ring"/>
     <circle cx="298" cy="386" r="31.8" class="mw-groove"/>
     <circle cx="298" cy="386" r="35.4" class="mw-hairline"/>
-    <text x="298" y="340" text-anchor="middle" class="radar-label">MANWE</text>
+    <text x="298" y="434" text-anchor="middle" class="radar-label">MANWE</text>
   </g>
   <g class="gal">
     <defs>
