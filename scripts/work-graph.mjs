@@ -520,72 +520,34 @@ export function nodeMark(n) {
   </g>`;
   }
   if (n.kind === "triangle") {
-    // prisoma: the INFORMATION PRISM recut in SMOKED GLASS — a dark violet
-    // glass body with an inner luminance core, a diagonal window-light sheen
-    // and LIQUID-SILVER edges (chrome-gradient bezel + dark inner groove +
-    // outer hairline: engram's machining applied to a prism). ALL light lives
-    // INSIDE the glass: a white ray enters through the left face, focuses to
-    // a flare at the point of incidence, and disperses as three tapered RAYS
-    // (unique / redundant / synergistic — the PID components) that land as
-    // soft glows on the inner right face. Glass and silver are theme-FIXED
-    // (a real object); only the label ink adapts. Static apart from a slow
-    // flare breath → reduced-motion safe. One instance → unique ids.
+    // prisoma: THE FIGURE IN THE GLASS — the information prism recut as an
+    // embodied agent's SOMA. The smoked-violet glass triangle IS a standing
+    // humanoid robot: apex = helmeted head/crown, midline = a liquid spine, the
+    // chest = a white-hot REACTOR that is itself a mini apex-up prism-in-prism,
+    // base corners = planted feet. Liquid light pours crown -> spine -> reactor
+    // and wells out as the body; a short spectral micro-fan keeps dispersion a
+    // visible event. Glass + liquid-silver are theme-FIXED (a real object); only
+    // the label ink adapts. Civilian violet — the ONLY figure + ONLY glass in
+    // the graph. Browser motion is liquid (flowing veins, molten core, breathing
+    // aura); librsvg / reduced-motion hold the complete standing still.
     const cx = n.x, cy = n.y, R = TRI_CIRCUM;
-    const PRZ = "4.2s"; // one dispersion pass: light arrives -> flare -> rays bloom in spectral order
     const tri = (r) => {
       const dx = (r * Math.sqrt(3)) / 2;
       return `${f1(cx)},${f1(cy - r)} ${f1(cx + dx)},${f1(cy + r / 2)} ${f1(cx - dx)},${f1(cy + r / 2)}`;
     };
     const topY = f1(cy - R), botY = f1(cy + R / 2);
-    const sx = cx - 2, sy = cy + 4; // point of incidence (the flare)
-    // Faces: apex → bottom-right (rays land here), apex → bottom-left (the
-    // white ray enters here). fu/lu are unit vectors along each face.
-    const apex = { x: cx, y: cy - R };
-    const brv = { x: cx + (R * Math.sqrt(3)) / 2, y: cy + R / 2 };
-    const blv = { x: cx - (R * Math.sqrt(3)) / 2, y: cy + R / 2 };
-    const fl = Math.hypot(brv.x - apex.x, brv.y - apex.y);
-    const fu = { x: (brv.x - apex.x) / fl, y: (brv.y - apex.y) / fl };
-    const lu = { x: (blv.x - apex.x) / fl, y: (blv.y - apex.y) / fl };
-    const land = (t) => ({ x: apex.x + (brv.x - apex.x) * t, y: apex.y + (brv.y - apex.y) * t });
-    const RAYS = [
-      { t: 0.55, hw: 5, c: "#34d399", id: "przRayG" },
-      { t: 0.72, hw: 5.5, c: "#fbbf24", id: "przRayA" },
-      { t: 0.88, hw: 5, c: "#ef4444", id: "przRayR" },
-    ];
-    const rayDefs = RAYS.map(({ t, c, id }) => {
-      const L = land(t);
-      return `<linearGradient id="${id}" x1="${f1(sx)}" y1="${f1(sy)}" x2="${f1(L.x)}" y2="${f1(L.y)}" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="${c}" stop-opacity="0.8"/><stop offset="100%" stop-color="${c}" stop-opacity="0.12"/>
-      </linearGradient>
-      <radialGradient id="${id}Glow" gradientUnits="userSpaceOnUse" cx="${f1(L.x)}" cy="${f1(L.y)}" r="5.5">
-        <stop offset="0%" stop-color="${c}" stop-opacity="0.7"/><stop offset="100%" stop-color="${c}" stop-opacity="0"/>
-      </radialGradient>`;
-    }).join("\n      ");
-    const rayWedges = RAYS.map(({ t, hw, id }) => {
-      const L = land(t);
-      return `<polygon points="${f1(sx)},${f1(sy)} ${f1(L.x + fu.x * hw)},${f1(L.y + fu.y * hw)} ${f1(L.x - fu.x * hw)},${f1(L.y - fu.y * hw)}" fill="url(#${id})"/>`;
-    }).join("\n      ");
-    // Each dispersed ray blooms in spectral sequence as the entered light disperses.
-    const rayKt = (i) => { const p = 0.22 + i * 0.14; return `0;${f1(p - 0.12)};${f1(p)};${f1(p + 0.12)};1`; };
-    const rayCores = RAYS.map(({ t, c }, i) => {
-      const L = land(t), kt = rayKt(i);
-      return `<line class="prz-core" x1="${f1(sx)}" y1="${f1(sy)}" x2="${f1(L.x)}" y2="${f1(L.y)}" stroke="${c}">` +
-        `<animate attributeName="stroke-width" values="1.5;1.5;2.8;1.5;1.5" keyTimes="${kt}" dur="${PRZ}" repeatCount="indefinite"/>` +
-        `<animate attributeName="stroke-opacity" values="0.85;0.85;1;0.85;0.85" keyTimes="${kt}" dur="${PRZ}" repeatCount="indefinite"/></line>`;
-    }).join("\n        ");
-    const rayGlows = RAYS.map(({ t, id }, i) => {
-      const L = land(t), kt = rayKt(i);
-      return `<circle cx="${f1(L.x)}" cy="${f1(L.y)}" r="5.5" fill="url(#${id}Glow)"><animate attributeName="r" values="5.5;5.5;8.5;5.5;5.5" keyTimes="${kt}" dur="${PRZ}" repeatCount="indefinite"/></circle>`;
-    }).join("\n      ");
-    // White in-ray: enters mid-left-face, converges on the flare.
-    const e = { x: apex.x + (blv.x - apex.x) * 0.6, y: apex.y + (blv.y - apex.y) * 0.6 };
+    // Chest-reactor molten blob: base D0 and morph target D1 (matched M + 4C + Z).
+    const D0 = "M 0,-22 C 5,-21 8,-17 8,-14 C 8,-11 5,-7 0,-6 C -5,-7 -8,-11 -8,-14 C -8,-17 -5,-21 0,-22 Z";
+    const D1 = "M 0,-21.5 C 5.5,-20.5 7.5,-17.5 8.5,-14 C 8,-10.5 4.5,-7.5 0,-6.5 C -4.5,-7.5 -8,-10.5 -8.5,-14 C -7.5,-17.5 -5.5,-20.5 0,-21.5 Z";
+    // Standing soma silhouette (single closed filled path, offset space).
+    const somaPath = "M 0,-40.5 C 4.8,-40.2 5.6,-34 4.6,-31.5 C 9,-29 11,-24 9.5,-18 C 8.5,-10 8,-3 7,1 C 20,6 32,13 36,22 L 32,22.5 C 24,14 14,9 2,8 L 0,8 L -2,8 C -14,9 -24,14 -32,22.5 L -36,22 C -32,13 -20,6 -7,1 C -8,-3 -8.5,-10 -9.5,-18 C -11,-24 -9,-29 -4.6,-31.5 C -5.6,-34 -4.8,-40.2 0,-40.5 Z";
     return `<g>
     <defs>
       <linearGradient id="przGlass" x1="0" y1="${topY}" x2="0" y2="${botY}" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#4c4370"/><stop offset="45%" stop-color="#262047"/><stop offset="100%" stop-color="#120e26"/>
       </linearGradient>
-      <radialGradient id="przCore" gradientUnits="userSpaceOnUse" cx="${f1(sx)}" cy="${f1(sy)}" r="34">
-        <stop offset="0%" stop-color="#c4b5fd" stop-opacity="0.3"/><stop offset="55%" stop-color="#a78bfa" stop-opacity="0.1"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+      <radialGradient id="przCore" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${f1(cy - 14)}" r="34">
+        <stop offset="0%" stop-color="#c4b5fd" stop-opacity="0.34"/><stop offset="55%" stop-color="#a78bfa" stop-opacity="0.12"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
       </radialGradient>
       <linearGradient id="przSheen" x1="${f1(cx - 46)}" y1="${topY}" x2="${f1(cx + 46)}" y2="${botY}" gradientUnits="userSpaceOnUse">
         <stop offset="0.3" stop-color="#ffffff" stop-opacity="0"/><stop offset="0.42" stop-color="#ffffff" stop-opacity="0.2"/><stop offset="0.52" stop-color="#ffffff" stop-opacity="0.03"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
@@ -593,15 +555,34 @@ export function nodeMark(n) {
       <linearGradient id="przSilver" x1="0" y1="${topY}" x2="0" y2="${botY}" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#f8fafc"/><stop offset="40%" stop-color="#c7d0da"/><stop offset="72%" stop-color="#8b96a3"/><stop offset="100%" stop-color="#525c66"/>
       </linearGradient>
-      <linearGradient id="przIn" x1="${f1(e.x)}" y1="${f1(e.y)}" x2="${f1(sx)}" y2="${f1(sy)}" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#f4f7fa" stop-opacity="0.5"/><stop offset="100%" stop-color="#f4f7fa" stop-opacity="0.1"/>
+      <linearGradient id="przSoma" x1="0" y1="-40" x2="0" y2="22" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#e9d5ff"/><stop offset="25%" stop-color="#c4b5fd"/><stop offset="60%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#8b7bd8"/>
       </linearGradient>
-      <radialGradient id="przInGlow" gradientUnits="userSpaceOnUse" cx="${f1(e.x)}" cy="${f1(e.y)}" r="4.5">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      <radialGradient id="przAura" cx="0" cy="-8" r="24" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.4"/><stop offset="60%" stop-color="#7c6ad0" stop-opacity="0.16"/><stop offset="100%" stop-color="#7c6ad0" stop-opacity="0"/>
       </radialGradient>
-      ${rayDefs}
-      <radialGradient id="przFlare" gradientUnits="userSpaceOnUse" cx="${f1(sx)}" cy="${f1(sy)}" r="9">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/><stop offset="45%" stop-color="#e9d5ff" stop-opacity="0.5"/><stop offset="100%" stop-color="#e9d5ff" stop-opacity="0"/>
+      <radialGradient id="przGround">
+        <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.5"/><stop offset="70%" stop-color="#8b7bd8" stop-opacity="0.14"/><stop offset="100%" stop-color="#8b7bd8" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="przSpine" x1="0" y1="-30" x2="0" y2="2" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#e9d5ff"/><stop offset="50%" stop-color="#c4b5fd"/><stop offset="100%" stop-color="#a78bfa"/>
+      </linearGradient>
+      <linearGradient id="przLeg" x1="0" y1="2" x2="0" y2="22" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#c4b5fd"/><stop offset="100%" stop-color="#8b7bd8"/>
+      </linearGradient>
+      <radialGradient id="przReactor" cx="0" cy="-14" r="9" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+        <stop offset="0.45" stop-color="#dcd0ff" stop-opacity="0.5"><animate attributeName="offset" values="0.45;0.55;0.45" keyTimes="0;0.5;1" dur="3.6s" repeatCount="indefinite"/></stop>
+        <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="przGem" x1="0" y1="-21" x2="0" y2="-10.5" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85"/><stop offset="50%" stop-color="#c4b5fd" stop-opacity="0.7"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0.55"/>
+      </linearGradient>
+      <radialGradient id="przHead" cx="0" cy="-37" r="7" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#c4b5fd" stop-opacity="0.5"/><stop offset="55%" stop-color="#a78bfa" stop-opacity="0.12"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="przFoot">
+        <stop offset="0%" stop-color="#c4b5fd" stop-opacity="0.6"/><stop offset="60%" stop-color="#a78bfa" stop-opacity="0.2"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
       </radialGradient>
       <clipPath id="przClip"><polygon points="${tri(R)}"/></clipPath>
     </defs>
@@ -609,23 +590,30 @@ export function nodeMark(n) {
     <g clip-path="url(#przClip)">
       <polygon points="${tri(R)}" fill="url(#przCore)"/>
       <polygon points="${tri(R)}" fill="url(#przSheen)"/>
-      <polygon points="${f1(e.x + lu.x * 2.6)},${f1(e.y + lu.y * 2.6)} ${f1(e.x - lu.x * 2.6)},${f1(e.y - lu.y * 2.6)} ${f1(sx)},${f1(sy)}" fill="url(#przIn)"/>
-      ${rayWedges}
-      <g filter="url(#edgeGlow)">
-        <line class="prz-core" x1="${f1(e.x)}" y1="${f1(e.y)}" x2="${f1(sx - 1.5)}" y2="${f1(sy - 0.6)}" stroke="#f4f7fa"/>
-        ${rayCores}
+      <g transform="translate(${cx},${cy})">
+        <ellipse cx="0" cy="20" rx="28" ry="3.2" class="prz-ground"/>
+        <g class="prz-aura-g" opacity="0.42"><ellipse cx="0" cy="-8" rx="13" ry="22" class="prz-aura" filter="url(#soft)"/><animate attributeName="opacity" values="0.42;0.5;0.42" keyTimes="0;0.5;1" dur="7s" repeatCount="indefinite"/></g>
+        <path class="prz-soma" d="${somaPath}"/>
+        <circle cx="-34" cy="22" r="3.5" class="prz-foot"/><circle cx="34" cy="22" r="3.5" class="prz-foot"/>
+        <path class="prz-leg" d="M 0,2 Q -30,9 -34,22"/><path class="prz-leg" d="M 0,2 Q 30,9 34,22"/>
+        <path class="prz-flow-leg" stroke-dashoffset="-9" d="M 0,2 Q -30,9 -34,22"><animate attributeName="stroke-dashoffset" values="-9;-27" dur="5s" begin="-1.4s" repeatCount="indefinite"/></path>
+        <path class="prz-flow-leg" stroke-dashoffset="-9" d="M 0,2 Q 30,9 34,22"><animate attributeName="stroke-dashoffset" values="-9;-27" dur="4.7s" begin="-1.8s" repeatCount="indefinite"/></path>
+        <path class="prz-spine" d="M 0,-30 C -0.6,-25 0.6,-19 0,-14 C -0.6,-9 0.6,-4 0,2"/>
+        <g filter="url(#edgeGlow)"><path class="prz-flow" stroke-dashoffset="-9" d="M 0,-30 C -0.6,-25 0.6,-19 0,-14 C -0.6,-9 0.6,-4 0,2"><animate attributeName="stroke-dashoffset" values="-9;-27" dur="4.6s" repeatCount="indefinite"/></path></g>
+        <g class="prz-fan-g" opacity="0.35"><path class="prz-fan" stroke="#c4b5fd" d="M 0,-14 L -5,-8"/><path class="prz-fan" stroke="#e9d5ff" d="M 0,-14 L 0,-6.5"/><path class="prz-fan" stroke="#c4b5fd" d="M 0,-14 L 5,-8"/><animate attributeName="opacity" values="0.35;0.7;0.35" keyTimes="0;0.5;1" dur="3.2s" repeatCount="indefinite"/></g>
+        <path class="prz-well" d="${D0}"><animate attributeName="d" values="${D0};${D1};${D0}" keyTimes="0;0.5;1" dur="3.2s" repeatCount="indefinite"/></path>
+        <polygon class="prz-gem" points="0,-21 6.06,-10.5 -6.06,-10.5"/>
+        <path class="prz-head" d="M -4.6,-34 C -5.2,-37 -3.4,-40.4 0,-40.5 C 3.4,-40.4 5.2,-37 4.6,-34 Z"/>
+        <path class="prz-antenna" d="M 0,-40.5 L 0,-43"/>
+        <circle class="prz-eye" cx="0" cy="-37" r="1.4" opacity="0.7"><animate attributeName="opacity" values="0.7;0.9;0.7" keyTimes="0;0.5;1" dur="3.4s" repeatCount="indefinite"/></circle>
+        <circle class="prz-hot" cx="0" cy="-14" r="1.4" filter="url(#mwBloom)"><animate attributeName="r" values="1.4;1.4;2.8;1.6;1.4" keyTimes="0;0.16;0.2;0.24;1" dur="4.6s" repeatCount="indefinite"/></circle>
+        <circle class="prz-hot-in" cx="0" cy="-14" r="0.7"/>
       </g>
-      ${rayGlows}
-      <circle cx="${f1(e.x)}" cy="${f1(e.y)}" r="4.5" fill="url(#przInGlow)"><animate attributeName="r" values="4.5;6.5;4.5;4.5" keyTimes="0;0.07;0.18;1" dur="${PRZ}" repeatCount="indefinite"/></circle>
     </g>
     <polygon points="${tri(R)}" class="prz-edge" stroke-linejoin="round"/>
     <polygon points="${tri(R - 4.8)}" class="prz-groove" stroke-linejoin="round"/>
     <polygon points="${tri(R + 2.8)}" class="prz-hairline" stroke-linejoin="round"/>
     <path class="prz-glint" d="M${cx} ${f1(cy - R - 4.5)} V${f1(cy - R + 4.5)} M${f1(cx - 4.5)} ${f1(cy - R)} H${f1(cx + 4.5)}"/>
-    <circle cx="${f1(sx)}" cy="${f1(sy)}" r="8" fill="url(#przFlare)">
-      <animate attributeName="r" values="8;11;8.5;8;8" keyTimes="0;0.09;0.22;0.6;1" dur="${PRZ}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.85;1;0.9;0.85;0.85" keyTimes="0;0.09;0.22;0.6;1" dur="${PRZ}" repeatCount="indefinite"/>
-    </circle>
     <text x="${n.x}" y="${f1(n.y + R / 2 + 16)}" text-anchor="middle" class="tri-label">${escapeXML(n.label)}</text>
   </g>`;
   }
@@ -1254,11 +1242,26 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .cube-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fdba74; }
     .logo-label     { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #cdd6e0; }
     .prz-body     { fill: url(#przGlass); }
-    .prz-core     { fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-opacity: 0.85; }
     .prz-edge     { fill: none; stroke: url(#przSilver); stroke-width: 2.4; }
     .prz-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .prz-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
     .prz-glint    { fill: none; stroke: #ffffff; stroke-width: 0.9; stroke-opacity: 0.7; stroke-linecap: round; }
+    .prz-ground   { fill: url(#przGround); }
+    .prz-aura     { fill: url(#przAura); }
+    .prz-soma     { fill: url(#przSoma); opacity: 0.3; }
+    .prz-foot     { fill: url(#przFoot); }
+    .prz-leg      { fill: none; stroke: url(#przLeg); stroke-width: 2.2; stroke-linecap: round; stroke-opacity: 0.72; }
+    .prz-spine    { fill: none; stroke: url(#przSpine); stroke-width: 2.4; stroke-linecap: round; stroke-opacity: 0.9; }
+    .prz-flow     { fill: none; stroke: #f5f3ff; stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 3 15; stroke-opacity: 0.9; }
+    .prz-flow-leg { fill: none; stroke: #e9d5ff; stroke-width: 1.3; stroke-linecap: round; stroke-dasharray: 3 15; stroke-opacity: 0.6; }
+    .prz-fan      { fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-opacity: 0.6; }
+    .prz-well     { fill: url(#przReactor); }
+    .prz-gem      { fill: url(#przGem); stroke: url(#przSilver); stroke-width: 0.8; stroke-linejoin: round; }
+    .prz-head     { fill: url(#przHead); stroke: #c4b5fd; stroke-width: 1.3; stroke-linejoin: round; }
+    .prz-antenna  { fill: none; stroke: #c4b5fd; stroke-width: 1; stroke-linecap: round; stroke-opacity: 0.75; }
+    .prz-eye      { fill: #c4b5fd; }
+    .prz-hot      { fill: #ffffff; }
+    .prz-hot-in   { fill: #ffffff; }
     .tri-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c4b5fd; }
     .gate-wire      { fill: none; stroke: #fbbf24; stroke-width: 2.6; stroke-linecap: round; opacity: 0.92; }
     .gate-wire-perc { fill: none; stroke: #fbbf24; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 5 4; opacity: 0.6; }
