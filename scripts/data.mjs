@@ -49,7 +49,7 @@ export const PROJECTS = [
   {
     name: "galadriel",
     accent: "#ef4444", light: "#dc2626", grad: "#2a0a0a",
-    stars: 0, repo: "sepahead/galadriel",
+    stars: 1, repo: "sepahead/galadriel",
     desc: "Fail-closed cross-sensor statistical-consistency monitor: NIS/CUSUM, signed correlation, and optional PID evidence. Research prototype.",
     stack: ["Rust"],
   },
@@ -63,8 +63,8 @@ export const PROJECTS = [
   {
     name: "haldir",
     accent: "#2dd4bf", light: "#0d9488", grad: "#042f2a",
-    phase: "in design", repo: "sepahead/haldir",
-    desc: "Security & guardian layer for the NCP ecosystem: per-frame provenance, fail-closed authorization gates & attestation. Design catalog.",
+    stars: 1, repo: "sepahead/haldir",
+    desc: "Fail-closed mission-authorization reference monitor for NCP: signed intents, deterministic policy, signed decision receipts. Experimental.",
     stack: ["Rust"],
   },
   {
