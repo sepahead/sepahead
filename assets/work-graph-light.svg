@@ -31,6 +31,10 @@
       <feGaussianBlur stdDeviation="2.4" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
+    <filter id="hdBloom" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="1.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
     <linearGradient id="eg0" gradientUnits="userSpaceOnUse" x1="147" y1="230" x2="209" y2="230"><stop offset="0%" stop-color="#bcc6d1"/><stop offset="100%" stop-color="#fbbf24"/></linearGradient>
     <linearGradient id="eg1" gradientUnits="userSpaceOnUse" x1="287" y1="212.4" x2="411.5" y2="153.1"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient>
     <linearGradient id="eg2" gradientUnits="userSpaceOnUse" x1="286.9" y1="247.9" x2="426.7" y2="315.8"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#9caf88"/></linearGradient>
@@ -43,11 +47,11 @@
     <linearGradient id="eg9" gradientUnits="userSpaceOnUse" x1="496.9" y1="334.9" x2="603" y2="343.2"><stop offset="0%" stop-color="#9caf88"/><stop offset="100%" stop-color="#fb7185"/></linearGradient>
     <linearGradient id="eg10" gradientUnits="userSpaceOnUse" x1="110" y1="319" x2="110" y2="267"><stop offset="0%" stop-color="#e879f9"/><stop offset="100%" stop-color="#bcc6d1"/></linearGradient>
     <linearGradient id="eg11" gradientUnits="userSpaceOnUse" x1="336.9" y1="373" x2="424.9" y2="343.7"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#9caf88"/></linearGradient>
-    <linearGradient id="eg12" gradientUnits="userSpaceOnUse" x1="404.5" y1="278.5" x2="433.4" y2="306.3"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#9caf88"/></linearGradient>
-    <linearGradient id="eg13" gradientUnits="userSpaceOnUse" x1="349" y1="218.3" x2="277.3" y2="131.2"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#34d399"/></linearGradient>
-    <linearGradient id="eg14" gradientUnits="userSpaceOnUse" x1="276" y1="198.3" x2="298" y2="171.7"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient>
-    <linearGradient id="eg15" gradientUnits="userSpaceOnUse" x1="341.2" y1="177.2" x2="357.8" y2="212.8"><stop offset="0%" stop-color="#2dd4bf"/><stop offset="100%" stop-color="#ef4444"/></linearGradient>
-    <linearGradient id="eg16" gradientUnits="userSpaceOnUse" x1="364.9" y1="137" x2="421.1" y2="132.9"><stop offset="0%" stop-color="#2dd4bf"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient>
+    <linearGradient id="eg12" gradientUnits="userSpaceOnUse" x1="431.2" y1="289.8" x2="439.1" y2="301.5"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#9caf88"/></linearGradient>
+    <linearGradient id="eg13" gradientUnits="userSpaceOnUse" x1="379" y1="227" x2="280.4" y2="128.4"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#34d399"/></linearGradient>
+    <linearGradient id="eg14" gradientUnits="userSpaceOnUse" x1="275.3" y1="197.7" x2="304.7" y2="160.3"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient>
+    <linearGradient id="eg15" gradientUnits="userSpaceOnUse" x1="351.3" y1="163" x2="386.7" y2="221"><stop offset="0%" stop-color="#2dd4bf"/><stop offset="100%" stop-color="#ef4444"/></linearGradient>
+    <linearGradient id="eg16" gradientUnits="userSpaceOnUse" x1="371" y1="128.6" x2="422.7" y2="129.4"><stop offset="0%" stop-color="#2dd4bf"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient>
   </defs>
   <style>
     :root { --hub-accent: #34d399; --cube-accent: #fb923c; --tri-accent: #a78bfa; }
@@ -134,20 +138,23 @@
     .gal-hotf   { fill: #ef4444; }
     .gal-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #ef4444; }
     .seat-hd         { fill: url(#hdGrad); }
-    .hd-crownglow    { fill: url(#hdCrownGlow); }
+    .hd-void         { fill: #03211d; }
+    .hd-frame        { fill: url(#haldirArch); stroke: #0f766e; stroke-width: 0.5; stroke-opacity: 0.7; }
+    .hd-reed         { fill: none; stroke: #0f766e; stroke-width: 0.6; stroke-opacity: 0.5; stroke-linecap: round; }
+    .hd-speed        { fill: none; stroke: #5eead4; stroke-width: 0.6; stroke-opacity: 0.4; stroke-linecap: round; }
     .hd-thresh       { fill: none; stroke: #2dd4bf; stroke-width: 1.6; stroke-linecap: round; stroke-opacity: 0.85; }
-    .hd-arch-band    { fill: url(#haldirArch); stroke: #0f766e; stroke-width: 0.5; stroke-opacity: 0.6; }
-    .hd-archivolt    { fill: none; stroke: #0f766e; stroke-width: 1.2; stroke-opacity: 0.9; stroke-linecap: round; stroke-linejoin: round; }
-    .hd-stud         { fill: #ccfbf1; fill-opacity: 0.9; }
-    .hd-grille-bar   { fill: none; stroke: #2dd4bf; stroke-width: 1.5; stroke-opacity: 0.92; stroke-linecap: round; }
-    .hd-spike        { fill: #2dd4bf; }
-    .hd-signet       { fill: #2dd4bf; stroke: #0d9488; stroke-width: 0.6; }
-    .hd-signet-facet { fill: #ecfeff; fill-opacity: 0.9; }
-    .hd-keyhole      { fill: #042f2a; }
-    .hd-denied       { fill: #0f766e; fill-opacity: 0.5; stroke: #0f766e; stroke-opacity: 0.55; stroke-width: 1; }
-    .hd-intoken      { fill: #2dd4bf; }
-    .hd-spark        { fill: #ecfeff; }
-    .hd-sealtoken    { fill: #5eead4; }
+    .hd-beam         { fill: none; stroke: #ef4444; stroke-width: 1.4; stroke-linecap: round; stroke-opacity: 0.92; }
+    .hd-diode        { fill: #ff3b47; }
+    .hd-diode-hot    { fill: #ffe1dd; }
+    .hd-core         { fill: #ef4444; }
+    .hd-core-facet   { fill: #ff9d94; fill-opacity: 0.95; }
+    .hd-core-hot     { fill: #fff1f0; }
+    .hd-coreglow     { fill: url(#hdCoreGlow); }
+    .hd-sun          { fill: none; stroke: #ff6b5e; stroke-width: 0.8; stroke-opacity: 0.85; stroke-linecap: round; }
+    .hd-scan         { fill: #ffd9d4; }
+    .hd-tok-in       { fill: #ff6b5e; }
+    .hd-tok-out      { fill: #fff1f0; }
+    .hd-flash        { fill: #fff1f0; }
     .haldir-label    { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #2dd4bf; }
     .wg-rule    { stroke: #30363d; stroke-width: 1; stroke-opacity: 0.55; }
     .wg-bracket { fill: none; stroke: #fbbf24; stroke-width: 1.5; stroke-linecap: round; stroke-opacity: 0.85; }
@@ -197,14 +204,14 @@
     <path d="M 496.9 334.9 Q 548.6 356 603 343.2" fill="none" stroke="url(#eg9)" stroke-width="2" stroke-linecap="round" class="edge"/>
     <path d="M 110 319 Q 101.7 293 110 267" fill="none" stroke="url(#eg10)" stroke-width="2" stroke-linecap="round" class="edge"/>
     <path d="M 336.9 373 Q 385.6 372.4 424.9 343.7" fill="none" stroke="url(#eg11)" stroke-width="2" stroke-linecap="round" class="edge"/>
-    <path d="M 404.5 278.5 Q 414.5 297 433.4 306.3" fill="none" stroke="url(#eg12)" stroke-width="2" stroke-linecap="round" class="edge"/>
-    <path d="M 349 218.3 Q 299.2 186.2 277.3 131.2" fill="none" stroke="url(#eg13)" stroke-width="2" stroke-linecap="round" class="edge"/>
-    <path d="M 341.2 177.2 Q 343.8 197.6 357.8 212.8" fill="none" stroke="url(#eg15)" stroke-width="2" stroke-linecap="round" class="edge"/>
-    <path d="M 364.9 137 Q 392.3 125.9 421.1 132.9" fill="none" stroke="url(#eg16)" stroke-width="2" stroke-linecap="round" class="edge"/>
+    <path d="M 431.2 289.8 Q 437 294.4 439.1 301.5" fill="none" stroke="url(#eg12)" stroke-width="2" stroke-linecap="round" class="edge"/>
+    <path d="M 379 227 Q 313.9 193.5 280.4 128.4" fill="none" stroke="url(#eg13)" stroke-width="2" stroke-linecap="round" class="edge"/>
+    <path d="M 351.3 163 Q 378.3 186.3 386.7 221" fill="none" stroke="url(#eg15)" stroke-width="2" stroke-linecap="round" class="edge"/>
+    <path d="M 371 128.6 Q 397 120.8 422.7 129.4" fill="none" stroke="url(#eg16)" stroke-width="2" stroke-linecap="round" class="edge"/>
     <path d="M 147 230 Q 178 220.1 209 230" fill="none" stroke="url(#eg0)" stroke-width="3" stroke-linecap="round" class="edge-live"><animate attributeName="opacity" values="0.7;1;0.7" dur="2.8s" begin="0.00s" repeatCount="indefinite"/></path>
     <path d="M 287 212.4 Q 339.8 162.8 411.5 153.1" fill="none" stroke="url(#eg1)" stroke-width="3" stroke-linecap="round" class="edge-live"><animate attributeName="opacity" values="0.7;1;0.7" dur="2.8s" begin="0.30s" repeatCount="indefinite"/></path>
     <path d="M 286.9 247.9 Q 345.9 304.2 426.7 315.8" fill="none" stroke="url(#eg2)" stroke-width="3" stroke-linecap="round" class="edge-live"><animate attributeName="opacity" values="0.7;1;0.7" dur="2.8s" begin="0.60s" repeatCount="indefinite"/></path>
-    <path d="M 276 198.3 Q 282.7 181.5 298 171.7" fill="none" stroke="url(#eg14)" stroke-width="3" stroke-linecap="round" class="edge-live"><animate attributeName="opacity" values="0.7;1;0.7" dur="2.8s" begin="4.20s" repeatCount="indefinite"/></path>
+    <path d="M 275.3 197.7 Q 284 174.3 304.7 160.3" fill="none" stroke="url(#eg14)" stroke-width="3" stroke-linecap="round" class="edge-live"><animate attributeName="opacity" values="0.7;1;0.7" dur="2.8s" begin="4.20s" repeatCount="indefinite"/></path>
   </g>
   <g class="flows">
     <path d="M 147 232.4 Q 178 222.5 209 232.4" class="flow"><animate attributeName="stroke-dashoffset" from="21" to="0" dur="1.7s" repeatCount="indefinite"/></path>
@@ -213,8 +220,8 @@
     <path d="M 286 210.2 Q 338.7 160.7 410.4 150.9" class="flow flow-rev"><animate attributeName="stroke-dashoffset" from="0" to="21" dur="1.7s" repeatCount="indefinite"/></path>
     <path d="M 285.8 250.1 Q 344.9 306.4 425.7 318" class="flow"><animate attributeName="stroke-dashoffset" from="21" to="0" dur="1.7s" repeatCount="indefinite"/></path>
     <path d="M 287.9 245.8 Q 347 302.1 427.8 313.7" class="flow flow-rev"><animate attributeName="stroke-dashoffset" from="0" to="21" dur="1.7s" repeatCount="indefinite"/></path>
-    <path d="M 277.9 199.9 Q 284.6 183 299.8 173.2" class="flow"><animate attributeName="stroke-dashoffset" from="21" to="0" dur="1.7s" repeatCount="indefinite"/></path>
-    <path d="M 274.2 196.8 Q 280.9 180 296.1 170.1" class="flow flow-rev"><animate attributeName="stroke-dashoffset" from="0" to="21" dur="1.7s" repeatCount="indefinite"/></path>
+    <path d="M 277.2 199.2 Q 285.9 175.8 306.6 161.7" class="flow"><animate attributeName="stroke-dashoffset" from="21" to="0" dur="1.7s" repeatCount="indefinite"/></path>
+    <path d="M 273.4 196.3 Q 282.1 172.8 302.8 158.8" class="flow flow-rev"><animate attributeName="stroke-dashoffset" from="0" to="21" dur="1.7s" repeatCount="indefinite"/></path>
   </g>
   <g class="nodes">
     <g>
@@ -489,70 +496,72 @@
   </g>
   <g class="gal">
     <defs>
-      <linearGradient id="galBezel" x1="0" y1="216" x2="0" y2="284" gradientUnits="userSpaceOnUse">
+      <linearGradient id="galBezel" x1="0" y1="222" x2="0" y2="290" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#e8eef4"/><stop offset="45%" stop-color="#8d99a6"/><stop offset="100%" stop-color="#2b3542"/>
       </linearGradient>
     </defs>
-    <g filter="url(#nodeShadow)"><circle cx="375" cy="250" r="34" class="seat-gal"/></g>
-    <circle cx="375" cy="250" r="34" stroke="url(#galBezel)" class="seat-ring"/>
-    <circle cx="375" cy="250" r="31.8" class="seat-groove"/>
-    <circle cx="375" cy="250" r="35.4" class="seat-hairline"/>
-    <circle cx="375" cy="250" r="31.8" class="gal-signal"/>
+    <g filter="url(#nodeShadow)"><circle cx="408" cy="256" r="34" class="seat-gal"/></g>
+    <circle cx="408" cy="256" r="34" stroke="url(#galBezel)" class="seat-ring"/>
+    <circle cx="408" cy="256" r="31.8" class="seat-groove"/>
+    <circle cx="408" cy="256" r="35.4" class="seat-hairline"/>
+    <circle cx="408" cy="256" r="31.8" class="gal-signal"/>
     <defs>
-      <radialGradient id="galEye" gradientUnits="userSpaceOnUse" cx="375" cy="242.4" r="8">
+      <radialGradient id="galEye" gradientUnits="userSpaceOnUse" cx="408" cy="248.4" r="8">
         <stop offset="0%" stop-color="#ff6b5e" stop-opacity="0.9"/>
         <stop offset="55%" stop-color="#ef4444" stop-opacity="0.45"/>
         <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
       </radialGradient>
-      <linearGradient id="galPlateG" x1="0" y1="226.1" x2="0" y2="273.9" gradientUnits="userSpaceOnUse">
+      <linearGradient id="galPlateG" x1="0" y1="232.1" x2="0" y2="279.9" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#10202f"/><stop offset="45%" stop-color="#0a1420"/><stop offset="100%" stop-color="#050a11"/>
       </linearGradient>
-      <linearGradient id="galCrownG" x1="0" y1="227.9" x2="0" y2="238" gradientUnits="userSpaceOnUse">
+      <linearGradient id="galCrownG" x1="0" y1="233.9" x2="0" y2="244" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#2a3a4d"/><stop offset="100%" stop-color="#101a26"/>
       </linearGradient>
-      <clipPath id="galSlit" clipPathUnits="userSpaceOnUse"><path d="M358 242.4 L361.2 239.4 L388.8 239.4 L392 242.4 L388.8 245.4 L361.2 245.4 Z"/></clipPath>
+      <clipPath id="galSlit" clipPathUnits="userSpaceOnUse"><path d="M391 248.4 L394.2 245.4 L421.8 245.4 L425 248.4 L421.8 251.4 L394.2 251.4 Z"/></clipPath>
     </defs>
-    <path d="M355.7 232.1 L363 226.1 L387 226.1 L394.3 232.1 L394.3 250 L390.6 259.7 L375 273.9 L359.4 259.7 L355.7 250 Z" class="gal-plate"/>
-    <path d="M357.5 233 L363.7 227.9 L386.3 227.9 L392.5 233 L392.5 238 L357.5 238 Z" fill="url(#galCrownG)" opacity="0.65"/><path d="M373.2 226.1 L376.8 226.1 L375.9 239 L374.1 239 Z" fill="url(#galCrownG)" opacity="0.9" class="gal-crest"/>
-    <path class="gal-fiber" d="M364.5 259.5 C364.5 254 367.5 251 367.5 245.8"/><path class="gal-pulse" d="M364.5 259.5 C364.5 254 367.5 251 367.5 245.8"><animate attributeName="stroke-dashoffset" from="43" to="0" dur="2.6s" begin="0.9s" repeatCount="indefinite"/></path><circle class="gal-port" cx="364.5" cy="259.5" r="1.4"/><circle class="gal-jack" cx="367.5" cy="245.8" r="0.9"/><path class="gal-fiber" d="M375 268.5 C375 261 375 253 375 245.8"/><path class="gal-pulse" d="M375 268.5 C375 261 375 253 375 245.8"><animate attributeName="stroke-dashoffset" from="43" to="0" dur="2.6s" begin="0s" repeatCount="indefinite"/></path><circle class="gal-port" cx="375" cy="268.5" r="1.4"/><circle class="gal-jack" cx="375" cy="245.8" r="0.9"/><path class="gal-fiber" d="M385.5 259.5 C385.5 254 382.5 251 382.5 245.8"/><path class="gal-pulse" d="M385.5 259.5 C385.5 254 382.5 251 382.5 245.8"><animate attributeName="stroke-dashoffset" from="43" to="0" dur="2.6s" begin="0.9s" repeatCount="indefinite"/></path><circle class="gal-port" cx="385.5" cy="259.5" r="1.4"/><circle class="gal-jack" cx="382.5" cy="245.8" r="0.9"/>
-    <path d="M358 242.4 L361.2 239.4 L388.8 239.4 L392 242.4 L388.8 245.4 L361.2 245.4 Z" class="gal-slit"/>
+    <path d="M388.7 238.1 L396 232.1 L420 232.1 L427.3 238.1 L427.3 256 L423.6 265.7 L408 279.9 L392.4 265.7 L388.7 256 Z" class="gal-plate"/>
+    <path d="M390.5 239 L396.7 233.9 L419.3 233.9 L425.5 239 L425.5 244 L390.5 244 Z" fill="url(#galCrownG)" opacity="0.65"/><path d="M406.2 232.1 L409.8 232.1 L408.9 245 L407.1 245 Z" fill="url(#galCrownG)" opacity="0.9" class="gal-crest"/>
+    <path class="gal-fiber" d="M397.5 265.5 C397.5 260 400.5 257 400.5 251.8"/><path class="gal-pulse" d="M397.5 265.5 C397.5 260 400.5 257 400.5 251.8"><animate attributeName="stroke-dashoffset" from="43" to="0" dur="2.6s" begin="0.9s" repeatCount="indefinite"/></path><circle class="gal-port" cx="397.5" cy="265.5" r="1.4"/><circle class="gal-jack" cx="400.5" cy="251.8" r="0.9"/><path class="gal-fiber" d="M408 274.5 C408 267 408 259 408 251.8"/><path class="gal-pulse" d="M408 274.5 C408 267 408 259 408 251.8"><animate attributeName="stroke-dashoffset" from="43" to="0" dur="2.6s" begin="0s" repeatCount="indefinite"/></path><circle class="gal-port" cx="408" cy="274.5" r="1.4"/><circle class="gal-jack" cx="408" cy="251.8" r="0.9"/><path class="gal-fiber" d="M418.5 265.5 C418.5 260 415.5 257 415.5 251.8"/><path class="gal-pulse" d="M418.5 265.5 C418.5 260 415.5 257 415.5 251.8"><animate attributeName="stroke-dashoffset" from="43" to="0" dur="2.6s" begin="0.9s" repeatCount="indefinite"/></path><circle class="gal-port" cx="418.5" cy="265.5" r="1.4"/><circle class="gal-jack" cx="415.5" cy="251.8" r="0.9"/>
+    <path d="M391 248.4 L394.2 245.4 L421.8 245.4 L425 248.4 L421.8 251.4 L394.2 251.4 Z" class="gal-slit"/>
     <g clip-path="url(#galSlit)">
       <g>
-        <ellipse cx="375" cy="242.4" rx="8" ry="3" fill="url(#galEye)"/>
-        <rect x="371.4" y="241.2" width="7.2" height="2.4" rx="1.2" class="gal-hotf"/>
+        <ellipse cx="408" cy="248.4" rx="8" ry="3" fill="url(#galEye)"/>
+        <rect x="404.4" y="247.2" width="7.2" height="2.4" rx="1.2" class="gal-hotf"/>
         <animateTransform attributeName="transform" type="translate" values="0 0;9.7 0;-9.7 0;0 0" keyTimes="0;0.25;0.75;1" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1" dur="3.6s" repeatCount="indefinite"/>
       </g>
     </g>
-    <text x="375" y="204" text-anchor="middle" class="gal-label">GALADRIEL</text>
+    <text x="408" y="210" text-anchor="middle" class="gal-label">GALADRIEL</text>
   </g>
   <g>
     <defs>
-      <linearGradient id="haldirArch" x1="0" y1="114" x2="0" y2="160" gradientUnits="userSpaceOnUse">
+      <linearGradient id="haldirArch" x1="0" y1="101" x2="0" y2="150" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#99f6e4"/><stop offset="50%" stop-color="#2dd4bf"/><stop offset="100%" stop-color="#0f766e"/>
       </linearGradient>
-      <radialGradient id="hdCrownGlow" gradientUnits="userSpaceOnUse" cx="324" cy="123" r="8">
-        <stop offset="0%" stop-color="#99f6e4" stop-opacity="0.85"/><stop offset="100%" stop-color="#99f6e4" stop-opacity="0"/>
+      <radialGradient id="hdCoreGlow" gradientUnits="userSpaceOnUse" cx="330" cy="109.5" r="7">
+        <stop offset="0%" stop-color="#ff6b5e" stop-opacity="0.9"/><stop offset="55%" stop-color="#ef4444" stop-opacity="0.4"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
       </radialGradient>
     </defs>
     <defs>
-      <linearGradient id="hdBezel" x1="0" y1="106" x2="0" y2="174" gradientUnits="userSpaceOnUse">
+      <linearGradient id="hdBezel" x1="0" y1="94" x2="0" y2="162" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#99f6e4"/><stop offset="45%" stop-color="#2dd4bf"/><stop offset="100%" stop-color="#0f766e"/>
       </linearGradient>
     </defs>
-    <g filter="url(#nodeShadow)"><circle cx="324" cy="140" r="34" class="seat-hd"/></g>
-    <circle cx="324" cy="140" r="34" stroke="url(#hdBezel)" class="seat-ring"/>
-    <circle cx="324" cy="140" r="31.8" class="seat-groove"/>
-    <circle cx="324" cy="140" r="35.4" class="seat-hairline"/>
-    <path class="hd-thresh" d="M305 160 H343"/>
-    <path class="hd-arch-band" d="M309 160 L309 141 C309 127 314 115 324 114 C334 115 339 127 339 141 L339 160 Z M317 158 L317 139 C317 131 319.5 127 324 126.5 C328.5 127 331 131 331 139 L331 158 Z" fill-rule="evenodd"/>
-    <path class="hd-archivolt" d="M313 159 L313 140 C313 129 317 119.5 324 119 C331 119.5 335 129 335 140 L335 159"/>
-    <circle class="hd-stud" cx="324" cy="116" r="0.9"/><circle class="hd-stud" cx="315" cy="131" r="0.9"/><circle class="hd-stud" cx="333" cy="131" r="0.9"/>
-    <g class="hd-grille"><path class="hd-grille-bar" d="M319.8 136 L319.8 152"/><polygon class="hd-spike" points="318.4,152 319.8,154.6 321.2,152"/><path class="hd-grille-bar" d="M324 136 L324 152"/><polygon class="hd-spike" points="322.6,152 324,154.6 325.4,152"/><path class="hd-grille-bar" d="M328.2 136 L328.2 152"/><polygon class="hd-spike" points="326.8,152 328.2,154.6 329.6,152"/><path class="hd-grille-bar" d="M318.8 136 H329.2"/><path class="hd-grille-bar" d="M318.8 144 H329.2"/><path class="hd-grille-bar" d="M318.8 152 H329.2"/><animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 -14;0 -14;0 0;0 0" keyTimes="0;0.14;0.30;0.62;0.78;1" dur="4.4s" repeatCount="indefinite"/></g>
-    <circle class="hd-crownglow" cx="324" cy="123" r="8" opacity="0.42"><animate attributeName="opacity" values="0.42;0.42;0.95;0.42;0.42" keyTimes="0;0.4;0.47;0.58;1" dur="4.4s" repeatCount="indefinite"/></circle>
-    <polygon class="hd-signet" points="324,118.5 327.5,121.2 327.5,124.8 324,127.5 320.5,124.8 320.5,121.2"/><polygon class="hd-signet-facet" points="324,118.5 327.5,121.2 324,122.5 320.5,121.2"/><circle class="hd-keyhole" cx="324" cy="122" r="1"/><polygon class="hd-keyhole" points="323.2,123 324.8,123 324,125.7"/>
-    <rect class="hd-denied" x="321" y="163" width="6" height="4" rx="1"/>
-    <g class="hd-intoken" opacity="0"><polygon points="324,159.6 326.4,162 324,164.4 321.6,162"/><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.14;0.2;0.4;0.44;1" dur="4.4s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 -30;0 -30;0 -30;0 -30" keyTimes="0;0.14;0.42;0.6;0.8;1" dur="4.4s" repeatCount="indefinite"/></g><circle class="hd-spark" cx="324" cy="131" r="0" opacity="0"><animate attributeName="r" values="0;0;6;0" keyTimes="0;0.4;0.47;0.53" dur="4.4s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0;0.9;0" keyTimes="0;0.4;0.47;0.53" dur="4.4s" repeatCount="indefinite"/></circle><g class="hd-sealtoken" opacity="0"><polygon points="324,129.4 326.6,132 324,134.6 321.4,132"/><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.42;0.5;0.62;1" dur="4.4s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 -24;0 -24" keyTimes="0;0.42;0.62;1" dur="4.4s" repeatCount="indefinite"/></g>
-    <text x="324" y="94" text-anchor="middle" class="haldir-label">HALDIR</text>
+    <g filter="url(#nodeShadow)"><circle cx="330" cy="128" r="34" class="seat-hd"/></g>
+    <circle cx="330" cy="128" r="34" stroke="url(#hdBezel)" class="seat-ring"/>
+    <circle cx="330" cy="128" r="31.8" class="seat-groove"/>
+    <circle cx="330" cy="128" r="35.4" class="seat-hairline"/>
+    <path class="hd-void" d="M339.5 146 L339.5 134 L337 134 L337 123 L335 123 L335 114 L333 112.5 L330 112.5 L327 112.5 L325 114 L325 123 L323 123 L323 134 L320.5 134 L320.5 146 Z"/>
+    <path class="hd-frame" d="M348 150 L348 135 L344.5 135 L344.5 124 L341 124 L341 114 L337 114 L337 109 L334.5 109 L334.5 104 L332.5 104 L332.5 101 L327.5 101 L327.5 104 L325.5 104 L325.5 109 L323 109 L323 114 L319 114 L319 124 L315.5 124 L315.5 135 L312 135 L312 150 Z M339.5 146 L339.5 134 L337 134 L337 123 L335 123 L335 114 L333 112.5 L330 112.5 L327 112.5 L325 114 L325 123 L323 123 L323 134 L320.5 134 L320.5 146 Z" fill-rule="evenodd"/>
+    <path class="hd-reed" d="M343 145 L343 125"/><path class="hd-reed" d="M317 145 L317 125"/><path class="hd-reed" d="M346 145 L346 125"/><path class="hd-reed" d="M314 145 L314 125"/>
+    <path class="hd-frame" d="M312 146 L348 146 L348 150 L312 150 Z"/>
+    <path class="hd-speed" d="M314 147 H346"/><path class="hd-speed" d="M314 148.2 H346"/><path class="hd-speed" d="M314 149.4 H346"/>
+    <path class="hd-thresh" d="M312 146 H348"/>
+    <circle class="hd-coreglow" cx="330" cy="109.5" r="7"><animate attributeName="r" values="7;7;7;11;7;7" keyTimes="0;0.06;0.52;0.56;0.6;1" dur="5s" repeatCount="indefinite"/></circle>
+    <g class="hd-lit" filter="url(#hdBloom)">
+      <animate attributeName="opacity" values="0.9;0.9;1;0.92;0.92" keyTimes="0;0.06;0.16;0.3;1" dur="5s" repeatCount="indefinite"/><path class="hd-beam" d="M339 141 L330 141" stroke-dasharray="9 40" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;0;9;9;-1.5;0;0" keyTimes="0;0.3;0.42;0.7;0.76;0.8;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.3 0 0.2 1;0.5 0 1 1;0.2 0 0 1;0.3 0 0.4 1;0 0 1 1" dur="5s" repeatCount="indefinite"/></path><path class="hd-beam" d="M321 141 L330 141" stroke-dasharray="9 40" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;0;9;9;-1.5;0;0" keyTimes="0;0.3;0.42;0.7;0.76;0.8;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.3 0 0.2 1;0.5 0 1 1;0.2 0 0 1;0.3 0 0.4 1;0 0 1 1" dur="5s" repeatCount="indefinite"/></path><path class="hd-beam" d="M338.5 134 L330 134" stroke-dasharray="8.5 40" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;0;8.5;8.5;-1.5;0;0" keyTimes="0;0.3;0.42;0.7;0.76;0.8;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.3 0 0.2 1;0.5 0 1 1;0.2 0 0 1;0.3 0 0.4 1;0 0 1 1" dur="5s" repeatCount="indefinite"/></path><path class="hd-beam" d="M321.5 134 L330 134" stroke-dasharray="8.5 40" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;0;8.5;8.5;-1.5;0;0" keyTimes="0;0.3;0.42;0.7;0.76;0.8;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.3 0 0.2 1;0.5 0 1 1;0.2 0 0 1;0.3 0 0.4 1;0 0 1 1" dur="5s" repeatCount="indefinite"/></path><path class="hd-beam" d="M336.5 126 L330 126" stroke-dasharray="6.5 40" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;0;6.5;6.5;-1.5;0;0" keyTimes="0;0.3;0.42;0.7;0.76;0.8;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.3 0 0.2 1;0.5 0 1 1;0.2 0 0 1;0.3 0 0.4 1;0 0 1 1" dur="5s" repeatCount="indefinite"/></path><path class="hd-beam" d="M323.5 126 L330 126" stroke-dasharray="6.5 40" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;0;6.5;6.5;-1.5;0;0" keyTimes="0;0.3;0.42;0.7;0.76;0.8;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.3 0 0.2 1;0.5 0 1 1;0.2 0 0 1;0.3 0 0.4 1;0 0 1 1" dur="5s" repeatCount="indefinite"/></path><path class="hd-beam" d="M334.5 119 L330 119" stroke-dasharray="4.5 40" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;0;4.5;4.5;-1.5;0;0" keyTimes="0;0.3;0.42;0.7;0.76;0.8;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.3 0 0.2 1;0.5 0 1 1;0.2 0 0 1;0.3 0 0.4 1;0 0 1 1" dur="5s" repeatCount="indefinite"/></path><path class="hd-beam" d="M325.5 119 L330 119" stroke-dasharray="4.5 40" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;0;4.5;4.5;-1.5;0;0" keyTimes="0;0.3;0.42;0.7;0.76;0.8;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.3 0 0.2 1;0.5 0 1 1;0.2 0 0 1;0.3 0 0.4 1;0 0 1 1" dur="5s" repeatCount="indefinite"/></path><path class="hd-beam" d="M333.5 115 L333.5 130" stroke-dasharray="15 40" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;0;15;15;-1.5;0;0" keyTimes="0;0.3;0.42;0.7;0.76;0.8;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.3 0 0.2 1;0.5 0 1 1;0.2 0 0 1;0.3 0 0.4 1;0 0 1 1" dur="5s" repeatCount="indefinite"/></path><path class="hd-beam" d="M333.5 145 L333.5 130" stroke-dasharray="15 40" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;0;15;15;-1.5;0;0" keyTimes="0;0.3;0.42;0.7;0.76;0.8;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.3 0 0.2 1;0.5 0 1 1;0.2 0 0 1;0.3 0 0.4 1;0 0 1 1" dur="5s" repeatCount="indefinite"/></path><path class="hd-beam" d="M326.5 115 L326.5 130" stroke-dasharray="15 40" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;0;15;15;-1.5;0;0" keyTimes="0;0.3;0.42;0.7;0.76;0.8;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.3 0 0.2 1;0.5 0 1 1;0.2 0 0 1;0.3 0 0.4 1;0 0 1 1" dur="5s" repeatCount="indefinite"/></path><path class="hd-beam" d="M326.5 145 L326.5 130" stroke-dasharray="15 40" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" values="0;0;15;15;-1.5;0;0" keyTimes="0;0.3;0.42;0.7;0.76;0.8;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.3 0 0.2 1;0.5 0 1 1;0.2 0 0 1;0.3 0 0.4 1;0 0 1 1" dur="5s" repeatCount="indefinite"/></path><circle class="hd-diode" cx="339" cy="141" r="1.5"/><circle class="hd-diode-hot" cx="339" cy="141" r="0.7"/><circle class="hd-diode" cx="321" cy="141" r="1.5"/><circle class="hd-diode-hot" cx="321" cy="141" r="0.7"/><circle class="hd-diode" cx="338.5" cy="134" r="1.5"/><circle class="hd-diode-hot" cx="338.5" cy="134" r="0.7"/><circle class="hd-diode" cx="321.5" cy="134" r="1.5"/><circle class="hd-diode-hot" cx="321.5" cy="134" r="0.7"/><circle class="hd-diode" cx="336.5" cy="126" r="1.5"/><circle class="hd-diode-hot" cx="336.5" cy="126" r="0.7"/><circle class="hd-diode" cx="323.5" cy="126" r="1.5"/><circle class="hd-diode-hot" cx="323.5" cy="126" r="0.7"/><circle class="hd-diode" cx="334.5" cy="119" r="1.5"/><circle class="hd-diode-hot" cx="334.5" cy="119" r="0.7"/><circle class="hd-diode" cx="325.5" cy="119" r="1.5"/><circle class="hd-diode-hot" cx="325.5" cy="119" r="0.7"/><path class="hd-sun" d="M330 109 L330 104"/><path class="hd-sun" d="M330 109 L327.4 104.6"/><path class="hd-sun" d="M330 109 L332.6 104.6"/><path class="hd-sun" d="M330 109 L325.6 106"/><path class="hd-sun" d="M330 109 L334.4 106"/><polygon class="hd-core" points="330,107 332.6,108.3 332.6,110.7 330,112 327.4,110.7 327.4,108.3"/><polygon class="hd-core-facet" points="330,107 332.6,108.3 330,109.5 327.4,108.3"/><circle class="hd-core-hot" cx="330" cy="109.5" r="0.9"><animate attributeName="r" values="0.9;0.9;2.6;0.9;0.9" keyTimes="0;0.52;0.56;0.62;1" dur="5s" repeatCount="indefinite"/></circle>
+    </g>
+    <rect class="hd-scan" x="321" y="114" width="18" height="1.3" opacity="0"><animate attributeName="opacity" values="0;0;0.85;0;0" keyTimes="0;0.16;0.23;0.3;1" dur="5s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 30;0 30" keyTimes="0;0.16;0.3;1" calcMode="spline" keySplines="0 0 1 1;0.4 0 0.6 1;0 0 1 1" dur="5s" repeatCount="indefinite"/></rect><polygon class="hd-tok-in" opacity="0" points="330,143 332.6,145.4 330,147.8 327.4,145.4"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.16;0.24;0.48;0.52;1" dur="5s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 -34;0 -34;0 -34" keyTimes="0;0.3;0.52;0.6;1" dur="5s" repeatCount="indefinite"/></polygon><polygon class="hd-tok-out" opacity="0" points="330,107.5 332,108.7 332,111 330,112.2 328,111 328,108.7"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.6;0.65;0.7;1" dur="5s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 -9;0 -9" keyTimes="0;0.6;0.7;1" dur="5s" repeatCount="indefinite"/></polygon><circle class="hd-flash" cx="330" cy="130" r="0" opacity="0"><animate attributeName="r" values="0;0;7;0;0" keyTimes="0;0.72;0.76;0.8;1" dur="5s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0;0.95;0;0" keyTimes="0;0.72;0.76;0.8;1" dur="5s" repeatCount="indefinite"/></circle>
+    <text x="330" y="82" text-anchor="middle" class="haldir-label">HALDIR</text>
   </g>
   </g>
   <g class="frame">
