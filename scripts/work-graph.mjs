@@ -57,7 +57,7 @@ const H = 460;
 // ---------------------------------------------------------------------------
 const nodes = {
   engram:      { x: 110, y: 230, color: "#bcc6d1", kind: "logo" },
-  pidrs:       { x: 250, y: 98,  color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
+  pidrs:       { x: 172, y: 104, color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
   ncp:         { x: 250, y: 230, color: "#fbbf24", kind: "gate", label: "NCP" },
   prisoma:     { x: 460, y: 130, color: "#a78bfa", kind: "triangle", private: true },
   crebain:     { x: 460, y: 332, color: "#9caf88", kind: "raven" },
@@ -66,7 +66,7 @@ const nodes = {
   reliefatlas: { x: 690, y: 350, color: "#fb7185", kind: "chip", label: "relief-atlas", dataset: true },
   cortexel:    { x: 110, y: 360, color: "#e879f9", kind: "voxel" },
   manwe:       { x: 298, y: 386, color: "#38bdf8", kind: "radar", label: "manwe" },
-  galadriel:   { x: 408, y: 256, color: "#ef4444", kind: "sentinel", label: "galadriel" },
+  galadriel:   { x: 434, y: 248, color: "#ef4444", kind: "sentinel", label: "galadriel" },
   haldir:      { x: 330, y: 128, color: "#2dd4bf", kind: "haldir", label: "haldir" },
 };
 // Uppercase every label in the SOURCE (not via CSS text-transform, which
@@ -120,7 +120,7 @@ function halfExtents(n) {
   if (n.kind === "hub") return { hw: (n.r || HUB_R), hh: (n.r || HUB_R), circle: true };
   if (n.kind === "gate") return { hw: SEAT_R, hh: SEAT_R, circle: true };
   if (n.kind === "voxel") return { hw: SEAT_R, hh: SEAT_R, circle: true };
-  if (n.kind === "raven") return { hw: 30, hh: 30, circle: true };
+  if (n.kind === "raven") return { hw: 34, hh: 34, circle: true };
   if (n.kind === "radar") return { hw: SEAT_R, hh: SEAT_R, circle: true };
   if (n.kind === "sentinel") return { hw: 34, hh: 34, circle: true };
   if (n.kind === "haldir") return { hw: SEAT_R, hh: SEAT_R, circle: true };
@@ -674,16 +674,37 @@ const nodeEls = Object.values(nodes).map((n) => {
     wt.push(enterEnd, CYCLE); wv.push(0, 0);
     const xv = wv.map((v) => f1(leftX + v));
     const ot = [0, holdEnd, enterEnd, CYCLE], dur = `${CYCLE}s`;
+    // The family machined GREEN seat, interleaved with the raster: disc → raven png
+    // → a white-hot pinpoint drawn over the baked red eye (the family focal move) →
+    // bezel/groove/signal-ring/hairline (they cross only the png's transparent gaps
+    // and replace its muddy baked grey ring) → four green corner-bracket ticks (the
+    // crosshair identity, kept). The r34 machining lands on the raven's own baked
+    // reticle; the png (S=90) is byte-untouched, as is the typewriter wordmark.
+    const ex = f1(cx - 1.9), ey = f1(cy - 12.1); // baked raven-eye centroid
+    const cTick = (sx, sy) =>
+      `<path class="creb-tick" d="M${f1(cx + sx * 23.5)} ${f1(cy + sy * 30)} L${f1(cx + sx * 30)} ${f1(cy + sy * 30)} L${f1(cx + sx * 30)} ${f1(cy + sy * 23.5)}"/>`;
     return `<g>
-    <circle cx="${cx}" cy="${cy}" r="34" class="raven-seat"/>
-    <image href="${CREBAIN_LOGO}" x="${f1(cx - S / 2)}" y="${f1(cy - S / 2)}" width="${S}" height="${S}" preserveAspectRatio="xMidYMid meet"/>
     <defs>
+      <linearGradient id="crebBezel" x1="0" y1="${f1(cy - 34)}" x2="0" y2="${f1(cy + 34)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#d8e6c0"/><stop offset="45%" stop-color="#9caf88"/><stop offset="100%" stop-color="#38491b"/>
+      </linearGradient>
       <clipPath id="crebainType" clipPathUnits="userSpaceOnUse">
         <rect x="${f1(leftX)}" y="${f1(baseY - 12)}" width="${f1(Wt)}" height="16">
           <animate attributeName="width" values="${wv.join(";")}" keyTimes="${kt(wt)}" dur="${dur}" calcMode="discrete" repeatCount="indefinite"/>
         </rect>
       </clipPath>
     </defs>
+    <g filter="url(#nodeShadow)"><circle cx="${cx}" cy="${cy}" r="34" class="seat-creb"/></g>
+    <image href="${CREBAIN_LOGO}" x="${f1(cx - S / 2)}" y="${f1(cy - S / 2)}" width="${S}" height="${S}" preserveAspectRatio="xMidYMid meet"/>
+    <g filter="url(#hdBloom)">
+      <circle cx="${ex}" cy="${ey}" r="1.4" class="creb-eye-core"/>
+      <circle cx="${ex}" cy="${ey}" r="0.55" class="creb-eye-hot"/>
+    </g>
+    <circle cx="${cx}" cy="${cy}" r="34" class="seat-ring" stroke="url(#crebBezel)"/>
+    <circle cx="${cx}" cy="${cy}" r="31.8" class="seat-groove"/>
+    <circle cx="${cx}" cy="${cy}" r="32.5" class="creb-signal"/>
+    <circle cx="${cx}" cy="${cy}" r="35.4" class="seat-hairline"/>
+    ${cTick(-1,-1)}${cTick(1,-1)}${cTick(-1,1)}${cTick(1,1)}
     <g class="raven-typeline">
       <text x="${f1(leftX)}" y="${f1(baseY)}" text-anchor="start" class="raven-label" clip-path="url(#crebainType)">${escapeXML(word)}</text>
       <rect x="${f1(leftX + Wt)}" y="${f1(curY)}" width="5" height="10" rx="1" class="raven-cursor">
@@ -741,13 +762,21 @@ const nodeEls = Object.values(nodes).map((n) => {
       `<path class="mw-bracket" d="M${f1(cx + b1 - bk)} ${f1(cy - b1)} H${f1(cx + b1)} V${f1(cy - b1 + bk)}"/>` +
       `<path class="mw-bracket" d="M${f1(cx + b1)} ${f1(cy + b1 - bk)} V${f1(cy + b1)} H${f1(cx + b1 - bk)}"/>` +
       `<path class="mw-bracket" d="M${f1(cx - b1 + bk)} ${f1(cy + b1)} H${f1(cx - b1)} V${f1(cy + b1 - bk)}"/>`;
-    const a = 5.2; // drone silhouette half-span, caught in the aperture
+    // Structured optic (galadriel/haldir grammar): a top-lit lens WELL, a controlled
+    // blue core HALO (radial falloff, NO blur), a crisp quadcopter with an OPEN centre
+    // gap, and a single WHITE-HOT hub pinpoint through a tight bloom — the sole
+    // brightest point. No #soft wash. Amber caret = the one warm "locked" cue.
+    const a = 4.9, gp = 1.2, rr = 2.2; // drone half-span · centre gap · rotor radius
     const drone =
-      `<path class="mw-sil" d="M${f1(cx - a)} ${f1(cy - a)} L${f1(cx + a)} ${f1(cy + a)} M${f1(cx + a)} ${f1(cy - a)} L${f1(cx - a)} ${f1(cy + a)}"/>` +
-      [[-a, -a], [a, -a], [-a, a], [a, a]]
-        .map(([rx, ry]) => `<circle class="mw-sil-rotor" cx="${f1(cx + rx)}" cy="${f1(cy + ry)}" r="2"/>`)
-        .join("") +
-      `<circle class="mw-sil-hub" cx="${cx}" cy="${cy}" r="1.4"/>`;
+      `<path class="mw-drone-arm" d="M${f1(cx-gp)} ${f1(cy-gp)} L${f1(cx-a)} ${f1(cy-a)}` +
+        ` M${f1(cx+gp)} ${f1(cy-gp)} L${f1(cx+a)} ${f1(cy-a)}` +
+        ` M${f1(cx-gp)} ${f1(cy+gp)} L${f1(cx-a)} ${f1(cy+a)}` +
+        ` M${f1(cx+gp)} ${f1(cy+gp)} L${f1(cx+a)} ${f1(cy+a)}"/>` +
+      [[-a,-a],[a,-a],[-a,a],[a,a]]
+        .map(([rx,ry]) => `<circle class="mw-rotor" cx="${f1(cx+rx)}" cy="${f1(cy+ry)}" r="${rr}"/>`).join("");
+    const lock =
+      `<polyline class="mw-lock" points="${f1(cx-1.4)},${f1(cy-9.6)} ${cx},${f1(cy-8.2)} ${f1(cx+1.4)},${f1(cy-9.6)}"/>` +
+      `<circle class="mw-lock-dot" cx="${cx}" cy="${f1(cy-9.9)}" r="0.6"/>`;
     return `<g>
     <defs>
       <radialGradient id="mwBarrel" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${f1(cy - 6)}" r="40">
@@ -756,18 +785,23 @@ const nodeEls = Object.values(nodes).map((n) => {
       <linearGradient id="mwBezel" x1="0" y1="${f1(cy - 34)}" x2="0" y2="${f1(cy + 34)}" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#bae6fd"/><stop offset="45%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#0c4a6e"/>
       </linearGradient>
-      <radialGradient id="mwAperture" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${cy}" r="13">
-        <stop offset="0%" stop-color="#f0f9ff"/><stop offset="55%" stop-color="#7dd3fc" stop-opacity="0.9"/><stop offset="100%" stop-color="#0ea5e9" stop-opacity="0.15"/>
+      <radialGradient id="mwWell" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${f1(cy - 4)}" r="13">
+        <stop offset="0%" stop-color="#17324a"/><stop offset="60%" stop-color="#0b2035"/><stop offset="100%" stop-color="#050f1b"/>
+      </radialGradient>
+      <radialGradient id="mwCore" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${cy}" r="6">
+        <stop offset="0%" stop-color="#cfeafe" stop-opacity="0.7"/><stop offset="45%" stop-color="#38bdf8" stop-opacity="0.42"/><stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
       </radialGradient>
     </defs>
     <g filter="url(#nodeShadow)"><circle cx="${cx}" cy="${cy}" r="${SEAT_R}" fill="url(#mwBarrel)"/></g>
     <circle cx="${cx}" cy="${cy}" r="${IR}" class="mw-iris"/>
-    <circle cx="${cx}" cy="${cy}" r="13.4" class="mw-apglow" filter="url(#soft)">
-      <animate attributeName="opacity" values="0.65;1;0.65" dur="3s" repeatCount="indefinite"/>
+    <polygon points="${hexAp}" class="mw-well"/>
+    <circle cx="${cx}" cy="${cy}" r="6" class="mw-core">
+      <animate attributeName="opacity" values="1;0.82;1" dur="3.4s" repeatCount="indefinite"/>
     </circle>
-    <polygon points="${hexAp}" fill="url(#mwAperture)"/>
-    <polygon points="${hexAp}" class="mw-aphex"/>
+    ${lock}
     ${drone}
+    <circle cx="${cx}" cy="${cy}" r="1.4" class="mw-hub" filter="url(#mwBloom)"/>
+    <polygon points="${hexAp}" class="mw-aphex"/>
     ${blades}
     ${brackets}
     ${ticks}
@@ -1024,6 +1058,10 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       <stop offset="0%" stop-color="#042f2a"/>
       <stop offset="100%" stop-color="#10131a"/>
     </radialGradient>
+    <radialGradient id="crebGrad" cx="50%" cy="40%" r="68%">
+      <stop offset="0%" stop-color="#1c2e10"/>
+      <stop offset="100%" stop-color="#10131a"/>
+    </radialGradient>
     <filter id="nodeShadow" x="-40%" y="-40%" width="180%" height="180%">
       <feDropShadow dx="0" dy="1.5" stdDeviation="2.4" flood-color="#000000" flood-opacity="0.38"/>
     </filter>
@@ -1037,6 +1075,10 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     </filter>
     <filter id="hdBloom" x="-40%" y="-40%" width="180%" height="180%">
       <feGaussianBlur stdDeviation="1.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="mwBloom" x="-300%" y="-300%" width="700%" height="700%">
+      <feGaussianBlur stdDeviation="1.4" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     ${gradDefs.join("\n    ")}
@@ -1097,20 +1139,27 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .flag-edge  { fill: none; stroke: #ffffff; stroke-opacity: 0.16; stroke-width: 0.6; }
     .vox-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #f0abfc; }
     .vox-net    { color: #e879f9; }
-    .raven-seat  { fill: #9caf88; fill-opacity: 0.08; filter: url(#soft); }
+    .seat-creb     { fill: url(#crebGrad); }
+    .creb-signal   { fill: none; stroke: #c3e2a0; stroke-opacity: 0.85; stroke-width: 1.4; }
+    .creb-tick     { fill: none; stroke: #9caf88; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .creb-eye-core { fill: #ff6b5e; }
+    .creb-eye-hot  { fill: #fff1f0; }
     .raven-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #9caf88; }
     .raven-cursor { fill: #9caf88; }
     .radar-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #38bdf8; }
     .mw-iris      { fill: #101a26; stroke: #38bdf8; stroke-opacity: 0.25; stroke-width: 1; }
-    .mw-apglow    { fill: #38bdf8; opacity: 0.85; }
+    .mw-well      { fill: url(#mwWell); }
+    .mw-core      { fill: url(#mwCore); }
     .mw-aphex     { fill: none; stroke: #e0f2fe; stroke-opacity: 0.45; stroke-width: 0.8; stroke-linejoin: round; }
     .mw-blade     { fill: none; stroke: #7dd3fc; stroke-opacity: 0.55; stroke-width: 1.2; }
     .mw-blade-sh  { fill: none; stroke: #05070b; stroke-opacity: 0.7; stroke-width: 1.2; }
     .mw-bracket   { fill: none; stroke: #bae6fd; stroke-width: 1.5; stroke-linecap: round; }
     .mw-tick      { stroke: #38bdf8; stroke-opacity: 0.35; stroke-width: 1; }
-    .mw-sil       { fill: none; stroke: #020617; stroke-width: 1.7; stroke-linecap: round; }
-    .mw-sil-rotor { fill: none; stroke: #020617; stroke-width: 1.4; }
-    .mw-sil-hub   { fill: #020617; }
+    .mw-lock      { fill: none; stroke: #f59e0b; stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
+    .mw-lock-dot  { fill: #fbbf24; }
+    .mw-drone-arm { fill: none; stroke: #7dd3fc; stroke-width: 1.4; stroke-linecap: round; }
+    .mw-rotor     { fill: #12283b; stroke: #7dd3fc; stroke-width: 1.2; }
+    .mw-hub       { fill: #f0f9ff; }
     .mw-ring      { fill: none; stroke: url(#mwBezel); stroke-width: 2.2; }
     .mw-groove    { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .mw-hairline  { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
@@ -1168,7 +1217,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .cube-label { fill: #c2410c; }
       .flag-edge { stroke: #000000; stroke-opacity: 0.25; }
       .vox-label { fill: #c026d3; }
-      .raven-seat { fill-opacity: 0.06; }
       .raven-label { fill: #4b5320; }
       .raven-cursor { fill: #4b5320; }
       .radar-label { fill: #0284c7; }
