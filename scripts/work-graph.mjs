@@ -472,34 +472,49 @@ export function nodeMark(n) {
     const top = f1(cy - r), bot = f1(cy + r);
     return `<g>
     <defs>
-      <linearGradient id="engramFace" x1="0" y1="${top}" x2="0" y2="${bot}" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#f2f6fa"/>
-        <stop offset="32%" stop-color="#cbd4dd"/>
-        <stop offset="64%" stop-color="#96a1ad"/>
-        <stop offset="100%" stop-color="#79848f"/>
-      </linearGradient>
-      <radialGradient id="engramSheen" gradientUnits="userSpaceOnUse" cx="${f1(cx - 10)}" cy="${f1(cy - 14)}" r="${f1(r * 1.35)}">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.30"/>
-        <stop offset="55%" stop-color="#ffffff" stop-opacity="0.05"/>
-        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      <radialGradient id="engramFace" gradientUnits="userSpaceOnUse" cx="${f1(cx - 9)}" cy="${f1(cy - 11)}" r="${f1(r * 1.5)}">
+        <stop offset="0%" stop-color="#fcfdff"/>
+        <stop offset="26%" stop-color="#e2e9ef"/>
+        <stop offset="58%" stop-color="#b4bfc9"/>
+        <stop offset="82%" stop-color="#8a949f"/>
+        <stop offset="100%" stop-color="#67717c"/>
       </radialGradient>
+      <radialGradient id="engramRecess" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${f1(cy + 8)}" r="${f1(r * 1.05)}">
+        <stop offset="66%" stop-color="#2f353d" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#2f353d" stop-opacity="0.5"/>
+      </radialGradient>
+      <linearGradient id="engramSpec" gradientUnits="userSpaceOnUse" x1="${f1(cx - 24)}" y1="${f1(cy - 28)}" x2="${f1(cx + 4)}" y2="${f1(cy)}">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+        <stop offset="42%" stop-color="#ffffff" stop-opacity="0.16"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </linearGradient>
       <linearGradient id="engramBezel" x1="0" y1="${top}" x2="0" y2="${bot}" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="46%" stop-color="#c6d0da"/>
-        <stop offset="100%" stop-color="#59646f"/>
+        <stop offset="42%" stop-color="#c2ccd6"/>
+        <stop offset="72%" stop-color="#7c8792"/>
+        <stop offset="100%" stop-color="#444d57"/>
+      </linearGradient>
+      <linearGradient id="engramBevel" x1="0" y1="${bot}" x2="0" y2="${top}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+        <stop offset="46%" stop-color="#ffffff" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#2c333c" stop-opacity="0.5"/>
       </linearGradient>
       <clipPath id="engramClip"><circle cx="${cx}" cy="${cy}" r="${r}"/></clipPath>
       <filter id="engramShadow" x="-70%" y="-70%" width="240%" height="240%">
-        <feDropShadow dx="0" dy="1.5" stdDeviation="2.4" flood-color="#000000" flood-opacity="0.4"/>
+        <feDropShadow dx="0" dy="2" stdDeviation="2.8" flood-color="#000000" flood-opacity="0.45"/>
+      </filter>
+      <filter id="engramEmboss" x="-45%" y="-45%" width="190%" height="210%">
+        <feDropShadow dx="0" dy="1.4" stdDeviation="1.3" flood-color="#39404a" flood-opacity="0.6"/>
       </filter>
     </defs>
     <g filter="url(#engramShadow)"><circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramFace)"/></g>
     <g clip-path="url(#engramClip)">
-      <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramSheen)"/>
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramRecess)"/>
+      <ellipse cx="${f1(cx - 8)}" cy="${f1(cy - 13)}" rx="25" ry="17" fill="url(#engramSpec)" transform="rotate(-30 ${f1(cx - 8)} ${f1(cy - 13)})"/>
     </g>
-    <image href="${TORUS_LOGO}" x="${f1(cx - S / 2)}" y="${f1(cy - S / 2)}" width="${S}" height="${S}" preserveAspectRatio="xMidYMid meet"/>
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="url(#engramBezel)" stroke-width="2.6"/>
-    <circle cx="${cx}" cy="${cy}" r="${f1(r - 2.4)}" fill="none" stroke="#37414c" stroke-width="1.1" stroke-opacity="0.5"/>
+    <image href="${TORUS_LOGO}" x="${f1(cx - S / 2)}" y="${f1(cy - S / 2)}" width="${S}" height="${S}" preserveAspectRatio="xMidYMid meet" filter="url(#engramEmboss)"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="url(#engramBezel)" stroke-width="3"/>
+    <circle cx="${cx}" cy="${cy}" r="${f1(r - 1.6)}" fill="none" stroke="url(#engramBevel)" stroke-width="1.7"/>
     <circle cx="${cx}" cy="${cy}" r="${f1(r + 1.4)}" fill="none" stroke="#2b333d" stroke-width="1" stroke-opacity="0.55"/>
     <text x="${cx}" y="${f1(cy - 46)}" text-anchor="middle" class="logo-label">${escapeXML(n.label)}</text>
   </g>`;
@@ -718,8 +733,16 @@ export function nodeMark(n) {
     };
     const firing = `${fire(T, 0.12)}${fire(L, 0.42)}${fire(R, 0.7)}`;
     const sparks = `${spark(T, L, 0.16, 0.38)}${spark(T, R, 0.16, 0.38)}${spark(L, R, 0.46, 0.66)}`;
+    // Agentic-viz "code tag" motif baked into the border: fuchsia chevrons straddle
+    // the seat ring at 9 and 3 o'clock — a < ... /> wrapping the visualization (the
+    // right bracket carries a forward-slash to read as a self-closing tag = a viz lib).
+    const chevL = `<path class="vox-code" d="M${f1(n.x - 29.5)} ${f1(n.y - 8)} L${f1(n.x - 37.8)} ${n.y} L${f1(n.x - 29.5)} ${f1(n.y + 8)}"/>`;
+    const chevR = `<path class="vox-code" d="M${f1(n.x + 29.5)} ${f1(n.y - 8)} L${f1(n.x + 37.8)} ${n.y} L${f1(n.x + 29.5)} ${f1(n.y + 8)}"/>`;
+    const slashR = `<path class="vox-slash" d="M${f1(n.x + 27.5)} ${f1(n.y + 7.5)} L${f1(n.x + 33.5)} ${f1(n.y - 7.5)}"/>`;
+    const codeTag = `${chevL}${slashR}${chevR}`;
     return `<g class="vox-net">
     ${seat(n.x, n.y, "vox", ["#f5d0fe", "#e879f9", "#86198f"])}
+    ${codeTag}
     <defs>${grads.join("")}
       <radialGradient id="voxFire"><stop offset="0%" stop-color="#fbcfe8" stop-opacity="0.95"/><stop offset="45%" stop-color="#e879f9" stop-opacity="0.4"/><stop offset="100%" stop-color="#e879f9" stop-opacity="0"/></radialGradient>
     </defs>
@@ -840,12 +863,18 @@ export function nodeMark(n) {
       const A = rad(i * 30), ca = Math.cos(A), sa = Math.sin(A);
       return `<line class="mw-tick" x1="${f1(cx + 29 * ca)}" y1="${f1(cy + 29 * sa)}" x2="${f1(cx + 31.2 * ca)}" y2="${f1(cy + 31.2 * sa)}"/>`;
     }).join("");
-    const bk = 5, b1 = 17;
-    const brackets =
-      `<path class="mw-bracket" d="M${f1(cx - b1)} ${f1(cy - b1 + bk)} V${f1(cy - b1)} H${f1(cx - b1 + bk)}"/>` +
-      `<path class="mw-bracket" d="M${f1(cx + b1 - bk)} ${f1(cy - b1)} H${f1(cx + b1)} V${f1(cy - b1 + bk)}"/>` +
-      `<path class="mw-bracket" d="M${f1(cx + b1)} ${f1(cy + b1 - bk)} V${f1(cy + b1)} H${f1(cx + b1 - bk)}"/>` +
-      `<path class="mw-bracket" d="M${f1(cx - b1 + bk)} ${f1(cy + b1)} H${f1(cx - b1)} V${f1(cy + b1 - bk)}"/>`;
+    // The machined DOUBLE BORDER: a bright chrome inner ring concentric with the
+    // outer bezel, broken at 12 o'clock by an index NOTCH (a lens-mount alignment
+    // mark) — this replaces the old lock-on crosshair brackets.
+    const NR = 24.5; // inner-ring radius
+    const gap = 9;   // notch half-angle (degrees) cut out of the inner ring at top
+    const gA = rad(90 - gap), gB = rad(90 + gap); // top = -y, so 90deg is UP here via -sin
+    const p = (ang, r) => `${f1(cx + r * Math.cos(ang))} ${f1(cy - r * Math.sin(ang))}`;
+    const innerRing =
+      `<path class="mw-inner" d="M${p(gA, NR)} A${NR} ${NR} 0 1 0 ${p(gB, NR)}"/>`;
+    const notch =
+      `<path class="mw-notch" d="M${p(gA, NR)} L${p(rad(90), NR - 4.4)} L${p(gB, NR)}"/>` +
+      `<circle class="mw-notch-pip" cx="${cx}" cy="${f1(cy - NR - 1.6)}" r="0.9"/>`;
     // Structured optic (galadriel/haldir grammar): a top-lit lens WELL, a controlled
     // blue core HALO (radial falloff, NO blur), a crisp quadcopter with an OPEN centre
     // gap, and a single WHITE-HOT hub pinpoint through a tight bloom — the sole
@@ -893,7 +922,7 @@ export function nodeMark(n) {
     <g class="mw-trigger" opacity="1">${trigFade}${lock}</g>
     <polygon points="${hexAp}" class="mw-aphex"/>
     <g class="mw-blades">${bladeSpin}${blades}</g>
-    ${brackets}
+    ${innerRing}${notch}
     ${ticks}
     <circle cx="${cx}" cy="${cy}" r="${SEAT_R}" class="mw-ring"/>
     <circle cx="${cx}" cy="${cy}" r="31.8" class="mw-groove"/>
@@ -1248,6 +1277,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .flag-edge  { fill: none; stroke: #ffffff; stroke-opacity: 0.16; stroke-width: 0.6; }
     .vox-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #f0abfc; }
     .vox-net    { color: #e879f9; }
+    .vox-code   { fill: none; stroke: #f0abfc; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    .vox-slash  { fill: none; stroke: #f0abfc; stroke-width: 2; stroke-linecap: round; stroke-opacity: 0.85; }
     .seat-creb     { fill: url(#crebGrad); }
     .creb-signal   { fill: none; stroke: #b6cf86; stroke-opacity: 0.7; stroke-width: 1.2; }
     .creb-tick     { fill: none; stroke: #b6cf86; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
@@ -1263,7 +1294,9 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mw-aphex     { fill: none; stroke: #e0f2fe; stroke-opacity: 0.45; stroke-width: 0.8; stroke-linejoin: round; }
     .mw-blade     { fill: none; stroke: #7dd3fc; stroke-opacity: 0.55; stroke-width: 1.2; }
     .mw-blade-sh  { fill: none; stroke: #05070b; stroke-opacity: 0.7; stroke-width: 1.2; }
-    .mw-bracket   { fill: none; stroke: #bae6fd; stroke-width: 1.5; stroke-linecap: round; }
+    .mw-inner     { fill: none; stroke: url(#mwBezel); stroke-width: 1.6; stroke-opacity: 0.9; stroke-linecap: round; }
+    .mw-notch     { fill: none; stroke: #bae6fd; stroke-width: 1.4; stroke-linejoin: round; stroke-linecap: round; }
+    .mw-notch-pip { fill: #e0f2fe; }
     .mw-tick      { stroke: #38bdf8; stroke-opacity: 0.35; stroke-width: 1; }
     .mw-lock      { fill: none; stroke: #ef4444; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
     .mw-lock-dot  { fill: #ff6b5e; }
