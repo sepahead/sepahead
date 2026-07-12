@@ -311,46 +311,126 @@ function seat(cx, cy, name, stops) {
 // per-project logos (scripts/logos.mjs) reuse the exact same marks + machining.
 export function nodeMark(n) {
   if (n.kind === "hub") {
-    // pid-rs: the ESTIMATOR DIAL — a rigid chrome-emerald bezel with inner
-    // groove and outer hairline over a drop shadow (manwe's border grade;
-    // only the soft glow underlay breathes, the dial itself is machined).
-    // Etched on the face, the PID VENN: two overlapping information sources
-    // whose shared REDUNDANCY lens is lit — the very quantity the estimators
-    // measure — with a unique-information dot in each exclusive lobe and a
-    // dashed SYNERGY ring enclosing both (the part no single source holds).
-    // The lens breathes with the glow; the label sits beneath like an
-    // instrument engraving. Reduced-motion holds the lens lit.
-    // pid-rs: THE DECOMPOSITION CORE — a dark-emerald machined instrument that has
-    // just decomposed two SOURCES into the four PID atoms. Two waveguides feed in
-    // diagonally (X1 upper-left, X2 upper-right) with diode ports + square KSG sample
-    // chips; a faceted split-diamond FUSION core (vertical seam = the joint atoms,
-    // horizontal facet = the two uniques) carries the single white-hot pinpoint; four
-    // graduated atom-GAUGES ring it — REDUNDANT (top), SYNERGY (bottom, fullest),
-    // UNIQUE-X1 (left), UNIQUE-X2 (right). Civilian emerald, theme-FIXED. Browser
-    // motion runs one estimation pass: intake -> compute -> redundancy resolves FIRST
-    // -> uniques peel -> synergy crowns LAST + brightest. librsvg/reduced-motion hold
-    // the finished still (fills at dashoffset 0, chips parked, tokens absent).
+    // pid-rs: THE DECOMPOSITION CORE — a dark-emerald chronograph that has just
+    // finished decomposing two SOURCES into the four PID atoms. Two waveguides
+    // feed in diagonally (X1 upper-left, X2 upper-right) with diode ports +
+    // square KSG sample chips; a faceted split-diamond FUSION core carries the
+    // single white-hot pinpoint; and FOUR SUB-DIAL COMPLICATIONS sit recessed
+    // at N/W/E/S on an etched index rail, each a machined cradle (chamfer,
+    // dark well, chrome rim, raised lip) holding a cut atom jewel: REDUNDANT
+    // (N, calm cabochon), UNIQUE-X1/X2 (W/E, mirrored baguette pair lit from
+    // the core side), SYNERGY (S, the grand complication — larger well,
+    // 8-facet brilliant with its own hot point). Hairline channels tie every
+    // complication to the core. Browser motion runs one measurement: intake ->
+    // compute flash -> the core lights REDUNDANT through the N channel -> TWO
+    // commit-sparks (one per source) leave the redundancy sub-dial and run the
+    // rail in opposite directions, committing each UNIQUE as they pass -> the
+    // sparks COLLIDE at S and the collision commits SYNERGY brightest (the
+    // atom that exists only jointly). librsvg/reduced-motion hold the finished
+    // still: all four jewels lit, channels lit, sparks dark, chips parked.
     const r = n.r || HUB_R;
     const X = n.x, Y = n.y;
     const A = (dx, dy) => `${f1(X + dx)} ${f1(Y + dy)}`;   // "x y"
     const P = (dx, dy) => `${f1(X + dx)},${f1(Y + dy)}`;   // "x,y"
-    const CYC = "4.8s";
-    // Four atom-gauges (56deg tracks at R=21.8; graduated fills sweep to level during
-    // the pass and END full, so the frozen still shows the finished measurement).
-    // [trackStart, trackEnd, fillEnd, dashLen, tipClass, resolveStart]
-    const GAUGE = [
-      [[10.2,-19.2],[-10.2,-19.2],[-4.6,-21.3],15.3,"pid-tip-s",0.28], // REDUNDANT (top)
-      [[-19.2,-10.2],[-19.2,10.2],[-21.8,-1.1],9.6,"pid-tip-u",0.44],  // UNIQUE-X1 (left)
-      [[19.3,10.2],[19.3,-10.2],[21.8,-1.1],11.7,"pid-tip-u",0.44],    // UNIQUE-X2 (right)
-      [[-10.2,19.3],[10.2,19.3],[7.6,20.5],18.3,"pid-tip-s",0.6],      // SYNERGY (bottom)
+    const CYC = "5.6s";
+    const CR = 23.5;   // complication-ring (index rail) radius
+    // Etched index rail (dark groove + lower catch-light) with minute ticks
+    // between the four complication seats — the chronograph's quiet craft.
+    // The rail is an ARC, not a circle: it yields ONLY to the SYNERGY grand
+    // complication at S, terminating in a machined relief gap wider than its
+    // rim (round-capped ends), while N/W/E stay inscribed flush — a static,
+    // legend-free cue that synergy exceeds what the rail (any single source's
+    // reach) can hold.
+    const SGAP = 28; // S relief half-angle (deg); S lip half-angle is ~21
+    const railArc = (cls, yOff) => {
+      const a1 = ((90 + SGAP) * Math.PI) / 180, a2 = ((90 - SGAP) * Math.PI) / 180;
+      return `<path class="${cls}" d="M${f1(X + CR * Math.cos(a1))} ${f1(Y + yOff + CR * Math.sin(a1))} A${CR} ${CR} 0 1 1 ${f1(X + CR * Math.cos(a2))} ${f1(Y + yOff + CR * Math.sin(a2))}"/>`;
+    };
+    const rail =
+      railArc("pidx-rail", 0) +
+      railArc("pidx-rail-lt", 0.55) +
+      `<circle class="pidx-inner" cx="${X}" cy="${Y}" r="13.2"/>` +
+      [30, 60, 120, 150, 210, 240, 300, 330].map((a) => {
+        const t = (a * Math.PI) / 180, c = Math.cos(t), s = Math.sin(t);
+        return `<path class="pidx-tick" d="M${A(21.9 * c, 21.9 * s)} L${A(25.1 * c, 25.1 * s)}"/>`;
+      }).join("");
+    // Channels: machined grooves tying core to complications; the lit hairline
+    // draws on at commit. N/W/E draw outward (core feeds the atoms); S is
+    // authored jewel->core so the synergy, born at the collision, feeds BACK.
+    // [x1,y1 (draw origin), x2,y2, dashLen, drawStart, drawEnd]
+    const CHAN = [
+      [0, -8.6, 0, -18.5, 10, 0.26, 0.3],   // core -> REDUNDANT
+      [-7.6, 0, -18.5, 0, 11, 0.43, 0.47],  // core -> UNIQUE-X1
+      [7.6, 0, 18.5, 0, 11, 0.43, 0.47],    // core -> UNIQUE-X2
+      [0, 17.2, 0, 8.6, 8.6, 0.63, 0.67],   // SYNERGY -> core
     ];
-    const gauges = GAUGE.map(([tm,te,fe,L,tip,rs]) => {
-      const b = +(rs + 0.14).toFixed(2);
-      return `<path class="pid-track" d="M${A(tm[0],tm[1])} A21.8 21.8 0 0 0 ${A(te[0],te[1])}"/>` +
-        `<path class="pid-fill" d="M${A(tm[0],tm[1])} A21.8 21.8 0 0 0 ${A(fe[0],fe[1])}" stroke-dasharray="${L} 200" stroke-dashoffset="0">` +
-          `<animate attributeName="stroke-dashoffset" values="0;0;${L};0;0" keyTimes="0;${rs};${rs};${b};1" dur="${CYC}" repeatCount="indefinite"/></path>` +
-        `<circle class="${tip}" cx="${f1(X+fe[0])}" cy="${f1(Y+fe[1])}" r="1.3"/>`;
-    }).join("");
+    const chans = CHAN.map(([x1, y1, x2, y2, L, ds, de]) =>
+      `<path class="pidx-chan" d="M${A(x1, y1)} L${A(x2, y2)}"/>` +
+      `<path class="pidx-chan-lt" d="M${A(x1, y1)} L${A(x2, y2)}" stroke-dasharray="${L} 40" stroke-dashoffset="0">` +
+        `<animate attributeName="stroke-dashoffset" values="0;0;${L};${L};0;0" keyTimes="0;0.02;0.06;${ds};${de};1" dur="${CYC}" repeatCount="indefinite"/></path>`
+    ).join("");
+    // One recessed cradle: chamfer shadow, dark well, vertical chrome rim
+    // (lit at its lower lip, the way a real recess catches light), raised lip.
+    const cradle = (dx, dy, wr) =>
+      `<circle class="pidx-chamfer" cx="${f1(X + dx)}" cy="${f1(Y + dy)}" r="${f1(wr + 0.9)}"/>` +
+      `<circle cx="${f1(X + dx)}" cy="${f1(Y + dy)}" r="${wr}" fill="url(#pidXWell)"/>` +
+      `<circle class="pidx-rim" cx="${f1(X + dx)}" cy="${f1(Y + dy)}" r="${wr}"/>` +
+      `<circle class="pidx-lip" cx="${f1(X + dx)}" cy="${f1(Y + dy)}" r="${f1(wr + 1.6)}"/>`;
+    // Unlit shade (drops over each jewel while the pass recomputes, snaps off
+    // at commit) and radial commit-flare. Static state: shade off, flare off.
+    const shade = (dx, dy, sr, C) =>
+      `<circle class="pidx-shade" cx="${f1(X + dx)}" cy="${f1(Y + dy)}" r="${sr}" opacity="0">` +
+        `<animate attributeName="opacity" values="0;0;0.92;0.92;0;0" keyTimes="0;0.02;0.06;${(C - 0.03).toFixed(2)};${C};1" dur="${CYC}" repeatCount="indefinite"/></circle>`;
+    const flare = (dx, dy, fr, cls, C, peak, out) =>
+      `<circle class="${cls}" cx="${f1(X + dx)}" cy="${f1(Y + dy)}" r="${fr}" opacity="0" filter="url(#mwBloom)">` +
+        `<animate attributeName="opacity" values="0;0;0.9;0;0" keyTimes="0;${C};${peak};${out};1" dur="${CYC}" repeatCount="indefinite"/></circle>`;
+    // The four atom jewels. REDUNDANT: calm cabochon. UNIQUEs: mirrored
+    // two-facet baguettes, bright facet toward the core that lights them.
+    // SYNERGY: 8-facet brilliant with girdle + its own white-hot point.
+    const jwR =
+      `<circle cx="${X}" cy="${f1(Y - CR)}" r="3.1" fill="url(#pidXJwR)"/>` +
+      `<circle class="pidx-girdle" cx="${X}" cy="${f1(Y - CR)}" r="3.1"/>` +
+      `<circle class="pidx-glint" cx="${f1(X - 1)}" cy="${f1(Y - CR - 1.1)}" r="0.7"/>`;
+    const jwU = (sx) => {
+      const cu = sx * CR;
+      return `<polygon class="${sx > 0 ? "pidx-fU-l" : "pidx-fU-d"}" points="${P(cu, -3.3)} ${P(cu - 3.3, 0)} ${P(cu, 3.3)}"/>` +
+        `<polygon class="${sx > 0 ? "pidx-fU-d" : "pidx-fU-l"}" points="${P(cu, -3.3)} ${P(cu + 3.3, 0)} ${P(cu, 3.3)}"/>` +
+        `<polygon class="pidx-jw-edge" points="${P(cu, -3.3)} ${P(cu + 3.3, 0)} ${P(cu, 3.3)} ${P(cu - 3.3, 0)}"/>`;
+    };
+    const SYN_RAMP = ["#ecfdf5", "#d1fae5", "#a7f3d0", "#6ee7b7", "#34d399", "#10b981", "#059669"];
+    const jwS = Array.from({ length: 8 }, (_, i) => {
+      const a1 = ((22.5 + 45 * i) * Math.PI) / 180, a2 = ((22.5 + 45 * (i + 1)) * Math.PI) / 180;
+      // Directional cut: each facet shaded by its angle to a top-left key
+      // light, so the stone reads as a machined brilliant, not a pinwheel.
+      const am = (a1 + a2) / 2, lit = Math.cos(am - (-2.36));
+      const tone = SYN_RAMP[Math.round((1 - lit) * 0.5 * (SYN_RAMP.length - 1))];
+      return `<polygon fill="${tone}" stroke="#065f46" stroke-width="0.3" stroke-opacity="0.6" points="${P(0, CR)} ${P(4.6 * Math.cos(a1), CR + 4.6 * Math.sin(a1))} ${P(4.6 * Math.cos(a2), CR + 4.6 * Math.sin(a2))}"/>`;
+    }).join("") +
+      `<circle class="pidx-girdle-s" cx="${X}" cy="${f1(Y + CR)}" r="4.65"/>` +
+      `<circle class="pidx-syn-hot" cx="${X}" cy="${f1(Y + CR)}" r="1.3" filter="url(#mwBloom)"/>`;
+    const complications =
+      cradle(0, -CR, 5.2) + cradle(-CR, 0, 5.2) + cradle(CR, 0, 5.2) + cradle(0, CR, 6.8) +
+      jwR + jwU(-1) + jwU(1) + jwS +
+      shade(0, -CR, 3.7, 0.3) + shade(-CR, 0, 3.9, 0.47) + shade(CR, 0, 3.9, 0.47) + shade(0, CR, 4.9, 0.64) +
+      flare(0, -CR, 4.4, "pidx-flare", 0.3, 0.32, 0.4) +
+      flare(-CR, 0, 4.4, "pidx-flare", 0.47, 0.49, 0.56) +
+      flare(CR, 0, 4.4, "pidx-flare", 0.47, 0.49, 0.56) +
+      flare(0, CR, 6, "pidx-flare-s", 0.62, 0.645, 0.76) +
+      `<circle class="pidx-syn-ring" cx="${X}" cy="${f1(Y + CR)}" r="4.5" opacity="0">` +
+        `<animate attributeName="r" values="4.5;4.5;9.5;4.5" keyTimes="0;0.62;0.76;1" dur="${CYC}" repeatCount="indefinite"/>` +
+        `<animate attributeName="opacity" values="0;0;0.85;0;0" keyTimes="0;0.62;0.65;0.76;1" dur="${CYC}" repeatCount="indefinite"/></circle>`;
+    // Two commit-sparks (one per source) born at REDUNDANT, running the rail
+    // in opposite directions, dying in the collision that lights SYNERGY.
+    const spark = (dir) => {
+      const tx = -dir * CR * Math.sin((10 * Math.PI) / 180);
+      const ty = -CR * Math.cos((10 * Math.PI) / 180);
+      return `<g opacity="0">` +
+        `<path class="pidx-spark-tail" d="M${A(tx, ty)} A${CR} ${CR} 0 0 ${dir > 0 ? 1 : 0} ${A(0, -CR)}"/>` +
+        `<circle class="pidx-spark-head" cx="${X}" cy="${f1(Y - CR)}" r="1.4" filter="url(#mwBloom)"/>` +
+        `<animateTransform attributeName="transform" type="rotate" values="0 ${X} ${Y};0 ${X} ${Y};${dir * 180} ${X} ${Y};${dir * 180} ${X} ${Y}" keyTimes="0;0.32;0.62;1" dur="${CYC}" repeatCount="indefinite"/>` +
+        `<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.32;0.345;0.61;0.635;1" dur="${CYC}" repeatCount="indefinite"/></g>`;
+    };
+    const sparks = spark(-1) + spark(1);
     // Two waveguides (dark body + lit centreline) + diode ports + square KSG chips
     // that stream from port into the core during intake, then reappear parked.
     const WG = [[-20.5,-20.5,-6.4,-6.4,-18.9,-18.9,"11.3 11.3"], [20.5,-20.5,6.4,-6.4,16.5,-18.9,"-11.3 11.3"]];
@@ -361,10 +441,6 @@ export function nodeMark(n) {
         `<animateTransform attributeName="transform" type="translate" values="0 0;${mv};${mv};0 0;0 0" keyTimes="0;0.14;0.16;0.92;1" dur="${CYC}" repeatCount="indefinite"/>` +
         `<animate attributeName="opacity" values="1;1;0;0;1;1" keyTimes="0;0.13;0.16;0.9;0.94;1" dur="${CYC}" repeatCount="indefinite"/></rect>`
     ).join("");
-    // Cradle arcs (shared-base = redundancy overlap, keystone = synergy only-together).
-    const baseArc = `<path class="pid-base" d="M${A(-6.4,-6.4)} Q${A(0,9)} ${A(6.4,-6.4)}"/>`;
-    const keystone = `<path class="pid-keystone" d="M${A(-6.4,-6.4)} Q${A(0,-15)} ${A(6.4,-6.4)}"/>`;
-    const flash = `<path class="pid-flash" d="M${A(-6.4,-6.4)} Q${A(0,-15)} ${A(6.4,-6.4)}" filter="url(#hdBloom)"><animate attributeName="opacity" values="0;0;0.9;0;0" keyTimes="0;0.6;0.68;0.78;1" dur="${CYC}" repeatCount="indefinite"/></path>`;
     // Split-diamond fusion core.
     const core =
       `<polygon class="pid-core-crown" points="${P(0,-8)} ${P(-7,0)} ${P(0,0)}"/>` +
@@ -375,25 +451,35 @@ export function nodeMark(n) {
       `<path class="pid-core-edge" d="M${A(0,-8)} L${A(7,0)} L${A(0,8)} L${A(-7,0)} Z"/>` +
       `<path class="pid-seam" d="M${A(0,-8)} L${A(0,8)}"/>`;
     const compute = `<circle class="pid-compute" cx="${X}" cy="${Y}" r="0"><animate attributeName="r" values="0;0;8;8;0" keyTimes="0;0.16;0.24;0.26;1" dur="${CYC}" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0;0.5;0;0" keyTimes="0;0.16;0.22;0.26;1" dur="${CYC}" repeatCount="indefinite"/></circle>`;
-    const pinpoint = `<circle class="pid-hot" cx="${X}" cy="${Y}" r="1.4" filter="url(#mwBloom)"><animate attributeName="r" values="1.4;1.4;2.8;1.6;1.4" keyTimes="0;0.16;0.2;0.24;1" dur="${CYC}" repeatCount="indefinite"/></circle><circle class="pid-hot-in" cx="${X}" cy="${Y}" r="0.7"/>`;
+    const pinpoint = `<circle class="pid-hot" cx="${X}" cy="${Y}" r="1.4" filter="url(#mwBloom)"><animate attributeName="r" values="1.4;1.4;2.8;1.6;1.6;2.3;1.4;1.4" keyTimes="0;0.16;0.2;0.26;0.62;0.66;0.74;1" dur="${CYC}" repeatCount="indefinite"/></circle><circle class="pid-hot-in" cx="${X}" cy="${Y}" r="0.7"/>`;
     return `<g>
     <defs>
       <linearGradient id="hubBezel" x1="0" y1="${f1(Y - r)}" x2="0" y2="${f1(Y + r)}" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#a7f3d0"/><stop offset="45%" stop-color="#34d399"/><stop offset="100%" stop-color="#065f46"/>
       </linearGradient>
+      <radialGradient id="pidXWell">
+        <stop offset="0%" stop-color="#06281d"/><stop offset="68%" stop-color="#041c14"/><stop offset="100%" stop-color="#02120c"/>
+      </radialGradient>
+      <linearGradient id="pidXRim" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#010e0a"/><stop offset="55%" stop-color="#065f46"/><stop offset="100%" stop-color="#34d399"/>
+      </linearGradient>
+      <radialGradient id="pidXJwR" cx="0.4" cy="0.35" r="0.75">
+        <stop offset="0%" stop-color="#d1fae5"/><stop offset="50%" stop-color="#34d399"/><stop offset="100%" stop-color="#047857"/>
+      </radialGradient>
     </defs>
     <circle cx="${X}" cy="${Y}" r="${r}" class="hub-glow"><animate attributeName="r" values="${r};${r + 2};${r}" dur="3.2s" repeatCount="indefinite"/></circle>
     <g filter="url(#nodeShadow)"><circle cx="${X}" cy="${Y}" r="${r}" class="hub-fill"/></g>
     <circle cx="${X}" cy="${Y}" r="${r}" class="hub-ring"/>
     <circle cx="${X}" cy="${Y}" r="${f1(r - 2.2)}" class="seat-groove"/>
     <circle cx="${X}" cy="${Y}" r="${f1(r + 1.4)}" class="seat-hairline"/>
-    ${gauges}
+    ${rail}
+    ${chans}
+    ${complications}
     ${wgs}
-    ${baseArc}
-    ${keystone}${flash}
     ${core}
     ${compute}
     ${pinpoint}
+    ${sparks}
     <text x="${X}" y="${f1(Y + 50)}" text-anchor="middle" class="hub-label">${escapeXML(n.label)}</text>
   </g>`;
   }
@@ -1249,18 +1335,33 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .hub-ring   { fill: none; stroke: url(#hubBezel); stroke-width: 2.2; }
     .hub-glow   { fill: none; stroke: #34d399; stroke-width: 6; stroke-opacity: 0.18; filter: url(#soft); }
     .hub-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6ee7b7; }
-    .pid-track   { fill: none; stroke: #065f46; stroke-opacity: 0.35; stroke-width: 4; stroke-linecap: round; }
-    .pid-fill    { fill: none; stroke: #34d399; stroke-width: 4; stroke-linecap: round; }
-    .pid-tip-u   { fill: #a7f3d0; }
-    .pid-tip-s   { fill: #d1fae5; }
+    .pidx-rail   { fill: none; stroke: #021a12; stroke-opacity: 0.9; stroke-width: 1.3; stroke-linecap: round; }
+    .pidx-rail-lt{ fill: none; stroke: #34d399; stroke-opacity: 0.18; stroke-width: 1.3; stroke-linecap: round; }
+    .pidx-tick   { fill: none; stroke: #047857; stroke-opacity: 0.9; stroke-width: 0.9; stroke-linecap: round; }
+    .pidx-inner  { fill: none; stroke: #10b981; stroke-opacity: 0.14; stroke-width: 0.6; }
+    .pidx-chan   { fill: none; stroke: #032018; stroke-width: 2.2; stroke-linecap: round; }
+    .pidx-chan-lt{ fill: none; stroke: #6ee7b7; stroke-width: 0.8; stroke-linecap: round; }
+    .pidx-chamfer{ fill: none; stroke: #05070b; stroke-opacity: 0.55; stroke-width: 1; }
+    .pidx-rim    { fill: none; stroke: url(#pidXRim); stroke-width: 1.1; }
+    .pidx-lip    { fill: none; stroke: #6ee7b7; stroke-opacity: 0.16; stroke-width: 0.5; }
+    .pidx-shade  { fill: #031710; }
+    .pidx-flare  { fill: #d1fae5; }
+    .pidx-flare-s{ fill: #ecfdf5; }
+    .pidx-syn-ring { fill: none; stroke: #a7f3d0; stroke-width: 1; }
+    .pidx-girdle { fill: none; stroke: #a7f3d0; stroke-opacity: 0.55; stroke-width: 0.4; }
+    .pidx-girdle-s { fill: none; stroke: #d1fae5; stroke-opacity: 0.7; stroke-width: 0.5; }
+    .pidx-glint  { fill: #ecfdf5; fill-opacity: 0.7; }
+    .pidx-fU-l   { fill: #6ee7b7; }
+    .pidx-fU-d   { fill: #10b981; }
+    .pidx-jw-edge{ fill: none; stroke: #a7f3d0; stroke-width: 0.4; stroke-opacity: 0.85; stroke-linejoin: round; }
+    .pidx-syn-hot{ fill: #ecfdf5; }
+    .pidx-spark-head { fill: #ecfdf5; }
+    .pidx-spark-tail { fill: none; stroke: #a7f3d0; stroke-width: 1.1; stroke-linecap: round; stroke-opacity: 0.85; }
     .pid-wg      { fill: none; stroke: #043a2e; stroke-width: 2.4; stroke-linecap: round; }
     .pid-wg-lit  { fill: none; stroke: #6ee7b7; stroke-width: 0.9; stroke-linecap: round; }
     .pid-port    { fill: #34d399; }
     .pid-port-core { fill: #06281d; }
     .pid-chip    { fill: #d1fae5; }
-    .pid-base    { fill: none; stroke: #6ee7b7; stroke-opacity: 0.3; stroke-width: 1; stroke-linecap: round; }
-    .pid-keystone{ fill: none; stroke: #34d399; stroke-opacity: 0.45; stroke-width: 1.2; stroke-linecap: round; }
-    .pid-flash   { fill: none; stroke: #d1fae5; stroke-width: 1.4; stroke-linecap: round; opacity: 0; }
     .pid-core-crown { fill: #6ee7b7; }
     .pid-core-bl { fill: #065f46; }
     .pid-core-br { fill: #047857; }
