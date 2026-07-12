@@ -48,7 +48,8 @@ const TORUS_LOGO =
   readFileSync(resolve(__dirname, "..", "pics", "torus-automations-logo.png")).toString("base64");
 
 const W = 860;
-const H = 460;
+const H = 512;
+const VSHIFT = 26; // push the graph body down so the taller canvas is balanced (frame/title stay put)
 
 // ---------------------------------------------------------------------------
 // Spec. Positions are node centres; colours are per-project accents.
@@ -429,6 +430,11 @@ export function nodeMark(n) {
     const pt = (k) => `${f1(cx + V[k][0])},${f1(cy + V[k][1])}`;
     const facets = TIN.map(([a, b, c, tone]) =>
       `<polygon class="mel-tin" points="${pt(a)} ${pt(b)} ${pt(c)}" fill="${tone}"/>`).join("\n      ");
+    // The full 3-D shaded surface (rock body + right flank + low-poly facets); reused for
+    // both the fog ghost and the crisp construction reveal.
+    const surface = `<path d="${solid}" class="mel-rock"/>` +
+      `<path d="M${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)} L${f1(cx + 12)} ${f1(cy + 24)} Z" class="mel-facet"/>` +
+      facets;
     // BEING CONSTRUCTED (3D FULL FILL): the massif's 3-D-shaded surface is REVEALED from
     // the base UP behind a bright build-line — a solid low-poly fill materialising in one
     // sweep, not a scatter of dots. It clears top-down, holds bare on the ridge scaffold,
@@ -467,12 +473,8 @@ export function nodeMark(n) {
     <g filter="url(#nodeShadow)"><path d="${hex(1)}" class="mel-plate"/></g>
     <g clip-path="url(#melClip)">
       <path d="${hex(1)}" fill="url(#melHeat)"/>
-      <path d="${solid}" class="mel-fog" filter="url(#soft)"/>
-      <g clip-path="url(#melBuild)">
-        <path d="${solid}" class="mel-rock"/>
-        <path d="M${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)} L${f1(cx + 12)} ${f1(cy + 24)} Z" class="mel-facet"/>
-        ${facets}
-      </g>
+      <g class="mel-fog-g" filter="url(#soft)">${surface}</g>
+      <g clip-path="url(#melBuild)">${surface}</g>
       <path d="${ridgeLine}" class="mel-ridge"/>
       ${front}
     </g>
@@ -602,14 +604,14 @@ export function nodeMark(n) {
       <linearGradient id="przHill" x1="0" y1="-6" x2="0" y2="27" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#9f88e8"/><stop offset="42%" stop-color="#5f4ea8"/><stop offset="100%" stop-color="#211840"/>
       </linearGradient>
-      <radialGradient id="przHillHi" cx="-7" cy="-1" r="30" gradientUnits="userSpaceOnUse">
-        <animate attributeName="cx" values="-7;-16;8;-7" keyTimes="0;0.33;0.66;1" dur="9s" repeatCount="indefinite"/>
-        <animate attributeName="cy" values="-1;-4;-3;-1" keyTimes="0;0.33;0.66;1" dur="9s" repeatCount="indefinite"/>
-        <stop offset="0%" stop-color="#e6ddff" stop-opacity="0.6"/><stop offset="52%" stop-color="#a78bfa" stop-opacity="0.14"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+      <radialGradient id="przHillHi" cx="-7" cy="-1" r="27" gradientUnits="userSpaceOnUse">
+        <animate attributeName="cx" values="-7;-23;16;-7" keyTimes="0;0.33;0.66;1" dur="8s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="-1;-5;-4;-1" keyTimes="0;0.33;0.66;1" dur="8s" repeatCount="indefinite"/>
+        <stop offset="0%" stop-color="#f1ecff" stop-opacity="0.85"/><stop offset="50%" stop-color="#a78bfa" stop-opacity="0.18"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
       </radialGradient>
-      <radialGradient id="przHillAo" cx="0" cy="32" r="44" gradientUnits="userSpaceOnUse">
-        <animate attributeName="cx" values="0;9;-6;0" keyTimes="0;0.33;0.66;1" dur="9s" repeatCount="indefinite"/>
-        <stop offset="48%" stop-color="#140d28" stop-opacity="0"/><stop offset="100%" stop-color="#140d28" stop-opacity="0.85"/>
+      <radialGradient id="przHillAo" cx="0" cy="32" r="42" gradientUnits="userSpaceOnUse">
+        <animate attributeName="cx" values="0;16;-11;0" keyTimes="0;0.33;0.66;1" dur="8s" repeatCount="indefinite"/>
+        <stop offset="42%" stop-color="#120a24" stop-opacity="0"/><stop offset="100%" stop-color="#120a24" stop-opacity="0.92"/>
       </radialGradient>
       <radialGradient id="przSpill" cx="0" cy="-3" r="17" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#f2ecff" stop-opacity="0.6"/><stop offset="55%" stop-color="#c4b5fd" stop-opacity="0.16"/><stop offset="100%" stop-color="#c4b5fd" stop-opacity="0"/>
@@ -761,18 +763,8 @@ export function nodeMark(n) {
     };
     const firing = `${fire(T, 0.12)}${fire(L, 0.42)}${fire(R, 0.7)}`;
     const sparks = `${spark(T, L, 0.16, 0.38)}${spark(T, R, 0.16, 0.38)}${spark(L, R, 0.46, 0.66)}`;
-    // Agentic-viz "code tag" motif: fuchsia chevrons sit just OUTSIDE the border at
-    // the top-left and bottom-right corners — a < ... > diagonally wrapping the whole
-    // visualization (an agentic viz library).
-    const dl = 31; // diagonal offset (corner centres land at radius ~44, outside r35.4)
-    const clx = f1(n.x - dl), cly = f1(n.y - dl); // top-left
-    const crx = f1(n.x + dl), cry = f1(n.y + dl); // bottom-right
-    const chevTL = `<path class="vox-code" d="M${f1(clx + 5)} ${f1(cly - 8)} L${f1(clx - 4)} ${cly} L${f1(clx + 5)} ${f1(cly + 8)}"/>`;
-    const chevBR = `<path class="vox-code" d="M${f1(crx - 5)} ${f1(cry - 8)} L${f1(crx + 4)} ${cry} L${f1(crx - 5)} ${f1(cry + 8)}"/>`;
-    const codeTag = `${chevTL}${chevBR}`;
     return `<g class="vox-net">
     ${seat(n.x, n.y, "vox", ["#f5d0fe", "#e879f9", "#86198f"])}
-    ${codeTag}
     <defs>${grads.join("")}
       <radialGradient id="voxFire"><stop offset="0%" stop-color="#fbcfe8" stop-opacity="0.95"/><stop offset="45%" stop-color="#e879f9" stop-opacity="0.4"/><stop offset="100%" stop-color="#e879f9" stop-opacity="0"/></radialGradient>
     </defs>
@@ -814,9 +806,7 @@ export function nodeMark(n) {
     // reticle; the png (S=90) is byte-untouched, as is the typewriter wordmark.
     const ex = f1(cx - 1.9), ey = f1(cy - 12.1); // baked raven-eye centroid
     // crosshair reticle BAKED into the tactical-green border: four cardinal ticks
-    // crossing the ring + four corner brackets hugging it (a matte tactical scope).
-    const cTick = (sx, sy) =>
-      `<path class="creb-tick" d="M${f1(cx + sx * 24.5)} ${f1(cy + sy * 31.5)} L${f1(cx + sx * 31.5)} ${f1(cy + sy * 31.5)} L${f1(cx + sx * 31.5)} ${f1(cy + sy * 24.5)}"/>`;
+    // crossing the ring (a matte tactical scope).
     const sTick = (deg) => {
       const a = (deg * Math.PI) / 180, c = Math.cos(a), s = Math.sin(a);
       return `<line class="creb-xhair" x1="${f1(cx + 30 * c)}" y1="${f1(cy + 30 * s)}" x2="${f1(cx + 38 * c)}" y2="${f1(cy + 38 * s)}"/>`;
@@ -844,7 +834,6 @@ export function nodeMark(n) {
       <circle cx="${cx}" cy="${cy}" r="31.8" class="seat-groove"/>
       <circle cx="${cx}" cy="${cy}" r="32.5" class="creb-signal"/>
       <circle cx="${cx}" cy="${cy}" r="35.4" class="seat-hairline"/>
-      ${cTick(-1,-1)}${cTick(1,-1)}${cTick(-1,1)}${cTick(1,1)}
     </g>
     <g class="raven-typeline">
       <text x="${f1(leftX)}" y="${f1(baseY)}" text-anchor="start" class="raven-label" clip-path="url(#crebainType)">${escapeXML(word)}</text>
@@ -1185,8 +1174,8 @@ const frame = `<g class="frame">
     <line x1="27" y1="11" x2="833" y2="11" class="wg-rule"/>
     <path d="M 37 11 H 27 A 16 16 0 0 0 11 27 V 37" class="wg-bracket"/>
     <path d="M 823 11 H 833 A 16 16 0 0 1 849 27 V 37" class="wg-bracket"/>
-    <path d="M 849 423 V 433 A 16 16 0 0 1 833 449 H 823" class="wg-bracket"/>
-    <path d="M 37 449 H 27 A 16 16 0 0 1 11 433 V 423" class="wg-bracket"/>
+    <path d="M 849 ${H - 37} V ${H - 27} A 16 16 0 0 1 833 ${H - 11} H 823" class="wg-bracket"/>
+    <path d="M 37 ${H - 11} H 27 A 16 16 0 0 1 11 ${H - 27} V ${H - 37}" class="wg-bracket"/>
   </g>`;
 
 // ---------------------------------------------------------------------------
@@ -1218,9 +1207,9 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       <stop offset="100%" stop-color="#10131a"/>
     </radialGradient>
     <radialGradient id="crebGrad" cx="50%" cy="40%" r="70%">
-      <stop offset="0%" stop-color="#3c4d21"/>
-      <stop offset="62%" stop-color="#26311a"/>
-      <stop offset="100%" stop-color="#161c10"/>
+      <stop offset="0%" stop-color="#293716"/>
+      <stop offset="62%" stop-color="#19230f"/>
+      <stop offset="100%" stop-color="#0d1208"/>
     </radialGradient>
     <filter id="nodeShadow" x="-40%" y="-40%" width="180%" height="180%">
       <feDropShadow dx="0" dy="1.5" stdDeviation="2.4" flood-color="#000000" flood-opacity="0.38"/>
@@ -1284,7 +1273,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .seat-vox      { fill: url(#voxGrad); }
     .mel-plate    { fill: url(#melPlate); }
     .mel-rock     { fill: url(#melRock); }
-    .mel-fog      { fill: url(#melRock); opacity: 0.5; }
+    .mel-fog-g    { opacity: 0.42; }
     .mel-ridge    { fill: none; stroke: #fdba74; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
     .mel-facet    { fill: #1a0e08; }
     .mel-tin      { stroke: #000000; stroke-opacity: 0.35; stroke-width: 0.6; stroke-linejoin: round; }
@@ -1327,10 +1316,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .flag-edge  { fill: none; stroke: #ffffff; stroke-opacity: 0.16; stroke-width: 0.6; }
     .vox-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #f0abfc; }
     .vox-net    { color: #e879f9; }
-    .vox-code   { fill: none; stroke: #f0abfc; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
     .seat-creb     { fill: url(#crebGrad); }
     .creb-signal   { fill: none; stroke: #b6cf86; stroke-opacity: 0.7; stroke-width: 1.2; }
-    .creb-tick     { fill: none; stroke: #b6cf86; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
     .creb-xhair    { fill: none; stroke: #a8c07a; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linecap: round; }
     .creb-eye-core { fill: #ff6b5e; }
     .creb-eye-hot  { fill: #fff1f0; }
@@ -1419,15 +1406,17 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
   <rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="16" class="panel"/>
   <text x="40" y="40" class="cap">THE&#160;SYSTEM&#160;//&#160;HOW&#160;THE&#160;WORK&#160;CONNECTS</text>
 
-  <g class="edges">
-    ${calmEdges.join("\n    ")}
-    ${liveEdges.join("\n    ")}
-  </g>
-  <g class="flows">
-    ${flows.join("\n    ")}
-  </g>
-  <g class="nodes">
-    ${nodeEls.join("\n  ")}
+  <g transform="translate(0 ${VSHIFT})">
+    <g class="edges">
+      ${calmEdges.join("\n    ")}
+      ${liveEdges.join("\n    ")}
+    </g>
+    <g class="flows">
+      ${flows.join("\n    ")}
+    </g>
+    <g class="nodes">
+      ${nodeEls.join("\n  ")}
+    </g>
   </g>
   ${frame}
 </svg>
