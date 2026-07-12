@@ -67,7 +67,7 @@ const nodes = {
   cortexel:    { x: 110, y: 360, color: "#e879f9", kind: "voxel" },
   manwe:       { x: 298, y: 386, color: "#38bdf8", kind: "radar", label: "manwe" },
   galadriel:   { x: 434, y: 248, color: "#ef4444", kind: "sentinel", label: "galadriel" },
-  haldir:      { x: 330, y: 128, color: "#2dd4bf", kind: "haldir", label: "haldir" },
+  haldir:      { x: 322, y: 182, color: "#2dd4bf", kind: "haldir", label: "haldir" },
 };
 // Uppercase every label in the SOURCE (not via CSS text-transform, which
 // librsvg and other SVG renderers ignore — content-case renders everywhere).
@@ -306,7 +306,9 @@ function seat(cx, cy, name, stops) {
     <circle cx="${cx}" cy="${cy}" r="${f1(SEAT_R + 1.4)}" class="seat-hairline"/>`;
 }
 
-const nodeEls = Object.values(nodes).map((n) => {
+// Render one node's bespoke mark (the per-kind switch). Exported so the standalone
+// per-project logos (scripts/logos.mjs) reuse the exact same marks + machining.
+export function nodeMark(n) {
   if (n.kind === "hub") {
     // pid-rs: the ESTIMATOR DIAL — a rigid chrome-emerald bezel with inner
     // groove and outer hairline over a drop shadow (manwe's border grade;
@@ -317,34 +319,81 @@ const nodeEls = Object.values(nodes).map((n) => {
     // dashed SYNERGY ring enclosing both (the part no single source holds).
     // The lens breathes with the glow; the label sits beneath like an
     // instrument engraving. Reduced-motion holds the lens lit.
+    // pid-rs: THE DECOMPOSITION CORE — a dark-emerald machined instrument that has
+    // just decomposed two SOURCES into the four PID atoms. Two waveguides feed in
+    // diagonally (X1 upper-left, X2 upper-right) with diode ports + square KSG sample
+    // chips; a faceted split-diamond FUSION core (vertical seam = the joint atoms,
+    // horizontal facet = the two uniques) carries the single white-hot pinpoint; four
+    // graduated atom-GAUGES ring it — REDUNDANT (top), SYNERGY (bottom, fullest),
+    // UNIQUE-X1 (left), UNIQUE-X2 (right). Civilian emerald, theme-FIXED. Browser
+    // motion runs one estimation pass: intake -> compute -> redundancy resolves FIRST
+    // -> uniques peel -> synergy crowns LAST + brightest. librsvg/reduced-motion hold
+    // the finished still (fills at dashoffset 0, chips parked, tokens absent).
     const r = n.r || HUB_R;
-    const breathe = `<animate attributeName="r" values="${r};${r + 2};${r}" dur="3.2s" repeatCount="indefinite"/>`;
-    const vx = 5.5, vr = 10, vy = n.y - 8; // Venn: centre offset · set radius · axis
-    const iy = Math.sqrt(vr * vr - vx * vx); // lens tip offset from the axis
-    const lens =
-      `M${f1(n.x)} ${f1(vy - iy)} A${vr} ${vr} 0 0 1 ${f1(n.x)} ${f1(vy + iy)}` +
-      ` A${vr} ${vr} 0 0 1 ${f1(n.x)} ${f1(vy - iy)} Z`;
+    const X = n.x, Y = n.y;
+    const A = (dx, dy) => `${f1(X + dx)} ${f1(Y + dy)}`;   // "x y"
+    const P = (dx, dy) => `${f1(X + dx)},${f1(Y + dy)}`;   // "x,y"
+    const CYC = "4.8s";
+    // Four atom-gauges (56deg tracks at R=21.8; graduated fills sweep to level during
+    // the pass and END full, so the frozen still shows the finished measurement).
+    // [trackStart, trackEnd, fillEnd, dashLen, tipClass, resolveStart]
+    const GAUGE = [
+      [[10.2,-19.2],[-10.2,-19.2],[-4.6,-21.3],15.3,"pid-tip-s",0.28], // REDUNDANT (top)
+      [[-19.2,-10.2],[-19.2,10.2],[-21.8,-1.1],9.6,"pid-tip-u",0.44],  // UNIQUE-X1 (left)
+      [[19.3,10.2],[19.3,-10.2],[21.8,-1.1],11.7,"pid-tip-u",0.44],    // UNIQUE-X2 (right)
+      [[-10.2,19.3],[10.2,19.3],[7.6,20.5],18.3,"pid-tip-s",0.6],      // SYNERGY (bottom)
+    ];
+    const gauges = GAUGE.map(([tm,te,fe,L,tip,rs]) => {
+      const b = +(rs + 0.14).toFixed(2);
+      return `<path class="pid-track" d="M${A(tm[0],tm[1])} A21.8 21.8 0 0 0 ${A(te[0],te[1])}"/>` +
+        `<path class="pid-fill" d="M${A(tm[0],tm[1])} A21.8 21.8 0 0 0 ${A(fe[0],fe[1])}" stroke-dasharray="${L} 200" stroke-dashoffset="0">` +
+          `<animate attributeName="stroke-dashoffset" values="0;0;${L};0;0" keyTimes="0;${rs};${rs};${b};1" dur="${CYC}" repeatCount="indefinite"/></path>` +
+        `<circle class="${tip}" cx="${f1(X+fe[0])}" cy="${f1(Y+fe[1])}" r="1.3"/>`;
+    }).join("");
+    // Two waveguides (dark body + lit centreline) + diode ports + square KSG chips
+    // that stream from port into the core during intake, then reappear parked.
+    const WG = [[-20.5,-20.5,-6.4,-6.4,-18.9,-18.9,"11.3 11.3"], [20.5,-20.5,6.4,-6.4,16.5,-18.9,"-11.3 11.3"]];
+    const wgs = WG.map(([px,py,kx,ky,chx,chy,mv]) =>
+      `<path class="pid-wg" d="M${A(px,py)} L${A(kx,ky)}"/><path class="pid-wg-lit" d="M${A(px,py)} L${A(kx,ky)}"/>` +
+      `<circle class="pid-port" cx="${f1(X+px)}" cy="${f1(Y+py)}" r="1.6"/><circle class="pid-port-core" cx="${f1(X+px)}" cy="${f1(Y+py)}" r="0.7"/>` +
+      `<rect class="pid-chip" x="${f1(X+chx)}" y="${f1(Y+chy)}" width="2.4" height="2.4">` +
+        `<animateTransform attributeName="transform" type="translate" values="0 0;${mv};${mv};0 0;0 0" keyTimes="0;0.14;0.16;0.92;1" dur="${CYC}" repeatCount="indefinite"/>` +
+        `<animate attributeName="opacity" values="1;1;0;0;1;1" keyTimes="0;0.13;0.16;0.9;0.94;1" dur="${CYC}" repeatCount="indefinite"/></rect>`
+    ).join("");
+    // Cradle arcs (shared-base = redundancy overlap, keystone = synergy only-together).
+    const baseArc = `<path class="pid-base" d="M${A(-6.4,-6.4)} Q${A(0,9)} ${A(6.4,-6.4)}"/>`;
+    const keystone = `<path class="pid-keystone" d="M${A(-6.4,-6.4)} Q${A(0,-15)} ${A(6.4,-6.4)}"/>`;
+    const flash = `<path class="pid-flash" d="M${A(-6.4,-6.4)} Q${A(0,-15)} ${A(6.4,-6.4)}" filter="url(#hdBloom)"><animate attributeName="opacity" values="0;0;0.9;0;0" keyTimes="0;0.6;0.68;0.78;1" dur="${CYC}" repeatCount="indefinite"/></path>`;
+    // Split-diamond fusion core.
+    const core =
+      `<polygon class="pid-core-crown" points="${P(0,-8)} ${P(-7,0)} ${P(0,0)}"/>` +
+      `<polygon class="pid-core-crown" points="${P(0,-8)} ${P(7,0)} ${P(0,0)}"/>` +
+      `<polygon class="pid-core-bl" points="${P(0,8)} ${P(-7,0)} ${P(0,0)}"/>` +
+      `<polygon class="pid-core-br" points="${P(0,8)} ${P(7,0)} ${P(0,0)}"/>` +
+      `<path class="pid-facet" d="M${A(-7,0)} L${A(7,0)}"/>` +
+      `<path class="pid-core-edge" d="M${A(0,-8)} L${A(7,0)} L${A(0,8)} L${A(-7,0)} Z"/>` +
+      `<path class="pid-seam" d="M${A(0,-8)} L${A(0,8)}"/>`;
+    const compute = `<circle class="pid-compute" cx="${X}" cy="${Y}" r="0"><animate attributeName="r" values="0;0;8;8;0" keyTimes="0;0.16;0.24;0.26;1" dur="${CYC}" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0;0.5;0;0" keyTimes="0;0.16;0.22;0.26;1" dur="${CYC}" repeatCount="indefinite"/></circle>`;
+    const pinpoint = `<circle class="pid-hot" cx="${X}" cy="${Y}" r="1.4" filter="url(#mwBloom)"><animate attributeName="r" values="1.4;1.4;2.8;1.6;1.4" keyTimes="0;0.16;0.2;0.24;1" dur="${CYC}" repeatCount="indefinite"/></circle><circle class="pid-hot-in" cx="${X}" cy="${Y}" r="0.7"/>`;
     return `<g>
     <defs>
-      <linearGradient id="hubBezel" x1="0" y1="${f1(n.y - r)}" x2="0" y2="${f1(n.y + r)}" gradientUnits="userSpaceOnUse">
+      <linearGradient id="hubBezel" x1="0" y1="${f1(Y - r)}" x2="0" y2="${f1(Y + r)}" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#a7f3d0"/><stop offset="45%" stop-color="#34d399"/><stop offset="100%" stop-color="#065f46"/>
       </linearGradient>
     </defs>
-    <circle cx="${n.x}" cy="${n.y}" r="${r}" class="hub-glow">${breathe}</circle>
-    <g filter="url(#nodeShadow)"><circle cx="${n.x}" cy="${n.y}" r="${r}" class="hub-fill"/></g>
-    <circle cx="${n.x}" cy="${n.y}" r="${r}" class="hub-ring"/>
-    <circle cx="${n.x}" cy="${n.y}" r="${f1(r - 2.2)}" class="seat-groove"/>
-    <circle cx="${n.x}" cy="${n.y}" r="${f1(r + 1.4)}" class="seat-hairline"/>
-    <circle cx="${n.x}" cy="${f1(vy)}" r="17" class="pid-syn"/>
-    <path d="${lens}" class="pid-lens" filter="url(#soft)">
-      <animate attributeName="opacity" values="0.7;1;0.7" dur="3.2s" repeatCount="indefinite"/>
-    </path>
-    <circle cx="${f1(n.x - vx)}" cy="${f1(vy)}" r="${vr}" class="pid-set"/>
-    <circle cx="${f1(n.x + vx)}" cy="${f1(vy)}" r="${vr}" class="pid-set"/>
-    <circle cx="${f1(n.x - 9.5)}" cy="${f1(vy)}" r="1.1" class="pid-uniq"/>
-    <circle cx="${f1(n.x + 9.5)}" cy="${f1(vy)}" r="1.1" class="pid-uniq"/>
-    ${n.private ? lock(n.x, n.y - 24, 1, "var(--hub-accent)") : ""}
-    <text x="${n.x}" y="${f1(n.y + 20)}" text-anchor="middle" class="hub-label">${escapeXML(n.label)}</text>
+    <circle cx="${X}" cy="${Y}" r="${r}" class="hub-glow"><animate attributeName="r" values="${r};${r + 2};${r}" dur="3.2s" repeatCount="indefinite"/></circle>
+    <g filter="url(#nodeShadow)"><circle cx="${X}" cy="${Y}" r="${r}" class="hub-fill"/></g>
+    <circle cx="${X}" cy="${Y}" r="${r}" class="hub-ring"/>
+    <circle cx="${X}" cy="${Y}" r="${f1(r - 2.2)}" class="seat-groove"/>
+    <circle cx="${X}" cy="${Y}" r="${f1(r + 1.4)}" class="seat-hairline"/>
+    ${gauges}
+    ${wgs}
+    ${baseArc}
+    ${keystone}${flash}
+    ${core}
+    ${compute}
+    ${pinpoint}
+    <text x="${X}" y="${f1(Y + 50)}" text-anchor="middle" class="hub-label">${escapeXML(n.label)}</text>
   </g>`;
   }
   if (n.kind === "cube") {
@@ -467,6 +516,7 @@ const nodeEls = Object.values(nodes).map((n) => {
     // (a real object); only the label ink adapts. Static apart from a slow
     // flare breath → reduced-motion safe. One instance → unique ids.
     const cx = n.x, cy = n.y, R = TRI_CIRCUM;
+    const PRZ = "4.2s"; // one dispersion pass: light arrives -> flare -> rays bloom in spectral order
     const tri = (r) => {
       const dx = (r * Math.sqrt(3)) / 2;
       return `${f1(cx)},${f1(cy - r)} ${f1(cx + dx)},${f1(cy + r / 2)} ${f1(cx - dx)},${f1(cy + r / 2)}`;
@@ -500,13 +550,17 @@ const nodeEls = Object.values(nodes).map((n) => {
       const L = land(t);
       return `<polygon points="${f1(sx)},${f1(sy)} ${f1(L.x + fu.x * hw)},${f1(L.y + fu.y * hw)} ${f1(L.x - fu.x * hw)},${f1(L.y - fu.y * hw)}" fill="url(#${id})"/>`;
     }).join("\n      ");
-    const rayCores = RAYS.map(({ t, c }) => {
-      const L = land(t);
-      return `<line class="prz-core" x1="${f1(sx)}" y1="${f1(sy)}" x2="${f1(L.x)}" y2="${f1(L.y)}" stroke="${c}"/>`;
+    // Each dispersed ray blooms in spectral sequence as the entered light disperses.
+    const rayKt = (i) => { const p = 0.22 + i * 0.14; return `0;${f1(p - 0.12)};${f1(p)};${f1(p + 0.12)};1`; };
+    const rayCores = RAYS.map(({ t, c }, i) => {
+      const L = land(t), kt = rayKt(i);
+      return `<line class="prz-core" x1="${f1(sx)}" y1="${f1(sy)}" x2="${f1(L.x)}" y2="${f1(L.y)}" stroke="${c}">` +
+        `<animate attributeName="stroke-width" values="1.5;1.5;2.8;1.5;1.5" keyTimes="${kt}" dur="${PRZ}" repeatCount="indefinite"/>` +
+        `<animate attributeName="stroke-opacity" values="0.85;0.85;1;0.85;0.85" keyTimes="${kt}" dur="${PRZ}" repeatCount="indefinite"/></line>`;
     }).join("\n        ");
-    const rayGlows = RAYS.map(({ t, id }) => {
-      const L = land(t);
-      return `<circle cx="${f1(L.x)}" cy="${f1(L.y)}" r="5.5" fill="url(#${id}Glow)"/>`;
+    const rayGlows = RAYS.map(({ t, id }, i) => {
+      const L = land(t), kt = rayKt(i);
+      return `<circle cx="${f1(L.x)}" cy="${f1(L.y)}" r="5.5" fill="url(#${id}Glow)"><animate attributeName="r" values="5.5;5.5;8.5;5.5;5.5" keyTimes="${kt}" dur="${PRZ}" repeatCount="indefinite"/></circle>`;
     }).join("\n      ");
     // White in-ray: enters mid-left-face, converges on the flare.
     const e = { x: apex.x + (blv.x - apex.x) * 0.6, y: apex.y + (blv.y - apex.y) * 0.6 };
@@ -547,14 +601,15 @@ const nodeEls = Object.values(nodes).map((n) => {
         ${rayCores}
       </g>
       ${rayGlows}
-      <circle cx="${f1(e.x)}" cy="${f1(e.y)}" r="4.5" fill="url(#przInGlow)"/>
+      <circle cx="${f1(e.x)}" cy="${f1(e.y)}" r="4.5" fill="url(#przInGlow)"><animate attributeName="r" values="4.5;6.5;4.5;4.5" keyTimes="0;0.07;0.18;1" dur="${PRZ}" repeatCount="indefinite"/></circle>
     </g>
     <polygon points="${tri(R)}" class="prz-edge" stroke-linejoin="round"/>
     <polygon points="${tri(R - 4.8)}" class="prz-groove" stroke-linejoin="round"/>
     <polygon points="${tri(R + 2.8)}" class="prz-hairline" stroke-linejoin="round"/>
     <path class="prz-glint" d="M${cx} ${f1(cy - R - 4.5)} V${f1(cy - R + 4.5)} M${f1(cx - 4.5)} ${f1(cy - R)} H${f1(cx + 4.5)}"/>
     <circle cx="${f1(sx)}" cy="${f1(sy)}" r="8" fill="url(#przFlare)">
-      <animate attributeName="opacity" values="0.8;1;0.8" dur="3.4s" repeatCount="indefinite"/>
+      <animate attributeName="r" values="8;11;8.5;8;8" keyTimes="0;0.09;0.22;0.6;1" dur="${PRZ}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.85;1;0.9;0.85;0.85" keyTimes="0;0.09;0.22;0.6;1" dur="${PRZ}" repeatCount="indefinite"/>
     </circle>
     <text x="${n.x}" y="${f1(n.y + R / 2 + 16)}" text-anchor="middle" class="tri-label">${escapeXML(n.label)}</text>
   </g>`;
@@ -644,13 +699,35 @@ const nodeEls = Object.values(nodes).map((n) => {
       return `<path d="M${f1(a.x)} ${f1(a.y)} Q${up} ${f1(b.x)} ${f1(b.y)} Q${dn} ${f1(a.x)} ${f1(a.y)} Z" fill="url(#${id})"/>`;
     };
     const conns = `${calli(T, L, 6)} ${calli(T, R, -6)} ${calli(L, R, 6)}`;
+    // Civilian SIGNAL PROPAGATION: neurons fire in depth order (apex T -> L -> near R)
+    // and a bright activation spark rides each connection between firings. Every
+    // animated element rests at r0 / opacity0, so librsvg + reduced-motion hold the
+    // clean static cluster. One 5s thought-pass, seamless loop. No red, no beams.
+    const VOX = "5s";
+    const fire = (c, p) => {
+      const kt = `0;${f1(p - 0.08)};${f1(p)};${f1(p + 0.13)};1`;
+      return `<circle cx="${f1(c.x)}" cy="${f1(c.y)}" r="0" fill="url(#voxFire)">` +
+        `<animate attributeName="r" values="0;0;11;0;0" keyTimes="${kt}" dur="${VOX}" repeatCount="indefinite"/>` +
+        `<animate attributeName="opacity" values="0;0;0.85;0;0" keyTimes="${kt}" dur="${VOX}" repeatCount="indefinite"/></circle>`;
+    };
+    const spark = (a, b, s, e) => {
+      const m = f1((s + e) / 2);
+      return `<circle r="1.8" fill="#fdf4ff" opacity="0">` +
+        `<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;${f1(s)};${f1(s + 0.02)};${f1(e - 0.02)};${f1(e)};1" dur="${VOX}" repeatCount="indefinite"/>` +
+        `<animateMotion path="M${f1(a.x)} ${f1(a.y)} L${f1(b.x)} ${f1(b.y)}" keyPoints="0;0;1;1" keyTimes="0;${f1(s)};${f1(e)};1" calcMode="linear" dur="${VOX}" repeatCount="indefinite"/></circle>`;
+    };
+    const firing = `${fire(T, 0.12)}${fire(L, 0.42)}${fire(R, 0.7)}`;
+    const sparks = `${spark(T, L, 0.16, 0.38)}${spark(T, R, 0.16, 0.38)}${spark(L, R, 0.46, 0.66)}`;
     return `<g class="vox-net">
     ${seat(n.x, n.y, "vox", ["#f5d0fe", "#e879f9", "#86198f"])}
-    <defs>${grads.join("")}</defs>
+    <defs>${grads.join("")}
+      <radialGradient id="voxFire"><stop offset="0%" stop-color="#fbcfe8" stop-opacity="0.95"/><stop offset="45%" stop-color="#e879f9" stop-opacity="0.4"/><stop offset="100%" stop-color="#e879f9" stop-opacity="0"/></radialGradient>
+    </defs>
     <g filter="url(#soft)">
       ${conns}
       ${cubeAt(T)} ${cubeAt(L)} ${cubeAt(R)}
     </g>
+    <g class="vox-fire">${firing}${sparks}</g>
     <text x="${n.x}" y="${f1(n.y + 48)}" text-anchor="middle" class="vox-label">${escapeXML(n.label)}</text>
   </g>`;
   }
@@ -681,12 +758,18 @@ const nodeEls = Object.values(nodes).map((n) => {
     // crosshair identity, kept). The r34 machining lands on the raven's own baked
     // reticle; the png (S=90) is byte-untouched, as is the typewriter wordmark.
     const ex = f1(cx - 1.9), ey = f1(cy - 12.1); // baked raven-eye centroid
+    // crosshair reticle BAKED into the tactical-green border: four cardinal ticks
+    // crossing the ring + four corner brackets hugging it (a matte tactical scope).
     const cTick = (sx, sy) =>
-      `<path class="creb-tick" d="M${f1(cx + sx * 23.5)} ${f1(cy + sy * 30)} L${f1(cx + sx * 30)} ${f1(cy + sy * 30)} L${f1(cx + sx * 30)} ${f1(cy + sy * 23.5)}"/>`;
+      `<path class="creb-tick" d="M${f1(cx + sx * 24.5)} ${f1(cy + sy * 31.5)} L${f1(cx + sx * 31.5)} ${f1(cy + sy * 31.5)} L${f1(cx + sx * 31.5)} ${f1(cy + sy * 24.5)}"/>`;
+    const sTick = (deg) => {
+      const a = (deg * Math.PI) / 180, c = Math.cos(a), s = Math.sin(a);
+      return `<line class="creb-xhair" x1="${f1(cx + 30 * c)}" y1="${f1(cy + 30 * s)}" x2="${f1(cx + 38 * c)}" y2="${f1(cy + 38 * s)}"/>`;
+    };
     return `<g>
     <defs>
       <linearGradient id="crebBezel" x1="0" y1="${f1(cy - 34)}" x2="0" y2="${f1(cy + 34)}" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#d8e6c0"/><stop offset="45%" stop-color="#9caf88"/><stop offset="100%" stop-color="#38491b"/>
+        <stop offset="0%" stop-color="#8ba458"/><stop offset="50%" stop-color="#728a49"/><stop offset="100%" stop-color="#4f612e"/>
       </linearGradient>
       <clipPath id="crebainType" clipPathUnits="userSpaceOnUse">
         <rect x="${f1(leftX)}" y="${f1(baseY - 12)}" width="${f1(Wt)}" height="16">
@@ -700,6 +783,7 @@ const nodeEls = Object.values(nodes).map((n) => {
       <circle cx="${ex}" cy="${ey}" r="1.4" class="creb-eye-core"/>
       <circle cx="${ex}" cy="${ey}" r="0.55" class="creb-eye-hot"/>
     </g>
+    ${sTick(0)}${sTick(90)}${sTick(180)}${sTick(270)}
     <circle cx="${cx}" cy="${cy}" r="34" class="seat-ring" stroke="url(#crebBezel)"/>
     <circle cx="${cx}" cy="${cy}" r="31.8" class="seat-groove"/>
     <circle cx="${cx}" cy="${cy}" r="32.5" class="creb-signal"/>
@@ -777,6 +861,13 @@ const nodeEls = Object.values(nodes).map((n) => {
     const lock =
       `<polyline class="mw-lock" points="${f1(cx-1.4)},${f1(cy-9.6)} ${cx},${f1(cy-8.2)} ${f1(cx+1.4)},${f1(cy-9.6)}"/>` +
       `<circle class="mw-lock-dot" cx="${cx}" cy="${f1(cy-9.9)}" r="0.6"/>`;
+    // Browser-only REVEAL loop (10s): the drone APPEARS, then the red target caret
+    // fades in, then the iris partitions spin one clockwise turn; hold, reset, replay.
+    // Frozen / reduced-motion base = the complete lit mark (opacity 1, 0deg rotation).
+    const MWC = "10s";
+    const droneFade = `<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.04;0.13;0.9;0.98;1" dur="${MWC}" repeatCount="indefinite"/>`;
+    const trigFade = `<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.22;0.31;0.9;0.97;1" dur="${MWC}" repeatCount="indefinite"/>`;
+    const bladeSpin = `<animateTransform attributeName="transform" type="rotate" values="0 ${cx} ${cy};0 ${cx} ${cy};360 ${cx} ${cy};360 ${cx} ${cy}" keyTimes="0;0.34;0.7;1" calcMode="spline" keySplines="0 0 1 1;0.45 0 0.55 1;0 0 1 1" dur="${MWC}" repeatCount="indefinite"/>`;
     return `<g>
     <defs>
       <radialGradient id="mwBarrel" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${f1(cy - 6)}" r="40">
@@ -798,11 +889,10 @@ const nodeEls = Object.values(nodes).map((n) => {
     <circle cx="${cx}" cy="${cy}" r="6" class="mw-core">
       <animate attributeName="opacity" values="1;0.82;1" dur="3.4s" repeatCount="indefinite"/>
     </circle>
-    ${lock}
-    ${drone}
-    <circle cx="${cx}" cy="${cy}" r="1.4" class="mw-hub" filter="url(#mwBloom)"/>
+    <g class="mw-drone" opacity="1">${droneFade}${drone}<circle cx="${cx}" cy="${cy}" r="1.4" class="mw-hub" filter="url(#mwBloom)"/></g>
+    <g class="mw-trigger" opacity="1">${trigFade}${lock}</g>
     <polygon points="${hexAp}" class="mw-aphex"/>
-    ${blades}
+    <g class="mw-blades">${bladeSpin}${blades}</g>
     ${brackets}
     ${ticks}
     <circle cx="${cx}" cy="${cy}" r="${SEAT_R}" class="mw-ring"/>
@@ -1016,7 +1106,8 @@ const nodeEls = Object.values(nodes).map((n) => {
     ${glyph}
     <text x="${f1(x + 27)}" y="${n.y + 5}" class="chip-label">${escapeXML(n.label)}</text>
   </g>`;
-});
+}
+const nodeEls = Object.values(nodes).map(nodeMark);
 
 // ---------------------------------------------------------------------------
 // Frame: a "provenance instrument": four amber corner brackets, all in NCP's
@@ -1058,9 +1149,10 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       <stop offset="0%" stop-color="#042f2a"/>
       <stop offset="100%" stop-color="#10131a"/>
     </radialGradient>
-    <radialGradient id="crebGrad" cx="50%" cy="40%" r="68%">
-      <stop offset="0%" stop-color="#1c2e10"/>
-      <stop offset="100%" stop-color="#10131a"/>
+    <radialGradient id="crebGrad" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#3c4d21"/>
+      <stop offset="62%" stop-color="#26311a"/>
+      <stop offset="100%" stop-color="#161c10"/>
     </radialGradient>
     <filter id="nodeShadow" x="-40%" y="-40%" width="180%" height="180%">
       <feDropShadow dx="0" dy="1.5" stdDeviation="2.4" flood-color="#000000" flood-opacity="0.38"/>
@@ -1094,12 +1186,29 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .chip-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; }
     .hub-fill   { fill: url(#hubGrad); }
     .hub-ring   { fill: none; stroke: url(#hubBezel); stroke-width: 2.2; }
-    .hub-glow   { fill: none; stroke: #34d399; stroke-width: 6; stroke-opacity: 0.22; filter: url(#soft); }
+    .hub-glow   { fill: none; stroke: #34d399; stroke-width: 6; stroke-opacity: 0.18; filter: url(#soft); }
     .hub-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6ee7b7; }
-    .pid-set    { fill: none; stroke: #34d399; stroke-opacity: 0.75; stroke-width: 1.3; }
-    .pid-lens   { fill: #34d399; fill-opacity: 0.4; }
-    .pid-syn    { fill: none; stroke: #34d399; stroke-opacity: 0.35; stroke-width: 1; stroke-dasharray: 3 4; }
-    .pid-uniq   { fill: #34d399; fill-opacity: 0.6; }
+    .pid-track   { fill: none; stroke: #065f46; stroke-opacity: 0.35; stroke-width: 4; stroke-linecap: round; }
+    .pid-fill    { fill: none; stroke: #34d399; stroke-width: 4; stroke-linecap: round; }
+    .pid-tip-u   { fill: #a7f3d0; }
+    .pid-tip-s   { fill: #d1fae5; }
+    .pid-wg      { fill: none; stroke: #043a2e; stroke-width: 2.4; stroke-linecap: round; }
+    .pid-wg-lit  { fill: none; stroke: #6ee7b7; stroke-width: 0.9; stroke-linecap: round; }
+    .pid-port    { fill: #34d399; }
+    .pid-port-core { fill: #06281d; }
+    .pid-chip    { fill: #d1fae5; }
+    .pid-base    { fill: none; stroke: #6ee7b7; stroke-opacity: 0.3; stroke-width: 1; stroke-linecap: round; }
+    .pid-keystone{ fill: none; stroke: #34d399; stroke-opacity: 0.45; stroke-width: 1.2; stroke-linecap: round; }
+    .pid-flash   { fill: none; stroke: #d1fae5; stroke-width: 1.4; stroke-linecap: round; opacity: 0; }
+    .pid-core-crown { fill: #6ee7b7; }
+    .pid-core-bl { fill: #065f46; }
+    .pid-core-br { fill: #047857; }
+    .pid-core-edge { fill: none; stroke: #a7f3d0; stroke-width: 0.8; stroke-linejoin: round; }
+    .pid-seam    { fill: none; stroke: #d1fae5; stroke-width: 0.7; stroke-opacity: 0.9; stroke-linecap: round; }
+    .pid-facet   { fill: none; stroke: #a7f3d0; stroke-width: 0.5; stroke-opacity: 0.35; }
+    .pid-hot     { fill: #ecfdf5; }
+    .pid-hot-in  { fill: #f0fdf4; }
+    .pid-compute { fill: none; stroke: #6ee7b7; stroke-width: 1; opacity: 0; }
     .seat-ring     { fill: none; stroke-width: 2.2; }
     .seat-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .seat-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
@@ -1140,8 +1249,9 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .vox-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #f0abfc; }
     .vox-net    { color: #e879f9; }
     .seat-creb     { fill: url(#crebGrad); }
-    .creb-signal   { fill: none; stroke: #c3e2a0; stroke-opacity: 0.85; stroke-width: 1.4; }
-    .creb-tick     { fill: none; stroke: #9caf88; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .creb-signal   { fill: none; stroke: #b6cf86; stroke-opacity: 0.7; stroke-width: 1.2; }
+    .creb-tick     { fill: none; stroke: #b6cf86; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .creb-xhair    { fill: none; stroke: #a8c07a; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linecap: round; }
     .creb-eye-core { fill: #ff6b5e; }
     .creb-eye-hot  { fill: #fff1f0; }
     .raven-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #9caf88; }
@@ -1155,8 +1265,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mw-blade-sh  { fill: none; stroke: #05070b; stroke-opacity: 0.7; stroke-width: 1.2; }
     .mw-bracket   { fill: none; stroke: #bae6fd; stroke-width: 1.5; stroke-linecap: round; }
     .mw-tick      { stroke: #38bdf8; stroke-opacity: 0.35; stroke-width: 1; }
-    .mw-lock      { fill: none; stroke: #f59e0b; stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
-    .mw-lock-dot  { fill: #fbbf24; }
+    .mw-lock      { fill: none; stroke: #ef4444; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .mw-lock-dot  { fill: #ff6b5e; }
     .mw-drone-arm { fill: none; stroke: #7dd3fc; stroke-width: 1.4; stroke-linecap: round; }
     .mw-rotor     { fill: #12283b; stroke: #7dd3fc; stroke-width: 1.2; }
     .mw-hub       { fill: #f0f9ff; }
@@ -1204,13 +1314,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .flow { stroke: #22d3ee; }
       .chip { fill: #ffffff; }
       .chip-label { fill: #1f2328; }
-      .hub-fill { fill: #ffffff; }
       .hub-glow { stroke: #059669; stroke-opacity: 0.12; }
       .hub-label { fill: #059669; }
-      .pid-set { stroke: #059669; }
-      .pid-lens { fill: #059669; fill-opacity: 0.3; }
-      .pid-syn { stroke: #059669; }
-      .pid-uniq { fill: #059669; }
       .logo-label { fill: #57626f; }
       .tri-label { fill: #6d28d9; }
       .gate-label { fill: #b45309; }
@@ -1246,6 +1351,18 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
 </svg>
 `;
 
-mkdirSync(dirname(OUT_PATH), { recursive: true });
-writeThemedPair(OUT_PATH, svg);
-console.log(`[work-graph] wrote ${OUT_PATH} (${svg.length} bytes)`);
+// Shared <defs> (gradients + filters + per-edge gradients) and <style> inner text,
+// sliced from the assembled graph so scripts/logos.mjs renders each mark on a
+// standalone canvas with byte-identical machining. Non-greedy → the first (main)
+// defs block, not a mark's inline defs.
+export const SHARED_DEFS = (svg.match(/<defs>([\s\S]*?)<\/defs>/) || [])[1] || "";
+export const SHARED_STYLE = (svg.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || "";
+export { nodes };
+
+// Only write the graph when run directly (`node scripts/work-graph.mjs`); importing
+// this module (e.g. from logos.mjs) reuses the exports without rewriting the graph.
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+  mkdirSync(dirname(OUT_PATH), { recursive: true });
+  writeThemedPair(OUT_PATH, svg);
+  console.log(`[work-graph] wrote ${OUT_PATH} (${svg.length} bytes)`);
+}
