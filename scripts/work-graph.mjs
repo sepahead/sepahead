@@ -120,11 +120,11 @@ function halfExtents(n) {
   if (n.kind === "hub") return { hw: (n.r || HUB_R), hh: (n.r || HUB_R), circle: true };
   if (n.kind === "gate") return { hw: SEAT_R, hh: SEAT_R, circle: true };
   if (n.kind === "voxel") return { hw: SEAT_R, hh: SEAT_R, circle: true };
-  if (n.kind === "raven") return { hw: 34, hh: 34, circle: true };
+  if (n.kind === "raven") return { hw: 44, hh: 44, circle: true };
   if (n.kind === "radar") return { hw: SEAT_R, hh: SEAT_R, circle: true };
   if (n.kind === "sentinel") return { hw: 34, hh: 34, circle: true };
   if (n.kind === "haldir") return { hw: SEAT_R, hh: SEAT_R, circle: true };
-  if (n.kind === "logo") return { hw: 30, hh: 30, circle: true };
+  if (n.kind === "logo") return { hw: 46, hh: 46, circle: true };
   if (n.kind === "cube") return { hw: 48, hh: 48, circle: true };
   return { hw: nodeWidth(n) / 2, hh: CHIP_H / 2, circle: false };
 }
@@ -467,6 +467,7 @@ export function nodeMark(n) {
     <g filter="url(#nodeShadow)"><path d="${hex(1)}" class="mel-plate"/></g>
     <g clip-path="url(#melClip)">
       <path d="${hex(1)}" fill="url(#melHeat)"/>
+      <path d="${solid}" class="mel-fog" filter="url(#soft)"/>
       <g clip-path="url(#melBuild)">
         <path d="${solid}" class="mel-rock"/>
         <path d="M${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)} L${f1(cx + 12)} ${f1(cy + 24)} Z" class="mel-facet"/>
@@ -494,6 +495,7 @@ export function nodeMark(n) {
     // live edges to NCP and cortexel resolve neutral via the edge-gradient system.
     // Static → reduced-motion safe. One instance → unique ids.
     const cx = n.x, cy = n.y, S = 54, r = 34;
+    const Z = 46 / 34; // scale the medallion up to prisoma/melkor size (graph only)
     const top = f1(cy - r), bot = f1(cy + r);
     return `<g>
     <defs>
@@ -532,16 +534,18 @@ export function nodeMark(n) {
         <feDropShadow dx="0" dy="1.4" stdDeviation="1.3" flood-color="#39404a" flood-opacity="0.6"/>
       </filter>
     </defs>
-    <g filter="url(#engramShadow)"><circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramFace)"/></g>
-    <g clip-path="url(#engramClip)">
-      <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramRecess)"/>
-      <ellipse cx="${f1(cx - 8)}" cy="${f1(cy - 13)}" rx="25" ry="17" fill="url(#engramSpec)" transform="rotate(-30 ${f1(cx - 8)} ${f1(cy - 13)})"/>
+    <g transform="translate(${cx} ${cy}) scale(${f1(Z)}) translate(${-cx} ${-cy})">
+      <g filter="url(#engramShadow)"><circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramFace)"/></g>
+      <g clip-path="url(#engramClip)">
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramRecess)"/>
+        <ellipse cx="${f1(cx - 8)}" cy="${f1(cy - 13)}" rx="25" ry="17" fill="url(#engramSpec)" transform="rotate(-30 ${f1(cx - 8)} ${f1(cy - 13)})"/>
+      </g>
+      <image href="${TORUS_LOGO}" x="${f1(cx - S / 2)}" y="${f1(cy - S / 2)}" width="${S}" height="${S}" preserveAspectRatio="xMidYMid meet" filter="url(#engramEmboss)"/>
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="url(#engramBezel)" stroke-width="3"/>
+      <circle cx="${cx}" cy="${cy}" r="${f1(r - 1.6)}" fill="none" stroke="url(#engramBevel)" stroke-width="1.7"/>
+      <circle cx="${cx}" cy="${cy}" r="${f1(r + 1.4)}" fill="none" stroke="#2b333d" stroke-width="1" stroke-opacity="0.55"/>
     </g>
-    <image href="${TORUS_LOGO}" x="${f1(cx - S / 2)}" y="${f1(cy - S / 2)}" width="${S}" height="${S}" preserveAspectRatio="xMidYMid meet" filter="url(#engramEmboss)"/>
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="url(#engramBezel)" stroke-width="3"/>
-    <circle cx="${cx}" cy="${cy}" r="${f1(r - 1.6)}" fill="none" stroke="url(#engramBevel)" stroke-width="1.7"/>
-    <circle cx="${cx}" cy="${cy}" r="${f1(r + 1.4)}" fill="none" stroke="#2b333d" stroke-width="1" stroke-opacity="0.55"/>
-    <text x="${cx}" y="${f1(cy - 46)}" text-anchor="middle" class="logo-label">${escapeXML(n.label)}</text>
+    <text x="${cx}" y="${f1(cy - r * Z - 12)}" text-anchor="middle" class="logo-label">${escapeXML(n.label)}</text>
   </g>`;
   }
   if (n.kind === "triangle") {
@@ -787,10 +791,12 @@ export function nodeMark(n) {
     // "entered" (fades + drops away) and the cycle retypes. The static attribute
     // values hold the fully-typed state, so reduced-motion shows it complete.
     const cx = n.x, cy = n.y, S = 90;
+    const Z = 44 / 34; // scale the badge up to prisoma/melkor size (graph only)
     const word = n.label;                          // CSS upper-cases it
     const NN = word.length, CH = 9.7;              // 12px mono: 0.6em glyph + 2.5 track
     const Wt = NN * CH, leftX = cx - Wt / 2;        // ~centred typed line
-    const baseY = cy + S / 2 + 8, curY = cy + S / 2 - 1, flagTop = cy + S / 2 + 16;
+    const SE = (S / 2) * Z;                          // scaled badge half-extent (wordmark sits below it)
+    const baseY = cy + SE + 8, curY = cy + SE - 1, flagTop = cy + SE + 16;
     const pause = 0.5, step = 0.13, hold = 10, enterDur = 0.4, tail = 0.1;
     const typeDone = pause + NN * step, holdEnd = typeDone + hold, enterEnd = holdEnd + enterDur;
     const CYCLE = Number((enterEnd + tail).toFixed(2));
@@ -826,18 +832,20 @@ export function nodeMark(n) {
         </rect>
       </clipPath>
     </defs>
-    <g filter="url(#nodeShadow)"><circle cx="${cx}" cy="${cy}" r="34" class="seat-creb"/></g>
-    <image href="${CREBAIN_LOGO}" x="${f1(cx - S / 2)}" y="${f1(cy - S / 2)}" width="${S}" height="${S}" preserveAspectRatio="xMidYMid meet"/>
-    <g filter="url(#hdBloom)">
-      <circle cx="${ex}" cy="${ey}" r="1.4" class="creb-eye-core"/>
-      <circle cx="${ex}" cy="${ey}" r="0.55" class="creb-eye-hot"/>
+    <g transform="translate(${cx} ${cy}) scale(${f1(Z)}) translate(${-cx} ${-cy})">
+      <g filter="url(#nodeShadow)"><circle cx="${cx}" cy="${cy}" r="34" class="seat-creb"/></g>
+      <image href="${CREBAIN_LOGO}" x="${f1(cx - S / 2)}" y="${f1(cy - S / 2)}" width="${S}" height="${S}" preserveAspectRatio="xMidYMid meet"/>
+      <g filter="url(#hdBloom)">
+        <circle cx="${ex}" cy="${ey}" r="1.4" class="creb-eye-core"/>
+        <circle cx="${ex}" cy="${ey}" r="0.55" class="creb-eye-hot"/>
+      </g>
+      ${sTick(0)}${sTick(90)}${sTick(180)}${sTick(270)}
+      <circle cx="${cx}" cy="${cy}" r="34" class="seat-ring" stroke="url(#crebBezel)"/>
+      <circle cx="${cx}" cy="${cy}" r="31.8" class="seat-groove"/>
+      <circle cx="${cx}" cy="${cy}" r="32.5" class="creb-signal"/>
+      <circle cx="${cx}" cy="${cy}" r="35.4" class="seat-hairline"/>
+      ${cTick(-1,-1)}${cTick(1,-1)}${cTick(-1,1)}${cTick(1,1)}
     </g>
-    ${sTick(0)}${sTick(90)}${sTick(180)}${sTick(270)}
-    <circle cx="${cx}" cy="${cy}" r="34" class="seat-ring" stroke="url(#crebBezel)"/>
-    <circle cx="${cx}" cy="${cy}" r="31.8" class="seat-groove"/>
-    <circle cx="${cx}" cy="${cy}" r="32.5" class="creb-signal"/>
-    <circle cx="${cx}" cy="${cy}" r="35.4" class="seat-hairline"/>
-    ${cTick(-1,-1)}${cTick(1,-1)}${cTick(-1,1)}${cTick(1,1)}
     <g class="raven-typeline">
       <text x="${f1(leftX)}" y="${f1(baseY)}" text-anchor="start" class="raven-label" clip-path="url(#crebainType)">${escapeXML(word)}</text>
       <rect x="${f1(leftX + Wt)}" y="${f1(curY)}" width="5" height="10" rx="1" class="raven-cursor">
@@ -945,7 +953,7 @@ export function nodeMark(n) {
     </defs>
     <g filter="url(#nodeShadow)"><circle cx="${cx}" cy="${cy}" r="${SEAT_R}" fill="url(#mwBarrel)"/></g>
     <circle cx="${cx}" cy="${cy}" r="${IR}" class="mw-iris"/>
-    <circle cx="${cx}" cy="${cy}" r="26.5" fill="url(#mwDots)"/>
+    <g>${bladeSpin}<circle cx="${cx}" cy="${cy}" r="26.5" fill="url(#mwDots)"/></g>
     <polygon points="${hexAp}" class="mw-well"/>
     <circle cx="${cx}" cy="${cy}" r="6" class="mw-core">
       <animate attributeName="opacity" values="1;0.82;1" dur="3.4s" repeatCount="indefinite"/>
@@ -1276,6 +1284,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .seat-vox      { fill: url(#voxGrad); }
     .mel-plate    { fill: url(#melPlate); }
     .mel-rock     { fill: url(#melRock); }
+    .mel-fog      { fill: url(#melRock); opacity: 0.5; }
     .mel-ridge    { fill: none; stroke: #fdba74; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
     .mel-facet    { fill: #1a0e08; }
     .mel-tin      { stroke: #000000; stroke-opacity: 0.35; stroke-width: 0.6; stroke-linejoin: round; }
