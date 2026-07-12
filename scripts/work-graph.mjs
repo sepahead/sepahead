@@ -435,7 +435,7 @@ export function nodeMark(n) {
     // hover, then snap back onto the surface (reintegrate) on a seamless loop. Motion is
     // pure translate (no opacity fade). Deterministic pseudo-random sampling keeps the
     // generated output stable across regenerations.
-    const MEL = "4.6s";
+    const MEL = "6s";
     const massif = [[-30, 24], [-12, -22], [0, -2], [12, -34], [30, 24]];
     const inMassif = (px, py) => { // ray-cast point-in-polygon
       let inside = false;
@@ -448,19 +448,22 @@ export function nodeMark(n) {
     const rnd = (k) => { const s = (k * 2654435761 >>> 0) % 2147483647; return ((s >>> 9) & 0x7fff) / 0x8000; };
     const splatHomes = [];
     let sk = 0;
-    for (let gy = -30; gy <= 22; gy += 7.5) for (let gx = -26; gx <= 26; gx += 8) {
+    for (let gy = -30; gy <= 22; gy += 7) for (let gx = -26; gx <= 26; gx += 7.5) {
       if (!inMassif(gx, gy)) continue;
-      const hx = gx + (rnd(sk * 2 + 1) - 0.5) * 5, hy = gy + (rnd(sk * 2 + 2) - 0.5) * 5;
-      const ang = Math.atan2(hy + 6, hx) + (rnd(sk * 3 + 1) - 0.5) * 1.0; // outward from massif core (0,-6)
-      const mag = 24 + rnd(sk * 3 + 2) * 34; // wide scatter — far ones clip off the hex = dispersed
-      splatHomes.push({ hx: f1(hx), hy: f1(hy), sx: f1(Math.cos(ang) * mag), sy: f1(Math.sin(ang) * mag), i: sk });
+      const hx = gx + (rnd(sk * 2 + 1) - 0.5) * 3, hy = gy + (rnd(sk * 2 + 2) - 0.5) * 3;
+      splatHomes.push({ hx: f1(hx), hy: f1(hy), i: sk });
       sk++;
     }
-    const splats = splatHomes.map(({ hx, hy, sx, sy, i }) => {
-      const d0 = f1(0.3 + (rnd(i * 5 + 1) - 0.5) * 0.08), d1 = f1(0.52 + (rnd(i * 5 + 2) - 0.5) * 0.06);
-      const r0 = f1(0.86 + (rnd(i * 5 + 3) - 0.5) * 0.05);
-      return `<circle class="mel-splat" cx="${f1(cx + hx)}" cy="${f1(cy + hy)}" r="2.7">` +
-        `<animateTransform attributeName="transform" type="translate" values="0 0;${sx} ${sy};${sx} ${sy};0 0;0 0" keyTimes="0;${d0};${d1};${r0};1" calcMode="spline" keySplines="0.35 0 0.2 1;0 0 1 1;0.4 0 0.25 1;0 0 1 1" dur="${MEL}" repeatCount="indefinite"/></circle>`;
+    const ys = splatHomes.map((s) => s.hy);
+    const yMin = Math.min(...ys), yMax = Math.max(...ys), ySpan = (yMax - yMin) || 1;
+    // Even-sized splats that ASSEMBLE the scene: they fade in in sequence, a few groups
+    // at a time (base -> peak), HOLD fully rendered, then FADE OUT together; loop. Base
+    // (t=0) = fully assembled, so librsvg / reduced-motion show the complete scene.
+    const splats = splatHomes.map(({ hx, hy }) => {
+      const g = Math.min(4, Math.floor(((yMax - hy) / ySpan) * 5)); // 0 = base row, 4 = peak
+      const a = f1(0.3 + g * 0.06), b = f1(0.3 + g * 0.06 + 0.07);
+      return `<circle class="mel-splat" cx="${f1(cx + hx)}" cy="${f1(cy + hy)}" r="2.6" opacity="1">` +
+        `<animate attributeName="opacity" values="1;1;0;0;1;1" keyTimes="0;0.14;0.24;${a};${b};1" dur="${MEL}" repeatCount="indefinite"/></circle>`;
     }).join("\n      ");
     return `<g>
     <defs>
@@ -892,22 +895,18 @@ export function nodeMark(n) {
       const A = rad(45 + i * 60);
       return `${f1(cx + 12.7 * Math.cos(A))},${f1(cy + 12.7 * Math.sin(A))}`;
     }).join(" ");
-    const ticks = Array.from({ length: 12 }, (_, i) => {
-      const A = rad(i * 30), ca = Math.cos(A), sa = Math.sin(A);
-      return `<line class="mw-tick" x1="${f1(cx + 29 * ca)}" y1="${f1(cy + 29 * sa)}" x2="${f1(cx + 31.2 * ca)}" y2="${f1(cy + 31.2 * sa)}"/>`;
-    }).join("");
     // The machined DOUBLE BORDER: a bright chrome inner ring concentric with the
     // outer bezel, broken at 12 o'clock by an index NOTCH (a lens-mount alignment
     // mark) — this replaces the old lock-on crosshair brackets.
-    const NR = 24.5; // inner-ring radius
-    const gap = 9;   // notch half-angle (degrees) cut out of the inner ring at top
+    const NR = 30; // inner-ring radius — pulled close to the bezel (34) for a TIGHT
+    // double border; the iris blades end near r27, safely inside it (no crossing).
+    const gap = 8;   // notch half-angle (degrees) cut out of the inner ring at top
     const gA = rad(90 - gap), gB = rad(90 + gap); // top = -y, so 90deg is UP here via -sin
     const p = (ang, r) => `${f1(cx + r * Math.cos(ang))} ${f1(cy - r * Math.sin(ang))}`;
     const innerRing =
       `<path class="mw-inner" d="M${p(gA, NR)} A${NR} ${NR} 0 1 1 ${p(gB, NR)}"/>`;
     const notch =
-      `<path class="mw-notch" d="M${p(gA, NR)} L${p(rad(90), NR - 4.4)} L${p(gB, NR)}"/>` +
-      `<circle class="mw-notch-pip" cx="${cx}" cy="${f1(cy - NR - 1.6)}" r="0.9"/>`;
+      `<path class="mw-notch" d="M${p(gA, NR)} L${p(rad(90), NR - 3)} L${p(gB, NR)}"/>`;
     // Structured optic (galadriel/haldir grammar): a top-lit lens WELL, a controlled
     // blue core HALO (radial falloff, NO blur), a crisp quadcopter with an OPEN centre
     // gap, and a single WHITE-HOT hub pinpoint through a tight bloom — the sole
@@ -956,7 +955,6 @@ export function nodeMark(n) {
     <polygon points="${hexAp}" class="mw-aphex"/>
     <g class="mw-blades">${bladeSpin}${blades}</g>
     ${innerRing}${notch}
-    ${ticks}
     <circle cx="${cx}" cy="${cy}" r="${SEAT_R}" class="mw-ring"/>
     <circle cx="${cx}" cy="${cy}" r="31.8" class="mw-groove"/>
     <circle cx="${cx}" cy="${cy}" r="35.4" class="mw-hairline"/>
@@ -1338,8 +1336,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mw-blade-sh  { fill: none; stroke: #05070b; stroke-opacity: 0.7; stroke-width: 1.2; }
     .mw-inner     { fill: none; stroke: url(#mwBezel); stroke-width: 1.6; stroke-opacity: 0.9; stroke-linecap: round; }
     .mw-notch     { fill: none; stroke: #bae6fd; stroke-width: 1.4; stroke-linejoin: round; stroke-linecap: round; }
-    .mw-notch-pip { fill: #e0f2fe; }
-    .mw-tick      { stroke: #38bdf8; stroke-opacity: 0.35; stroke-width: 1; }
     .mw-lock      { fill: none; stroke: #ef4444; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
     .mw-lock-dot  { fill: #ff6b5e; }
     .mw-drone-arm { fill: none; stroke: #7dd3fc; stroke-width: 1.4; stroke-linecap: round; }
