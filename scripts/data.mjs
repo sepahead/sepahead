@@ -61,11 +61,11 @@ export const PROJECTS = [
     stack: ["Rust"],
   },
   {
-    name: "cortexel",
-    accent: "#e879f9", light: "#c026d3", grad: "#2a0a2e",
-    stars: 3, repo: "sepahead/cortexel",
-    desc: "Agent-consumable scientific-visualization library for neural simulations: VizSpec to spike rasters & STDP curves, provenance fail-closed.",
-    stack: ["TS", "React", "Three"],
+    name: "haldir",
+    accent: "#2dd4bf", light: "#0d9488", grad: "#042f2a",
+    phase: "in design", repo: "sepahead/haldir",
+    desc: "Security & guardian layer for the NCP ecosystem: per-frame provenance, fail-closed authorization gates & attestation. Design catalog.",
+    stack: ["Rust"],
   },
   {
     name: "manwe",
@@ -75,11 +75,27 @@ export const PROJECTS = [
     stack: ["Rust"],
   },
   {
-    name: "haldir",
-    accent: "#2dd4bf", light: "#0d9488", grad: "#042f2a",
-    phase: "in design", repo: "sepahead/haldir",
-    desc: "Security & guardian layer for the NCP ecosystem: per-frame provenance, fail-closed authorization gates & attestation. Design catalog.",
-    stack: ["Rust"],
+    name: "cortexel",
+    accent: "#e879f9", light: "#c026d3", grad: "#2a0a2e",
+    stars: 3, repo: "sepahead/cortexel",
+    desc: "Agent-consumable scientific-visualization library for neural simulations: VizSpec to spike rasters & STDP curves, provenance fail-closed.",
+    stack: ["TS", "React", "Three"],
+  },
+  // Datasets (the two atlas repos, shown last with a `dataset` badge rather than a
+  // star count — they are the same repos rendered as dataset chips in the graph).
+  {
+    name: "relief-atlas",
+    accent: "#fb7185", light: "#e11d48", grad: "#2a0a12",
+    dataset: true, repo: "sepahead/relief-atlas",
+    desc: "10K+ AI-generated 3D mesh assets for disaster-relief and humanitarian-aid simulation: synthetic geometry for training and sim.",
+    stack: ["Python"],
+  },
+  {
+    name: "cobot-atlas",
+    accent: "#60a5fa", light: "#2563eb", grad: "#0b1a33",
+    dataset: true, repo: "sepahead/cobot-atlas",
+    desc: "3D mesh-generation pipeline: 2,023 meshes for collaborative-robot simulation and embodied AI, published as a dataset on Hugging Face.",
+    stack: ["Python"],
   },
 ];
 

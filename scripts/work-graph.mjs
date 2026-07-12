@@ -67,6 +67,7 @@ const nodes = {
   cortexel:    { x: 110, y: 360, color: "#e879f9", kind: "voxel" },
   manwe:       { x: 298, y: 386, color: "#38bdf8", kind: "radar", label: "manwe" },
   galadriel:   { x: 375, y: 250, color: "#ef4444", kind: "sentinel", label: "galadriel" },
+  haldir:      { x: 324, y: 140, color: "#2dd4bf", kind: "haldir", label: "haldir" },
 };
 // Uppercase every label in the SOURCE (not via CSS text-transform, which
 // librsvg and other SVG renderers ignore — content-case renders everywhere).
@@ -87,6 +88,9 @@ const edges = [
   { a: "manwe",       b: "crebain" },
   { a: "galadriel",   b: "crebain" },
   { a: "galadriel",   b: "pidrs" },
+  { a: "ncp",         b: "haldir" },
+  { a: "haldir",      b: "galadriel" },
+  { a: "haldir",      b: "prisoma" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -119,6 +123,7 @@ function halfExtents(n) {
   if (n.kind === "raven") return { hw: 30, hh: 30, circle: true };
   if (n.kind === "radar") return { hw: SEAT_R, hh: SEAT_R, circle: true };
   if (n.kind === "sentinel") return { hw: 34, hh: 34, circle: true };
+  if (n.kind === "haldir") return { hw: SEAT_R, hh: SEAT_R, circle: true };
   if (n.kind === "logo") return { hw: 30, hh: 30, circle: true };
   if (n.kind === "cube") return { hw: 48, hh: 48, circle: true };
   return { hw: nodeWidth(n) / 2, hh: CHIP_H / 2, circle: false };
@@ -848,6 +853,108 @@ const nodeEls = Object.values(nodes).map((n) => {
     <text x="${cx}" y="${f1(cy - 46)}" text-anchor="middle" class="gal-label">${escapeXML(n.label)}</text>
   </g>`;
   }
+  if (n.kind === "haldir") {
+    // haldir: THE MARCHWARDEN'S ARCH — the fail-closed authorization reference
+    // monitor as an elvish gate you are challenged to pass THROUGH. A tall pointed
+    // (ogee) arch BAND, top-lit teal, stands over a PORTCULLIS dropped SHUT into
+    // the sill (default-deny — fail-closed is the resting truth of a reference
+    // monitor). At the crown a lit keystone SIGNET bearing Haldir's engraved
+    // KEYHOLE — the sole key that publishes the final command and the mark's
+    // single brightest point: what Haldir admits, it RE-ORIGINATES under its own
+    // seal. Below the threshold a dull DENIED chip waits, unadmitted. The read at
+    // a glance is bright-sealed-crown vs dull-denied-doorstep. Deliberately NOT
+    // NCP's horizontal amber dual-lane transport gate (this is a VERTICAL teal
+    // archway, a curved open void, not a free-standing bar) and NOT galadriel's
+    // solid red shield (an OPEN portal you pass through — no eye, visor or crest).
+    // Teal seat is theme-FIXED (a real object); only the label ink adapts. Motion
+    // (browser-only) runs one vertical admission cycle: the grille LIFTS, the
+    // signed intent RISES through the wards, the crown STAMPS it, the re-originated
+    // command EXITS through the apex, then the portcullis RE-SEATS — fail-closed.
+    // librsvg + reduced-motion hold the shut, sealed still life (the three motion
+    // tokens are authored opacity:0, absent from the frozen frame). Unique ids.
+    const cx = n.x, cy = n.y;
+    const A = (dx, dy) => `${f1(cx + dx)} ${f1(cy + dy)}`;   // "x y" for paths
+    const P = (dx, dy) => `${f1(cx + dx)},${f1(cy + dy)}`;   // "x,y" for polygons
+    const CYC = "4.4s";
+    // L3 arch band — outer ogee profile minus inner aperture (evenodd), top-lit.
+    const archBand =
+      `M${A(-15,20)} L${A(-15,1)} C${A(-15,-13)} ${A(-10,-25)} ${A(0,-26)} C${A(10,-25)} ${A(15,-13)} ${A(15,1)} L${A(15,20)} Z ` +
+      `M${A(-7,18)} L${A(-7,-1)} C${A(-7,-9)} ${A(-4.5,-13)} ${A(0,-13.5)} C${A(4.5,-13)} ${A(7,-9)} ${A(7,-1)} L${A(7,18)} Z`;
+    // L4 archivolt ward groove (single hairline inside the profile).
+    const archivolt =
+      `M${A(-11,19)} L${A(-11,0)} C${A(-11,-11)} ${A(-7,-20.5)} ${A(0,-21)} C${A(7,-20.5)} ${A(11,-11)} ${A(11,0)} L${A(11,19)}`;
+    // L5 three crown studs (the layered wards, as a heraldic triad).
+    const studs = [[0,-24],[-9,-9],[9,-9]]
+      .map(([dx,dy]) => `<circle class="hd-stud" cx="${f1(cx+dx)}" cy="${f1(cy+dy)}" r="0.9"/>`).join("");
+    // L6 portcullis DOWN / shut — a framed LATTICE (3 verticals crossed by 3 rails)
+    // filling the lower gate opening, its short barbed teeth seated below the bottom
+    // rail toward the sill. The pointed tympanum above stays open for the keystone
+    // signet (architecturally correct: a rectangular portcullis, a pointed arch).
+    // The framed lattice + arch context read unmistakably as a shut grille, never
+    // NCP's horizontal transport lanes; rung-less bars alone read as arrows.
+    const gTop = cy - 4, gBot = cy + 12;
+    const grilleBars = [-4.2, 0, 4.2].map((dx) => {
+      const x = cx + dx;
+      return `<path class="hd-grille-bar" d="M${f1(x)} ${f1(gTop)} L${f1(x)} ${f1(gBot)}"/>` +
+        `<polygon class="hd-spike" points="${f1(x-1.4)},${f1(gBot)} ${f1(x)},${f1(gBot+2.6)} ${f1(x+1.4)},${f1(gBot)}"/>`;
+    }).join("");
+    const grilleRails = [gTop, cy + 4, gBot].map((ry) => `<path class="hd-grille-bar" d="M${f1(cx-5.2)} ${f1(ry)} H${f1(cx+5.2)}"/>`).join("");
+    const grille = grilleBars + grilleRails;
+    // L7 keystone signet (hero) + engraved keyhole (NEVER a checkmark), at the apex.
+    const signet =
+      `<polygon class="hd-signet" points="${P(0,-21.5)} ${P(3.5,-18.8)} ${P(3.5,-15.2)} ${P(0,-12.5)} ${P(-3.5,-15.2)} ${P(-3.5,-18.8)}"/>` +
+      `<polygon class="hd-signet-facet" points="${P(0,-21.5)} ${P(3.5,-18.8)} ${P(0,-17.5)} ${P(-3.5,-18.8)}"/>` +
+      `<circle class="hd-keyhole" cx="${cx}" cy="${f1(cy-18)}" r="1"/>` +
+      `<polygon class="hd-keyhole" points="${P(-0.8,-17)} ${P(0.8,-17)} ${P(0,-14.3)}"/>`;
+    // L8 dull DENIED input chip at the doorstep (the dim counter to the bright crown).
+    const denied = `<rect class="hd-denied" x="${f1(cx-3)}" y="${f1(cy+23)}" width="6" height="4" rx="1"/>`;
+    // Motion (browser-only). Grille lift; crown stamp pulse; three tokens (opacity:0
+    // at rest so librsvg/reduced-motion omit them): intent rises, spark, sealed
+    // command re-originated and emitted through the apex.
+    const grilleLift =
+      `<animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 -14;0 -14;0 0;0 0" keyTimes="0;0.14;0.30;0.62;0.78;1" dur="${CYC}" repeatCount="indefinite"/>`;
+    const crownPulse =
+      `<animate attributeName="opacity" values="0.42;0.42;0.95;0.42;0.42" keyTimes="0;0.4;0.47;0.58;1" dur="${CYC}" repeatCount="indefinite"/>`;
+    const inTok =
+      `<g class="hd-intoken" opacity="0">` +
+        `<polygon points="${P(0,19.6)} ${P(2.4,22)} ${P(0,24.4)} ${P(-2.4,22)}"/>` +
+        `<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.14;0.2;0.4;0.44;1" dur="${CYC}" repeatCount="indefinite"/>` +
+        `<animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 -30;0 -30;0 -30;0 -30" keyTimes="0;0.14;0.42;0.6;0.8;1" dur="${CYC}" repeatCount="indefinite"/>` +
+      `</g>`;
+    const spark =
+      `<circle class="hd-spark" cx="${cx}" cy="${f1(cy-9)}" r="0" opacity="0">` +
+        `<animate attributeName="r" values="0;0;6;0" keyTimes="0;0.4;0.47;0.53" dur="${CYC}" repeatCount="indefinite"/>` +
+        `<animate attributeName="opacity" values="0;0;0.9;0" keyTimes="0;0.4;0.47;0.53" dur="${CYC}" repeatCount="indefinite"/>` +
+      `</circle>`;
+    const sealTok =
+      `<g class="hd-sealtoken" opacity="0">` +
+        `<polygon points="${P(0,-10.6)} ${P(2.6,-8)} ${P(0,-5.4)} ${P(-2.6,-8)}"/>` +
+        `<animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.42;0.5;0.62;1" dur="${CYC}" repeatCount="indefinite"/>` +
+        `<animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 -24;0 -24" keyTimes="0;0.42;0.62;1" dur="${CYC}" repeatCount="indefinite"/>` +
+      `</g>`;
+    return `<g>
+    <defs>
+      <linearGradient id="haldirArch" x1="0" y1="${f1(cy-26)}" x2="0" y2="${f1(cy+20)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#99f6e4"/><stop offset="50%" stop-color="#2dd4bf"/><stop offset="100%" stop-color="#0f766e"/>
+      </linearGradient>
+      <radialGradient id="hdCrownGlow" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${f1(cy-17)}" r="8">
+        <stop offset="0%" stop-color="#99f6e4" stop-opacity="0.85"/><stop offset="100%" stop-color="#99f6e4" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    ${seat(cx, cy, "hd", ["#99f6e4", "#2dd4bf", "#0f766e"])}
+    <path class="hd-thresh" d="M${f1(cx-19)} ${f1(cy+20)} H${f1(cx+19)}"/>
+    <path class="hd-arch-band" d="${archBand}" fill-rule="evenodd"/>
+    <path class="hd-archivolt" d="${archivolt}"/>
+    ${studs}
+    <g class="hd-grille">${grille}${grilleLift}</g>
+    <circle class="hd-crownglow" cx="${cx}" cy="${f1(cy-17)}" r="8" opacity="0.42">${crownPulse}</circle>
+    ${signet}
+    ${denied}
+    ${inTok}${spark}${sealTok}
+    <text x="${cx}" y="${f1(cy-46)}" text-anchor="middle" class="haldir-label">${escapeXML(n.label)}</text>
+  </g>`;
+  }
+
   // small "chip" nodes
   const w = nodeWidth(n);
   const x = n.x - w / 2;
@@ -880,7 +987,7 @@ const frame = `<g class="frame">
 // Assemble.
 // ---------------------------------------------------------------------------
 const aria =
-  "Project graph: engram, the neural-modeling hub, and crebain, the multi-UAV simulation and airspace-awareness testbed, connect through the always-on, two-way NCP protocol to prisoma, a private hub; pid-rs, cobot-atlas, melkor and relief-atlas connect to prisoma; cobot-atlas, melkor and relief-atlas also connect to crebain, as does manwe, the drone-detection eye feeding crebain; cortexel connects to engram; galadriel, a public cross-sensor statistical-consistency monitor, connects to crebain and pid-rs.";
+  "Project graph: engram, the neural-modeling hub, and crebain, the multi-UAV simulation and airspace-awareness testbed, connect through the always-on, two-way NCP protocol to prisoma, a private hub; pid-rs, cobot-atlas, melkor and relief-atlas connect to prisoma; cobot-atlas, melkor and relief-atlas also connect to crebain, as does manwe, the drone-detection eye feeding crebain; cortexel connects to engram; galadriel, a public cross-sensor statistical-consistency monitor, connects to crebain and pid-rs; haldir, the fail-closed authorization gate that admits a signed controller intent and re-originates the plant command under its own key, connects to NCP, galadriel and prisoma.";
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
   <defs>
@@ -898,6 +1005,10 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     </radialGradient>
     <radialGradient id="galGrad" cx="50%" cy="40%" r="68%">
       <stop offset="0%" stop-color="#2a0a0a"/>
+      <stop offset="100%" stop-color="#10131a"/>
+    </radialGradient>
+    <radialGradient id="hdGrad" cx="50%" cy="40%" r="68%">
+      <stop offset="0%" stop-color="#042f2a"/>
       <stop offset="100%" stop-color="#10131a"/>
     </radialGradient>
     <filter id="nodeShadow" x="-40%" y="-40%" width="180%" height="180%">
@@ -997,6 +1108,22 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .gal-slit   { fill: #05070b; stroke: #22d3ee; stroke-opacity: 0.55; stroke-width: 0.8; stroke-linejoin: miter; }
     .gal-hotf   { fill: #ef4444; }
     .gal-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #ef4444; }
+    .seat-hd         { fill: url(#hdGrad); }
+    .hd-crownglow    { fill: url(#hdCrownGlow); }
+    .hd-thresh       { fill: none; stroke: #2dd4bf; stroke-width: 1.6; stroke-linecap: round; stroke-opacity: 0.85; }
+    .hd-arch-band    { fill: url(#haldirArch); stroke: #0f766e; stroke-width: 0.5; stroke-opacity: 0.6; }
+    .hd-archivolt    { fill: none; stroke: #0f766e; stroke-width: 1.2; stroke-opacity: 0.9; stroke-linecap: round; stroke-linejoin: round; }
+    .hd-stud         { fill: #ccfbf1; fill-opacity: 0.9; }
+    .hd-grille-bar   { fill: none; stroke: #2dd4bf; stroke-width: 1.5; stroke-opacity: 0.92; stroke-linecap: round; }
+    .hd-spike        { fill: #2dd4bf; }
+    .hd-signet       { fill: #2dd4bf; stroke: #0d9488; stroke-width: 0.6; }
+    .hd-signet-facet { fill: #ecfeff; fill-opacity: 0.9; }
+    .hd-keyhole      { fill: #042f2a; }
+    .hd-denied       { fill: #0f766e; fill-opacity: 0.5; stroke: #0f766e; stroke-opacity: 0.55; stroke-width: 1; }
+    .hd-intoken      { fill: #2dd4bf; }
+    .hd-spark        { fill: #ecfeff; }
+    .hd-sealtoken    { fill: #5eead4; }
+    .haldir-label    { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #2dd4bf; }
     .wg-rule    { stroke: #30363d; stroke-width: 1; stroke-opacity: 0.55; }
     .wg-bracket { fill: none; stroke: #fbbf24; stroke-width: 1.5; stroke-linecap: round; stroke-opacity: 0.85; }
     .panel      { fill: #ffffff; fill-opacity: 0.022; stroke: #ffffff; stroke-opacity: 0.07; }
@@ -1026,6 +1153,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .raven-cursor { fill: #4b5320; }
       .radar-label { fill: #0284c7; }
       .gal-label { fill: #dc2626; }
+      .haldir-label { fill: #0d9488; }
       .wg-rule { stroke: #d0d7de; stroke-opacity: 0.9; }
       .wg-bracket { stroke: #b45309; }
       .panel { fill: #0b1f2a; fill-opacity: 0.025; stroke: #0b1f2a; stroke-opacity: 0.08; }

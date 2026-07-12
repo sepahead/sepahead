@@ -37,9 +37,9 @@ async function hydrateStars(list) {
     return;
   }
   for (const p of list) {
-    // `phase` projects (design-stage repos) carry a status word, not a star
+    // `phase` (design-stage) and `dataset` repos carry a status word, not a star
     // count — skip the refresh so the badge never becomes a "★ 0".
-    if (p.private || p.phase || !p.repo) continue;
+    if (p.private || p.phase || p.dataset || !p.repo) continue;
     try {
       const res = await fetch(`https://api.github.com/repos/${p.repo}`, {
         headers: {
@@ -130,6 +130,22 @@ function lock(x, y, scale, cls) {
     `<rect x="0" y="6" width="12" height="9" rx="1.6" class="glyph-fill ${cls}"/></g>`;
 }
 
+// Dataset glyph: a small stack of isometric mesh-sample plates (mirrors the
+// work-graph dataset chips) so a dataset card reads as "a layered collection of
+// 3-D assets" rather than a starred code project. Centred at (cx, cy).
+function datasetPlates(cx, cy, cls) {
+  const hw = 4.6, hh = 2.4, dy = 3.1, op = [0.18, 0.28, 0.42];
+  return [-dy, 0, dy]
+    .map((o, i) => {
+      const c = cy + o;
+      const pts =
+        `${cx.toFixed(1)},${(c - hh).toFixed(1)} ${(cx + hw).toFixed(1)},${c.toFixed(1)} ` +
+        `${cx.toFixed(1)},${(c + hh).toFixed(1)} ${(cx - hw).toFixed(1)},${c.toFixed(1)}`;
+      return `<polygon points="${pts}" class="glyph-fill glyph-stroke ${cls}" fill-opacity="${op[i]}" stroke-width="1" stroke-linejoin="round"/>`;
+    })
+    .join("");
+}
+
 // Star glyph (filled 5-point star) centred at (cx, cy), radius r.
 function star(cx, cy, r, cls) {
   const pts = [];
@@ -189,6 +205,10 @@ function buildCard(p) {
       `<circle cx="${bx - 10}" cy="${y + 22}" r="5" fill="none" stroke-width="1.4" class="glyph-stroke ${cls}"/>` +
       `<circle cx="${bx - 10}" cy="${y + 22}" r="1.6" class="glyph-fill ${cls}"/>` +
       `<text x="${bx - 21}" y="${y + 27}" text-anchor="end" class="badge ${cls}">${escapeXML(p.phase)}</text>`;
+  } else if (p.dataset) {
+    badge =
+      datasetPlates(bx - 7, y + 22, cls) +
+      `<text x="${bx - 16}" y="${y + 27}" text-anchor="end" class="badge ${cls}">dataset</text>`;
   } else if (p.stars != null) {
     badge =
       star(bx - 6, y + 22, 6, cls) +
