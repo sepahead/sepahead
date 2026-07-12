@@ -917,8 +917,11 @@ export function nodeMark(n) {
       `<polyline class="mw-lock" points="${f1(cx-1.4)},${f1(cy-9.6)} ${cx},${f1(cy-8.2)} ${f1(cx+1.4)},${f1(cy-9.6)}"/>` +
       `<circle class="mw-lock-dot" cx="${cx}" cy="${f1(cy-9.9)}" r="0.6"/>`;
     // Browser-only REVEAL loop (10s): the drone APPEARS, then the red target caret
-    // fades in, then the iris partitions spin one clockwise turn; hold, reset, replay.
-    // Frozen / reduced-motion base = the complete lit mark (opacity 1, 0deg rotation).
+    // fades in, then the whole iris MECHANISM — blade partitions, dot disc, the
+    // hexagonal aperture (well + rim) and the inner focus ring (its index notch
+    // sweeping past the fixed tick scale) — spins one clockwise turn while the
+    // drone, lock caret and core glow hold still; hold, reset, replay. Frozen /
+    // reduced-motion base = the complete lit mark (opacity 1, 0deg rotation).
     const MWC = "10s";
     const droneFade = `<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.04;0.13;0.9;0.98;1" dur="${MWC}" repeatCount="indefinite"/>`;
     const trigFade = `<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.22;0.31;0.9;0.97;1" dur="${MWC}" repeatCount="indefinite"/>`;
@@ -944,15 +947,15 @@ export function nodeMark(n) {
     <g filter="url(#nodeShadow)"><circle cx="${cx}" cy="${cy}" r="${SEAT_R}" fill="url(#mwBarrel)"/></g>
     <circle cx="${cx}" cy="${cy}" r="${IR}" class="mw-iris"/>
     <g>${bladeSpin}<circle cx="${cx}" cy="${cy}" r="26.5" fill="url(#mwDots)"/></g>
-    <polygon points="${hexAp}" class="mw-well"/>
+    <g>${bladeSpin}<polygon points="${hexAp}" class="mw-well"/></g>
     <circle cx="${cx}" cy="${cy}" r="6" class="mw-core">
       <animate attributeName="opacity" values="1;0.82;1" dur="3.4s" repeatCount="indefinite"/>
     </circle>
     <g class="mw-drone" opacity="1">${droneFade}${drone}<circle cx="${cx}" cy="${cy}" r="1.4" class="mw-hub" filter="url(#mwBloom)"/></g>
     <g class="mw-trigger" opacity="1">${trigFade}${lock}</g>
-    <polygon points="${hexAp}" class="mw-aphex"/>
+    <g>${bladeSpin}<polygon points="${hexAp}" class="mw-aphex"/></g>
     <g class="mw-blades">${bladeSpin}${blades}</g>
-    ${innerRing}${notch}${ticks}
+    <g class="mw-focus">${bladeSpin}${innerRing}${notch}</g>${ticks}
     <circle cx="${cx}" cy="${cy}" r="${SEAT_R}" class="mw-ring"/>
     <circle cx="${cx}" cy="${cy}" r="31.8" class="mw-groove"/>
     <circle cx="${cx}" cy="${cy}" r="35.4" class="mw-hairline"/>
