@@ -26,6 +26,7 @@ const SPEC = {
   manwe:    { half: 44 },
   engram:   { half: 54 }, // medallion scaled to radius ~46 + bezel/shadow
   haldir:   { half: 46 },
+  prisoma:  { half: 52, dy: -9 }, // apex-heavy triangle (hairline -55.8, base+shadow ~+38): recentre on the visual midpoint
 };
 
 // Remove a whole <g class="cls">...</g> group (balanced, handles nesting).
@@ -51,8 +52,8 @@ function stripChrome(mark) {
 export function logoSVG(key) {
   const n = nodes[key];
   if (!n) throw new Error(`no node ${key}`);
-  const H = SPEC[key].half;
-  const vb = `${f1(n.x - H)} ${f1(n.y - H)} ${f1(2 * H)} ${f1(2 * H)}`;
+  const { half: H, dy = 0 } = SPEC[key];
+  const vb = `${f1(n.x - H)} ${f1(n.y + dy - H)} ${f1(2 * H)} ${f1(2 * H)}`;
   const mark = stripChrome(nodeMark(n));
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="${f1(2 * H)}" height="${f1(2 * H)}" role="img" aria-label="${key} logo">
   <defs>${SHARED_DEFS}</defs>
