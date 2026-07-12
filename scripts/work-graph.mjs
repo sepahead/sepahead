@@ -429,32 +429,47 @@ export function nodeMark(n) {
     const pt = (k) => `${f1(cx + V[k][0])},${f1(cy + V[k][1])}`;
     const facets = TIN.map(([a, b, c, tone]) =>
       `<polygon class="mel-tin" points="${pt(a)} ${pt(b)} ${pt(c)}" fill="${tone}"/>`).join("\n      ");
-    // MESH RECONSTRUCTION overlay: the low-poly surface is actively re-triangulated —
-    // the facet WIREFRAME draws on (stroke-dashoffset) and vertex points pop in (radius,
-    // NOT opacity), bottom -> top, like a 3-D scan assembling the mesh; it holds
-    // reconstructed, then resets and rebuilds. Base (t=0) = un-built, so librsvg /
-    // reduced-motion show the clean surveyed massif; the loop is seamless (first==last).
-    const MEL = "5s";
-    const dist = (a, b) => Math.hypot(V[a][0] - V[b][0], V[a][1] - V[b][1]);
-    const order = TIN.map((t, i) => ({ i, y: (V[t[0]][1] + V[t[1]][1] + V[t[2]][1]) / 3 }))
-      .sort((p, q) => q.y - p.y); // base (higher screen-y) reconstructs first
-    const rank = {}; order.forEach((o, k) => { rank[o.i] = k; });
-    const meshTris = TIN.map(([a, b, c], i) => {
-      const P = f1(dist(a, b) + dist(b, c) + dist(c, a));
-      const b0 = f1(0.05 + rank[i] * 0.09), b1 = f1(0.05 + rank[i] * 0.09 + 0.16);
-      return `<polygon class="mel-mesh" points="${pt(a)} ${pt(b)} ${pt(c)}" stroke-dasharray="${P} ${P}" stroke-dashoffset="${P}">` +
-        `<animate attributeName="stroke-dashoffset" values="${P};${P};0;0;${P}" keyTimes="0;${b0};${b1};0.9;1" dur="${MEL}" repeatCount="indefinite"/></polygon>`;
-    }).join("\n      ");
-    const meshVerts = Object.keys(V).map((k) => {
-      const ph = f1(0.05 + (24 - V[k][1]) / 58 * 0.5); // base earliest, peak latest
-      return `<circle class="mel-vert" cx="${f1(cx + V[k][0])}" cy="${f1(cy + V[k][1])}" r="0">` +
-        `<animate attributeName="r" values="0;0;1.6;1.6;0" keyTimes="0;${ph};${f1(ph + 0.05)};0.9;1" dur="${MEL}" repeatCount="indefinite"/></circle>`;
+    // GAUSSIAN-SPLAT DISINTEGRATION / REINTEGRATION (3DGS): the surveyed massif is a
+    // cloud of soft splats resting ON the mountain (t=0 = the integrated scene, held by
+    // librsvg / reduced-motion). They blow OUTWARD into a diffuse cloud (disintegrate),
+    // hover, then snap back onto the surface (reintegrate) on a seamless loop. Motion is
+    // pure translate (no opacity fade). Deterministic pseudo-random sampling keeps the
+    // generated output stable across regenerations.
+    const MEL = "4.6s";
+    const massif = [[-30, 24], [-12, -22], [0, -2], [12, -34], [30, 24]];
+    const inMassif = (px, py) => { // ray-cast point-in-polygon
+      let inside = false;
+      for (let i = 0, j = massif.length - 1; i < massif.length; j = i++) {
+        const [xi, yi] = massif[i], [xj, yj] = massif[j];
+        if ((yi > py) !== (yj > py) && px < ((xj - xi) * (py - yi)) / (yj - yi) + xi) inside = !inside;
+      }
+      return inside;
+    };
+    const rnd = (k) => { const s = (k * 2654435761 >>> 0) % 2147483647; return ((s >>> 9) & 0x7fff) / 0x8000; };
+    const splatHomes = [];
+    let sk = 0;
+    for (let gy = -30; gy <= 22; gy += 7.5) for (let gx = -26; gx <= 26; gx += 8) {
+      if (!inMassif(gx, gy)) continue;
+      const hx = gx + (rnd(sk * 2 + 1) - 0.5) * 5, hy = gy + (rnd(sk * 2 + 2) - 0.5) * 5;
+      const ang = Math.atan2(hy + 6, hx) + (rnd(sk * 3 + 1) - 0.5) * 1.0; // outward from massif core (0,-6)
+      const mag = 24 + rnd(sk * 3 + 2) * 34; // wide scatter — far ones clip off the hex = dispersed
+      splatHomes.push({ hx: f1(hx), hy: f1(hy), sx: f1(Math.cos(ang) * mag), sy: f1(Math.sin(ang) * mag), i: sk });
+      sk++;
+    }
+    const splats = splatHomes.map(({ hx, hy, sx, sy, i }) => {
+      const d0 = f1(0.3 + (rnd(i * 5 + 1) - 0.5) * 0.08), d1 = f1(0.52 + (rnd(i * 5 + 2) - 0.5) * 0.06);
+      const r0 = f1(0.86 + (rnd(i * 5 + 3) - 0.5) * 0.05);
+      return `<circle class="mel-splat" cx="${f1(cx + hx)}" cy="${f1(cy + hy)}" r="2.7">` +
+        `<animateTransform attributeName="transform" type="translate" values="0 0;${sx} ${sy};${sx} ${sy};0 0;0 0" keyTimes="0;${d0};${d1};${r0};1" calcMode="spline" keySplines="0.35 0 0.2 1;0 0 1 1;0.4 0 0.25 1;0 0 1 1" dur="${MEL}" repeatCount="indefinite"/></circle>`;
     }).join("\n      ");
     return `<g>
     <defs>
       <linearGradient id="melPlate" x1="0" y1="${f1(cy - 48)}" x2="0" y2="${f1(cy + 48)}" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#2b1a10"/><stop offset="55%" stop-color="#170d07"/><stop offset="100%" stop-color="#0b0604"/>
       </linearGradient>
+      <radialGradient id="melSplat">
+        <stop offset="0%" stop-color="#fed7aa" stop-opacity="0.9"/><stop offset="42%" stop-color="#f97316" stop-opacity="0.5"/><stop offset="100%" stop-color="#ea580c" stop-opacity="0"/>
+      </radialGradient>
       <radialGradient id="melHeat" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${f1(cy + 22)}" r="62">
         <stop offset="0%" stop-color="#c2410c" stop-opacity="0.72"/><stop offset="45%" stop-color="#9a3412" stop-opacity="0.38"/><stop offset="100%" stop-color="#7c2d12" stop-opacity="0"/>
       </radialGradient>
@@ -470,8 +485,7 @@ export function nodeMark(n) {
       <path d="M${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)} L${f1(cx + 12)} ${f1(cy + 24)} Z" class="mel-facet"/>
       ${facets}
       <path d="${ridgeLine}" class="mel-ridge"/>
-      ${meshTris}
-      ${meshVerts}
+      ${splats}
     </g>
     <path d="${hex(1)}" class="mel-edge"/>
     <path d="${hex(0.9423)}" class="mel-groove"/>
@@ -561,9 +575,10 @@ export function nodeMark(n) {
     const F = [0, -6];                                        // focal: blade foot / hill crest
     const lEdge = (t) => [f1(-45.9 * t), f1(-53 + 79.5 * t)]; // apex -> base-left
     const rEdge = (t) => [f1(45.9 * t), f1(-53 + 79.5 * t)];  // apex -> base-right
-    // LEFT = few cool input rays (1-2 hues); RIGHT = many spectral output rays.
-    const LEFT = [[0.42, "#ddd6fe"], [0.58, "#c4b5fd"], [0.72, "#a5b4fc"]];
-    const RIGHT = [[0.30, "#a5b4fc"], [0.39, "#818cf8"], [0.48, "#60a5fa"], [0.57, "#38bdf8"], [0.66, "#2dd4bf"], [0.74, "#c084fc"], [0.82, "#e879f9"]];
+    // LEFT = few cool input rays (1-2 hues); RIGHT = many spectral output rays. Both
+    // fans are held in the upper "sky" (t <= 0.58) so no ray dips below the hill crest.
+    const LEFT = [[0.40, "#ddd6fe"], [0.49, "#c4b5fd"], [0.58, "#a5b4fc"]];
+    const RIGHT = [[0.26, "#a5b4fc"], [0.31, "#818cf8"], [0.37, "#60a5fa"], [0.43, "#38bdf8"], [0.49, "#2dd4bf"], [0.54, "#c084fc"], [0.58, "#e879f9"]];
     const ray = (edgeFn, [t, color], i, dur) => {
       const P = edgeFn(t);
       return `<line class="prz-ray" x1="${F[0]}" y1="${F[1]}" x2="${P[0]}" y2="${P[1]}" stroke="${color}"/>` +
@@ -605,11 +620,22 @@ export function nodeMark(n) {
       <linearGradient id="przBlade" x1="-2.4" y1="0" x2="2.4" y2="0" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#5a636d"/><stop offset="28%" stop-color="#e7ecf1"/><stop offset="50%" stop-color="#ffffff"/><stop offset="72%" stop-color="#c2ccd6"/><stop offset="100%" stop-color="#525c66"/>
       </linearGradient>
+      <linearGradient id="przSky" x1="0" y1="${topY}" x2="0" y2="${f1(cy - 4)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#0d0a20" stop-opacity="0.72"/><stop offset="42%" stop-color="#181233" stop-opacity="0.34"/><stop offset="100%" stop-color="#181233" stop-opacity="0"/>
+      </linearGradient>
+      <radialGradient id="przSkyGlow" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${f1(cy - 10)}" r="30">
+        <stop offset="0%" stop-color="#5b4c9e" stop-opacity="0.5"/><stop offset="60%" stop-color="#3a2f66" stop-opacity="0.14"/><stop offset="100%" stop-color="#3a2f66" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="przShadow" x="-45%" y="-45%" width="190%" height="190%">
+        <feDropShadow dx="0" dy="2.4" stdDeviation="4.2" flood-color="#000000" flood-opacity="0.5"/>
+      </filter>
       <clipPath id="przClip"><polygon points="${tri(R)}"/></clipPath>
     </defs>
-    <g filter="url(#nodeShadow)"><polygon points="${tri(R)}" class="prz-body"/></g>
+    <g filter="url(#przShadow)"><polygon points="${tri(R)}" class="prz-body"/></g>
     <g clip-path="url(#przClip)">
       <polygon points="${tri(R)}" fill="url(#przCore)"/>
+      <polygon points="${tri(R)}" fill="url(#przSkyGlow)"/>
+      <polygon points="${tri(R)}" fill="url(#przSky)"/>
       <polygon points="${tri(R)}" fill="url(#przSheen)"/>
       <g transform="translate(${cx},${cy})">
         <g filter="url(#edgeGlow)">
@@ -878,7 +904,7 @@ export function nodeMark(n) {
     const gA = rad(90 - gap), gB = rad(90 + gap); // top = -y, so 90deg is UP here via -sin
     const p = (ang, r) => `${f1(cx + r * Math.cos(ang))} ${f1(cy - r * Math.sin(ang))}`;
     const innerRing =
-      `<path class="mw-inner" d="M${p(gA, NR)} A${NR} ${NR} 0 1 0 ${p(gB, NR)}"/>`;
+      `<path class="mw-inner" d="M${p(gA, NR)} A${NR} ${NR} 0 1 1 ${p(gB, NR)}"/>`;
     const notch =
       `<path class="mw-notch" d="M${p(gA, NR)} L${p(rad(90), NR - 4.4)} L${p(gB, NR)}"/>` +
       `<circle class="mw-notch-pip" cx="${cx}" cy="${f1(cy - NR - 1.6)}" r="0.9"/>`;
@@ -1255,8 +1281,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mel-ridge    { fill: none; stroke: #fdba74; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
     .mel-facet    { fill: #070302; }
     .mel-tin      { stroke: #000000; stroke-opacity: 0.4; stroke-width: 0.6; stroke-linejoin: round; }
-    .mel-mesh     { fill: none; stroke: #f59e0b; stroke-width: 0.9; stroke-opacity: 0.85; stroke-linejoin: round; }
-    .mel-vert     { fill: #fde68a; }
+    .mel-splat    { fill: url(#melSplat); }
     .mel-edge     { fill: none; stroke: url(#melBezel); stroke-width: 2.4; stroke-linejoin: miter; }
     .mel-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .mel-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
