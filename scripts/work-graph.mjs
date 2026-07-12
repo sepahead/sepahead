@@ -430,11 +430,13 @@ export function nodeMark(n) {
     const pt = (k) => `${f1(cx + V[k][0])},${f1(cy + V[k][1])}`;
     const facets = TIN.map(([a, b, c, tone]) =>
       `<polygon class="mel-tin" points="${pt(a)} ${pt(b)} ${pt(c)}" fill="${tone}"/>`).join("\n      ");
-    // The full 3-D shaded surface (rock body + right flank + low-poly facets); reused for
-    // both the fog ghost and the crisp construction reveal.
+    // The full 3-D shaded surface (rock body + right flank + low-poly facets + the M ridge
+    // LINE) — reused for both the fog ghost and the crisp construction reveal, so the ridge
+    // is foggy while unfilled and DRAWS ON crisply as the shape fills from the base up.
     const surface = `<path d="${solid}" class="mel-rock"/>` +
       `<path d="M${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)} L${f1(cx + 12)} ${f1(cy + 24)} Z" class="mel-facet"/>` +
-      facets;
+      facets +
+      `<path d="${ridgeLine}" class="mel-ridge"/>`;
     // BEING CONSTRUCTED (3D FULL FILL): the massif's 3-D-shaded surface is REVEALED from
     // the base UP behind a bright build-line — a solid low-poly fill materialising in one
     // sweep, not a scatter of dots. It clears top-down, holds bare on the ridge scaffold,
@@ -475,7 +477,6 @@ export function nodeMark(n) {
       <path d="${hex(1)}" fill="url(#melHeat)"/>
       <g class="mel-fog-g" filter="url(#soft)">${surface}</g>
       <g clip-path="url(#melBuild)">${surface}</g>
-      <path d="${ridgeLine}" class="mel-ridge"/>
       ${front}
     </g>
     <path d="${hex(1)}" class="mel-edge"/>
@@ -668,7 +669,7 @@ export function nodeMark(n) {
     // edges (prisoma=perception/top, crebain=action/bottom, engram=centre trunk).
     return `<g>
     ${seat(n.x, n.y, "gate", ["#fde68a", "#fbbf24", "#92400e"])}
-    <g filter="url(#soft)">
+    <g filter="url(#soft)" transform="translate(${f1(n.x - 250)} ${f1(n.y - 230)})">
       <path d="M224 222 H243 M257 222 H276" class="gate-wire-perc"/>
       <path d="M224 238 H243 M257 238 H276" class="gate-wire"/>
       <circle cx="224" cy="222" r="2.2" class="gate-port"/>
@@ -691,7 +692,7 @@ export function nodeMark(n) {
         <animate attributeName="opacity" values="1;1;0.3;1;1" keyTimes="0;0.34;0.56;0.62;1" dur="2.6s" repeatCount="indefinite"/>
       </circle>
     </g>
-    <text x="${n.x}" y="276" text-anchor="middle" class="gate-label">${escapeXML(n.label)}</text>
+    <text x="${n.x}" y="${f1(n.y + 46)}" text-anchor="middle" class="gate-label">${escapeXML(n.label)}</text>
   </g>`;
   }
   if (n.kind === "voxel") {
