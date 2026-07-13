@@ -308,12 +308,35 @@
         <stop offset="55%" stop-color="#46c8d8" stop-opacity="0.05"/>
         <stop offset="100%" stop-color="#46c8d8" stop-opacity="0"/>
       </radialGradient>
-      <radialGradient id="en-rip" gradientUnits="userSpaceOnUse" cx="109.95" cy="229.68" r="32">
-        <stop offset="52%" stop-color="#b5ecf4" stop-opacity="0"/>
-        <stop offset="60%" stop-color="#b5ecf4" stop-opacity="0.2"/>
-        <stop offset="72%" stop-color="#9fe3ee" stop-opacity="0.24"/>
-        <stop offset="84%" stop-color="#8fd8ea" stop-opacity="0.1"/>
-        <stop offset="95%" stop-color="#8fd8ea" stop-opacity="0"/>
+      <radialGradient id="en-flow" gradientUnits="userSpaceOnUse" cx="109.95" cy="229.68" r="30">
+        <stop offset="0%" stop-color="#aeeef5" stop-opacity="0.62"/>
+        <stop offset="52%" stop-color="#a3ebf2" stop-opacity="0.56"/>
+        <stop offset="64%" stop-color="#93dcec" stop-opacity="0.46"/>
+        <stop offset="78%" stop-color="#79c3d6" stop-opacity="0.32"/>
+        <stop offset="90%" stop-color="#5fa3ba" stop-opacity="0.15"/>
+        <stop offset="100%" stop-color="#5fa3ba" stop-opacity="0.04"/>
+      </radialGradient>
+      <radialGradient id="en-dens" gradientUnits="userSpaceOnUse" cx="109.95" cy="229.68" r="30">
+        <stop offset="40%" stop-color="#1a4a55" stop-opacity="0"/>
+        <stop offset="52%" stop-color="#1a4a55" stop-opacity="0.18"/>
+        <stop offset="60%" stop-color="#17434f" stop-opacity="0.26"/>
+        <stop offset="74%" stop-color="#123644" stop-opacity="0.12"/>
+        <stop offset="92%" stop-color="#123644" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="en-surge" gradientUnits="userSpaceOnUse" cx="109.95" cy="229.68" r="33">
+        <stop offset="46%" stop-color="#ffe9a8" stop-opacity="1"/>
+        <stop offset="52%" stop-color="#ffd75e" stop-opacity="0.95"/>
+        <stop offset="60%" stop-color="#cdb4ff" stop-opacity="0.9"/>
+        <stop offset="72%" stop-color="#8fe0f0" stop-opacity="0.8"/>
+        <stop offset="86%" stop-color="#5fd0e0" stop-opacity="0.7"/>
+        <stop offset="99%" stop-color="#46c8d8" stop-opacity="0.5"/>
+      </radialGradient>
+      <radialGradient id="en-spoke" gradientUnits="userSpaceOnUse" cx="109.95" cy="229.68" r="15">
+        <stop offset="0%" stop-color="#f0eaff" stop-opacity="0.95"/>
+        <stop offset="20%" stop-color="#d4c7ff" stop-opacity="0.9"/>
+        <stop offset="45%" stop-color="#a78bfa" stop-opacity="0.7"/>
+        <stop offset="75%" stop-color="#7e6ee0" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#7e6ee0" stop-opacity="0"/>
       </radialGradient>
       <radialGradient id="en-ringL" gradientUnits="userSpaceOnUse" cx="90.07" cy="229.58" r="12">
         <stop offset="16%" stop-color="#fde68a" stop-opacity="0"/>
@@ -351,12 +374,14 @@
       <g clip-path="url(#engramClip)">
         <circle cx="110" cy="230" r="34" fill="url(#engramRecess)"/>
         <ellipse cx="121" cy="245" rx="15" ry="9" fill="url(#en-caust)" transform="rotate(18 121 245)"/>
+        <circle cx="109.95" cy="229.68" r="30" fill="url(#en-dens)"/>
+        <path d="M 138.51 223.61 C 138.11 225.42 137.51 231.3 136.11 234.48 C 134.71 237.66 132.45 240.55 130.12 242.68 C 127.8 244.81 124.85 246.36 122.16 247.25 C 119.47 248.15 116.49 248.31 113.99 248.04 C 111.48 247.77 108.28 246.04 107.14 245.63  M 100.93 257.45 C 99.56 256.2 94.76 252.74 92.71 249.94 C 90.66 247.14 89.28 243.73 88.6 240.65 C 87.92 237.57 88.05 234.25 88.63 231.47 C 89.2 228.69 90.54 226.03 92.03 224 C 93.52 221.96 96.62 220.05 97.54 219.27  M 90.41 207.98 C 92.18 207.42 97.58 205 101.03 204.62 C 104.48 204.24 108.12 204.76 111.12 205.71 C 114.13 206.66 116.94 208.43 119.06 210.32 C 121.18 212.2 122.81 214.7 123.83 217 C 124.85 219.31 124.95 222.95 125.17 224.14 " fill="none" stroke="url(#en-flow)" stroke-width="1.6" stroke-linecap="round"/>
         <g stroke="#7ef0ff" stroke-opacity="0.09" stroke-width="0.42" fill="none" stroke-linecap="round">
           <path d="M 96 250 Q 106 245.5 118 250.5"/>
           <path d="M 105 254 Q 115 250 125 254"/>
         </g>
         <g opacity="0.7">
-          <animate attributeName="opacity" values="0.7;1;0.7" dur="11s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.7;0.7;1;0.8;0.7" keyTimes="0;0.5;0.62;0.82;1" dur="7.2s" repeatCount="indefinite"/>
           <g fill="#b3a7ff" opacity="0.1">
             <circle cx="119.71" cy="229.45" r="11.22"/><circle cx="117.94" cy="235.9" r="10.31"/><circle cx="113.48" cy="240.89" r="10.03"/><circle cx="106.36" cy="240.63" r="10.09"/><circle cx="102.26" cy="235.73" r="10.68"/><circle cx="99.74" cy="229.56" r="10.86"/><circle cx="102.65" cy="223.58" r="11.12"/><circle cx="106.44" cy="218.31" r="10.07"/><circle cx="113.28" cy="218.47" r="10.25"/><circle cx="117.7" cy="223.3" r="10.61"/>
           </g>
@@ -369,12 +394,9 @@
           <circle cx="109.95" cy="229.68" r="20" stroke="#8fd4de" stroke-opacity="0.1" stroke-width="0.75" stroke-dasharray="24 101.66"/>
           <circle cx="109.95" cy="229.68" r="24.3" stroke="#a78bfa" stroke-opacity="0.08" stroke-width="0.7" stroke-dasharray="30 122.68" stroke-dashoffset="60"/>
         </g>
-        <circle cx="109.95" cy="229.68" r="30.6" fill="none" stroke="url(#en-rip)" stroke-width="0.8">
-          <animate attributeName="r" values="16.6;30.6" dur="7s" begin="0.6s" repeatCount="indefinite"/>
-        </circle>
-        <circle cx="109.95" cy="229.68" r="30.6" fill="none" stroke="url(#en-rip)" stroke-width="0.8">
-          <animate attributeName="r" values="16.6;30.6" dur="7s" begin="4.1s" repeatCount="indefinite"/>
-        </circle>
+        <path d="M 138.51 223.61 C 138.11 225.42 137.51 231.3 136.11 234.48 C 134.71 237.66 132.45 240.55 130.12 242.68 C 127.8 244.81 124.85 246.36 122.16 247.25 C 119.47 248.15 116.49 248.31 113.99 248.04 C 111.48 247.77 108.28 246.04 107.14 245.63  M 100.93 257.45 C 99.56 256.2 94.76 252.74 92.71 249.94 C 90.66 247.14 89.28 243.73 88.6 240.65 C 87.92 237.57 88.05 234.25 88.63 231.47 C 89.2 228.69 90.54 226.03 92.03 224 C 93.52 221.96 96.62 220.05 97.54 219.27  M 90.41 207.98 C 92.18 207.42 97.58 205 101.03 204.62 C 104.48 204.24 108.12 204.76 111.12 205.71 C 114.13 206.66 116.94 208.43 119.06 210.32 C 121.18 212.2 122.81 214.7 123.83 217 C 124.85 219.31 124.95 222.95 125.17 224.14 " fill="none" stroke="url(#en-surge)" stroke-width="1.15" stroke-linecap="round" pathLength="290" stroke-dasharray="26 364" stroke-dashoffset="418">
+          <animate attributeName="stroke-dashoffset" values="418;418;28;28" keyTimes="0;0.06;0.58;1" calcMode="spline" keySplines="0 0 1 1;0.35 0 0.8 0.75;0 0 1 1" dur="7.2s" repeatCount="indefinite"/>
+        </path>
         <ellipse cx="102" cy="217" rx="25" ry="17" fill="url(#engramSpec)" transform="rotate(-30 102 217)"/>
       </g>
       <defs>
@@ -397,20 +419,42 @@
           <stop offset="100%" stop-color="#3f4954"/>
         </linearGradient>
         <radialGradient id="en-iris" gradientUnits="userSpaceOnUse" cx="109.95" cy="229.68" r="11.6">
-          <stop offset="0%" stop-color="#0f1116"/>
-          <stop offset="45%" stop-color="#13151a"/>
-          <stop offset="78%" stop-color="#16181d"/>
-          <stop offset="100%" stop-color="#23262c"/>
+          <stop offset="0%" stop-color="#05060a"/>
+          <stop offset="60%" stop-color="#0a0c11"/>
+          <stop offset="85%" stop-color="#12151c"/>
+          <stop offset="96%" stop-color="#262b34"/>
+          <stop offset="100%" stop-color="#2e3540"/>
         </radialGradient>
         <radialGradient id="en-vane" gradientUnits="userSpaceOnUse" cx="109.95" cy="229.68" r="11.6">
-          <stop offset="0%" stop-color="#0f1116"/>
-          <stop offset="45%" stop-color="#14161c"/>
-          <stop offset="72%" stop-color="#1c202a"/>
-          <stop offset="100%" stop-color="#3d4553"/>
+          <stop offset="0%" stop-color="#0b0d12"/>
+          <stop offset="42%" stop-color="#101218"/>
+          <stop offset="66%" stop-color="#1a1e28"/>
+          <stop offset="100%" stop-color="#49525f"/>
+        </radialGradient>
+        <radialGradient id="en-funl" gradientUnits="userSpaceOnUse" cx="109.95" cy="229.68" r="12.45">
+          <stop offset="0%" stop-color="#05070c" stop-opacity="0.9"/>
+          <stop offset="30%" stop-color="#070b12" stop-opacity="0.8"/>
+          <stop offset="50%" stop-color="#0d1520" stop-opacity="0.5"/>
+          <stop offset="68%" stop-color="#131e2a" stop-opacity="0.22"/>
+          <stop offset="84%" stop-color="#16222e" stop-opacity="0.06"/>
+          <stop offset="100%" stop-color="#16222e" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="en-ign" gradientUnits="userSpaceOnUse" cx="109.95" cy="229.68" r="6.96">
+          <stop offset="62%" stop-color="#8f7bdb" stop-opacity="0"/>
+          <stop offset="72%" stop-color="#9683e2" stop-opacity="0.46"/>
+          <stop offset="80%" stop-color="#b49bff" stop-opacity="0.62"/>
+          <stop offset="88%" stop-color="#7a68b8" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="#7a68b8" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="en-embr" gradientUnits="userSpaceOnUse" cx="109.95" cy="229.68" r="2.53">
+          <stop offset="0%" stop-color="#e6dbff" stop-opacity="1"/>
+          <stop offset="30%" stop-color="#b298ff" stop-opacity="0.7"/>
+          <stop offset="60%" stop-color="#5f4d96" stop-opacity="0.32"/>
+          <stop offset="100%" stop-color="#5f4d96" stop-opacity="0"/>
         </radialGradient>
       </defs>
       <g filter="url(#engramEmboss)">
-        <path d="M 94.07 213.97 L 94.07 219.66 L 98.82 224.41 M 90.07 229.58 L 96.5 229.58 M 94.07 245.08 L 94.07 239.91 L 98.82 235.17 M 121.07 224.41 L 125.82 219.66 L 125.82 213.97 M 123.39 229.58 L 129.83 229.58 M 121.07 235.17 L 125.82 239.91 L 125.82 245.08" stroke="url(#en-pin)" stroke-width="1.42" fill="none"/>
+        <path d="M 98.82 224.41 L 94.07 219.66 L 94.07 213.97 M 96.5 229.58 L 90.07 229.58 M 98.82 235.17 L 94.07 239.91 L 94.07 245.08 M 121.07 224.41 L 125.82 219.66 L 125.82 213.97 M 123.39 229.58 L 129.83 229.58 M 121.07 235.17 L 125.82 239.91 L 125.82 245.08" stroke="url(#en-pin)" stroke-width="1.42" fill="none"/>
         <g fill="url(#en-pin)">
           <circle cx="94.07" cy="213.97" r="2.06"/><circle cx="125.82" cy="213.97" r="2.06"/><circle cx="90.07" cy="229.58" r="2.06"/><circle cx="129.83" cy="229.58" r="2.06"/><circle cx="94.07" cy="245.08" r="2.06"/><circle cx="125.82" cy="245.08" r="2.06"/>
         </g>
@@ -421,6 +465,8 @@
           <circle cx="102.65" cy="223.58" r="5.48"/><circle cx="99.74" cy="229.56" r="5.27"/><circle cx="102.26" cy="235.73" r="5.06"/><circle cx="106.36" cy="240.63" r="3.8"/>
         </g>
         <circle cx="109.95" cy="229.68" r="11.07" fill="url(#en-glow)"/>
+        <circle cx="109.95" cy="229.68" r="12.45" fill="url(#en-funl)"/>
+        <circle cx="109.95" cy="229.68" r="11.18" fill="none" stroke="#c3ccd6" stroke-opacity="0.14" stroke-width="0.26"/>
         <ellipse cx="105.15" cy="217.98" rx="4.85" ry="3.16" fill="#2e343c" transform="rotate(-24 105.15 217.98)"/>
       </g>
       <g stroke="#d4af37" stroke-opacity="0.55" stroke-width="0.37" fill="none">
@@ -428,36 +474,44 @@
       </g>
       <g>
         <animateTransform attributeName="transform" type="rotate" from="0 109.95 229.68" to="360 109.95 229.68" dur="16s" repeatCount="indefinite"/>
-        <path id="en-blade" d="M 113.91 219.09 C 113.97 219.05 114.7 219.59 115.17 219.86 C 115.64 220.13 116.27 220.34 116.71 220.71 C 117.14 221.09 117.49 221.62 117.78 222.12 C 118.08 222.61 118.33 223.15 118.5 223.69 C 118.67 224.24 118.76 224.81 118.81 225.36 C 118.86 225.91 118.88 226.45 118.82 226.97 C 118.77 227.49 118.62 228.01 118.48 228.48 C 118.34 228.96 118.19 229.41 117.98 229.82 C 117.77 230.24 117.48 230.62 117.22 230.97 C 116.96 231.31 116.71 231.64 116.43 231.92 C 116.15 232.2 115.82 232.43 115.52 232.64 C 115.22 232.86 114.93 233.05 114.63 233.21 C 114.33 233.37 114.01 233.5 113.74 233.61 C 113.46 233.71 113.12 233.96 112.96 233.83 C 112.8 233.7 112.73 233.06 112.77 232.82 C 112.81 232.58 113.05 232.54 113.18 232.4 C 113.31 232.25 113.44 232.1 113.57 231.95 C 113.7 231.79 113.82 231.63 113.95 231.46 C 114.07 231.29 114.14 231.11 114.31 230.93 C 114.48 230.75 114.73 230.6 114.96 230.39 C 115.19 230.18 115.47 229.97 115.7 229.68 C 115.92 229.4 116.13 229.04 116.3 228.68 C 116.47 228.31 116.61 227.91 116.72 227.48 C 116.83 227.06 116.92 226.59 116.95 226.12 C 116.97 225.65 116.93 225.16 116.86 224.66 C 116.79 224.16 116.69 223.63 116.51 223.12 C 116.33 222.61 116.09 222.12 115.81 221.62 C 115.52 221.12 115.12 220.57 114.81 220.15 C 114.49 219.72 113.85 219.14 113.91 219.09 Z" fill="url(#en-vane)" stroke="#5a646f" stroke-opacity="0.5" stroke-width="0.26"/>
+        <g id="en-blade">
+          <path d="M 113.76 218.61 C 113.96 218.69 114.65 219.12 115.16 219.46 C 115.66 219.79 116.32 220.2 116.78 220.62 C 117.23 221.04 117.58 221.51 117.9 222.01 C 118.21 222.5 118.48 223.03 118.67 223.57 C 118.86 224.11 118.98 224.69 119.05 225.25 C 119.12 225.8 119.13 226.36 119.09 226.89 C 119.04 227.42 118.92 227.95 118.78 228.44 C 118.64 228.93 118.46 229.4 118.24 229.83 C 118.02 230.26 117.74 230.65 117.47 231.01 C 117.19 231.37 116.9 231.69 116.59 231.97 C 116.28 232.25 115.95 232.49 115.63 232.7 C 115.31 232.92 114.99 233.1 114.68 233.25 C 114.37 233.4 114.04 233.53 113.76 233.63 C 113.47 233.73 113.12 233.97 112.96 233.83 C 112.8 233.7 112.73 233.06 112.77 232.82 C 112.81 232.58 113.05 232.54 113.18 232.4 C 113.31 232.25 113.44 232.1 113.57 231.95 C 113.7 231.79 113.83 231.63 113.95 231.46 C 114.06 231.29 114.12 231.11 114.27 230.92 C 114.41 230.74 114.6 230.57 114.79 230.36 C 114.99 230.16 115.23 229.96 115.43 229.68 C 115.63 229.41 115.82 229.08 115.99 228.73 C 116.16 228.38 116.31 227.99 116.43 227.58 C 116.54 227.17 116.64 226.72 116.68 226.26 C 116.71 225.79 116.71 225.3 116.65 224.81 C 116.6 224.32 116.49 223.8 116.33 223.3 C 116.17 222.79 115.96 222.3 115.69 221.78 C 115.41 221.27 114.96 220.67 114.67 220.21 C 114.38 219.74 114.1 219.26 113.94 218.99 C 113.79 218.73 113.56 218.54 113.76 218.61 Z" fill="url(#en-vane)" stroke="#59636e" stroke-opacity="0.4" stroke-width="0.23"/>
+          <path d="M 113.76 218.61 C 113.99 218.76 114.65 219.12 115.16 219.46 C 115.66 219.79 116.32 220.2 116.78 220.62 C 117.23 221.04 117.58 221.51 117.9 222.01 C 118.21 222.5 118.48 223.03 118.67 223.57 C 118.86 224.11 118.98 224.69 119.05 225.25 C 119.12 225.8 119.13 226.36 119.09 226.89 C 119.04 227.42 118.92 227.95 118.78 228.44 C 118.64 228.93 118.33 229.6 118.24 229.83 " fill="none" stroke="#a8e2ec" stroke-opacity="0.45" stroke-width="0.36" stroke-linecap="round"/>
+        </g>
         <use href="#en-blade" transform="rotate(60 109.95 229.68)"/><use href="#en-blade" transform="rotate(120 109.95 229.68)"/><use href="#en-blade" transform="rotate(180 109.95 229.68)"/><use href="#en-blade" transform="rotate(240 109.95 229.68)"/><use href="#en-blade" transform="rotate(300 109.95 229.68)"/>
         <circle cx="109.95" cy="229.68" r="4.43" fill="url(#en-iris)"/>
       </g>
+      <circle cx="109.95" cy="229.68" r="6.96" fill="url(#en-ign)" opacity="0.3">
+        <animate attributeName="opacity" values="0.3;0.3;0.95;0.42;0.3" keyTimes="0;0.56;0.68;0.85;1" dur="7.2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="109.95" cy="229.68" r="2.53" fill="url(#en-embr)" opacity="0.45">
+        <animate attributeName="opacity" values="0.45;0.45;1;0.6;0.45" keyTimes="0;0.62;0.74;0.9;1" dur="7.2s" repeatCount="indefinite"/>
+      </circle>
       <g>
         <animateTransform attributeName="transform" type="rotate" from="0 109.95 229.68" to="-360 109.95 229.68" dur="26s" repeatCount="indefinite"/>
-        <path d="M 107.37 228.75 A 2.74 2.74 0 0 1 111.32 227.31" fill="none" stroke="#3d3651" stroke-width="0.63" stroke-linecap="round"/>
+        <path d="M 107.37 228.75 A 2.74 2.74 0 0 1 111.32 227.31" fill="none" stroke="#4a4066" stroke-width="0.63" stroke-linecap="round"/>
       </g>
       <g stroke-width="0.74" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M 94.07 213.97 L 94.07 219.66 L 98.82 224.41 M 90.07 229.58 L 96.5 229.58 M 94.07 245.08 L 94.07 239.91 L 98.82 235.17" stroke="#fcd34d" pathLength="290" stroke-dasharray="14 376" stroke-dashoffset="418">
-          <animate attributeName="stroke-dashoffset" values="418;28" dur="5.6s" begin="0.9s" repeatCount="indefinite"/>
+        <path d="M 98.82 224.41 L 94.07 219.66 L 94.07 213.97 M 96.5 229.58 L 90.07 229.58 M 98.82 235.17 L 94.07 239.91 L 94.07 245.08" stroke="#fcd34d" pathLength="290" stroke-dasharray="14 376" stroke-dashoffset="418">
+          <animate attributeName="stroke-dashoffset" values="418;418;28;28" keyTimes="0;0.74;0.95;1" dur="7.2s" repeatCount="indefinite"/>
         </path>
         <path d="M 121.07 224.41 L 125.82 219.66 L 125.82 213.97 M 123.39 229.58 L 129.83 229.58 M 121.07 235.17 L 125.82 239.91 L 125.82 245.08" stroke="#fde68a" pathLength="290" stroke-dasharray="14 376" stroke-dashoffset="418">
-          <animate attributeName="stroke-dashoffset" values="418;28" dur="6.8s" begin="3.7s" repeatCount="indefinite"/>
+          <animate attributeName="stroke-dashoffset" values="418;418;28;28" keyTimes="0;0.77;0.98;1" dur="7.2s" repeatCount="indefinite"/>
         </path>
       </g>
       <g fill="#fde68a" opacity="0">
-        <circle cx="94.07" cy="213.97" r="2.32"/><circle cx="90.07" cy="229.58" r="2.32"/><circle cx="94.07" cy="245.08" r="2.32"/>
-        <animate attributeName="opacity" values="0;0.7;0;0" keyTimes="0;0.06;0.18;1" dur="5.6s" begin="0.9s" repeatCount="indefinite"/>
-      </g>
-      <g fill="#fde68a" opacity="0">
-        <circle cx="125.82" cy="213.97" r="2.32"/><circle cx="129.83" cy="229.58" r="2.32"/><circle cx="125.82" cy="245.08" r="2.32"/>
-        <animate attributeName="opacity" values="0;0;0.7;0;0" keyTimes="0;0.2;0.32;0.46;1" dur="6.8s" begin="3.7s" repeatCount="indefinite"/>
+        <circle cx="94.07" cy="213.97" r="2.32"/><circle cx="125.82" cy="213.97" r="2.32"/><circle cx="90.07" cy="229.58" r="2.32"/><circle cx="129.83" cy="229.58" r="2.32"/><circle cx="94.07" cy="245.08" r="2.32"/><circle cx="125.82" cy="245.08" r="2.32"/>
+        <animate attributeName="opacity" values="0;0;0.7;0;0" keyTimes="0;0.83;0.92;0.99;1" dur="7.2s" repeatCount="indefinite"/>
       </g>
       <circle cx="90.07" cy="229.58" r="11" fill="none" stroke="url(#en-ringL)" stroke-width="0.6">
-        <animate attributeName="r" values="1.9;11;11" keyTimes="0;0.32;1" dur="5.6s" begin="0.9s" repeatCount="indefinite"/>
+        <animate attributeName="r" values="1.9;1.9;11;11" keyTimes="0;0.78;0.99;1" dur="7.2s" repeatCount="indefinite"/>
       </circle>
       <circle cx="129.83" cy="229.58" r="11" fill="none" stroke="url(#en-ringR)" stroke-width="0.6">
-        <animate attributeName="r" values="1.9;1.9;11;11" keyTimes="0;0.2;0.52;1" dur="6.8s" begin="3.7s" repeatCount="indefinite"/>
+        <animate attributeName="r" values="1.9;1.9;11" keyTimes="0;0.81;1" dur="7.2s" repeatCount="indefinite"/>
       </circle>
+      <path d="M 112.22 243.7 C 111.88 243.15 110.69 241.54 110.18 240.41 C 109.66 239.28 109.33 237.99 109.14 236.9 C 108.96 235.82 109.08 234.39 109.07 233.89  L 109.34 233.94 C 109.46 234.44 109.64 235.9 110.05 236.95 C 110.46 238 111.07 239.22 111.81 240.25 C 112.56 241.28 114.07 242.64 114.53 243.12  Z M 96.68 224.64 C 97.32 224.62 99.3 224.39 100.54 224.51 C 101.78 224.63 103.06 224.98 104.1 225.37 C 105.13 225.75 106.31 226.57 106.75 226.81  L 106.57 227.02 C 106.07 226.88 104.72 226.3 103.6 226.13 C 102.49 225.96 101.13 225.87 99.86 226.01 C 98.6 226.14 96.66 226.77 96.02 226.92  Z M 120.95 220.71 C 120.65 221.27 119.86 223.11 119.13 224.12 C 118.41 225.13 117.46 226.06 116.61 226.77 C 115.76 227.47 114.47 228.08 114.04 228.34  L 113.94 228.08 C 114.32 227.73 115.49 226.84 116.2 225.96 C 116.9 225.08 117.66 223.94 118.17 222.78 C 118.69 221.62 119.12 219.63 119.3 219  Z" fill="url(#en-spoke)" opacity="0">
+        <animate attributeName="opacity" values="0;0;0.85;0;0" keyTimes="0;0.6;0.65;0.72;1" dur="7.2s" repeatCount="indefinite"/>
+      </path>
       <circle cx="110" cy="230" r="30.2" fill="none" stroke="#02030a" stroke-opacity="0.55" stroke-width="0.5"/>
       <circle cx="110" cy="230" r="31.1" fill="none" stroke="#d4af37" stroke-opacity="0.45" stroke-width="0.5"/>
       <path d="M 81.16 241.65 A 31.1 31.1 0 0 1 113.25 199.07" fill="none" stroke="#fde68a" stroke-opacity="0.8" stroke-width="0.55" stroke-linecap="round"/>
