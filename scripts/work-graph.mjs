@@ -572,42 +572,39 @@ export function nodeMark(n) {
     // engram: the torus-automations brand mark suspended in a PRIMORDIAL POOL
     // held by a MACHINED SILVER bezel — a specimen porthole onto the first sea.
     // The face inside the chrome double bezel (bright gradient rim + dark inner
-    // groove + dark outer hairline for WHITE pages) is deep teal-black liquid:
-    // a top-lit depth gradient, a violet-black wall vignette, painted (static)
-    // caustic light-play, a gilt meniscus hairline where the water climbs the
-    // bezel (brightest under the top-left key light) and the old specular band
-    // softened into surface glare. The pool is one GRAVITATIONAL ENERGY
-    // CIRCUIT feeding the mind: a painted triskelion of inward spiral
-    // streamlines (CW, the churn's sense) whose eye-centred gradient brightens
-    // toward the brain, a teal density corona hugging the brain rim (energy
-    // concentrating at the sink), a slow eddy the churn drags around (48s),
-    // and a violet bioelectric halo around the membrane. All liquid layers
-    // sit UNFILTERED; the coin still rides its soft drop shadow. Theme-FIXED
-    // (a real object); only the label recolours. The node colour stays silver,
+    // groove + dark outer hairline for WHITE pages) is deep teal-black liquid,
+    // kept SERENE: a top-lit depth gradient, a violet-black wall vignette, a
+    // gilt meniscus hairline where the water climbs the bezel (brightest under
+    // the top-left key light) and the old specular band softened into surface
+    // glare — nothing else is painted in the water, so the only light in the
+    // pool at rest is the brain's own violet membrane halo. Theme-FIXED (a
+    // real object); only the label recolours. The node colour stays silver,
     // so its live edges to NCP and cortexel resolve neutral via edge
     // gradients. librsvg/reduced-motion hold the serene pool still. en- ids.
     //
-    // The emblem itself is NATIVE SVG (the raster logo redrawn from measurements
-    // of the 512px PNG): a 10-lobe scalloped brain-cloud under one top-lit
-    // radial gradient, a 6-blade MAELSTROM (one traced crescent, rotationally
-    // repeated; sharp tips, full bellies, a luminous shear line on each outer
-    // edge) spiralling clockwise down a funnel-shaded depression into an
-    // abyssal eye — violet ignition annulus at the blade roots, charged violet
-    // ember in the pupil, counter-drifting iris arc (-360deg/26s vs the 16s
-    // churn): the overmind mid-thought. Eye-centred fills keep every rotation
-    // seamless-by-symmetry.
+    // The emblem is ONE ORGANISM in that water: a 10-lobe scalloped brain-
+    // cloud whose gradient now lives in the same obsidian family as the
+    // 6-blade MAELSTROM inside it (one traced crescent, rotationally repeated;
+    // sharp tips, full bellies) spiralling clockwise down a funnel-shaded
+    // depression into an abyssal eye — muted ignition annulus at the blade
+    // roots, charged violet ember in the pupil, counter-drifting iris arc
+    // (-360deg/26s vs the 16s churn): the overmind mid-thought. Eye-centred
+    // fills keep every rotation seamless-by-symmetry. The ELECTRODES speak
+    // galadriel's circuit grammar: slim single-sweep light-guides (no IC
+    // elbows) running membrane-to-port, gold jack dots where they pierce the
+    // membrane, ringed ports with gold collars at the pool's edge.
     //
     // THE CAUSAL CHAIN is phase-locked on one 7.2s master period so a viewer
-    // can narrate it: teal beads condense at the rim and spiral INWARD down
-    // the streamlines, vanishing under the brain (keyTimes 0.06-0.58, one
-    // dash timeline visits arm after arm — the pin trick) -> the membrane
-    // halo swells (peak 0.62) -> the ignition ring at the blade roots flares
-    // (peak 0.68) -> the ember in the eye surges (peak 0.74) -> cognition
-    // fires OUT both pin banks as gold beads (0.70/0.73 - 0.97), pads glint
-    // and the middle pads RING THE WATER (gold reaction rings whose fade
-    // rides pad-centred radial-gradient strokes). Sea-teal in, violet mind,
-    // gold out. The emboss filter only ever sees the STATIC layer
-    // (body+pins+funnel); everything that moves lives outside it, so the
+    // can narrate it: three surge comets (teal warming through violet to gold
+    // as they fall — accelerating infall splines) spiral INWARD on invisible
+    // guides and vanish under the brain (keyTimes 0.06-0.58) -> the membrane
+    // halo swells (peak 0.62) -> violet discharge filaments arc membrane-to-
+    // eye (peak 0.65) -> the ignition ring flares (peak 0.68) -> the ember
+    // surges (peak 0.74) -> cognition fires OUT both pin banks as gold beads
+    // (0.74/0.77 - 0.98), pads glint and the middle pads RING THE WATER.
+    // Sea-teal in, violet mind, gold out. The emboss filter only ever sees
+    // the STATIC layer (body+pins+funnel); everything that moves lives
+    // outside it, so the
     // filtered result caches. 12 SMIL timelines, 3 rotations total.
     const cx = n.x, cy = n.y, r = 34;
     const Z = 46 / 34; // scale the medallion up to prisoma/melkor size (graph only)
@@ -645,9 +642,14 @@ export function nodeMark(n) {
     // sides (cognition fires outward once the pool has charged the mind) —
     // so one dash pulse visits pin after pin for free.
     const P = (pts) => pts.map(([u, v], i) => `${i ? "L" : "M"} ${f2(X(u))} ${f2(Y(v))}`).join(" ");
-    const pinsL = `${P([[150, 203], [105, 158], [105, 104]])} ${P([[128, 252], [67, 252]])} ${P([[150, 305], [105, 350], [105, 399]])}`;
-    const pinsR = `${P([[361, 203], [406, 158], [406, 104]])} ${P([[383, 252], [444, 252]])} ${P([[361, 305], [406, 350], [406, 399]])}`;
+    // MODERN LIGHT-GUIDES (galadriel's circuit grammar): each electrode is one
+    // smooth cubic sweep — no IC elbows — leaving the membrane tangentially and
+    // entering its ringed port vertically; drawn brain->pad in signal direction.
+    const cp = (u, v) => `${f2(X(u))} ${f2(Y(v))}`;
+    const pinsL = `M ${cp(150, 203)} C ${cp(122, 185)} ${cp(105, 158)} ${cp(105, 104)} M ${cp(128, 252)} L ${cp(67, 252)} M ${cp(150, 305)} C ${cp(122, 323)} ${cp(105, 350)} ${cp(105, 399)}`;
+    const pinsR = `M ${cp(361, 203)} C ${cp(389, 185)} ${cp(406, 158)} ${cp(406, 104)} M ${cp(383, 252)} L ${cp(444, 252)} M ${cp(361, 305)} C ${cp(389, 323)} ${cp(406, 350)} ${cp(406, 399)}`;
     const pads = [[105, 104], [406, 104], [67, 252], [444, 252], [105, 399], [406, 399]];
+    const jacks = [[150, 203], [361, 203], [128, 252], [383, 252], [150, 305], [361, 305]];
     // middle pads = the electrodes whose firing rings the water (reaction rings)
     const PLX = f2(X(67)), PLY = f2(Y(252)), PRX = f2(X(444)), PRY = f2(Y(252));
     // meniscus point on the pool rim (deg measured y-down, 0 = +x)
@@ -690,8 +692,6 @@ export function nodeMark(n) {
       }
       return d;
     };
-    // luminous shear line where each blade's outer edge cuts the water
-    const bladeEdge = crOpen(bladeOuter.slice(0, 9).map(pol));
     const bladeUses = [1, 2, 3, 4, 5]
       .map((k) => `<use href="#en-blade" transform="rotate(${k * 60} ${VX} ${VY})"/>`)
       .join("");
@@ -719,17 +719,17 @@ export function nodeMark(n) {
     const spokes = [100, 220, 340].map(spokePath).join(" ");
     const emblem = `<defs>
         <radialGradient id="en-body" gradientUnits="userSpaceOnUse" cx="${f2(X(300))}" cy="${f2(Y(140))}" r="${su(330)}">
-          <stop offset="0%" stop-color="#9da0a3"/>
-          <stop offset="30%" stop-color="#868b8f"/>
-          <stop offset="55%" stop-color="#5e6368"/>
-          <stop offset="80%" stop-color="#34383e"/>
-          <stop offset="100%" stop-color="#1c1f24"/>
+          <stop offset="0%" stop-color="#7e848b"/>
+          <stop offset="30%" stop-color="#666c74"/>
+          <stop offset="55%" stop-color="#474d55"/>
+          <stop offset="80%" stop-color="#2b3038"/>
+          <stop offset="100%" stop-color="#181b20"/>
         </radialGradient>
         <radialGradient id="en-glow" gradientUnits="userSpaceOnUse" cx="${f2(X(228))}" cy="${f2(Y(196))}" r="${su(150)}">
-          <stop offset="0%" stop-color="#a4a9ad"/>
-          <stop offset="35%" stop-color="#7b8085"/>
-          <stop offset="70%" stop-color="#45494e"/>
-          <stop offset="100%" stop-color="#2c3034"/>
+          <stop offset="0%" stop-color="#83888e"/>
+          <stop offset="35%" stop-color="#61666c"/>
+          <stop offset="70%" stop-color="#3a3e44"/>
+          <stop offset="100%" stop-color="#24282d"/>
         </radialGradient>
         <linearGradient id="en-pin" gradientUnits="userSpaceOnUse" x1="0" y1="${f2(Y(85))}" x2="0" y2="${f2(Y(418))}">
           <stop offset="0%" stop-color="#98a2ac"/>
@@ -772,9 +772,9 @@ export function nodeMark(n) {
         </radialGradient>
       </defs>
       <g filter="url(#engramEmboss)">
-        <path d="${pinsL} ${pinsR}" stroke="url(#en-pin)" stroke-width="${su(13.5)}" fill="none"/>
-        <g fill="url(#en-pin)">
-          ${pads.map(([u, v]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(19.5)}"/>`).join("")}
+        <path d="${pinsL} ${pinsR}" stroke="url(#en-pin)" stroke-width="${su(8)}" fill="none" stroke-linecap="round"/>
+        <g fill="#0a0f14" stroke="url(#en-pin)" stroke-width="${su(4.5)}">
+          ${pads.map(([u, v]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(14)}"/>`).join("")}
         </g>
         <g fill="url(#en-body)">
           ${lobes.map(([u, v, rr]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(rr)}"/>`).join("")}
@@ -787,20 +787,22 @@ export function nodeMark(n) {
         <circle cx="${VX}" cy="${VY}" r="${su(106)}" fill="none" stroke="#c3ccd6" stroke-opacity="0.14" stroke-width="${su(2.5)}"/>
         <ellipse cx="${f2(X(210))}" cy="${f2(Y(142))}" rx="${su(46)}" ry="${su(30)}" fill="#2e343c" transform="rotate(-24 ${f2(X(210))} ${f2(Y(142))})"/>
       </g>
-      <g stroke="#d4af37" stroke-opacity="0.55" stroke-width="${su(3.5)}" fill="none">
-        ${pads.map(([u, v]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(19.5)}"/>`).join("")}
+      <g stroke="#d4af37" stroke-opacity="0.55" stroke-width="${su(3)}" fill="none">
+        ${pads.map(([u, v]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(15)}"/>`).join("")}
+      </g>
+      <g fill="#fde68a" fill-opacity="0.9">
+        ${jacks.map(([u, v]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(5.5)}"/>`).join("")}
       </g>
       <g>
         <animateTransform attributeName="transform" type="rotate" from="0 ${VX} ${VY}" to="360 ${VX} ${VY}" dur="16s" repeatCount="indefinite"/>
         <g id="en-blade">
           <path d="${blade}" fill="url(#en-vane)" stroke="#59636e" stroke-opacity="0.4" stroke-width="${su(2.2)}"/>
-          <path d="${bladeEdge}" fill="none" stroke="#a8e2ec" stroke-opacity="0.45" stroke-width="${su(3.4)}" stroke-linecap="round"/>
         </g>
         ${bladeUses}
         <circle cx="${VX}" cy="${VY}" r="${su(42)}" fill="url(#en-iris)"/>
       </g>
-      <circle cx="${VX}" cy="${VY}" r="${su(66)}" fill="url(#en-ign)" opacity="0.3">
-        <animate attributeName="opacity" values="0.3;0.3;0.95;0.42;0.3" keyTimes="0;0.56;0.68;0.85;1" dur="7.2s" repeatCount="indefinite"/>
+      <circle cx="${VX}" cy="${VY}" r="${su(66)}" fill="url(#en-ign)" opacity="0.18">
+        <animate attributeName="opacity" values="0.18;0.18;0.95;0.35;0.18" keyTimes="0;0.56;0.68;0.85;1" dur="7.2s" repeatCount="indefinite"/>
       </circle>
       <circle cx="${VX}" cy="${VY}" r="${su(24)}" fill="url(#en-embr)" opacity="0.45">
         <animate attributeName="opacity" values="0.45;0.45;1;0.6;0.45" keyTimes="0;0.62;0.74;0.9;1" dur="7.2s" repeatCount="indefinite"/>
@@ -809,7 +811,7 @@ export function nodeMark(n) {
         <animateTransform attributeName="transform" type="rotate" from="0 ${VX} ${VY}" to="-360 ${VX} ${VY}" dur="26s" repeatCount="indefinite"/>
         <path d="M ${f2(pol([200, 26])[0])} ${f2(pol([200, 26])[1])} A ${su(26)} ${su(26)} 0 0 1 ${f2(pol([300, 26])[0])} ${f2(pol([300, 26])[1])}" fill="none" stroke="#4a4066" stroke-width="${su(6)}" stroke-linecap="round"/>
       </g>
-      <g stroke-width="${su(7)}" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <g stroke-width="${su(6)}" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path d="${pinsL}" stroke="#fcd34d" pathLength="290" stroke-dasharray="14 376" stroke-dashoffset="418">
           <animate attributeName="stroke-dashoffset" values="418;418;28;28" keyTimes="0;0.74;0.95;1" dur="7.2s" repeatCount="indefinite"/>
         </path>
@@ -818,7 +820,7 @@ export function nodeMark(n) {
         </path>
       </g>
       <g fill="#fde68a" opacity="0">
-        ${pads.map(([u, v]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(22)}"/>`).join("")}
+        ${pads.map(([u, v]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(17)}"/>`).join("")}
         <animate attributeName="opacity" values="0;0;0.7;0;0" keyTimes="0;0.83;0.92;0.99;1" dur="7.2s" repeatCount="indefinite"/>
       </g>
       <circle cx="${PLX}" cy="${PLY}" r="11" fill="none" stroke="url(#en-ringL)" stroke-width="0.6">
@@ -845,26 +847,6 @@ export function nodeMark(n) {
         <stop offset="42%" stop-color="#ffffff" stop-opacity="0.08"/>
         <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
       </linearGradient>
-      <radialGradient id="en-caust" gradientUnits="userSpaceOnUse" cx="${f1(cx + 11)}" cy="${f1(cy + 15)}" r="15">
-        <stop offset="0%" stop-color="#46c8d8" stop-opacity="0.12"/>
-        <stop offset="55%" stop-color="#46c8d8" stop-opacity="0.05"/>
-        <stop offset="100%" stop-color="#46c8d8" stop-opacity="0"/>
-      </radialGradient>
-      <radialGradient id="en-flow" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="30">
-        <stop offset="0%" stop-color="#aeeef5" stop-opacity="0.62"/>
-        <stop offset="52%" stop-color="#a3ebf2" stop-opacity="0.56"/>
-        <stop offset="64%" stop-color="#93dcec" stop-opacity="0.46"/>
-        <stop offset="78%" stop-color="#79c3d6" stop-opacity="0.32"/>
-        <stop offset="90%" stop-color="#5fa3ba" stop-opacity="0.15"/>
-        <stop offset="100%" stop-color="#5fa3ba" stop-opacity="0.04"/>
-      </radialGradient>
-      <radialGradient id="en-dens" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="30">
-        <stop offset="40%" stop-color="#1a4a55" stop-opacity="0"/>
-        <stop offset="52%" stop-color="#1a4a55" stop-opacity="0.18"/>
-        <stop offset="60%" stop-color="#17434f" stop-opacity="0.26"/>
-        <stop offset="74%" stop-color="#123644" stop-opacity="0.12"/>
-        <stop offset="92%" stop-color="#123644" stop-opacity="0"/>
-      </radialGradient>
       <radialGradient id="en-surge" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="33">
         <stop offset="46%" stop-color="#ffe9a8" stop-opacity="1"/>
         <stop offset="52%" stop-color="#ffd75e" stop-opacity="0.95"/>
@@ -915,13 +897,6 @@ export function nodeMark(n) {
       <g filter="url(#engramShadow)"><circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramFace)"/></g>
       <g clip-path="url(#engramClip)">
         <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramRecess)"/>
-        <ellipse cx="${f1(cx + 11)}" cy="${f1(cy + 15)}" rx="15" ry="9" fill="url(#en-caust)" transform="rotate(18 ${f1(cx + 11)} ${f1(cy + 15)})"/>
-        <circle cx="${VX}" cy="${VY}" r="30" fill="url(#en-dens)"/>
-        <path d="${arms}" fill="none" stroke="url(#en-flow)" stroke-width="1.6" stroke-linecap="round"/>
-        <g stroke="#7ef0ff" stroke-opacity="0.09" stroke-width="0.42" fill="none" stroke-linecap="round">
-          <path d="M ${f1(cx - 14)} ${f1(cy + 20)} Q ${f1(cx - 4)} ${f1(cy + 15.5)} ${f1(cx + 8)} ${f1(cy + 20.5)}"/>
-          <path d="M ${f1(cx - 5)} ${f1(cy + 24)} Q ${f1(cx + 5)} ${f1(cy + 20)} ${f1(cx + 15)} ${f1(cy + 24)}"/>
-        </g>
         <g opacity="0.7">
           <animate attributeName="opacity" values="0.7;0.7;1;0.8;0.7" keyTimes="0;0.5;0.62;0.82;1" dur="7.2s" repeatCount="indefinite"/>
           <g fill="#b3a7ff" opacity="0.1">
@@ -930,11 +905,6 @@ export function nodeMark(n) {
           <g fill="#b3a7ff" opacity="0.2">
             ${lobes.slice(0, 10).map(([u, v, rr]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${f2(su(rr) + 2)}"/>`).join("")}
           </g>
-        </g>
-        <g stroke-linecap="round" fill="none">
-          <animateTransform attributeName="transform" type="rotate" from="0 ${VX} ${VY}" to="360 ${VX} ${VY}" dur="48s" repeatCount="indefinite"/>
-          <circle cx="${VX}" cy="${VY}" r="20" stroke="#8fd4de" stroke-opacity="0.1" stroke-width="0.75" stroke-dasharray="24 101.66"/>
-          <circle cx="${VX}" cy="${VY}" r="24.3" stroke="#a78bfa" stroke-opacity="0.08" stroke-width="0.7" stroke-dasharray="30 122.68" stroke-dashoffset="60"/>
         </g>
         <path d="${arms}" fill="none" stroke="url(#en-surge)" stroke-width="1.15" stroke-linecap="round" pathLength="290" stroke-dasharray="26 364" stroke-dashoffset="418">
           <animate attributeName="stroke-dashoffset" values="418;418;28;28" keyTimes="0;0.06;0.58;1" calcMode="spline" keySplines="0 0 1 1;0.35 0 0.8 0.75;0 0 1 1" dur="7.2s" repeatCount="indefinite"/>
