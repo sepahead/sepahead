@@ -41,11 +41,6 @@ const CREBAIN_LOGO =
   "data:image/png;base64," +
   readFileSync(resolve(__dirname, "..", "pics", "crebain-logo.png")).toString("base64");
 
-// engram's mark: the torus-automations brand logo, embedded the same way so the
-// self-contained SVG renders it with zero external requests.
-const TORUS_LOGO =
-  "data:image/png;base64," +
-  readFileSync(resolve(__dirname, "..", "pics", "torus-automations-logo.png")).toString("base64");
 
 const W = 860;
 const H = 512;
@@ -584,10 +579,150 @@ export function nodeMark(n) {
     // pops on the silver in dark and light alike, so the metal is theme-FIXED (a
     // real object); only the label recolours. The node colour is silver, so its
     // live edges to NCP and cortexel resolve neutral via the edge-gradient system.
-    // Static → reduced-motion safe. One instance → unique ids.
-    const cx = n.x, cy = n.y, S = 54, r = 34;
+    // librsvg/reduced-motion hold the complete lit emblem still. Unique en- ids.
+    //
+    // The emblem itself is NATIVE SVG (the raster logo redrawn from measurements
+    // of the 512px PNG): a 10-lobe scalloped brain-cloud under one top-lit
+    // radial gradient, a 6-blade vortex (one traced crescent, rotationally
+    // repeated) spiralling clockwise into a dark eye, and three IC pins per
+    // side. The overmind lives: the vortex churns (one seamless-by-symmetry
+    // 360deg rotation, eye-centred fills are rotation-invariant) and signal
+    // pulses run the pins — into the brain on the left, out on the right —
+    // with pads glinting as they fire/receive — on CO-PRIME periods (left
+    // 5.6s, right 6.8s; ~95s super-period) so the call-and-response drifts
+    // instead of repeating. Inside the pupil a barely-there dark iris arc
+    // counter-drifts (-360deg/26s) against the 16s churn: the overmind
+    // thinking. The emboss filter only ever sees the STATIC layer
+    // (body+pins); vortex, iris arc + pulses live outside it, so the
+    // filtered result caches. 6 SMIL timelines total.
+    const cx = n.x, cy = n.y, r = 34;
     const Z = 46 / 34; // scale the medallion up to prisoma/melkor size (graph only)
     const top = f1(cy - r), bot = f1(cy + r);
+
+    // ---- emblem geometry: everything below is measured in the source logo's
+    // 512-box "reference pixels" and mapped into the 54-unit seat the old
+    // raster occupied, so the swap is invisible. f2: the blade curves need
+    // finer quantisation than the graph-wide 0.1u grid.
+    const f2 = (v) => Number(v.toFixed(2));
+    const K = 54 / 512;
+    const X = (u) => cx + (u - 256) * K;
+    const Y = (v) => cy + (v - 256) * K;
+    const su = (px) => f2(px * K);
+    const V = [255.5, 253]; // vortex centre (sits 3px above the box centre)
+    const VX = f2(X(V[0])), VY = f2(Y(V[1]));
+    const pol = ([t, rr]) => {
+      const a = (t * Math.PI) / 180;
+      return [X(V[0] + rr * Math.cos(a)), Y(V[1] + rr * Math.sin(a))];
+    };
+    // closed Catmull-Rom loop -> cubic path (affine-safe: runs on mapped pts)
+    const crPath = (pts) => {
+      const m = pts.length;
+      let d = `M ${f2(pts[0][0])} ${f2(pts[0][1])} `;
+      for (let i = 0; i < m; i++) {
+        const p0 = pts[(i + m - 1) % m], p1 = pts[i], p2 = pts[(i + 1) % m], p3 = pts[(i + 2) % m];
+        const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+        const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+        d += `C ${f2(c1[0])} ${f2(c1[1])} ${f2(c2[0])} ${f2(c2[1])} ${f2(p2[0])} ${f2(p2[1])} `;
+      }
+      return d + "Z";
+    };
+    // three IC pins per side (upper bends 45deg, middle straight, lower
+    // mirrored), each subpath drawn in SIGNAL direction — left: pad->brain,
+    // right: brain->pad — so one dash pulse visits pin after pin for free.
+    const P = (pts) => pts.map(([u, v], i) => `${i ? "L" : "M"} ${f2(X(u))} ${f2(Y(v))}`).join(" ");
+    const pinsL = `${P([[105, 104], [105, 158], [150, 203]])} ${P([[67, 252], [128, 252]])} ${P([[105, 399], [105, 350], [150, 305]])}`;
+    const pinsR = `${P([[361, 203], [406, 158], [406, 104]])} ${P([[383, 252], [444, 252]])} ${P([[361, 305], [406, 350], [406, 399]])}`;
+    const pads = [[105, 104], [406, 104], [67, 252], [444, 252], [105, 399], [406, 399]];
+    // scalloped brain-cloud: 10 fitted lobe circles + a core disc, one shared
+    // gradient making the union read as a single mass; then the near-black
+    // left-flank lobes and the beanie blob the raster shades dark.
+    const lobes = [
+      [348.1, 250.8, 59], [331.3, 311.9, 50.3], [289, 359.3, 47.7], [221.5, 356.8, 48.3],
+      [182.6, 310.3, 53.9], [158.7, 251.8, 55.6], [186.3, 195.1, 58], [222.2, 145.2, 48.1],
+      [287.1, 146.7, 49.8], [329, 192.5, 53.2], [255.5, 251.5, 120],
+    ];
+    const flank = [[186.3, 195.1, 52], [158.7, 251.8, 50], [182.6, 310.3, 48], [221.5, 356.8, 36]];
+    // one vortex blade traced off the raster in polar (deg, radius): a thin
+    // rim tip curling ~120deg clockwise-inward to a tail tucked under the eye.
+    const bladeOuter = [
+      [-69.5, 107.2], [-62, 105.5], [-53, 106.5], [-44, 103.3], [-35, 99], [-26, 93.5],
+      [-17, 88], [-8, 81.7], [1, 76.2], [10, 70], [19, 65], [28, 59.8], [37, 55.6],
+      [46, 51.7], [54, 48.6],
+    ];
+    const bladeInner = [
+      [48, 40], [40, 40], [32, 40.5], [24, 41.5], [16, 43], [8, 48], [0, 54.5],
+      [-9, 61], [-18, 67.5], [-27, 74.5], [-36, 81], [-45, 88], [-54, 94.5], [-63, 101.5],
+    ];
+    const blade = crPath([...bladeOuter, ...bladeInner].map(pol));
+    const bladeUses = [1, 2, 3, 4, 5]
+      .map((k) => `<use href="#en-blade" transform="rotate(${k * 60} ${VX} ${VY})"/>`)
+      .join("");
+    const emblem = `<defs>
+        <radialGradient id="en-body" gradientUnits="userSpaceOnUse" cx="${f2(X(300))}" cy="${f2(Y(140))}" r="${su(330)}">
+          <stop offset="0%" stop-color="#9da0a3"/>
+          <stop offset="30%" stop-color="#868b8f"/>
+          <stop offset="55%" stop-color="#5e6368"/>
+          <stop offset="80%" stop-color="#34383e"/>
+          <stop offset="100%" stop-color="#1c1f24"/>
+        </radialGradient>
+        <radialGradient id="en-glow" gradientUnits="userSpaceOnUse" cx="${f2(X(228))}" cy="${f2(Y(196))}" r="${su(150)}">
+          <stop offset="0%" stop-color="#a4a9ad"/>
+          <stop offset="35%" stop-color="#7b8085"/>
+          <stop offset="70%" stop-color="#45494e"/>
+          <stop offset="100%" stop-color="#2c3034"/>
+        </radialGradient>
+        <linearGradient id="en-pin" gradientUnits="userSpaceOnUse" x1="0" y1="${f2(Y(85))}" x2="0" y2="${f2(Y(418))}">
+          <stop offset="0%" stop-color="#45484e"/>
+          <stop offset="50%" stop-color="#33363b"/>
+          <stop offset="100%" stop-color="#222429"/>
+        </linearGradient>
+        <radialGradient id="en-iris" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="${su(110)}">
+          <stop offset="0%" stop-color="#0f1116"/>
+          <stop offset="45%" stop-color="#13151a"/>
+          <stop offset="78%" stop-color="#16181d"/>
+          <stop offset="100%" stop-color="#23262c"/>
+        </radialGradient>
+      </defs>
+      <g filter="url(#engramEmboss)">
+        <path d="${pinsL} ${pinsR}" stroke="url(#en-pin)" stroke-width="${su(13.5)}" fill="none"/>
+        <g fill="url(#en-pin)">
+          ${pads.map(([u, v]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(19.5)}"/>`).join("")}
+        </g>
+        <g fill="url(#en-body)">
+          ${lobes.map(([u, v, rr]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(rr)}"/>`).join("")}
+        </g>
+        <g fill="#191c20">
+          ${flank.map(([u, v, rr]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(rr)}"/>`).join("")}
+        </g>
+        <circle cx="${VX}" cy="${VY}" r="${su(105)}" fill="url(#en-glow)"/>
+        <ellipse cx="${f2(X(210))}" cy="${f2(Y(142))}" rx="${su(46)}" ry="${su(30)}" fill="#1c1f24" transform="rotate(-24 ${f2(X(210))} ${f2(Y(142))})"/>
+      </g>
+      <g>
+        <animateTransform attributeName="transform" type="rotate" from="0 ${VX} ${VY}" to="360 ${VX} ${VY}" dur="16s" repeatCount="indefinite"/>
+        <path id="en-blade" d="${blade}" fill="url(#en-iris)"/>
+        ${bladeUses}
+        <circle cx="${VX}" cy="${VY}" r="${su(42)}" fill="url(#en-iris)"/>
+      </g>
+      <g>
+        <animateTransform attributeName="transform" type="rotate" from="0 ${VX} ${VY}" to="-360 ${VX} ${VY}" dur="26s" repeatCount="indefinite"/>
+        <path d="M ${f2(pol([200, 26])[0])} ${f2(pol([200, 26])[1])} A ${su(26)} ${su(26)} 0 0 1 ${f2(pol([300, 26])[0])} ${f2(pol([300, 26])[1])}" fill="none" stroke="#2e333a" stroke-width="${su(6)}" stroke-linecap="round"/>
+      </g>
+      <g stroke="#dfe5ec" stroke-width="${su(7)}" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="${pinsL}" pathLength="290" stroke-dasharray="14 376" stroke-dashoffset="418">
+          <animate attributeName="stroke-dashoffset" values="418;28" dur="5.6s" begin="0.9s" repeatCount="indefinite"/>
+        </path>
+        <path d="${pinsR}" pathLength="290" stroke-dasharray="14 376" stroke-dashoffset="418">
+          <animate attributeName="stroke-dashoffset" values="418;28" dur="6.8s" begin="3.7s" repeatCount="indefinite"/>
+        </path>
+      </g>
+      <g fill="#d7dde3" opacity="0">
+        ${pads.slice(0, 1).concat([pads[2]], [pads[4]]).map(([u, v]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(22)}"/>`).join("")}
+        <animate attributeName="opacity" values="0;0.7;0;0" keyTimes="0;0.06;0.18;1" dur="5.6s" begin="0.9s" repeatCount="indefinite"/>
+      </g>
+      <g fill="#d7dde3" opacity="0">
+        ${[pads[1], pads[3], pads[5]].map(([u, v]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(22)}"/>`).join("")}
+        <animate attributeName="opacity" values="0;0;0.7;0;0" keyTimes="0;0.2;0.32;0.46;1" dur="6.8s" begin="3.7s" repeatCount="indefinite"/>
+      </g>`;
     return `<g>
     <defs>
       <radialGradient id="engramFace" gradientUnits="userSpaceOnUse" cx="${f1(cx - 9)}" cy="${f1(cy - 11)}" r="${f1(r * 1.5)}">
@@ -631,7 +766,7 @@ export function nodeMark(n) {
         <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramRecess)"/>
         <ellipse cx="${f1(cx - 8)}" cy="${f1(cy - 13)}" rx="25" ry="17" fill="url(#engramSpec)" transform="rotate(-30 ${f1(cx - 8)} ${f1(cy - 13)})"/>
       </g>
-      <image href="${TORUS_LOGO}" x="${f1(cx - S / 2)}" y="${f1(cy - S / 2)}" width="${S}" height="${S}" preserveAspectRatio="xMidYMid meet" filter="url(#engramEmboss)"/>
+      ${emblem}
       <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="url(#engramBezel)" stroke-width="3"/>
       <circle cx="${cx}" cy="${cy}" r="${f1(r - 1.6)}" fill="none" stroke="url(#engramBevel)" stroke-width="1.7"/>
       <circle cx="${cx}" cy="${cy}" r="${f1(r + 1.4)}" fill="none" stroke="#2b333d" stroke-width="1" stroke-opacity="0.55"/>
