@@ -53,7 +53,7 @@ const VSHIFT = 26; // push the graph body down so the taller canvas is balanced 
 // ---------------------------------------------------------------------------
 const nodes = {
   engram:      { x: 110, y: 230, color: "#bcc6d1", kind: "logo" },
-  pidrs:       { x: 172, y: 104, color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
+  pidrs:       { x: 150, y: 116, color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
   ncp:         { x: 250, y: 256, color: "#fbbf24", kind: "gate", label: "NCP" },
   prisoma:     { x: 470, y: 122, color: "#a78bfa", kind: "triangle", private: true },
   crebain:     { x: 458, y: 366, color: "#9caf88", kind: "raven" },
@@ -63,7 +63,7 @@ const nodes = {
   cortexel:    { x: 110, y: 360, color: "#e879f9", kind: "voxel" },
   manwe:       { x: 298, y: 386, color: "#38bdf8", kind: "radar", label: "manwe" },
   galadriel:   { x: 434, y: 248, color: "#ef4444", kind: "sentinel", label: "galadriel" },
-  haldir:      { x: 345, y: 181, color: "#2dd4bf", kind: "haldir", label: "haldir" },
+  haldir:      { x: 328, y: 181, color: "#2dd4bf", kind: "haldir", label: "haldir" },
 };
 // Uppercase every label in the SOURCE (not via CSS text-transform, which
 // librsvg and other SVG renderers ignore — content-case renders everywhere).
@@ -477,7 +477,7 @@ export function nodeMark(n) {
     ${compute}
     ${pinpoint}
     ${sparks}
-    <text x="${X}" y="${f1(Y + 50)}" text-anchor="middle" class="hub-label">${escapeXML(n.label)}</text>
+    <text x="${X}" y="${f1(Y - 48)}" text-anchor="middle" class="hub-label">${escapeXML(n.label)}</text>
   </g>`;
   }
   if (n.kind === "cube") {
@@ -582,11 +582,12 @@ export function nodeMark(n) {
     // so its live edges to NCP and cortexel resolve neutral via edge
     // gradients. librsvg/reduced-motion hold the serene pool still. en- ids.
     //
-    // The emblem is ONE ORGANISM in that water: a 10-lobe scalloped brain-
-    // cloud whose gradient now lives in the same obsidian family as the
-    // 6-blade MAELSTROM inside it (one traced crescent, rotationally repeated;
-    // sharp tips, full bellies) spiralling clockwise down a funnel-shaded
-    // depression into an abyssal eye — muted ignition annulus at the blade
+    // The emblem is ONE ORGANISM in that water — and the BRAIN IS THE VORTEX:
+    // the 6-blade maelstrom (one traced crescent x1.5, rotationally repeated;
+    // sharp tips, full bellies) fills the ENTIRE 10-lobe scalloped silhouette,
+    // clipped to the lobe union so the scalloped membrane edge itself cuts the
+    // churning swirl — no boundary ring, no seam. It spirals clockwise down a
+    // funnel shade into an abyssal eye — muted ignition annulus at the blade
     // roots, charged violet ember in the pupil, counter-drifting iris arc
     // (-360deg/26s vs the 16s churn): the overmind mid-thought. Eye-centred
     // fills keep every rotation seamless-by-symmetry. The ELECTRODES speak
@@ -665,7 +666,6 @@ export function nodeMark(n) {
       [182.6, 310.3, 53.9], [158.7, 251.8, 55.6], [186.3, 195.1, 58], [222.2, 145.2, 48.1],
       [287.1, 146.7, 49.8], [329, 192.5, 53.2], [255.5, 251.5, 120],
     ];
-    const flank = [[186.3, 195.1, 52], [158.7, 251.8, 50], [182.6, 310.3, 48], [221.5, 356.8, 36]];
     // one maelstrom blade recut in polar (deg, radius) off the original trace:
     // a SHARP rim tip (outer start and inner end nearly meet) curling ~125deg
     // clockwise-inward with a FULLER belly, tail tucked under the eye.
@@ -679,7 +679,10 @@ export function nodeMark(n) {
       [-9, 58], [-18, 64.6], [-27, 71.6], [-36, 78.6], [-45, 85.6], [-54, 92.6],
       [-63.5, 100.4], [-69.5, 108.2],
     ];
-    const blade = crPath([...bladeOuter, ...bladeInner].map(pol));
+    // FULL-BRAIN VORTEX: the traced blade scaled x1.5 about the eye so the
+    // swirl fills the entire scalloped silhouette (the rotor is clipped to the
+    // lobe union — the brain IS the vortex; no boundary ring, no abrupt seam).
+    const blade = crPath([...bladeOuter, ...bladeInner].map(([t, rr]) => pol([t, rr * 1.5])));
     // open Catmull-Rom -> cubic (endpoints clamped): shear edges + streamlines
     const crOpen = (pts) => {
       const m = pts.length;
@@ -711,7 +714,7 @@ export function nodeMark(n) {
     // membrane-to-core energy transport VISIBLE rather than implied. Anchored
     // to the streamline arrival sectors (100/220/340deg) for causal continuity.
     const spokePath = (E) => {
-      const cs = [0, 0.35, 0.7, 1].map((t) => ({ a: E - 24 * (1 - t), r: 14.2 - 9.9 * t, w: 1.05 * (1 - t) + 0.14 }));
+      const cs = [0, 0.35, 0.7, 1].map((t) => ({ a: E - 24 * (1 - t), r: 14.2 - 7.6 * t, w: 1.05 * (1 - t) + 0.14 }));
       const Lp = cs.map((c) => gpol(c.a + (c.w / c.r) * 57.2958, c.r));
       const Rp = cs.slice().reverse().map((c) => gpol(c.a - (c.w / c.r) * 57.2958, c.r));
       return `${crOpen(Lp)} L ${crOpen(Rp).slice(2)} Z`;
@@ -725,7 +728,7 @@ export function nodeMark(n) {
           <stop offset="80%" stop-color="#2b3038"/>
           <stop offset="100%" stop-color="#181b20"/>
         </radialGradient>
-        <radialGradient id="en-glow" gradientUnits="userSpaceOnUse" cx="${f2(X(228))}" cy="${f2(Y(196))}" r="${su(150)}">
+        <radialGradient id="en-glow" gradientUnits="userSpaceOnUse" cx="${f2(X(228))}" cy="${f2(Y(196))}" r="${su(225)}">
           <stop offset="0%" stop-color="#83888e"/>
           <stop offset="35%" stop-color="#61666c"/>
           <stop offset="70%" stop-color="#3a3e44"/>
@@ -736,20 +739,20 @@ export function nodeMark(n) {
           <stop offset="50%" stop-color="#67717c"/>
           <stop offset="100%" stop-color="#3f4954"/>
         </linearGradient>
-        <radialGradient id="en-iris" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="${su(110)}">
+        <radialGradient id="en-iris" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="${su(165)}">
           <stop offset="0%" stop-color="#05060a"/>
           <stop offset="60%" stop-color="#0a0c11"/>
           <stop offset="85%" stop-color="#12151c"/>
           <stop offset="96%" stop-color="#262b34"/>
           <stop offset="100%" stop-color="#2e3540"/>
         </radialGradient>
-        <radialGradient id="en-vane" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="${su(110)}">
+        <radialGradient id="en-vane" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="${su(165)}">
           <stop offset="0%" stop-color="#0b0d12"/>
           <stop offset="42%" stop-color="#101218"/>
           <stop offset="66%" stop-color="#1a1e28"/>
           <stop offset="100%" stop-color="#49525f"/>
         </radialGradient>
-        <radialGradient id="en-funl" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="${su(118)}">
+        <radialGradient id="en-funl" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="${su(177)}">
           <stop offset="0%" stop-color="#05070c" stop-opacity="0.9"/>
           <stop offset="30%" stop-color="#070b12" stop-opacity="0.8"/>
           <stop offset="50%" stop-color="#0d1520" stop-opacity="0.5"/>
@@ -757,19 +760,22 @@ export function nodeMark(n) {
           <stop offset="84%" stop-color="#16222e" stop-opacity="0.06"/>
           <stop offset="100%" stop-color="#16222e" stop-opacity="0"/>
         </radialGradient>
-        <radialGradient id="en-ign" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="${su(66)}">
+        <radialGradient id="en-ign" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="${su(99)}">
           <stop offset="62%" stop-color="#8f7bdb" stop-opacity="0"/>
           <stop offset="72%" stop-color="#9683e2" stop-opacity="0.46"/>
           <stop offset="80%" stop-color="#b49bff" stop-opacity="0.62"/>
           <stop offset="88%" stop-color="#7a68b8" stop-opacity="0.25"/>
           <stop offset="100%" stop-color="#7a68b8" stop-opacity="0"/>
         </radialGradient>
-        <radialGradient id="en-embr" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="${su(24)}">
+        <radialGradient id="en-embr" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="${su(36)}">
           <stop offset="0%" stop-color="#e6dbff" stop-opacity="1"/>
           <stop offset="30%" stop-color="#b298ff" stop-opacity="0.7"/>
           <stop offset="60%" stop-color="#5f4d96" stop-opacity="0.32"/>
           <stop offset="100%" stop-color="#5f4d96" stop-opacity="0"/>
         </radialGradient>
+        <clipPath id="en-brainClip">
+          ${lobes.map(([u, v, rr]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(rr)}"/>`).join("")}
+        </clipPath>
       </defs>
       <g filter="url(#engramEmboss)">
         <path d="${pinsL} ${pinsR}" stroke="url(#en-pin)" stroke-width="${su(8)}" fill="none" stroke-linecap="round"/>
@@ -779,13 +785,10 @@ export function nodeMark(n) {
         <g fill="url(#en-body)">
           ${lobes.map(([u, v, rr]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(rr)}"/>`).join("")}
         </g>
-        <g fill="#191c20">
-          ${flank.map(([u, v, rr]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(rr)}"/>`).join("")}
+        <g clip-path="url(#en-brainClip)">
+          <circle cx="${VX}" cy="${VY}" r="${su(160)}" fill="url(#en-glow)"/>
+          <circle cx="${VX}" cy="${VY}" r="${su(177)}" fill="url(#en-funl)"/>
         </g>
-        <circle cx="${VX}" cy="${VY}" r="${su(105)}" fill="url(#en-glow)"/>
-        <circle cx="${VX}" cy="${VY}" r="${su(118)}" fill="url(#en-funl)"/>
-        <circle cx="${VX}" cy="${VY}" r="${su(106)}" fill="none" stroke="#c3ccd6" stroke-opacity="0.14" stroke-width="${su(2.5)}"/>
-        <ellipse cx="${f2(X(210))}" cy="${f2(Y(142))}" rx="${su(46)}" ry="${su(30)}" fill="#2e343c" transform="rotate(-24 ${f2(X(210))} ${f2(Y(142))})"/>
       </g>
       <g stroke="#d4af37" stroke-opacity="0.55" stroke-width="${su(3)}" fill="none">
         ${pads.map(([u, v]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(15)}"/>`).join("")}
@@ -793,23 +796,25 @@ export function nodeMark(n) {
       <g fill="#fde68a" fill-opacity="0.9">
         ${jacks.map(([u, v]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(5.5)}"/>`).join("")}
       </g>
-      <g>
-        <animateTransform attributeName="transform" type="rotate" from="0 ${VX} ${VY}" to="360 ${VX} ${VY}" dur="16s" repeatCount="indefinite"/>
-        <g id="en-blade">
-          <path d="${blade}" fill="url(#en-vane)" stroke="#59636e" stroke-opacity="0.4" stroke-width="${su(2.2)}"/>
+      <g clip-path="url(#en-brainClip)">
+        <g>
+          <animateTransform attributeName="transform" type="rotate" from="0 ${VX} ${VY}" to="360 ${VX} ${VY}" dur="16s" repeatCount="indefinite"/>
+          <g id="en-blade">
+            <path d="${blade}" fill="url(#en-vane)" stroke="#59636e" stroke-opacity="0.4" stroke-width="${su(2.2)}"/>
+          </g>
+          ${bladeUses}
+          <circle cx="${VX}" cy="${VY}" r="${su(63)}" fill="url(#en-iris)"/>
         </g>
-        ${bladeUses}
-        <circle cx="${VX}" cy="${VY}" r="${su(42)}" fill="url(#en-iris)"/>
       </g>
-      <circle cx="${VX}" cy="${VY}" r="${su(66)}" fill="url(#en-ign)" opacity="0.18">
+      <circle cx="${VX}" cy="${VY}" r="${su(99)}" fill="url(#en-ign)" opacity="0.18">
         <animate attributeName="opacity" values="0.18;0.18;0.95;0.35;0.18" keyTimes="0;0.56;0.68;0.85;1" dur="7.2s" repeatCount="indefinite"/>
       </circle>
-      <circle cx="${VX}" cy="${VY}" r="${su(24)}" fill="url(#en-embr)" opacity="0.45">
+      <circle cx="${VX}" cy="${VY}" r="${su(36)}" fill="url(#en-embr)" opacity="0.45">
         <animate attributeName="opacity" values="0.45;0.45;1;0.6;0.45" keyTimes="0;0.62;0.74;0.9;1" dur="7.2s" repeatCount="indefinite"/>
       </circle>
       <g>
         <animateTransform attributeName="transform" type="rotate" from="0 ${VX} ${VY}" to="-360 ${VX} ${VY}" dur="26s" repeatCount="indefinite"/>
-        <path d="M ${f2(pol([200, 26])[0])} ${f2(pol([200, 26])[1])} A ${su(26)} ${su(26)} 0 0 1 ${f2(pol([300, 26])[0])} ${f2(pol([300, 26])[1])}" fill="none" stroke="#4a4066" stroke-width="${su(6)}" stroke-linecap="round"/>
+        <path d="M ${f2(pol([200, 39])[0])} ${f2(pol([200, 39])[1])} A ${su(39)} ${su(39)} 0 0 1 ${f2(pol([300, 39])[0])} ${f2(pol([300, 39])[1])}" fill="none" stroke="#4a4066" stroke-width="${su(9)}" stroke-linecap="round"/>
       </g>
       <g stroke-width="${su(6)}" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path d="${pinsL}" stroke="#fcd34d" pathLength="290" stroke-dasharray="14 376" stroke-dashoffset="418">
