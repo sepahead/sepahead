@@ -569,18 +569,19 @@ export function nodeMark(n) {
   </g>`;
   }
   if (n.kind === "logo") {
-    // engram: the torus-automations brand mark suspended in a PRIMORDIAL POOL
-    // held by a MACHINED SILVER bezel — a specimen porthole onto the first sea.
-    // The face inside the chrome double bezel (bright gradient rim + dark inner
-    // groove + dark outer hairline for WHITE pages) is deep teal-black liquid,
-    // kept SERENE: a top-lit depth gradient, a violet-black wall vignette, a
-    // gilt meniscus hairline where the water climbs the bezel (brightest under
-    // the top-left key light) and the old specular band softened into surface
-    // glare — nothing else is painted in the water, so the only light in the
-    // pool at rest is the brain's own violet membrane halo. Theme-FIXED (a
-    // real object); only the label recolours. The node colour stays silver,
-    // so its live edges to NCP and cortexel resolve neutral via edge
-    // gradients. librsvg/reduced-motion hold the serene pool still. en- ids.
+    // engram: the torus-automations brand mark suspended in a LUMINOUS
+    // STORM-SEA held by a GOLD-INLAID SILVER RELIQUARY bezel. The face inside
+    // the chrome double bezel (bright gradient rim + dark inner groove + dark
+    // outer hairline for WHITE pages) is key-lit slate-teal water — visibly
+    // luminous under the top-left light yet falling to deep sea at the wall
+    // (depth gradient + teal-black vignette), so the OBSIDIAN brain pops hard
+    // against it. A quiet silver meniscus glint marks the waterline; ALL the
+    // rim gold is damascened INTO the bezel metal (see the inlay block), never
+    // floating on the water. At rest the pool is serene: the only light in it
+    // is the brain's own violet membrane halo. Theme-FIXED (a real object);
+    // only the label recolours. The node colour stays silver, so its live
+    // edges to NCP and cortexel resolve neutral via edge gradients.
+    // librsvg/reduced-motion hold the serene pool still. en- ids.
     //
     // The emblem is ONE ORGANISM in that water — and the BRAIN IS THE VORTEX:
     // the 6-blade maelstrom (one traced crescent x1.5, rotationally repeated;
@@ -596,17 +597,18 @@ export function nodeMark(n) {
     // membrane, ringed ports with gold collars at the pool's edge.
     //
     // THE CAUSAL CHAIN is phase-locked on one 7.2s master period so a viewer
-    // can narrate it: three surge comets (teal warming through violet to gold
-    // as they fall — accelerating infall splines) spiral INWARD on invisible
-    // guides and vanish under the brain (keyTimes 0.06-0.58) -> the membrane
-    // halo swells (peak 0.62) -> violet discharge filaments arc membrane-to-
-    // eye (peak 0.65) -> the ignition ring flares (peak 0.68) -> the ember
-    // surges (peak 0.74) -> cognition fires OUT both pin banks as gold beads
-    // (0.74/0.77 - 0.98), pads glint and the middle pads RING THE WATER.
-    // Sea-teal in, violet mind, gold out. The emboss filter only ever sees
-    // the STATIC layer (body+pins+funnel); everything that moves lives
-    // outside it, so the
-    // filtered result caches. 12 SMIL timelines, 3 rotations total.
+    // can narrate it: two FORCE-LIGHTNING bolts (violet glow under a hot
+    // white core, jagged forked polylines) CRACKLE up out of the water and
+    // ground on the membrane — discrete stepped opacity, flashes between
+    // 0.205 and 0.565, absent at keyframe 0 so the static pool stays serene
+    // -> the membrane halo swells as it absorbs them (peak 0.62) -> violet
+    // discharge filaments arc membrane-to-eye (peak 0.65) -> the ignition
+    // ring flares (peak 0.68) -> the ember surges (peak 0.74) -> cognition
+    // fires OUT both pin banks as gold beads (0.74/0.77 - 0.98), pads glint
+    // and the middle pads RING THE WATER. Raw storm in, violet mind, gold
+    // out. The emboss filter only ever sees the STATIC layer
+    // (body+pins+funnel); everything that moves lives outside it, so the
+    // filtered result caches. 13 SMIL timelines, 2 animateTransform.
     const cx = n.x, cy = n.y, r = 34;
     const Z = 46 / 34; // scale the medallion up to prisoma/melkor size (graph only)
     const top = f1(cy - r), bot = f1(cy + r);
@@ -679,11 +681,7 @@ export function nodeMark(n) {
       [-9, 58], [-18, 64.6], [-27, 71.6], [-36, 78.6], [-45, 85.6], [-54, 92.6],
       [-63.5, 100.4], [-69.5, 108.2],
     ];
-    // FULL-BRAIN VORTEX: the traced blade scaled x1.5 about the eye so the
-    // swirl fills the entire scalloped silhouette (the rotor is clipped to the
-    // lobe union — the brain IS the vortex; no boundary ring, no abrupt seam).
-    const blade = crPath([...bladeOuter, ...bladeInner].map(([t, rr]) => pol([t, rr * 1.5])));
-    // open Catmull-Rom -> cubic (endpoints clamped): shear edges + streamlines
+    // open Catmull-Rom -> cubic (endpoints clamped): sulci + streamlines
     const crOpen = (pts) => {
       const m = pts.length;
       let d = `M ${f2(pts[0][0])} ${f2(pts[0][1])} `;
@@ -695,19 +693,80 @@ export function nodeMark(n) {
       }
       return d;
     };
+    // FULL-BRAIN VORTEX, CEREBRAL CUT: the traced blade scaled x1.5 about the
+    // eye fills the entire scalloped silhouette (rotor clipped to the lobe
+    // union — the brain IS the vortex; no boundary ring, no abrupt seam), and
+    // each fold edge undulates like a GYRUS: a sine wobble rides the polar
+    // radius (envelope pinched to zero at both tips so the sharp rim tip and
+    // the tucked tail survive), out of phase inner vs outer so the fold
+    // breathes in width like cortical matter, never like a machined vane.
+    const gyr = (pts, amp, freq, ph) => pts.map(([t, rr], i) => {
+      const env = Math.sin((Math.PI * i) / (pts.length - 1));
+      return [t, rr * 1.5 + amp * env * Math.sin(i * freq + ph)];
+    });
+    const blade = crPath([...gyr(bladeOuter, 7, 1.85, 0.4), ...gyr(bladeInner, 5, 1.6, 2.6)].map((p) => pol(p)));
+    // one SULCUS per fold: the groove line a brain reads by — the blade's
+    // polar centerline (outer edge paired with the reversed inner edge),
+    // wobbled out of phase with both edges, drawn as a soft dark crease with
+    // a single lit crest hairline offset toward the rim (the key light
+    // catching the top of the fold). Flat strokes = rotation-invariant.
+    const centerline = bladeOuter.map(([to, ro], i) => {
+      const [ti, ri] = bladeInner[bladeInner.length - 1 - i];
+      return [(to + ti) / 2, (ro + ri) / 2];
+    }).slice(1, 14);
+    const sulcus = crOpen(gyr(centerline, 5.5, 1.7, 1.5).map((p) => pol(p)));
+    const crest = crOpen(gyr(centerline.map(([t, rr]) => [t - 3.4, rr + 7]), 5.5, 1.7, 1.9).slice(2, 12).map((p) => pol(p)));
     const bladeUses = [1, 2, 3, 4, 5]
       .map((k) => `<use href="#en-blade" transform="rotate(${k * 60} ${VX} ${VY})"/>`)
       .join("");
-    // the DRINKING CURRENT: three inward spiral arms in GRAPH units around the
-    // eye (deg y-down, CW = increasing angle, matching the churn), rim->brain
-    // so the shared dash pulse flows INWARD and vanishes under the mind.
-    // Arrivals at 100/220/340deg dodge the pin axes (0/45/135/180/225/315).
+    // RAW ELECTRICITY: the pool doesn't lap at the mind, it ARCS into it —
+    // two force-lightning bolts (one dominant, one echo) in GRAPH units
+    // around the eye (deg y-down), water rim -> membrane. Each is a jagged
+    // polar polyline (straight segments, never smoothed) with side forks
+    // that ground out in the water; the trunk tip lands ON a lobe surface.
+    // Strike corridors sit in the sectors the electrode axes leave free
+    // (electrodes own ~0/26-44/135-158/180/205-225/315-335deg): the dominant
+    // bolt drops from the TOP of the pool (~265deg, straight through the key
+    // light), the echo rises from the lower-left (~115deg), so absorption-at-
+    // the-membrane stays the causal beat that feeds the halo->ember chain.
     const gpol = (deg, rr) => {
       const a = (deg * Math.PI) / 180;
       return [VX + rr * Math.cos(a), VY + rr * Math.sin(a)];
     };
-    const arm = (a0) => crOpen([0, 0.2, 0.4, 0.6, 0.8, 1].map((t) => gpol(a0 + 112 * t, 29.2 - 13 * t)));
-    const arms = `${arm(-12)} ${arm(108)} ${arm(228)}`;
+    // Wiry bolt system (grafted from the cortex candidate — all three judges
+    // converged on it): 10-sample jagged main channel with hand-tuned
+    // alternating kinks and slight CW drift, a back-flaring fork + a sideways
+    // fork dying in the water, thin glow/arc/core stroke stack, and an impact
+    // flare where each tip grounds on the membrane. Strike corridors keep the
+    // electrode axes free: dominant top ~255-275deg, echo ~100-120deg, third
+    // ~60-80deg. Two overlapping DISCRETE flicker schedules so multiple
+    // strikes crackle simultaneously; base opacity 0 keeps keyframe-0 serene.
+    const jagLine = (pts) => pts.map(([a, rr], i) => {
+      const p = gpol(a, rr);
+      return `${i ? "L" : "M"} ${f2(p[0])} ${f2(p[1])}`;
+    }).join(" ");
+    const bolt = (a0, w) => {
+      const jag = [0, 2.2, -1.8, 3.6, -2.6, 1.4, -3.2, 2.4, -1.2, 0].map((j) => j * w);
+      const drift = [0, 2, 4, 6.5, 9, 11.5, 14, 16, 18, 19.5];
+      const rads = [30.4, 28.9, 27.3, 25.7, 24.1, 22.4, 20.8, 19.2, 17.7, 16.2];
+      const main = rads.map((rr, i) => [a0 + drift[i] + jag[i], rr]);
+      const b1 = main[3], b2 = main[6];
+      const fork1 = [b1, [b1[0] - 7 * w, b1[1] + 1.2], [b1[0] - 13 * w, b1[1] + 2.8], [b1[0] - 17 * w, b1[1] + 4.6]];
+      const fork2 = [b2, [b2[0] + 8 * w, b2[1] - 0.6], [b2[0] + 15 * w, b2[1] - 1.8]];
+      return { d: `${jagLine(main)} ${jagLine(fork1)} ${jagLine(fork2)}`, tip: gpol(main[9][0], main[9][1]) };
+    };
+    const boltsA = [bolt(255, 1), bolt(60, 1)];
+    const boltsB = [bolt(100, -1)];
+    const boltGroup = (bs, anim) => {
+      const d = bs.map((b) => b.d).join(" ");
+      return `<g opacity="0" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="${d}" stroke="#7d6bf2" stroke-opacity="0.45" stroke-width="1.5"/>
+          <path d="${d}" stroke="#c9bcff" stroke-opacity="0.85" stroke-width="0.65"/>
+          <path d="${d}" stroke="#ffffff" stroke-width="0.3"/>
+          ${bs.map((b) => `<circle cx="${f2(b.tip[0])}" cy="${f2(b.tip[1])}" r="1.6" fill="#8b7cf6" fill-opacity="0.5"/><circle cx="${f2(b.tip[0])}" cy="${f2(b.tip[1])}" r="0.6" fill="#f6f3ff"/>`).join("")}
+          ${anim}
+        </g>`;
+    };
     // three tapered violet DISCHARGE FILAMENTS, membrane rim -> eye, curling
     // with the churn and pointed at the eye — they flash in the gap between
     // the membrane swell (0.62) and the ignition-ring flare (0.68), making the
@@ -801,6 +860,8 @@ export function nodeMark(n) {
           <animateTransform attributeName="transform" type="rotate" from="0 ${VX} ${VY}" to="360 ${VX} ${VY}" dur="16s" repeatCount="indefinite"/>
           <g id="en-blade">
             <path d="${blade}" fill="url(#en-vane)" stroke="#59636e" stroke-opacity="0.4" stroke-width="${su(2.2)}"/>
+            <path d="${sulcus}" fill="none" stroke="#05070d" stroke-opacity="0.55" stroke-width="${su(7)}" stroke-linecap="round"/>
+            <path d="${crest}" fill="none" stroke="#828c9b" stroke-opacity="0.32" stroke-width="${su(2.6)}" stroke-linecap="round"/>
           </g>
           ${bladeUses}
           <circle cx="${VX}" cy="${VY}" r="${su(63)}" fill="url(#en-iris)"/>
@@ -834,32 +895,49 @@ export function nodeMark(n) {
       <circle cx="${PRX}" cy="${PRY}" r="11" fill="none" stroke="url(#en-ringR)" stroke-width="0.6">
         <animate attributeName="r" values="1.9;1.9;11" keyTimes="0;0.81;1" dur="7.2s" repeatCount="indefinite"/>
       </circle>`;
+    // DAMASCENED BEZEL: the gold no longer floats as a gilt ring on the water
+    // — it is SET INTO the silver. A recessed channel machined into the outer
+    // bezel band (dark base, faint turned-edge hairline) carries interrupted
+    // gold segments of uneven length with hairline gaps — brightest under the
+    // top-left key light, chased with tick marks (dashed dark-gold overlay)
+    // so the metal reads worked, not painted — plus three flush gold
+    // micro-dots seated in their own drilled recesses on the bevel.
+    const IR = 33.9; // channel radius, inside the 32.5-35.5 bezel band
+    const iarc = (a0, a1, rr) => `M ${mpt(a0, rr)} A ${rr} ${rr} 0 0 1 ${mpt(a1, rr)}`;
+    const segs = [
+      [197, 232, "#f7e08e", 0.95], [236, 247, "#e8c760", 0.9], [305, 312, "#c9a23e", 0.85],
+      [326, 345, "#cfa845", 0.9], [84, 97, "#b9923a", 0.85], [140, 149, "#caa544", 0.85],
+    ];
+    const dot = (a, col) => {
+      const [dx, dy] = mpt(a, 33).split(" ").map(Number);
+      return `<circle cx="${dx}" cy="${dy}" r="0.5" fill="#22282f"/><circle cx="${dx}" cy="${dy}" r="0.33" fill="${col}"/><circle cx="${f1(dx - 0.11)}" cy="${f1(dy - 0.11)}" r="0.09" fill="#fff3c9" fill-opacity="0.85"/>`;
+    };
+    const inlay = `<g fill="none">
+      <circle cx="${cx}" cy="${cy}" r="${IR}" stroke="#262c33" stroke-opacity="0.9" stroke-width="0.95"/>
+      <circle cx="${cx}" cy="${cy}" r="${f1(IR + 0.62)}" stroke="#f4f8fc" stroke-opacity="0.22" stroke-width="0.16"/>
+      <g stroke-linecap="round">${segs.map(([a0, a1, col, op]) => `<path d="${iarc(a0, a1, IR)}" stroke="${col}" stroke-opacity="${op}" stroke-width="0.62"/>`).join("")}</g>
+      <g stroke-dasharray="0.14 0.55">${segs.map(([a0, a1]) => `<path d="${iarc(a0, a1, IR)}" stroke="#7a5f1d" stroke-opacity="0.4" stroke-width="0.62"/>`).join("")}</g>
+      <path d="${iarc(200, 226, f1(IR + 0.33))}" stroke="#fff6cf" stroke-opacity="0.55" stroke-width="0.16"/>
+    </g>
+    ${dot(268, "#d0aa48")}${dot(22, "#c09a3c")}${dot(118, "#caa544")}`;
     return `<g>
     <defs>
       <radialGradient id="engramFace" gradientUnits="userSpaceOnUse" cx="${f1(cx - 9)}" cy="${f1(cy - 11)}" r="${f1(r * 1.5)}">
-        <stop offset="0%" stop-color="#1c414c"/>
-        <stop offset="30%" stop-color="#123240"/>
-        <stop offset="58%" stop-color="#0c2230"/>
-        <stop offset="82%" stop-color="#091423"/>
-        <stop offset="100%" stop-color="#0a0d1d"/>
+        <stop offset="0%" stop-color="#4d8ba0"/>
+        <stop offset="28%" stop-color="#397084"/>
+        <stop offset="55%" stop-color="#255064"/>
+        <stop offset="80%" stop-color="#163247"/>
+        <stop offset="100%" stop-color="#0e1e31"/>
       </radialGradient>
       <radialGradient id="engramRecess" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${f1(cy + 8)}" r="${f1(r * 1.05)}">
-        <stop offset="62%" stop-color="#05030e" stop-opacity="0"/>
-        <stop offset="100%" stop-color="#05030e" stop-opacity="0.62"/>
+        <stop offset="62%" stop-color="#03101c" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#03101c" stop-opacity="0.58"/>
       </radialGradient>
       <linearGradient id="engramSpec" gradientUnits="userSpaceOnUse" x1="${f1(cx - 24)}" y1="${f1(cy - 28)}" x2="${f1(cx + 4)}" y2="${f1(cy)}">
         <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/>
         <stop offset="42%" stop-color="#ffffff" stop-opacity="0.08"/>
         <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
       </linearGradient>
-      <radialGradient id="en-surge" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="33">
-        <stop offset="46%" stop-color="#ffe9a8" stop-opacity="1"/>
-        <stop offset="52%" stop-color="#ffd75e" stop-opacity="0.95"/>
-        <stop offset="60%" stop-color="#cdb4ff" stop-opacity="0.9"/>
-        <stop offset="72%" stop-color="#8fe0f0" stop-opacity="0.8"/>
-        <stop offset="86%" stop-color="#5fd0e0" stop-opacity="0.7"/>
-        <stop offset="99%" stop-color="#46c8d8" stop-opacity="0.5"/>
-      </radialGradient>
       <radialGradient id="en-spoke" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="15">
         <stop offset="0%" stop-color="#f0eaff" stop-opacity="0.95"/>
         <stop offset="20%" stop-color="#d4c7ff" stop-opacity="0.9"/>
@@ -904,16 +982,15 @@ export function nodeMark(n) {
         <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramRecess)"/>
         <g opacity="0.7">
           <animate attributeName="opacity" values="0.7;0.7;1;0.8;0.7" keyTimes="0;0.5;0.62;0.82;1" dur="7.2s" repeatCount="indefinite"/>
-          <g fill="#b3a7ff" opacity="0.1">
+          <g fill="#b3a7ff" opacity="0.13">
             ${lobes.slice(0, 10).map(([u, v, rr]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${f2(su(rr) + 5)}"/>`).join("")}
           </g>
-          <g fill="#b3a7ff" opacity="0.2">
+          <g fill="#b3a7ff" opacity="0.24">
             ${lobes.slice(0, 10).map(([u, v, rr]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${f2(su(rr) + 2)}"/>`).join("")}
           </g>
         </g>
-        <path d="${arms}" fill="none" stroke="url(#en-surge)" stroke-width="1.15" stroke-linecap="round" pathLength="290" stroke-dasharray="26 364" stroke-dashoffset="418">
-          <animate attributeName="stroke-dashoffset" values="418;418;28;28" keyTimes="0;0.06;0.58;1" calcMode="spline" keySplines="0 0 1 1;0.35 0 0.8 0.75;0 0 1 1" dur="7.2s" repeatCount="indefinite"/>
-        </path>
+        ${boltGroup(boltsA, `<animate attributeName="opacity" calcMode="discrete" values="0;1;0.2;1;0;0.85;0.3;1;0.1;1;0.45;1;0;0" keyTimes="0;0.07;0.11;0.14;0.19;0.23;0.28;0.33;0.4;0.45;0.5;0.55;0.595;1" dur="7.2s" repeatCount="indefinite"/>`)}
+        ${boltGroup(boltsB, `<animate attributeName="opacity" calcMode="discrete" values="0;0.9;0.15;1;0;1;0.35;0.9;0;1;0.5;0;0" keyTimes="0;0.09;0.13;0.17;0.22;0.27;0.31;0.36;0.43;0.48;0.54;0.585;1" dur="7.2s" repeatCount="indefinite"/>`)}
         <ellipse cx="${f1(cx - 8)}" cy="${f1(cy - 13)}" rx="25" ry="17" fill="url(#engramSpec)" transform="rotate(-30 ${f1(cx - 8)} ${f1(cy - 13)})"/>
       </g>
       ${emblem}
@@ -921,13 +998,10 @@ export function nodeMark(n) {
         <animate attributeName="opacity" values="0;0;0.85;0;0" keyTimes="0;0.6;0.65;0.72;1" dur="7.2s" repeatCount="indefinite"/>
       </path>
       <circle cx="${cx}" cy="${cy}" r="30.2" fill="none" stroke="#02030a" stroke-opacity="0.55" stroke-width="0.5"/>
-      <circle cx="${cx}" cy="${cy}" r="31.1" fill="none" stroke="#d4af37" stroke-opacity="0.45" stroke-width="0.5"/>
-      <path d="M ${mpt(158, 31.1)} A 31.1 31.1 0 0 1 ${mpt(276, 31.1)}" fill="none" stroke="#fde68a" stroke-opacity="0.8" stroke-width="0.55" stroke-linecap="round"/>
-      <path d="M ${mpt(22, 31.1)} A 31.1 31.1 0 0 1 ${mpt(58, 31.1)}" fill="none" stroke="#f0d060" stroke-opacity="0.3" stroke-width="0.45" stroke-linecap="round"/>
-      <circle cx="${mpt(210, 31.1).split(" ")[0]}" cy="${mpt(210, 31.1).split(" ")[1]}" r="0.45" fill="#fde68a" fill-opacity="0.9"/>
-      <circle cx="${mpt(243, 31.1).split(" ")[0]}" cy="${mpt(243, 31.1).split(" ")[1]}" r="0.3" fill="#fff7d6" fill-opacity="0.8"/>
+      <path d="M ${mpt(168, 30.6)} A 30.6 30.6 0 0 1 ${mpt(262, 30.6)}" fill="none" stroke="#cfdde8" stroke-opacity="0.3" stroke-width="0.4" stroke-linecap="round"/>
       <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="url(#engramBezel)" stroke-width="3"/>
       <circle cx="${cx}" cy="${cy}" r="${f1(r - 1.6)}" fill="none" stroke="url(#engramBevel)" stroke-width="1.7"/>
+      ${inlay}
       <circle cx="${cx}" cy="${cy}" r="${f1(r + 1.4)}" fill="none" stroke="#2b333d" stroke-width="1" stroke-opacity="0.55"/>
     </g>
     <text x="${cx}" y="${f1(cy - r * Z - 12)}" text-anchor="middle" class="logo-label">${escapeXML(n.label)}</text>
