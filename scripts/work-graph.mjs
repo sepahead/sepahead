@@ -59,8 +59,8 @@ const VSHIFT = 26; // push the graph body down so the taller canvas is balanced 
 const nodes = {
   engram:      { x: 110, y: 230, color: "#bcc6d1", kind: "logo" },
   pidrs:       { x: 172, y: 104, color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
-  ncp:         { x: 250, y: 230, color: "#fbbf24", kind: "gate", label: "NCP" },
-  prisoma:     { x: 460, y: 130, color: "#a78bfa", kind: "triangle", private: true },
+  ncp:         { x: 250, y: 244, color: "#fbbf24", kind: "gate", label: "NCP" },
+  prisoma:     { x: 470, y: 122, color: "#a78bfa", kind: "triangle", private: true },
   crebain:     { x: 458, y: 366, color: "#9caf88", kind: "raven" },
   cobotatlas:  { x: 690, y: 150, color: "#60a5fa", kind: "chip", label: "cobot-atlas", dataset: true },
   melkor:      { x: 690, y: 250, color: "#fb923c", kind: "cube" },
@@ -321,7 +321,9 @@ export function nodeMark(n) {
     // (N, calm cabochon), UNIQUE-X1/X2 (W/E, mirrored baguette pair lit from
     // the core side), SYNERGY (S, the grand complication — larger well,
     // 8-facet brilliant with its own hot point). Hairline channels tie every
-    // complication to the core. Browser motion runs one measurement: intake ->
+    // complication to the core. Browser motion runs one measurement: the
+    // diamond dims to a 0.28-opacity ember (its white-hot pilot point stays
+    // lit) while the two KSG chips stream in, IGNITING to full as they land ->
     // compute flash -> the core lights REDUNDANT through the N channel -> TWO
     // commit-sparks (one per source) leave the redundancy sub-dial and run the
     // rail in opposite directions, committing each UNIQUE as they pass -> the
@@ -476,7 +478,7 @@ export function nodeMark(n) {
     ${chans}
     ${complications}
     ${wgs}
-    ${core}
+    <g opacity="1"><animate attributeName="opacity" values="1;1;0.28;0.28;1;1" keyTimes="0;0.02;0.06;0.14;0.17;1" dur="${CYC}" repeatCount="indefinite"/>${core}</g>
     ${compute}
     ${pinpoint}
     ${sparks}
@@ -982,7 +984,8 @@ export function nodeMark(n) {
     const notch =
       `<path class="mw-notch" d="M${p(gA, NR)} L${p(rad(90), NR - 3)} L${p(gB, NR)}"/>`;
     // Twelve fine index NOTCHES graduating the channel between the inner ring (30)
-    // and the bezel (34) — a machined lens scale.
+    // and the bezel (34) — a machined lens scale. They ride the focus-ring spin
+    // with the notch, blades, dots and aperture (the whole mechanism turns as one).
     const ticks = Array.from({ length: 12 }, (_, i) => {
       const A = rad(i * 30), ca = Math.cos(A), sa = Math.sin(A);
       return `<line class="mw-tick" x1="${f1(cx + 30.6 * ca)}" y1="${f1(cy + 30.6 * sa)}" x2="${f1(cx + 33.4 * ca)}" y2="${f1(cy + 33.4 * sa)}"/>`;
@@ -1004,9 +1007,9 @@ export function nodeMark(n) {
       `<circle class="mw-lock-dot" cx="${cx}" cy="${f1(cy-9.9)}" r="0.6"/>`;
     // Browser-only REVEAL loop (10s): the drone APPEARS, then the red target caret
     // fades in, then the whole iris MECHANISM — blade partitions, dot disc, the
-    // hexagonal aperture (well + rim) and the inner focus ring (its index notch
-    // sweeping past the fixed tick scale) — spins one clockwise turn while the
-    // drone, lock caret and core glow hold still; hold, reset, replay. Frozen /
+    // hexagonal aperture (well + rim), the inner focus ring with its index notch
+    // AND the tick scale between the two borders — spins one clockwise turn while
+    // the drone, lock caret and core glow hold still; hold, reset, replay. Frozen /
     // reduced-motion base = the complete lit mark (opacity 1, 0deg rotation).
     const MWC = "10s";
     const droneFade = `<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.04;0.13;0.9;0.98;1" dur="${MWC}" repeatCount="indefinite"/>`;
@@ -1041,7 +1044,7 @@ export function nodeMark(n) {
     <g class="mw-trigger" opacity="1">${trigFade}${lock}</g>
     <g>${bladeSpin}<polygon points="${hexAp}" class="mw-aphex"/></g>
     <g class="mw-blades">${bladeSpin}${blades}</g>
-    <g class="mw-focus">${bladeSpin}${innerRing}${notch}</g>${ticks}
+    <g class="mw-focus">${bladeSpin}${innerRing}${notch}${ticks}</g>
     <circle cx="${cx}" cy="${cy}" r="${SEAT_R}" class="mw-ring"/>
     <circle cx="${cx}" cy="${cy}" r="31.8" class="mw-groove"/>
     <circle cx="${cx}" cy="${cy}" r="35.4" class="mw-hairline"/>
