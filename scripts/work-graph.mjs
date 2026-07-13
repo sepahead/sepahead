@@ -569,32 +569,42 @@ export function nodeMark(n) {
   </g>`;
   }
   if (n.kind === "logo") {
-    // engram: the torus-automations brand mark inlaid on a MACHINED SILVER
-    // medallion — a chrome-banded face (bright crown → dark horizon → ground
-    // lift) under a cool offset sheen for a hint of convexity, a machined DOUBLE
-    // bezel (bright gradient rim + dark inner groove) plus a dark outer hairline
-    // that keeps the coin's edge crisp on WHITE (where a bright rim melts into the
-    // page), a clamped top reflection band and a whisper of warm bottom bounce,
-    // all seated on a soft drop shadow for depth in BOTH themes. The dark emblem
-    // pops on the silver in dark and light alike, so the metal is theme-FIXED (a
-    // real object); only the label recolours. The node colour is silver, so its
-    // live edges to NCP and cortexel resolve neutral via the edge-gradient system.
-    // librsvg/reduced-motion hold the complete lit emblem still. Unique en- ids.
+    // engram: the torus-automations brand mark suspended in a PRIMORDIAL POOL
+    // held by a MACHINED SILVER bezel — a specimen porthole onto the first sea.
+    // The face inside the chrome double bezel (bright gradient rim + dark inner
+    // groove + dark outer hairline for WHITE pages) is deep teal-black liquid:
+    // a top-lit depth gradient, a violet-black wall vignette, painted (static)
+    // caustic light-play, a gilt meniscus hairline where the water climbs the
+    // bezel (brightest under the top-left key light) and the old specular band
+    // softened into surface glare. The water LIVES: a violet bioelectric halo
+    // breathes around the brain (11s), a slow eddy the churn drags around
+    // (48s, same CW sense), and whisper-quiet ripple rings breathe outward
+    // (offset 7s pair whose fade rides a radial-gradient stroke — animating r
+    // alone fades them, one timeline per ring). All liquid layers sit
+    // UNFILTERED; the coin still rides its soft drop shadow. Theme-FIXED (a
+    // real object); only the label recolours. The node colour stays silver, so
+    // its live edges to NCP and cortexel resolve neutral via edge gradients.
+    // librsvg/reduced-motion hold the serene pool still. Unique en- ids.
     //
     // The emblem itself is NATIVE SVG (the raster logo redrawn from measurements
     // of the 512px PNG): a 10-lobe scalloped brain-cloud under one top-lit
     // radial gradient, a 6-blade vortex (one traced crescent, rotationally
     // repeated) spiralling clockwise into a dark eye, and three IC pins per
     // side. The overmind lives: the vortex churns (one seamless-by-symmetry
-    // 360deg rotation, eye-centred fills are rotation-invariant) and signal
-    // pulses run the pins — into the brain on the left, out on the right —
-    // with pads glinting as they fire/receive — on CO-PRIME periods (left
-    // 5.6s, right 6.8s; ~95s super-period) so the call-and-response drifts
-    // instead of repeating. Inside the pupil a barely-there dark iris arc
+    // 360deg rotation, eye-centred fills are rotation-invariant) and GOLD
+    // signal beads run the pins — into the brain on the left, out on the
+    // right (never silver: silver signals washed out on the old silver face)
+    // — with pads glinting gold as they fire/receive — on CO-PRIME periods
+    // (left 5.6s, right 6.8s; ~95s super-period) so the call-and-response
+    // drifts instead of repeating. Each firing RINGS THE WATER: a gold
+    // reaction ring blooms off the middle pad, its fade riding a pad-centred
+    // radial-gradient stroke. Inside the pupil a barely-there violet iris arc
     // counter-drifts (-360deg/26s) against the 16s churn: the overmind
-    // thinking. The emboss filter only ever sees the STATIC layer
-    // (body+pins); vortex, iris arc + pulses live outside it, so the
-    // filtered result caches. 6 SMIL timelines total.
+    // thinking. The blade path carries a faint cool rim stroke and the cap
+    // blob is recut a step lighter so the near-black tips never melt into it
+    // at any phase. The emboss filter only ever sees the STATIC layer
+    // (body+pins); everything that moves lives outside it, so the filtered
+    // result caches. 12 SMIL timelines, 3 rotations total.
     const cx = n.x, cy = n.y, r = 34;
     const Z = 46 / 34; // scale the medallion up to prisoma/melkor size (graph only)
     const top = f1(cy - r), bot = f1(cy + r);
@@ -633,6 +643,13 @@ export function nodeMark(n) {
     const pinsL = `${P([[105, 104], [105, 158], [150, 203]])} ${P([[67, 252], [128, 252]])} ${P([[105, 399], [105, 350], [150, 305]])}`;
     const pinsR = `${P([[361, 203], [406, 158], [406, 104]])} ${P([[383, 252], [444, 252]])} ${P([[361, 305], [406, 350], [406, 399]])}`;
     const pads = [[105, 104], [406, 104], [67, 252], [444, 252], [105, 399], [406, 399]];
+    // middle pads = the electrodes whose firing rings the water (reaction rings)
+    const PLX = f2(X(67)), PLY = f2(Y(252)), PRX = f2(X(444)), PRY = f2(Y(252));
+    // meniscus point on the pool rim (deg measured y-down, 0 = +x)
+    const mpt = (deg, rr) => {
+      const a = (deg * Math.PI) / 180;
+      return `${f2(cx + rr * Math.cos(a))} ${f2(cy + rr * Math.sin(a))}`;
+    };
     // scalloped brain-cloud: 10 fitted lobe circles + a core disc, one shared
     // gradient making the union read as a single mass; then the near-black
     // left-flank lobes and the beanie blob the raster shades dark.
@@ -672,15 +689,21 @@ export function nodeMark(n) {
           <stop offset="100%" stop-color="#2c3034"/>
         </radialGradient>
         <linearGradient id="en-pin" gradientUnits="userSpaceOnUse" x1="0" y1="${f2(Y(85))}" x2="0" y2="${f2(Y(418))}">
-          <stop offset="0%" stop-color="#45484e"/>
-          <stop offset="50%" stop-color="#33363b"/>
-          <stop offset="100%" stop-color="#222429"/>
+          <stop offset="0%" stop-color="#98a2ac"/>
+          <stop offset="50%" stop-color="#67717c"/>
+          <stop offset="100%" stop-color="#3f4954"/>
         </linearGradient>
         <radialGradient id="en-iris" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="${su(110)}">
           <stop offset="0%" stop-color="#0f1116"/>
           <stop offset="45%" stop-color="#13151a"/>
           <stop offset="78%" stop-color="#16181d"/>
           <stop offset="100%" stop-color="#23262c"/>
+        </radialGradient>
+        <radialGradient id="en-vane" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="${su(110)}">
+          <stop offset="0%" stop-color="#0f1116"/>
+          <stop offset="45%" stop-color="#14161c"/>
+          <stop offset="72%" stop-color="#1c202a"/>
+          <stop offset="100%" stop-color="#3d4553"/>
         </radialGradient>
       </defs>
       <g filter="url(#engramEmboss)">
@@ -695,52 +718,85 @@ export function nodeMark(n) {
           ${flank.map(([u, v, rr]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(rr)}"/>`).join("")}
         </g>
         <circle cx="${VX}" cy="${VY}" r="${su(105)}" fill="url(#en-glow)"/>
-        <ellipse cx="${f2(X(210))}" cy="${f2(Y(142))}" rx="${su(46)}" ry="${su(30)}" fill="#1c1f24" transform="rotate(-24 ${f2(X(210))} ${f2(Y(142))})"/>
+        <ellipse cx="${f2(X(210))}" cy="${f2(Y(142))}" rx="${su(46)}" ry="${su(30)}" fill="#2e343c" transform="rotate(-24 ${f2(X(210))} ${f2(Y(142))})"/>
+      </g>
+      <g stroke="#d4af37" stroke-opacity="0.55" stroke-width="${su(3.5)}" fill="none">
+        ${pads.map(([u, v]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(19.5)}"/>`).join("")}
       </g>
       <g>
         <animateTransform attributeName="transform" type="rotate" from="0 ${VX} ${VY}" to="360 ${VX} ${VY}" dur="16s" repeatCount="indefinite"/>
-        <path id="en-blade" d="${blade}" fill="url(#en-iris)"/>
+        <path id="en-blade" d="${blade}" fill="url(#en-vane)" stroke="#5a646f" stroke-opacity="0.5" stroke-width="${su(2.5)}"/>
         ${bladeUses}
         <circle cx="${VX}" cy="${VY}" r="${su(42)}" fill="url(#en-iris)"/>
       </g>
       <g>
         <animateTransform attributeName="transform" type="rotate" from="0 ${VX} ${VY}" to="-360 ${VX} ${VY}" dur="26s" repeatCount="indefinite"/>
-        <path d="M ${f2(pol([200, 26])[0])} ${f2(pol([200, 26])[1])} A ${su(26)} ${su(26)} 0 0 1 ${f2(pol([300, 26])[0])} ${f2(pol([300, 26])[1])}" fill="none" stroke="#2e333a" stroke-width="${su(6)}" stroke-linecap="round"/>
+        <path d="M ${f2(pol([200, 26])[0])} ${f2(pol([200, 26])[1])} A ${su(26)} ${su(26)} 0 0 1 ${f2(pol([300, 26])[0])} ${f2(pol([300, 26])[1])}" fill="none" stroke="#3d3651" stroke-width="${su(6)}" stroke-linecap="round"/>
       </g>
-      <g stroke="#dfe5ec" stroke-width="${su(7)}" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <path d="${pinsL}" pathLength="290" stroke-dasharray="14 376" stroke-dashoffset="418">
+      <g stroke-width="${su(7)}" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="${pinsL}" stroke="#fcd34d" pathLength="290" stroke-dasharray="14 376" stroke-dashoffset="418">
           <animate attributeName="stroke-dashoffset" values="418;28" dur="5.6s" begin="0.9s" repeatCount="indefinite"/>
         </path>
-        <path d="${pinsR}" pathLength="290" stroke-dasharray="14 376" stroke-dashoffset="418">
+        <path d="${pinsR}" stroke="#fde68a" pathLength="290" stroke-dasharray="14 376" stroke-dashoffset="418">
           <animate attributeName="stroke-dashoffset" values="418;28" dur="6.8s" begin="3.7s" repeatCount="indefinite"/>
         </path>
       </g>
-      <g fill="#d7dde3" opacity="0">
+      <g fill="#fde68a" opacity="0">
         ${pads.slice(0, 1).concat([pads[2]], [pads[4]]).map(([u, v]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(22)}"/>`).join("")}
         <animate attributeName="opacity" values="0;0.7;0;0" keyTimes="0;0.06;0.18;1" dur="5.6s" begin="0.9s" repeatCount="indefinite"/>
       </g>
-      <g fill="#d7dde3" opacity="0">
+      <g fill="#fde68a" opacity="0">
         ${[pads[1], pads[3], pads[5]].map(([u, v]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${su(22)}"/>`).join("")}
         <animate attributeName="opacity" values="0;0;0.7;0;0" keyTimes="0;0.2;0.32;0.46;1" dur="6.8s" begin="3.7s" repeatCount="indefinite"/>
-      </g>`;
+      </g>
+      <circle cx="${PLX}" cy="${PLY}" r="11" fill="none" stroke="url(#en-ringL)" stroke-width="0.6">
+        <animate attributeName="r" values="1.9;11;11" keyTimes="0;0.32;1" dur="5.6s" begin="0.9s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="${PRX}" cy="${PRY}" r="11" fill="none" stroke="url(#en-ringR)" stroke-width="0.6">
+        <animate attributeName="r" values="1.9;1.9;11;11" keyTimes="0;0.2;0.52;1" dur="6.8s" begin="3.7s" repeatCount="indefinite"/>
+      </circle>`;
     return `<g>
     <defs>
       <radialGradient id="engramFace" gradientUnits="userSpaceOnUse" cx="${f1(cx - 9)}" cy="${f1(cy - 11)}" r="${f1(r * 1.5)}">
-        <stop offset="0%" stop-color="#fcfdff"/>
-        <stop offset="26%" stop-color="#e2e9ef"/>
-        <stop offset="58%" stop-color="#b4bfc9"/>
-        <stop offset="82%" stop-color="#8a949f"/>
-        <stop offset="100%" stop-color="#67717c"/>
+        <stop offset="0%" stop-color="#1c414c"/>
+        <stop offset="30%" stop-color="#123240"/>
+        <stop offset="58%" stop-color="#0c2230"/>
+        <stop offset="82%" stop-color="#091423"/>
+        <stop offset="100%" stop-color="#0a0d1d"/>
       </radialGradient>
       <radialGradient id="engramRecess" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${f1(cy + 8)}" r="${f1(r * 1.05)}">
-        <stop offset="66%" stop-color="#2f353d" stop-opacity="0"/>
-        <stop offset="100%" stop-color="#2f353d" stop-opacity="0.5"/>
+        <stop offset="62%" stop-color="#05030e" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#05030e" stop-opacity="0.62"/>
       </radialGradient>
       <linearGradient id="engramSpec" gradientUnits="userSpaceOnUse" x1="${f1(cx - 24)}" y1="${f1(cy - 28)}" x2="${f1(cx + 4)}" y2="${f1(cy)}">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
-        <stop offset="42%" stop-color="#ffffff" stop-opacity="0.16"/>
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/>
+        <stop offset="42%" stop-color="#ffffff" stop-opacity="0.08"/>
         <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
       </linearGradient>
+      <radialGradient id="en-caust" gradientUnits="userSpaceOnUse" cx="${f1(cx + 11)}" cy="${f1(cy + 15)}" r="15">
+        <stop offset="0%" stop-color="#46c8d8" stop-opacity="0.12"/>
+        <stop offset="55%" stop-color="#46c8d8" stop-opacity="0.05"/>
+        <stop offset="100%" stop-color="#46c8d8" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="en-rip" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="32">
+        <stop offset="52%" stop-color="#b5ecf4" stop-opacity="0"/>
+        <stop offset="60%" stop-color="#b5ecf4" stop-opacity="0.2"/>
+        <stop offset="72%" stop-color="#9fe3ee" stop-opacity="0.24"/>
+        <stop offset="84%" stop-color="#8fd8ea" stop-opacity="0.1"/>
+        <stop offset="95%" stop-color="#8fd8ea" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="en-ringL" gradientUnits="userSpaceOnUse" cx="${PLX}" cy="${PLY}" r="12">
+        <stop offset="16%" stop-color="#fde68a" stop-opacity="0"/>
+        <stop offset="32%" stop-color="#fde68a" stop-opacity="0.8"/>
+        <stop offset="52%" stop-color="#e7c257" stop-opacity="0.4"/>
+        <stop offset="80%" stop-color="#d4af37" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="en-ringR" gradientUnits="userSpaceOnUse" cx="${PRX}" cy="${PRY}" r="12">
+        <stop offset="16%" stop-color="#fde68a" stop-opacity="0"/>
+        <stop offset="32%" stop-color="#fde68a" stop-opacity="0.8"/>
+        <stop offset="52%" stop-color="#e7c257" stop-opacity="0.4"/>
+        <stop offset="80%" stop-color="#d4af37" stop-opacity="0"/>
+      </radialGradient>
       <linearGradient id="engramBezel" x1="0" y1="${top}" x2="0" y2="${bot}" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#ffffff"/>
         <stop offset="42%" stop-color="#c2ccd6"/>
@@ -764,9 +820,40 @@ export function nodeMark(n) {
       <g filter="url(#engramShadow)"><circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramFace)"/></g>
       <g clip-path="url(#engramClip)">
         <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramRecess)"/>
+        <ellipse cx="${f1(cx + 11)}" cy="${f1(cy + 15)}" rx="15" ry="9" fill="url(#en-caust)" transform="rotate(18 ${f1(cx + 11)} ${f1(cy + 15)})"/>
+        <g stroke="#7ef0ff" stroke-opacity="0.09" stroke-width="0.42" fill="none" stroke-linecap="round">
+          <path d="M ${f1(cx - 14)} ${f1(cy + 20)} Q ${f1(cx - 4)} ${f1(cy + 15.5)} ${f1(cx + 8)} ${f1(cy + 20.5)}"/>
+          <path d="M ${f1(cx - 5)} ${f1(cy + 24)} Q ${f1(cx + 5)} ${f1(cy + 20)} ${f1(cx + 15)} ${f1(cy + 24)}"/>
+        </g>
+        <g opacity="0.7">
+          <animate attributeName="opacity" values="0.7;1;0.7" dur="11s" repeatCount="indefinite"/>
+          <g fill="#b3a7ff" opacity="0.1">
+            ${lobes.slice(0, 10).map(([u, v, rr]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${f2(su(rr) + 5)}"/>`).join("")}
+          </g>
+          <g fill="#b3a7ff" opacity="0.2">
+            ${lobes.slice(0, 10).map(([u, v, rr]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${f2(su(rr) + 2)}"/>`).join("")}
+          </g>
+        </g>
+        <g stroke-linecap="round" fill="none">
+          <animateTransform attributeName="transform" type="rotate" from="0 ${VX} ${VY}" to="360 ${VX} ${VY}" dur="48s" repeatCount="indefinite"/>
+          <circle cx="${VX}" cy="${VY}" r="20" stroke="#8fd4de" stroke-opacity="0.1" stroke-width="0.75" stroke-dasharray="24 101.66"/>
+          <circle cx="${VX}" cy="${VY}" r="24.3" stroke="#a78bfa" stroke-opacity="0.08" stroke-width="0.7" stroke-dasharray="30 122.68" stroke-dashoffset="60"/>
+        </g>
+        <circle cx="${VX}" cy="${VY}" r="30.6" fill="none" stroke="url(#en-rip)" stroke-width="0.8">
+          <animate attributeName="r" values="16.6;30.6" dur="7s" begin="0.6s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="${VX}" cy="${VY}" r="30.6" fill="none" stroke="url(#en-rip)" stroke-width="0.8">
+          <animate attributeName="r" values="16.6;30.6" dur="7s" begin="4.1s" repeatCount="indefinite"/>
+        </circle>
         <ellipse cx="${f1(cx - 8)}" cy="${f1(cy - 13)}" rx="25" ry="17" fill="url(#engramSpec)" transform="rotate(-30 ${f1(cx - 8)} ${f1(cy - 13)})"/>
       </g>
       ${emblem}
+      <circle cx="${cx}" cy="${cy}" r="30.2" fill="none" stroke="#02030a" stroke-opacity="0.55" stroke-width="0.5"/>
+      <circle cx="${cx}" cy="${cy}" r="31.1" fill="none" stroke="#d4af37" stroke-opacity="0.45" stroke-width="0.5"/>
+      <path d="M ${mpt(158, 31.1)} A 31.1 31.1 0 0 1 ${mpt(276, 31.1)}" fill="none" stroke="#fde68a" stroke-opacity="0.8" stroke-width="0.55" stroke-linecap="round"/>
+      <path d="M ${mpt(22, 31.1)} A 31.1 31.1 0 0 1 ${mpt(58, 31.1)}" fill="none" stroke="#f0d060" stroke-opacity="0.3" stroke-width="0.45" stroke-linecap="round"/>
+      <circle cx="${mpt(210, 31.1).split(" ")[0]}" cy="${mpt(210, 31.1).split(" ")[1]}" r="0.45" fill="#fde68a" fill-opacity="0.9"/>
+      <circle cx="${mpt(243, 31.1).split(" ")[0]}" cy="${mpt(243, 31.1).split(" ")[1]}" r="0.3" fill="#fff7d6" fill-opacity="0.8"/>
       <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="url(#engramBezel)" stroke-width="3"/>
       <circle cx="${cx}" cy="${cy}" r="${f1(r - 1.6)}" fill="none" stroke="url(#engramBevel)" stroke-width="1.7"/>
       <circle cx="${cx}" cy="${cy}" r="${f1(r + 1.4)}" fill="none" stroke="#2b333d" stroke-width="1" stroke-opacity="0.55"/>
