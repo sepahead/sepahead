@@ -53,7 +53,7 @@ const VSHIFT = 26; // push the graph body down so the taller canvas is balanced 
 // ---------------------------------------------------------------------------
 const nodes = {
   engram:      { x: 110, y: 230, color: "#bcc6d1", kind: "logo" },
-  pidrs:       { x: 150, y: 116, color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
+  pidrs:       { x: 166, y: 116, color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
   ncp:         { x: 250, y: 256, color: "#fbbf24", kind: "gate", label: "NCP" },
   prisoma:     { x: 470, y: 122, color: "#a78bfa", kind: "triangle", private: true },
   crebain:     { x: 458, y: 366, color: "#9caf88", kind: "raven" },
@@ -62,8 +62,8 @@ const nodes = {
   reliefatlas: { x: 690, y: 350, color: "#fb7185", kind: "chip", label: "relief-atlas", dataset: true },
   cortexel:    { x: 110, y: 360, color: "#e879f9", kind: "voxel" },
   manwe:       { x: 298, y: 386, color: "#38bdf8", kind: "radar", label: "manwe" },
-  galadriel:   { x: 434, y: 248, color: "#ef4444", kind: "sentinel", label: "galadriel" },
-  haldir:      { x: 328, y: 181, color: "#2dd4bf", kind: "haldir", label: "haldir" },
+  galadriel:   { x: 495, y: 253, color: "#ef4444", kind: "sentinel", label: "galadriel" },
+  haldir:      { x: 370, y: 254, color: "#2dd4bf", kind: "haldir", label: "haldir" },
 };
 // Uppercase every label in the SOURCE (not via CSS text-transform, which
 // librsvg and other SVG renderers ignore — content-case renders everywhere).
@@ -1037,7 +1037,7 @@ export function nodeMark(n) {
       </g>
     </g>
     <polygon points="${tri(R)}" class="prz-edge" stroke-linejoin="round"/>
-    <polygon points="${tri(R - 4.8)}" class="prz-groove" stroke-linejoin="round"/>
+    <polygon points="${tri(R - 3.4)}" class="prz-groove" stroke-linejoin="round"/>
     <polygon points="${tri(R + 2.8)}" class="prz-hairline" stroke-linejoin="round"/>
     <text x="${n.x}" y="${f1(n.y + R / 2 + 16)}" text-anchor="middle" class="tri-label">${escapeXML(n.label)}</text>
   </g>`;
