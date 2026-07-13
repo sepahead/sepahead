@@ -1002,18 +1002,30 @@ export function nodeMark(n) {
         ` M${f1(cx+gp)} ${f1(cy+gp)} L${f1(cx+a)} ${f1(cy+a)}"/>` +
       [[-a,-a],[a,-a],[-a,a],[a,a]]
         .map(([rx,ry]) => `<circle class="mw-rotor" cx="${f1(cx+rx)}" cy="${f1(cy+ry)}" r="${rr}"/>`).join("");
-    const lock =
-      `<polyline class="mw-lock" points="${f1(cx-1.4)},${f1(cy-9.6)} ${cx},${f1(cy-8.2)} ${f1(cx+1.4)},${f1(cy-9.6)}"/>` +
-      `<circle class="mw-lock-dot" cx="${cx}" cy="${f1(cy-9.9)}" r="0.6"/>`;
-    // Browser-only REVEAL loop (10s): the drone APPEARS, then the red target caret
-    // fades in, then the whole iris MECHANISM — blade partitions, dot disc, the
+    // Four SENSOR CARETS ring the drone (chevron + dot, one per side), each a
+    // distinct sensor hue. They ACTIVATE in sequence across the reveal — green
+    // (right) first, then yellow (bottom), then orange (left), and the original
+    // red (top) locks on LAST, just before the iris spin stops — then all four
+    // fade out with the drone. deg rotates the top-authored caret about centre.
+    const caret = (cls, deg, t0, t1) =>
+      `<g class="mw-trigger" opacity="1"${deg ? ` transform="rotate(${deg} ${f1(cx)} ${f1(cy)})"` : ""}>` +
+        `<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;${t0};${t1};0.9;0.97;1" dur="${MWC}" repeatCount="indefinite"/>` +
+        `<polyline class="${cls}" points="${f1(cx-1.4)},${f1(cy-9.6)} ${cx},${f1(cy-8.2)} ${f1(cx+1.4)},${f1(cy-9.6)}"/>` +
+        `<circle class="${cls}-dot" cx="${cx}" cy="${f1(cy-9.9)}" r="0.6"/>` +
+      `</g>`;
+    // Browser-only REVEAL loop (10s): the drone APPEARS, the four sensor carets
+    // activate one by one (green right 0.20, yellow bottom 0.34, orange left
+    // 0.47, red top 0.60 — completing just before the spin settles at 0.7),
+    // while the whole iris MECHANISM — blade partitions, dot disc, the
     // hexagonal aperture (well + rim), the inner focus ring with its index notch
-    // AND the tick scale between the two borders — spins one clockwise turn while
-    // the drone, lock caret and core glow hold still; hold, reset, replay. Frozen /
+    // AND the tick scale between the two borders — spins one clockwise turn and
+    // the drone, carets and core glow hold still; hold, reset, replay. Frozen /
     // reduced-motion base = the complete lit mark (opacity 1, 0deg rotation).
     const MWC = "10s";
     const droneFade = `<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.04;0.13;0.9;0.98;1" dur="${MWC}" repeatCount="indefinite"/>`;
-    const trigFade = `<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.22;0.31;0.9;0.97;1" dur="${MWC}" repeatCount="indefinite"/>`;
+    const locks =
+      caret("mw-lock-g", 90, 0.20, 0.27) + caret("mw-lock-y", 180, 0.34, 0.41) +
+      caret("mw-lock-o", 270, 0.47, 0.54) + caret("mw-lock", 0, 0.60, 0.67);
     const bladeSpin = `<animateTransform attributeName="transform" type="rotate" values="0 ${cx} ${cy};0 ${cx} ${cy};360 ${cx} ${cy};360 ${cx} ${cy}" keyTimes="0;0.34;0.7;1" calcMode="spline" keySplines="0 0 1 1;0.45 0 0.55 1;0 0 1 1" dur="${MWC}" repeatCount="indefinite"/>`;
     return `<g>
     <defs>
@@ -1041,7 +1053,7 @@ export function nodeMark(n) {
       <animate attributeName="opacity" values="1;0.82;1" dur="3.4s" repeatCount="indefinite"/>
     </circle>
     <g class="mw-drone" opacity="1">${droneFade}${drone}<circle cx="${cx}" cy="${cy}" r="1.4" class="mw-hub" filter="url(#mwBloom)"/></g>
-    <g class="mw-trigger" opacity="1">${trigFade}${lock}</g>
+    ${locks}
     <g>${bladeSpin}<polygon points="${hexAp}" class="mw-aphex"/></g>
     <g class="mw-blades">${bladeSpin}${blades}</g>
     <g class="mw-focus">${bladeSpin}${innerRing}${notch}${ticks}</g>
@@ -1130,7 +1142,7 @@ export function nodeMark(n) {
   if (n.kind === "haldir") {
     // haldir: THE METROPOLIS PORTAL — the fail-closed authorization reference
     // monitor as a NEO-DECO cyber GATE. A teal art-deco stepped-ziggurat skyscraper
-    // portal (fluted pilaster jambs stepping inward through 3 setbacks to a stepped
+    // portal (clean pilaster jambs stepping inward through 3 setbacks to a stepped
     // keystone crown, a corbelled FLAT void ceiling — deliberately un-medieval)
     // seals its near-black void with a RED laser LATTICE: 4 horizontal ward beams
     // woven with 2 vertical ties, 8 lit emitter diodes marching up both jambs, and
@@ -1165,11 +1177,6 @@ export function nodeMark(n) {
     const frameOuter =
       `M${A(18,22)} L${A(18,7)} L${A(14.5,7)} L${A(14.5,-4)} L${A(11,-4)} L${A(11,-14)} L${A(7,-14)} L${A(7,-19)} L${A(4.5,-19)} L${A(4.5,-24)} L${A(2.5,-24)} L${A(2.5,-27)} ` +
       `L${A(-2.5,-27)} L${A(-2.5,-24)} L${A(-4.5,-24)} L${A(-4.5,-19)} L${A(-7,-19)} L${A(-7,-14)} L${A(-11,-14)} L${A(-11,-4)} L${A(-14.5,-4)} L${A(-14.5,7)} L${A(-18,7)} L${A(-18,22)} Z`;
-    // L3 deco reeding / fluting on the jambs
-    const reeds = [13, 16].flatMap((x) => [
-      `<path class="hd-reed" d="M${A(x,17)} L${A(x,-3)}"/>`,
-      `<path class="hd-reed" d="M${A(-x,17)} L${A(-x,-3)}"/>`,
-    ]).join("");
     // L4 sill plinth + streamline speed-reeds + threshold hairline
     const plinth = `<path class="hd-frame" d="M${A(-18,18)} L${A(18,18)} L${A(18,22)} L${A(-18,22)} Z"/>`;
     const speed = [19, 20.2, 21.4].map((y) => `<path class="hd-speed" d="M${A(-16,y)} H${f1(cx+16)}"/>`).join("");
@@ -1229,7 +1236,6 @@ export function nodeMark(n) {
     ${seat(cx, cy, "hd", ["#99f6e4", "#2dd4bf", "#0f766e"])}
     <path class="hd-void" d="${voidPath}"/>
     <path class="hd-frame" d="${frameOuter} ${voidPath}" fill-rule="evenodd"/>
-    ${reeds}
     ${plinth}
     ${speed}
     ${thresh}
@@ -1444,6 +1450,12 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mw-dot       { fill: #7dd3fc; fill-opacity: 0.16; }
     .mw-lock      { fill: none; stroke: #ef4444; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
     .mw-lock-dot  { fill: #ff6b5e; }
+    .mw-lock-g    { fill: none; stroke: #4ade80; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .mw-lock-g-dot{ fill: #86efac; }
+    .mw-lock-y    { fill: none; stroke: #facc15; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .mw-lock-y-dot{ fill: #fde047; }
+    .mw-lock-o    { fill: none; stroke: #fb923c; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .mw-lock-o-dot{ fill: #fdba74; }
     .mw-drone-arm { fill: none; stroke: #7dd3fc; stroke-width: 1.4; stroke-linecap: round; }
     .mw-rotor     { fill: #12283b; stroke: #7dd3fc; stroke-width: 1.2; }
     .mw-hub       { fill: #f0f9ff; }
@@ -1464,7 +1476,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .seat-hd         { fill: url(#hdGrad); }
     .hd-void         { fill: #03211d; }
     .hd-frame        { fill: url(#haldirArch); stroke: #0f766e; stroke-width: 0.5; stroke-opacity: 0.7; }
-    .hd-reed         { fill: none; stroke: #0f766e; stroke-width: 0.6; stroke-opacity: 0.5; stroke-linecap: round; }
     .hd-speed        { fill: none; stroke: #5eead4; stroke-width: 0.6; stroke-opacity: 0.4; stroke-linecap: round; }
     .hd-thresh       { fill: none; stroke: #2dd4bf; stroke-width: 1.6; stroke-linecap: round; stroke-opacity: 0.85; }
     .hd-beam         { fill: none; stroke: #ef4444; stroke-width: 1.4; stroke-linecap: round; stroke-opacity: 0.92; }
