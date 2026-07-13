@@ -61,14 +61,14 @@ const nodes = {
   pidrs:       { x: 172, y: 104, color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
   ncp:         { x: 250, y: 230, color: "#fbbf24", kind: "gate", label: "NCP" },
   prisoma:     { x: 460, y: 130, color: "#a78bfa", kind: "triangle", private: true },
-  crebain:     { x: 460, y: 332, color: "#9caf88", kind: "raven" },
+  crebain:     { x: 458, y: 366, color: "#9caf88", kind: "raven" },
   cobotatlas:  { x: 690, y: 150, color: "#60a5fa", kind: "chip", label: "cobot-atlas", dataset: true },
   melkor:      { x: 690, y: 250, color: "#fb923c", kind: "cube" },
   reliefatlas: { x: 690, y: 350, color: "#fb7185", kind: "chip", label: "relief-atlas", dataset: true },
   cortexel:    { x: 110, y: 360, color: "#e879f9", kind: "voxel" },
   manwe:       { x: 298, y: 386, color: "#38bdf8", kind: "radar", label: "manwe" },
   galadriel:   { x: 434, y: 248, color: "#ef4444", kind: "sentinel", label: "galadriel" },
-  haldir:      { x: 322, y: 182, color: "#2dd4bf", kind: "haldir", label: "haldir" },
+  haldir:      { x: 345, y: 181, color: "#2dd4bf", kind: "haldir", label: "haldir" },
 };
 // Uppercase every label in the SOURCE (not via CSS text-transform, which
 // librsvg and other SVG renderers ignore — content-case renders everywhere).
