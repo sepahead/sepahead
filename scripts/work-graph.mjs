@@ -59,7 +59,7 @@ const VSHIFT = 26; // push the graph body down so the taller canvas is balanced 
 const nodes = {
   engram:      { x: 110, y: 230, color: "#bcc6d1", kind: "logo" },
   pidrs:       { x: 172, y: 104, color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
-  ncp:         { x: 250, y: 244, color: "#fbbf24", kind: "gate", label: "NCP" },
+  ncp:         { x: 250, y: 256, color: "#fbbf24", kind: "gate", label: "NCP" },
   prisoma:     { x: 470, y: 122, color: "#a78bfa", kind: "triangle", private: true },
   crebain:     { x: 458, y: 366, color: "#9caf88", kind: "raven" },
   cobotatlas:  { x: 690, y: 150, color: "#60a5fa", kind: "chip", label: "cobot-atlas", dataset: true },
@@ -956,16 +956,23 @@ export function nodeMark(n) {
     // chords read as a hexagram, not an iris). Each lit edge is paired with a
     // radially-outward shadow line for machined depth. Offset 15° so no edge
     // sits axis-aligned.
-    const blades = Array.from({ length: 6 }, (_, i) => {
-      const A = rad(15 + i * 60), ca = Math.cos(A), sa = Math.sin(A);
-      const dxb = -sa, dyb = ca; // chord (tangent) direction
-      const mk = (nOff) => {
-        const tx = cx + (TR + nOff) * ca, ty = cy + (TR + nOff) * sa;
-        const t0 = 6.35, t1 = Math.sqrt(IR * IR - (TR + nOff) * (TR + nOff)) - 0.6;
-        return `M${f1(tx + t0 * dxb)} ${f1(ty + t0 * dyb)} L${f1(tx + t1 * dxb)} ${f1(ty + t1 * dyb)}`;
-      };
-      return `<path class="mw-blade-sh" d="${mk(1.5)}"/><path class="mw-blade" d="${mk(0)}"/>`;
-    }).join("");
+    // All six shadow edges merge into ONE path and all six lit edges into
+    // another (same paint order as the old 12 separate paths, strokes never
+    // overlap) so the spin animates 2 elements, not 12.
+    const blades = (() => {
+      const sh = [], lit = [];
+      for (let i = 0; i < 6; i++) {
+        const A = rad(15 + i * 60), ca = Math.cos(A), sa = Math.sin(A);
+        const dxb = -sa, dyb = ca; // chord (tangent) direction
+        const mk = (nOff) => {
+          const tx = cx + (TR + nOff) * ca, ty = cy + (TR + nOff) * sa;
+          const t0 = 6.35, t1 = Math.sqrt(IR * IR - (TR + nOff) * (TR + nOff)) - 0.6;
+          return `M${f1(tx + t0 * dxb)} ${f1(ty + t0 * dyb)} L${f1(tx + t1 * dxb)} ${f1(ty + t1 * dyb)}`;
+        };
+        sh.push(mk(1.5)); lit.push(mk(0));
+      }
+      return `<path class="mw-blade-sh" d="${sh.join(" ")}"/><path class="mw-blade" d="${lit.join(" ")}"/>`;
+    })();
     // Aperture: the hexagon the six tangents leave open.
     const hexAp = Array.from({ length: 6 }, (_, i) => {
       const A = rad(45 + i * 60);
@@ -986,10 +993,10 @@ export function nodeMark(n) {
     // Twelve fine index NOTCHES graduating the channel between the inner ring (30)
     // and the bezel (34) — a machined lens scale. They ride the focus-ring spin
     // with the notch, blades, dots and aperture (the whole mechanism turns as one).
-    const ticks = Array.from({ length: 12 }, (_, i) => {
+    const ticks = `<path class="mw-tick" d="${Array.from({ length: 12 }, (_, i) => {
       const A = rad(i * 30), ca = Math.cos(A), sa = Math.sin(A);
-      return `<line class="mw-tick" x1="${f1(cx + 30.6 * ca)}" y1="${f1(cy + 30.6 * sa)}" x2="${f1(cx + 33.4 * ca)}" y2="${f1(cy + 33.4 * sa)}"/>`;
-    }).join("");
+      return `M${f1(cx + 30.6 * ca)} ${f1(cy + 30.6 * sa)} L${f1(cx + 33.4 * ca)} ${f1(cy + 33.4 * sa)}`;
+    }).join(" ")}"/>`;
     // Structured optic (galadriel/haldir grammar): a top-lit lens WELL, a controlled
     // blue core HALO (radial falloff, NO blur), a crisp quadcopter with an OPEN centre
     // gap, and a single WHITE-HOT hub pinpoint through a tight bloom — the sole
@@ -1021,7 +1028,23 @@ export function nodeMark(n) {
     // AND the tick scale between the two borders — spins one clockwise turn and
     // the drone, carets and core glow hold still; hold, reset, replay. Frozen /
     // reduced-motion base = the complete lit mark (opacity 1, 0deg rotation).
+    // PERF: the mechanism is exactly TWO animated groups (dots+well below the
+    // drone, aphex+blades+focus-ring above it) sharing z-adjacent layers, the
+    // blade/tick strokes are merged paths, and the dot grid is baked circles —
+    // 2 SMIL transform timelines instead of 5 and no per-frame pattern
+    // re-tiling, which is what made the spin stutter.
     const MWC = "10s";
+    // Dot grid baked as static circles (was a <pattern> fill — re-tiling a
+    // pattern under the spin transform repaints every frame; plain circles
+    // rotate cheaply). Same 5.5px lattice, same phase, clipped to the disc.
+    const dots = (() => {
+      const out = [];
+      for (let m = -5; m <= 4; m++) for (let n = -5; n <= 4; n++) {
+        const ddx = 5.5 * m + 1.4, ddy = 5.5 * n + 1.4;
+        if (Math.hypot(ddx, ddy) <= 27) out.push(`<circle class="mw-dot" cx="${f1(cx + ddx)}" cy="${f1(cy + ddy)}" r="0.5"/>`);
+      }
+      return out.join("");
+    })();
     const droneFade = `<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.04;0.13;0.9;0.98;1" dur="${MWC}" repeatCount="indefinite"/>`;
     const locks =
       caret("mw-lock-g", 90, 0.20, 0.27) + caret("mw-lock-y", 180, 0.34, 0.41) +
@@ -1041,22 +1064,17 @@ export function nodeMark(n) {
       <radialGradient id="mwCore" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${cy}" r="6">
         <stop offset="0%" stop-color="#cfeafe" stop-opacity="0.7"/><stop offset="45%" stop-color="#38bdf8" stop-opacity="0.42"/><stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
       </radialGradient>
-      <pattern id="mwDots" width="5.5" height="5.5" patternUnits="userSpaceOnUse" patternTransform="translate(${f1(cx)} ${f1(cy)})">
-        <circle cx="1.4" cy="1.4" r="0.5" class="mw-dot"/>
-      </pattern>
+      <clipPath id="mwDisc"><circle cx="${cx}" cy="${cy}" r="26.5"/></clipPath>
     </defs>
     <g filter="url(#nodeShadow)"><circle cx="${cx}" cy="${cy}" r="${SEAT_R}" fill="url(#mwBarrel)"/></g>
     <circle cx="${cx}" cy="${cy}" r="${IR}" class="mw-iris"/>
-    <g>${bladeSpin}<circle cx="${cx}" cy="${cy}" r="26.5" fill="url(#mwDots)"/></g>
-    <g>${bladeSpin}<polygon points="${hexAp}" class="mw-well"/></g>
+    <g>${bladeSpin}<g clip-path="url(#mwDisc)">${dots}</g><polygon points="${hexAp}" class="mw-well"/></g>
     <circle cx="${cx}" cy="${cy}" r="6" class="mw-core">
       <animate attributeName="opacity" values="1;0.82;1" dur="3.4s" repeatCount="indefinite"/>
     </circle>
     <g class="mw-drone" opacity="1">${droneFade}${drone}<circle cx="${cx}" cy="${cy}" r="1.4" class="mw-hub" filter="url(#mwBloom)"/></g>
     ${locks}
-    <g>${bladeSpin}<polygon points="${hexAp}" class="mw-aphex"/></g>
-    <g class="mw-blades">${bladeSpin}${blades}</g>
-    <g class="mw-focus">${bladeSpin}${innerRing}${notch}${ticks}</g>
+    <g class="mw-blades">${bladeSpin}<polygon points="${hexAp}" class="mw-aphex"/>${blades}${innerRing}${notch}${ticks}</g>
     <circle cx="${cx}" cy="${cy}" r="${SEAT_R}" class="mw-ring"/>
     <circle cx="${cx}" cy="${cy}" r="31.8" class="mw-groove"/>
     <circle cx="${cx}" cy="${cy}" r="35.4" class="mw-hairline"/>
