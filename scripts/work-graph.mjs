@@ -873,10 +873,6 @@ export function nodeMark(n) {
       <circle cx="${VX}" cy="${VY}" r="${su(36)}" fill="url(#en-embr)" opacity="0.45">
         <animate attributeName="opacity" values="0.45;0.45;1;0.6;0.45" keyTimes="0;0.62;0.74;0.9;1" dur="7.2s" repeatCount="indefinite"/>
       </circle>
-      <g>
-        <animateTransform attributeName="transform" type="rotate" from="0 ${VX} ${VY}" to="-360 ${VX} ${VY}" dur="26s" repeatCount="indefinite"/>
-        <path d="M ${f2(pol([200, 39])[0])} ${f2(pol([200, 39])[1])} A ${su(39)} ${su(39)} 0 0 1 ${f2(pol([300, 39])[0])} ${f2(pol([300, 39])[1])}" fill="none" stroke="#4a4066" stroke-width="${su(9)}" stroke-linecap="round"/>
-      </g>
       <g stroke-width="${su(6)}" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path d="${pinsL}" stroke="#fcd34d" pathLength="290" stroke-dasharray="14 376" stroke-dashoffset="418">
           <animate attributeName="stroke-dashoffset" values="418;418;28;28" keyTimes="0;0.74;0.95;1" dur="7.2s" repeatCount="indefinite"/>
@@ -902,42 +898,41 @@ export function nodeMark(n) {
     // top-left key light, chased with tick marks (dashed dark-gold overlay)
     // so the metal reads worked, not painted — plus three flush gold
     // micro-dots seated in their own drilled recesses on the bevel.
-    const IR = 33.9; // channel radius, inside the 32.5-35.5 bezel band
+    // The recess exists ONLY where a gold segment sits (a per-segment dark
+    // seat barely longer than its gold, cut into the MIDDLE of the band at
+    // r=33.2 so polished silver shows on BOTH sides of every inlay) — no
+    // full-circle channel line, so the band stays one silver ring that the
+    // gold interrupts, never a second border.
+    const IR = 33.2; // seat radius: silver band spans ~31.5-35.5; metal both sides
     const iarc = (a0, a1, rr) => `M ${mpt(a0, rr)} A ${rr} ${rr} 0 0 1 ${mpt(a1, rr)}`;
     const segs = [
       [197, 232, "#f7e08e", 0.95], [236, 247, "#e8c760", 0.9], [305, 312, "#c9a23e", 0.85],
       [326, 345, "#cfa845", 0.9], [84, 97, "#b9923a", 0.85], [140, 149, "#caa544", 0.85],
     ];
     const dot = (a, col) => {
-      const [dx, dy] = mpt(a, 33).split(" ").map(Number);
+      const [dx, dy] = mpt(a, IR).split(" ").map(Number);
       return `<circle cx="${dx}" cy="${dy}" r="0.5" fill="#22282f"/><circle cx="${dx}" cy="${dy}" r="0.33" fill="${col}"/><circle cx="${f1(dx - 0.11)}" cy="${f1(dy - 0.11)}" r="0.09" fill="#fff3c9" fill-opacity="0.85"/>`;
     };
     const inlay = `<g fill="none">
-      <circle cx="${cx}" cy="${cy}" r="${IR}" stroke="#262c33" stroke-opacity="0.9" stroke-width="0.95"/>
-      <circle cx="${cx}" cy="${cy}" r="${f1(IR + 0.62)}" stroke="#f4f8fc" stroke-opacity="0.22" stroke-width="0.16"/>
+      <g stroke-linecap="round">${segs.map(([a0, a1]) => `<path d="${iarc(a0 - 1.2, a1 + 1.2, IR)}" stroke="#22282f" stroke-opacity="0.85" stroke-width="0.95"/>`).join("")}</g>
       <g stroke-linecap="round">${segs.map(([a0, a1, col, op]) => `<path d="${iarc(a0, a1, IR)}" stroke="${col}" stroke-opacity="${op}" stroke-width="0.62"/>`).join("")}</g>
       <g stroke-dasharray="0.14 0.55">${segs.map(([a0, a1]) => `<path d="${iarc(a0, a1, IR)}" stroke="#7a5f1d" stroke-opacity="0.4" stroke-width="0.62"/>`).join("")}</g>
-      <path d="${iarc(200, 226, f1(IR + 0.33))}" stroke="#fff6cf" stroke-opacity="0.55" stroke-width="0.16"/>
+      <path d="${iarc(200, 226, f1(IR + 0.4))}" stroke="#fff6cf" stroke-opacity="0.55" stroke-width="0.16"/>
     </g>
     ${dot(268, "#d0aa48")}${dot(22, "#c09a3c")}${dot(118, "#caa544")}`;
     return `<g>
     <defs>
       <radialGradient id="engramFace" gradientUnits="userSpaceOnUse" cx="${f1(cx - 9)}" cy="${f1(cy - 11)}" r="${f1(r * 1.5)}">
-        <stop offset="0%" stop-color="#4d8ba0"/>
-        <stop offset="28%" stop-color="#397084"/>
-        <stop offset="55%" stop-color="#255064"/>
-        <stop offset="80%" stop-color="#163247"/>
-        <stop offset="100%" stop-color="#0e1e31"/>
+        <stop offset="0%" stop-color="#57a5b6"/>
+        <stop offset="28%" stop-color="#3f8496"/>
+        <stop offset="55%" stop-color="#286274"/>
+        <stop offset="80%" stop-color="#183a50"/>
+        <stop offset="100%" stop-color="#0d2033"/>
       </radialGradient>
       <radialGradient id="engramRecess" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${f1(cy + 8)}" r="${f1(r * 1.05)}">
         <stop offset="62%" stop-color="#03101c" stop-opacity="0"/>
         <stop offset="100%" stop-color="#03101c" stop-opacity="0.58"/>
       </radialGradient>
-      <linearGradient id="engramSpec" gradientUnits="userSpaceOnUse" x1="${f1(cx - 24)}" y1="${f1(cy - 28)}" x2="${f1(cx + 4)}" y2="${f1(cy)}">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/>
-        <stop offset="42%" stop-color="#ffffff" stop-opacity="0.08"/>
-        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-      </linearGradient>
       <radialGradient id="en-spoke" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="15">
         <stop offset="0%" stop-color="#f0eaff" stop-opacity="0.95"/>
         <stop offset="20%" stop-color="#d4c7ff" stop-opacity="0.9"/>
@@ -991,7 +986,6 @@ export function nodeMark(n) {
         </g>
         ${boltGroup(boltsA, `<animate attributeName="opacity" calcMode="discrete" values="0;1;0.2;1;0;0.85;0.3;1;0.1;1;0.45;1;0;0" keyTimes="0;0.07;0.11;0.14;0.19;0.23;0.28;0.33;0.4;0.45;0.5;0.55;0.595;1" dur="7.2s" repeatCount="indefinite"/>`)}
         ${boltGroup(boltsB, `<animate attributeName="opacity" calcMode="discrete" values="0;0.9;0.15;1;0;1;0.35;0.9;0;1;0.5;0;0" keyTimes="0;0.09;0.13;0.17;0.22;0.27;0.31;0.36;0.43;0.48;0.54;0.585;1" dur="7.2s" repeatCount="indefinite"/>`)}
-        <ellipse cx="${f1(cx - 8)}" cy="${f1(cy - 13)}" rx="25" ry="17" fill="url(#engramSpec)" transform="rotate(-30 ${f1(cx - 8)} ${f1(cy - 13)})"/>
       </g>
       ${emblem}
       <path d="${spokes}" fill="url(#en-spoke)" opacity="0">

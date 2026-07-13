@@ -288,21 +288,16 @@
       <g>
     <defs>
       <radialGradient id="engramFace" gradientUnits="userSpaceOnUse" cx="101" cy="219" r="51">
-        <stop offset="0%" stop-color="#4d8ba0"/>
-        <stop offset="28%" stop-color="#397084"/>
-        <stop offset="55%" stop-color="#255064"/>
-        <stop offset="80%" stop-color="#163247"/>
-        <stop offset="100%" stop-color="#0e1e31"/>
+        <stop offset="0%" stop-color="#57a5b6"/>
+        <stop offset="28%" stop-color="#3f8496"/>
+        <stop offset="55%" stop-color="#286274"/>
+        <stop offset="80%" stop-color="#183a50"/>
+        <stop offset="100%" stop-color="#0d2033"/>
       </radialGradient>
       <radialGradient id="engramRecess" gradientUnits="userSpaceOnUse" cx="110" cy="238" r="35.7">
         <stop offset="62%" stop-color="#03101c" stop-opacity="0"/>
         <stop offset="100%" stop-color="#03101c" stop-opacity="0.58"/>
       </radialGradient>
-      <linearGradient id="engramSpec" gradientUnits="userSpaceOnUse" x1="86" y1="202" x2="114" y2="230">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/>
-        <stop offset="42%" stop-color="#ffffff" stop-opacity="0.08"/>
-        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-      </linearGradient>
       <radialGradient id="en-spoke" gradientUnits="userSpaceOnUse" cx="109.95" cy="229.68" r="15">
         <stop offset="0%" stop-color="#f0eaff" stop-opacity="0.95"/>
         <stop offset="20%" stop-color="#d4c7ff" stop-opacity="0.9"/>
@@ -368,7 +363,6 @@
           <circle cx="101.97" cy="243.78" r="1.6" fill="#8b7cf6" fill-opacity="0.5"/><circle cx="101.97" cy="243.78" r="0.6" fill="#f6f3ff"/>
           <animate attributeName="opacity" calcMode="discrete" values="0;0.9;0.15;1;0;1;0.35;0.9;0;1;0.5;0;0" keyTimes="0;0.09;0.13;0.17;0.22;0.27;0.31;0.36;0.43;0.48;0.54;0.585;1" dur="7.2s" repeatCount="indefinite"/>
         </g>
-        <ellipse cx="102" cy="217" rx="25" ry="17" fill="url(#engramSpec)" transform="rotate(-30 102 217)"/>
       </g>
       <defs>
         <radialGradient id="en-body" gradientUnits="userSpaceOnUse" cx="114.64" cy="217.77" r="34.8">
@@ -464,10 +458,6 @@
       <circle cx="109.95" cy="229.68" r="3.8" fill="url(#en-embr)" opacity="0.45">
         <animate attributeName="opacity" values="0.45;0.45;1;0.6;0.45" keyTimes="0;0.62;0.74;0.9;1" dur="7.2s" repeatCount="indefinite"/>
       </circle>
-      <g>
-        <animateTransform attributeName="transform" type="rotate" from="0 109.95 229.68" to="-360 109.95 229.68" dur="26s" repeatCount="indefinite"/>
-        <path d="M 106.08 228.28 A 4.11 4.11 0 0 1 112 226.12" fill="none" stroke="#4a4066" stroke-width="0.95" stroke-linecap="round"/>
-      </g>
       <g stroke-width="0.63" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path d="M 98.82 224.41 C 95.87 222.51 94.07 219.66 94.07 213.97 M 96.5 229.58 L 90.07 229.58 M 98.82 235.17 C 95.87 237.07 94.07 239.91 94.07 245.08" stroke="#fcd34d" pathLength="290" stroke-dasharray="14 376" stroke-dashoffset="418">
           <animate attributeName="stroke-dashoffset" values="418;418;28;28" keyTimes="0;0.74;0.95;1" dur="7.2s" repeatCount="indefinite"/>
@@ -494,13 +484,12 @@
       <circle cx="110" cy="230" r="34" fill="none" stroke="url(#engramBezel)" stroke-width="3"/>
       <circle cx="110" cy="230" r="32.4" fill="none" stroke="url(#engramBevel)" stroke-width="1.7"/>
       <g fill="none">
-      <circle cx="110" cy="230" r="33.9" stroke="#262c33" stroke-opacity="0.9" stroke-width="0.95"/>
-      <circle cx="110" cy="230" r="34.5" stroke="#f4f8fc" stroke-opacity="0.22" stroke-width="0.16"/>
-      <g stroke-linecap="round"><path d="M 77.58 220.09 A 33.9 33.9 0 0 1 89.13 203.29" stroke="#f7e08e" stroke-opacity="0.95" stroke-width="0.62"/><path d="M 91.04 201.9 A 33.9 33.9 0 0 1 96.75 198.79" stroke="#e8c760" stroke-opacity="0.9" stroke-width="0.62"/><path d="M 129.44 202.23 A 33.9 33.9 0 0 1 132.68 204.81" stroke="#c9a23e" stroke-opacity="0.85" stroke-width="0.62"/><path d="M 138.1 211.04 A 33.9 33.9 0 0 1 142.74 221.23" stroke="#cfa845" stroke-opacity="0.9" stroke-width="0.62"/><path d="M 113.54 263.71 A 33.9 33.9 0 0 1 105.87 263.65" stroke="#b9923a" stroke-opacity="0.85" stroke-width="0.62"/><path d="M 84.03 251.79 A 33.9 33.9 0 0 1 80.94 247.46" stroke="#caa544" stroke-opacity="0.85" stroke-width="0.62"/></g>
-      <g stroke-dasharray="0.14 0.55"><path d="M 77.58 220.09 A 33.9 33.9 0 0 1 89.13 203.29" stroke="#7a5f1d" stroke-opacity="0.4" stroke-width="0.62"/><path d="M 91.04 201.9 A 33.9 33.9 0 0 1 96.75 198.79" stroke="#7a5f1d" stroke-opacity="0.4" stroke-width="0.62"/><path d="M 129.44 202.23 A 33.9 33.9 0 0 1 132.68 204.81" stroke="#7a5f1d" stroke-opacity="0.4" stroke-width="0.62"/><path d="M 138.1 211.04 A 33.9 33.9 0 0 1 142.74 221.23" stroke="#7a5f1d" stroke-opacity="0.4" stroke-width="0.62"/><path d="M 113.54 263.71 A 33.9 33.9 0 0 1 105.87 263.65" stroke="#7a5f1d" stroke-opacity="0.4" stroke-width="0.62"/><path d="M 84.03 251.79 A 33.9 33.9 0 0 1 80.94 247.46" stroke="#7a5f1d" stroke-opacity="0.4" stroke-width="0.62"/></g>
-      <path d="M 77.86 218.3 A 34.2 34.2 0 0 1 86.24 205.4" stroke="#fff6cf" stroke-opacity="0.55" stroke-width="0.16"/>
+      <g stroke-linecap="round"><path d="M 78.05 220.96 A 33.2 33.2 0 0 1 90.11 203.42" stroke="#22282f" stroke-opacity="0.85" stroke-width="0.95"/><path d="M 90.86 202.87 A 33.2 33.2 0 0 1 97.67 199.17" stroke="#22282f" stroke-opacity="0.85" stroke-width="0.95"/><path d="M 128.47 202.41 A 33.2 33.2 0 0 1 132.73 205.8" stroke="#22282f" stroke-opacity="0.85" stroke-width="0.95"/><path d="M 137.13 210.86 A 33.2 33.2 0 0 1 142.24 222.08" stroke="#22282f" stroke-opacity="0.85" stroke-width="0.95"/><path d="M 114.16 262.94 A 33.2 33.2 0 0 1 105.26 262.86" stroke="#22282f" stroke-opacity="0.85" stroke-width="0.95"/><path d="M 85.02 251.87 A 33.2 33.2 0 0 1 81.19 246.5" stroke="#22282f" stroke-opacity="0.85" stroke-width="0.95"/></g>
+      <g stroke-linecap="round"><path d="M 78.25 220.29 A 33.2 33.2 0 0 1 89.56 203.84" stroke="#f7e08e" stroke-opacity="0.95" stroke-width="0.62"/><path d="M 91.43 202.48 A 33.2 33.2 0 0 1 97.03 199.44" stroke="#e8c760" stroke-opacity="0.9" stroke-width="0.62"/><path d="M 129.04 202.8 A 33.2 33.2 0 0 1 132.22 205.33" stroke="#c9a23e" stroke-opacity="0.85" stroke-width="0.62"/><path d="M 137.52 211.43 A 33.2 33.2 0 0 1 142.07 221.41" stroke="#cfa845" stroke-opacity="0.9" stroke-width="0.62"/><path d="M 113.47 263.02 A 33.2 33.2 0 0 1 105.95 262.95" stroke="#b9923a" stroke-opacity="0.85" stroke-width="0.62"/><path d="M 84.57 251.34 A 33.2 33.2 0 0 1 81.54 247.1" stroke="#caa544" stroke-opacity="0.85" stroke-width="0.62"/></g>
+      <g stroke-dasharray="0.14 0.55"><path d="M 78.25 220.29 A 33.2 33.2 0 0 1 89.56 203.84" stroke="#7a5f1d" stroke-opacity="0.4" stroke-width="0.62"/><path d="M 91.43 202.48 A 33.2 33.2 0 0 1 97.03 199.44" stroke="#7a5f1d" stroke-opacity="0.4" stroke-width="0.62"/><path d="M 129.04 202.8 A 33.2 33.2 0 0 1 132.22 205.33" stroke="#7a5f1d" stroke-opacity="0.4" stroke-width="0.62"/><path d="M 137.52 211.43 A 33.2 33.2 0 0 1 142.07 221.41" stroke="#7a5f1d" stroke-opacity="0.4" stroke-width="0.62"/><path d="M 113.47 263.02 A 33.2 33.2 0 0 1 105.95 262.95" stroke="#7a5f1d" stroke-opacity="0.4" stroke-width="0.62"/><path d="M 84.57 251.34 A 33.2 33.2 0 0 1 81.54 247.1" stroke="#7a5f1d" stroke-opacity="0.4" stroke-width="0.62"/></g>
+      <path d="M 78.43 218.51 A 33.6 33.6 0 0 1 86.66 205.83" stroke="#fff6cf" stroke-opacity="0.55" stroke-width="0.16"/>
     </g>
-    <circle cx="108.85" cy="197.02" r="0.5" fill="#22282f"/><circle cx="108.85" cy="197.02" r="0.33" fill="#d0aa48"/><circle cx="108.7" cy="196.9" r="0.09" fill="#fff3c9" fill-opacity="0.85"/><circle cx="140.6" cy="242.36" r="0.5" fill="#22282f"/><circle cx="140.6" cy="242.36" r="0.33" fill="#c09a3c"/><circle cx="140.5" cy="242.3" r="0.09" fill="#fff3c9" fill-opacity="0.85"/><circle cx="94.51" cy="259.14" r="0.5" fill="#22282f"/><circle cx="94.51" cy="259.14" r="0.33" fill="#caa544"/><circle cx="94.4" cy="259" r="0.09" fill="#fff3c9" fill-opacity="0.85"/>
+    <circle cx="108.84" cy="196.82" r="0.5" fill="#22282f"/><circle cx="108.84" cy="196.82" r="0.33" fill="#d0aa48"/><circle cx="108.7" cy="196.7" r="0.09" fill="#fff3c9" fill-opacity="0.85"/><circle cx="140.78" cy="242.44" r="0.5" fill="#22282f"/><circle cx="140.78" cy="242.44" r="0.33" fill="#c09a3c"/><circle cx="140.7" cy="242.3" r="0.09" fill="#fff3c9" fill-opacity="0.85"/><circle cx="94.41" cy="259.31" r="0.5" fill="#22282f"/><circle cx="94.41" cy="259.31" r="0.33" fill="#caa544"/><circle cx="94.3" cy="259.2" r="0.09" fill="#fff3c9" fill-opacity="0.85"/>
       <circle cx="110" cy="230" r="35.4" fill="none" stroke="#2b333d" stroke-width="1" stroke-opacity="0.55"/>
     </g>
     <text x="110" y="172" text-anchor="middle" class="logo-label">ENGRAM</text>
