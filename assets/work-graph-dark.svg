@@ -276,6 +276,22 @@
         <stop offset="62%" stop-color="#03101c" stop-opacity="0"/>
         <stop offset="100%" stop-color="#03101c" stop-opacity="0.58"/>
       </radialGradient>
+      <radialGradient id="en-bioCol" gradientUnits="userSpaceOnUse" cx="109.95" cy="229.68" r="24">
+        <stop offset="0%" stop-color="#5ff0dd"/>
+        <stop offset="58%" stop-color="#33dcc7"/>
+        <stop offset="72%" stop-color="#1cbdac"/>
+        <stop offset="88%" stop-color="#0f9084"/>
+        <stop offset="100%" stop-color="#0a6f6b"/>
+      </radialGradient>
+      <radialGradient id="en-bioFade" gradientUnits="userSpaceOnUse" cx="109.95" cy="229.68" r="25">
+        <stop offset="0%" stop-color="#606060"/>
+        <stop offset="58%" stop-color="#606060"/>
+        <stop offset="80%" stop-color="#1c1c1c"/>
+        <stop offset="100%" stop-color="#000000"/>
+      </radialGradient>
+      <mask id="en-bioMask" maskUnits="userSpaceOnUse" x="84.95" y="204.68" width="50" height="50">
+        <circle cx="109.95" cy="229.68" r="25" fill="url(#en-bioFade)"/>
+      </mask>
       <radialGradient id="en-spoke" gradientUnits="userSpaceOnUse" cx="109.95" cy="229.68" r="15">
         <stop offset="0%" stop-color="#f0eaff" stop-opacity="0.95"/>
         <stop offset="20%" stop-color="#d4c7ff" stop-opacity="0.9"/>
@@ -338,13 +354,10 @@
       <g filter="url(#engramShadow)"><circle cx="110" cy="230" r="34" fill="url(#engramFace)"/></g>
       <g clip-path="url(#engramClip)">
         <circle cx="110" cy="230" r="34" fill="url(#engramRecess)"/>
-        <g opacity="0.7">
+        <g opacity="0.7" mask="url(#en-bioMask)">
           <animate attributeName="opacity" values="0.7;0.7;1;0.8;0.7" keyTimes="0;0.5;0.62;0.82;1" dur="7.2s" repeatCount="indefinite"/>
-          <g fill="#b3a7ff" opacity="0.13">
-            <circle cx="119.71" cy="229.45" r="11.22"/><circle cx="117.94" cy="235.9" r="10.31"/><circle cx="113.48" cy="240.89" r="10.03"/><circle cx="106.36" cy="240.63" r="10.09"/><circle cx="102.26" cy="235.73" r="10.68"/><circle cx="99.74" cy="229.56" r="10.86"/><circle cx="102.65" cy="223.58" r="11.12"/><circle cx="106.44" cy="218.31" r="10.07"/><circle cx="113.28" cy="218.47" r="10.25"/><circle cx="117.7" cy="223.3" r="10.61"/>
-          </g>
-          <g fill="#b3a7ff" opacity="0.24">
-            <circle cx="119.71" cy="229.45" r="8.22"/><circle cx="117.94" cy="235.9" r="7.31"/><circle cx="113.48" cy="240.89" r="7.03"/><circle cx="106.36" cy="240.63" r="7.09"/><circle cx="102.26" cy="235.73" r="7.68"/><circle cx="99.74" cy="229.56" r="7.86"/><circle cx="102.65" cy="223.58" r="8.12"/><circle cx="106.44" cy="218.31" r="7.07"/><circle cx="113.28" cy="218.47" r="7.25"/><circle cx="117.7" cy="223.3" r="7.61"/>
+          <g fill="url(#en-bioCol)">
+            <circle cx="119.71" cy="229.45" r="14.22"/><circle cx="117.94" cy="235.9" r="13.31"/><circle cx="113.48" cy="240.89" r="13.03"/><circle cx="106.36" cy="240.63" r="13.09"/><circle cx="102.26" cy="235.73" r="13.68"/><circle cx="99.74" cy="229.56" r="13.86"/><circle cx="102.65" cy="223.58" r="14.12"/><circle cx="106.44" cy="218.31" r="13.07"/><circle cx="113.28" cy="218.47" r="13.25"/><circle cx="117.7" cy="223.3" r="13.61"/>
           </g>
         </g>
         <g opacity="0" fill="none" stroke-linecap="round" stroke-linejoin="round">

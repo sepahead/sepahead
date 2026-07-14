@@ -578,7 +578,12 @@ export function nodeMark(n) {
     // against it. A quiet silver meniscus glint marks the waterline; the bezel
     // is pure turned silver (brushed flank, polished crown, coin-edge milling),
     // no rim ornament. At rest the pool is serene: the only light in it
-    // is the brain's own violet membrane halo. Theme-FIXED (a real object);
+    // is the brain's own TEAL bioelectric membrane field (haldir-teal, a
+    // complement to the violet energy so storm/ember pop, tied to the teal
+    // pool as one cool water). An opaque scalloped lobe-union carries a
+    // bright-cyan->deep-teal fill; a radial luminance MASK (en-bioMask) feathers
+    // it from a luminous membrane rim to nothing by the mid-pool, so it never
+    // bands and the silver light-guides cross clean deep water. Theme-FIXED (a real object);
     // only the label recolours. The node colour stays silver, so its live
     // edges to NCP and cortexel resolve neutral via edge gradients.
     // librsvg/reduced-motion hold the serene pool still. en- ids.
@@ -1158,6 +1163,22 @@ export function nodeMark(n) {
         <stop offset="62%" stop-color="#03101c" stop-opacity="0"/>
         <stop offset="100%" stop-color="#03101c" stop-opacity="0.58"/>
       </radialGradient>
+      <radialGradient id="en-bioCol" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="24">
+        <stop offset="0%" stop-color="#5ff0dd"/>
+        <stop offset="58%" stop-color="#33dcc7"/>
+        <stop offset="72%" stop-color="#1cbdac"/>
+        <stop offset="88%" stop-color="#0f9084"/>
+        <stop offset="100%" stop-color="#0a6f6b"/>
+      </radialGradient>
+      <radialGradient id="en-bioFade" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="25">
+        <stop offset="0%" stop-color="#606060"/>
+        <stop offset="58%" stop-color="#606060"/>
+        <stop offset="80%" stop-color="#1c1c1c"/>
+        <stop offset="100%" stop-color="#000000"/>
+      </radialGradient>
+      <mask id="en-bioMask" maskUnits="userSpaceOnUse" x="${f2(VX - 25)}" y="${f2(VY - 25)}" width="50" height="50">
+        <circle cx="${VX}" cy="${VY}" r="25" fill="url(#en-bioFade)"/>
+      </mask>
       <radialGradient id="en-spoke" gradientUnits="userSpaceOnUse" cx="${VX}" cy="${VY}" r="15">
         <stop offset="0%" stop-color="#f0eaff" stop-opacity="0.95"/>
         <stop offset="20%" stop-color="#d4c7ff" stop-opacity="0.9"/>
@@ -1220,13 +1241,10 @@ export function nodeMark(n) {
       <g filter="url(#engramShadow)"><circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramFace)"/></g>
       <g clip-path="url(#engramClip)">
         <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#engramRecess)"/>
-        <g opacity="0.7">
+        <g opacity="0.7" mask="url(#en-bioMask)">
           <animate attributeName="opacity" values="0.7;0.7;1;0.8;0.7" keyTimes="0;0.5;0.62;0.82;1" dur="7.2s" repeatCount="indefinite"/>
-          <g fill="#b3a7ff" opacity="0.13">
-            ${lobes.slice(0, 10).map(([u, v, rr]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${f2(su(rr) + 5)}"/>`).join("")}
-          </g>
-          <g fill="#b3a7ff" opacity="0.24">
-            ${lobes.slice(0, 10).map(([u, v, rr]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${f2(su(rr) + 2)}"/>`).join("")}
+          <g fill="url(#en-bioCol)">
+            ${lobes.slice(0, 10).map(([u, v, rr]) => `<circle cx="${f2(X(u))}" cy="${f2(Y(v))}" r="${f2(su(rr) + 8)}"/>`).join("")}
           </g>
         </g>
         ${storm}
