@@ -570,14 +570,14 @@ export function nodeMark(n) {
   }
   if (n.kind === "logo") {
     // engram: the torus-automations brand mark suspended in a LUMINOUS
-    // STORM-SEA held by a GOLD-INLAID SILVER RELIQUARY bezel. The face inside
+    // STORM-SEA held by a MACHINED SILVER RELIQUARY bezel. The face inside
     // the chrome double bezel (bright gradient rim + dark inner groove + dark
     // outer hairline for WHITE pages) is key-lit slate-teal water — visibly
     // luminous under the top-left light yet falling to deep sea at the wall
     // (depth gradient + teal-black vignette), so the OBSIDIAN brain pops hard
-    // against it. A quiet silver meniscus glint marks the waterline; ALL the
-    // rim gold is damascened INTO the bezel metal (see the inlay block), never
-    // floating on the water. At rest the pool is serene: the only light in it
+    // against it. A quiet silver meniscus glint marks the waterline; the bezel
+    // is pure turned silver (brushed flank, polished crown, coin-edge milling),
+    // no rim ornament. At rest the pool is serene: the only light in it
     // is the brain's own violet membrane halo. Theme-FIXED (a real object);
     // only the label recolours. The node colour stays silver, so its live
     // edges to NCP and cortexel resolve neutral via edge gradients.
@@ -1119,10 +1119,7 @@ export function nodeMark(n) {
     //         bezel's inner bevel is always brightest opposite the key)
     //   31.35 crisp bright inner EDGE hairline
     //   31.3-33.9  BRUSHED FLANK: a matte, low-contrast band with one faint
-    //         hairline-turning mark. The GOLD IS SEATED HERE, in the middle
-    //         of the flank at r=32.6, so ~0.7u of silver shows on BOTH sides
-    //         of every inlay — the gold interrupts the metal, it never rides
-    //         on top of it and it never becomes a second border line.
+    //         hairline-turning mark — clean turned silver, no ornament.
     //   33.95 machined STEP shadow (the flank drops away under the crown)
     //   33.95-36.05  POLISHED CROWN: the mirror surface, keyed on the TL->BR
     //         diagonal (white at the top-left, near-black at the bottom-right)
@@ -1131,36 +1128,6 @@ export function nodeMark(n) {
     //   36.0  bright edge hairline TL (175-300deg) / deep shadow arc BR
     //   36.25 outer contour hairline — holds the coin against white pages
     //
-    // GOLD: eight hand-chased segments of uneven length and gap, each cut into
-    // its own dark seat (a recess barely longer than the gold), tick-chased
-    // with a dashed dark-gold overlay, given a lit hairline on its upper wall
-    // and a shadow hairline on its lower wall so the inlay has THICKNESS, and
-    // pushed brighter/warmer where the key light rakes across it (175-305deg)
-    // and duller where it falls into shadow. Three flush micro-dots sit in
-    // drilled recesses between them.
-    const IR = 32.6; // seat radius, centred in the 31.3-33.9 brushed flank
-    const iarc = (a0, a1, rr) => `M ${mpt(a0, rr)} A ${rr} ${rr} 0 0 1 ${mpt(a1, rr)}`;
-    // [a0, a1, colour, opacity, gold width] — no two alike
-    const segs = [
-      [196, 233, "#ffe9a3", 0.97, 0.66], [239, 251, "#f2d67f", 0.93, 0.55],
-      [258, 274, "#ffe6a0", 0.95, 0.7], [303, 313, "#c8a244", 0.82, 0.54],
-      [327, 347, "#d5ae4c", 0.87, 0.62], [22, 31, "#b58f3c", 0.8, 0.5],
-      [82, 96, "#a9873a", 0.78, 0.6], [138, 150, "#c09a41", 0.84, 0.57],
-    ];
-    const keyLit = (a0, a1) => { const m = (a0 + a1) / 2; return m > 172 && m < 308; };
-    const dot = (a, col) => {
-      const [dx, dy] = mpt(a, IR).split(" ").map(Number);
-      return `<circle cx="${dx}" cy="${dy}" r="0.55" fill="#161c24"/><circle cx="${dx}" cy="${dy}" r="0.42" fill="#0c1119" fill-opacity="0.8"/><circle cx="${dx}" cy="${dy}" r="0.31" fill="${col}"/><circle cx="${f2(dx - 0.1)}" cy="${f2(dy - 0.1)}" r="0.1" fill="#fff3c9" fill-opacity="0.9"/>`;
-    };
-    const inlay = `<g fill="none">
-      <g stroke-linecap="round">${segs.map(([a0, a1]) => `<path d="${iarc(a0 - 1.5, a1 + 1.5, IR)}" stroke="#161c24" stroke-opacity="0.92" stroke-width="1.05"/>`).join("")}</g>
-      <g stroke-linecap="round">${segs.map(([a0, a1]) => `<path d="${iarc(a0 - 1.1, a1 + 1.1, f2(IR - 0.4))}" stroke="#090d13" stroke-opacity="0.55" stroke-width="0.22"/>`).join("")}</g>
-      <g stroke-linecap="round">${segs.map(([a0, a1, col, op, w]) => `<path d="${iarc(a0, a1, IR)}" stroke="${col}" stroke-opacity="${op}" stroke-width="${w}"/>`).join("")}</g>
-      ${segs.map(([a0, a1, , , w], i) => `<path d="${iarc(a0, a1, IR)}" stroke="#6d5417" stroke-opacity="0.24" stroke-width="${w}" stroke-dasharray="${[0.08, 0.11, 0.09][i % 3]} ${[0.7, 0.9, 0.62][i % 3]}"/>`).join("")}
-      ${segs.map(([a0, a1, , , w]) => `<path d="${iarc(a0 + 0.7, a1 - 0.7, f2(IR - w / 2 + 0.07))}" stroke="#fff6d2" stroke-opacity="${keyLit(a0, a1) ? 0.62 : 0.26}" stroke-width="0.13" stroke-linecap="round"/>`).join("")}
-      ${segs.map(([a0, a1, , , w]) => `<path d="${iarc(a0 + 0.6, a1 - 0.6, f2(IR + w / 2 - 0.06))}" stroke="#5c4413" stroke-opacity="0.5" stroke-width="0.14" stroke-linecap="round"/>`).join("")}
-    </g>
-    ${dot(268, "#e8c257")}${dot(11, "#c09a3c")}${dot(118, "#caa544")}${dot(180, "#dcb64e")}`;
     // the band itself: strokes ordered inner -> outer
     const band = `<circle cx="${cx}" cy="${cy}" r="30.2" fill="none" stroke="#02060e" stroke-opacity="0.62" stroke-width="0.8"/>
     <path d="M ${mpt(168, 30.15)} A 30.15 30.15 0 0 1 ${mpt(258, 30.15)}" fill="none" stroke="#cfdde8" stroke-opacity="0.3" stroke-width="0.4" stroke-linecap="round"/>
@@ -1169,7 +1136,6 @@ export function nodeMark(n) {
     <circle cx="${cx}" cy="${cy}" r="32.6" fill="none" stroke="url(#en-bz-flank)" stroke-width="2.6"/>
     <circle cx="${cx}" cy="${cy}" r="31.9" fill="none" stroke="#e8f1f8" stroke-opacity="0.08" stroke-width="0.14"/>
     <circle cx="${cx}" cy="${cy}" r="33.55" fill="none" stroke="#0d131a" stroke-opacity="0.11" stroke-width="0.14"/>
-    ${inlay}
     <circle cx="${cx}" cy="${cy}" r="33.95" fill="none" stroke="#0c1219" stroke-opacity="0.55" stroke-width="0.5"/>
     <circle cx="${cx}" cy="${cy}" r="35.0" fill="none" stroke="url(#en-bz-crown)" stroke-width="2.1"/>
     <circle cx="${cx}" cy="${cy}" r="34.45" fill="none" stroke="#1b222b" stroke-opacity="0.14" stroke-width="0.45"/>
