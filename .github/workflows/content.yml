@@ -1,0 +1,52 @@
+name: Verify portfolio content
+
+on:
+  pull_request:
+  push:
+    paths:
+      - "README.md"
+      - "docs/**"
+      - "scripts/data.mjs"
+      - "scripts/sync-selected-work.mjs"
+      - "scripts/work-cards.mjs"
+      - "scripts/work-graph.mjs"
+      - "scripts/section-titles.mjs"
+      - "scripts/theme-split.mjs"
+      - "scripts/tokens.mjs"
+      - "pics/crebain-logo.png"
+      - "assets/work-card-*.svg"
+      - "assets/work-graph-*.svg"
+      - "assets/title-*.svg"
+      - ".github/workflows/content.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  generated-content:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Check source syntax and synchronized content
+        run: |
+          node --check scripts/data.mjs
+          node --check scripts/sync-selected-work.mjs
+          node --check scripts/work-cards.mjs
+          node --check scripts/work-graph.mjs
+          node --check scripts/section-titles.mjs
+          node --check scripts/theme-split.mjs
+          node --check scripts/tokens.mjs
+          node scripts/sync-selected-work.mjs --check
+
+      - name: Check deterministic generated SVGs
+        run: |
+          node scripts/work-graph.mjs
+          node scripts/section-titles.mjs
+          git add --intent-to-add assets/work-graph-*.svg assets/title-*.svg
+          git diff --exit-code -- assets/work-graph-*.svg assets/title-*.svg

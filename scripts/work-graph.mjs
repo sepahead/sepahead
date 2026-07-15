@@ -13,7 +13,7 @@
 // near-equal counter-flowing packet lanes (full-duplex, the edge echo of NCP's
 // dual-lane gate glyph).
 // Every project node is a bespoke "real object" mark on a machined border —
-// the crebain-badge / engram-medallion tier: NCP is a dual-lane safety gate
+// the crebain-badge / engram-medallion tier: NCP is a dual-lane contract gate
 // (perception ⇄ action through one checkpoint) on a solid amber badge seat;
 // cortexel is a voxel NEURAL NETWORK on a fuchsia badge seat; crebain is its
 // own raven-in-crosshair brand mark; engram a machined silver medallion;
@@ -55,7 +55,7 @@ const nodes = {
   engram:      { x: 110, y: 230, color: "#bcc6d1", kind: "logo" },
   pidrs:       { x: 166, y: 116, color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
   ncp:         { x: 250, y: 256, color: "#fbbf24", kind: "gate", label: "NCP" },
-  prisoma:     { x: 470, y: 122, color: "#a78bfa", kind: "triangle", private: true },
+  prisoma:     { x: 470, y: 122, color: "#a78bfa", kind: "triangle" },
   crebain:     { x: 458, y: 366, color: "#9caf88", kind: "raven" },
   cobotatlas:  { x: 690, y: 150, color: "#60a5fa", kind: "chip", label: "cobot-atlas", dataset: true },
   melkor:      { x: 690, y: 250, color: "#fb923c", kind: "cube" },
@@ -1918,7 +1918,7 @@ const frame = `<g class="frame">
 // Assemble.
 // ---------------------------------------------------------------------------
 const aria =
-  "Project graph: engram, the neural-modeling hub, and crebain, the multi-UAV simulation and airspace-awareness testbed, connect through the always-on, two-way NCP protocol to prisoma, a private hub; pid-rs, cobot-atlas, melkor and relief-atlas connect to prisoma; cobot-atlas, melkor and relief-atlas also connect to crebain, as does manwe, the drone-detection eye feeding crebain; cortexel connects to engram; galadriel, a public cross-sensor statistical-consistency monitor, connects to crebain and pid-rs; haldir, the fail-closed authorization gate that admits a signed controller intent and re-originates the plant command under its own key, connects to NCP, galadriel and prisoma.";
+  "Conceptual project ecosystem map: NCP provides the contract layer around Engram, Prisoma, CREBAIN and Haldir; pid-rs is a direct Prisoma dependency and provides optional diagnostics used by Galadriel; Manwe targets candidate outputs for CREBAIN but has no drop-in adapter; Galadriel and CREBAIN retain component-level research interfaces without current cross-repository qualification; Melkor and the atlas projects represent 3D tooling and data inputs; Cortexel and Engram share a neural-simulation context. Lines denote code dependencies, research relationships, historical compatibility or intended integrations, not production deployment.";
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
   <defs>

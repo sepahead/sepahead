@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 150" width="395" height="150" role="img" aria-label="prisoma (private): A prism for embodied agents, robotics and world models: Vision-Language-Action analysis via several native methods, PID among them.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 150" width="395" height="150" role="img" aria-label="prisoma (research): Auditable capture-intervention-replay research for VLA-policy diagnosis. PID stays conditional on explicit validation gates.">
   <defs>
     <radialGradient id="wash0" cx="8%" cy="0%" r="120%"><stop offset="0%" stop-color="#241a44" stop-opacity="0.9"/><stop offset="60%" stop-color="#241a44" stop-opacity="0"/></radialGradient>
   </defs>
@@ -52,10 +52,10 @@
     <path d="M2.5 14 v122" class="spine c0" stroke-width="4" stroke-linecap="round"/>
     <text x="23" y="38" class="title c0" textLength="91" lengthAdjust="spacingAndGlyphs">prisoma</text>
     <rect x="23" y="46" width="34" height="2.5" rx="1.25" class="rule c0"/>
-    <g transform="translate(365 16) scale(0.78)"><path d="M2 6 V4.4 a4 4 0 0 1 8 0 V6" fill="none" class="glyph-stroke c0" stroke-width="1.6"/><rect x="0" y="6" width="12" height="9" rx="1.6" class="glyph-fill c0"/></g><text x="360" y="28" text-anchor="end" class="badge c0">private</text>
-    <text x="23" y="60" class="desc">A prism for embodied agents, robotics and world</text>
-    <text x="23" y="78" class="desc">models: Vision-Language-Action analysis via</text>
-    <text x="23" y="96" class="desc">several native methods, PID among them.</text>
+    <circle cx="366" cy="22" r="5" fill="none" stroke-width="1.4" class="glyph-stroke c0"/><circle cx="366" cy="22" r="1.6" class="glyph-fill c0"/><text x="355" y="27" text-anchor="end" class="badge c0">research</text>
+    <text x="23" y="60" class="desc">Auditable capture-intervention-replay research</text>
+    <text x="23" y="78" class="desc">for VLA-policy diagnosis. PID stays conditional</text>
+    <text x="23" y="96" class="desc">on explicit validation gates.</text>
     <g><rect x="23" y="110" width="50" height="22" rx="6" class="chip c0"/><text x="48" y="125" text-anchor="middle" class="chip-label c0">Rust</text></g>
     <g><rect x="81" y="110" width="66" height="22" rx="6" class="chip c0"/><text x="114" y="125" text-anchor="middle" class="chip-label c0">Python</text></g>
   </g>

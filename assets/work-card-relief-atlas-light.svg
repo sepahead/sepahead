@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 150" width="395" height="150" role="img" aria-label="relief-atlas: 10K+ AI-generated 3D mesh assets for disaster-relief and humanitarian-aid simulation: synthetic geometry for training and sim.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 150" width="395" height="150" role="img" aria-label="relief-atlas (dataset): Python generation pipeline and 10,079 AI-generated GLB meshes for disaster relief, humanitarian aid and civil protection.">
   <defs>
     <radialGradient id="wash0" cx="8%" cy="0%" r="120%"><stop offset="0%" stop-color="#2a0a12" stop-opacity="0.9"/><stop offset="60%" stop-color="#2a0a12" stop-opacity="0"/></radialGradient>
   </defs>
@@ -63,9 +63,9 @@
     <text x="23" y="38" class="title c0" textLength="156" lengthAdjust="spacingAndGlyphs">relief-atlas</text>
     <rect x="23" y="46" width="34" height="2.5" rx="1.25" class="rule c0"/>
     <polygon points="369.0,16.5 373.6,18.9 369.0,21.3 364.4,18.9" class="glyph-fill glyph-stroke c0" fill-opacity="0.18" stroke-width="1" stroke-linejoin="round"/><polygon points="369.0,19.6 373.6,22.0 369.0,24.4 364.4,22.0" class="glyph-fill glyph-stroke c0" fill-opacity="0.28" stroke-width="1" stroke-linejoin="round"/><polygon points="369.0,22.7 373.6,25.1 369.0,27.5 364.4,25.1" class="glyph-fill glyph-stroke c0" fill-opacity="0.42" stroke-width="1" stroke-linejoin="round"/><text x="360" y="27" text-anchor="end" class="badge c0">dataset</text>
-    <text x="23" y="60" class="desc">10K+ AI-generated 3D mesh assets for</text>
-    <text x="23" y="78" class="desc">disaster-relief and humanitarian-aid simulation:</text>
-    <text x="23" y="96" class="desc">synthetic geometry for training and sim.</text>
+    <text x="23" y="60" class="desc">Python generation pipeline and 10,079</text>
+    <text x="23" y="78" class="desc">AI-generated GLB meshes for disaster relief,</text>
+    <text x="23" y="96" class="desc">humanitarian aid and civil protection.</text>
     <g><rect x="23" y="110" width="66" height="22" rx="6" class="chip c0"/><text x="56" y="125" text-anchor="middle" class="chip-label c0">Python</text></g>
   </g>
 </svg>

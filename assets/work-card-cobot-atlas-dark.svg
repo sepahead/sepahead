@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 150" width="395" height="150" role="img" aria-label="cobot-atlas: 3D mesh-generation pipeline: 2,023 meshes for collaborative-robot simulation and embodied AI, published as a dataset on Hugging Face.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 150" width="395" height="150" role="img" aria-label="cobot-atlas (dataset): Pipeline for 2,023 unique robot-simulation meshes; 2,024 GLB files and 33.5 GB published on Hugging Face with DOI.">
   <defs>
     <radialGradient id="wash0" cx="8%" cy="0%" r="120%"><stop offset="0%" stop-color="#0b1a33" stop-opacity="0.9"/><stop offset="60%" stop-color="#0b1a33" stop-opacity="0"/></radialGradient>
   </defs>
@@ -53,9 +53,9 @@
     <text x="23" y="38" class="title c0" textLength="143" lengthAdjust="spacingAndGlyphs">cobot-atlas</text>
     <rect x="23" y="46" width="34" height="2.5" rx="1.25" class="rule c0"/>
     <polygon points="369.0,16.5 373.6,18.9 369.0,21.3 364.4,18.9" class="glyph-fill glyph-stroke c0" fill-opacity="0.18" stroke-width="1" stroke-linejoin="round"/><polygon points="369.0,19.6 373.6,22.0 369.0,24.4 364.4,22.0" class="glyph-fill glyph-stroke c0" fill-opacity="0.28" stroke-width="1" stroke-linejoin="round"/><polygon points="369.0,22.7 373.6,25.1 369.0,27.5 364.4,25.1" class="glyph-fill glyph-stroke c0" fill-opacity="0.42" stroke-width="1" stroke-linejoin="round"/><text x="360" y="27" text-anchor="end" class="badge c0">dataset</text>
-    <text x="23" y="60" class="desc">3D mesh-generation pipeline: 2,023 meshes for</text>
-    <text x="23" y="78" class="desc">collaborative-robot simulation and embodied AI,</text>
-    <text x="23" y="96" class="desc">published as a dataset on Hugging Face.</text>
+    <text x="23" y="60" class="desc">Pipeline for 2,023 unique robot-simulation</text>
+    <text x="23" y="78" class="desc">meshes; 2,024 GLB files and 33.5 GB published on</text>
+    <text x="23" y="96" class="desc">Hugging Face with DOI.</text>
     <g><rect x="23" y="110" width="66" height="22" rx="6" class="chip c0"/><text x="56" y="125" text-anchor="middle" class="chip-label c0">Python</text></g>
   </g>
 </svg>

@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 150" width="395" height="150" role="img" aria-label="cortexel (3 stars): Agent-consumable scientific-visualization library for neural simulations: VizSpec to spike rasters &amp; STDP curves, provenance fail-closed.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 150" width="395" height="150" role="img" aria-label="cortexel (3 stars): Strict declarative JSON for neural-simulation figures to deterministic accessible SVG, exact-value tables and provenance artifacts.">
   <defs>
     <radialGradient id="wash0" cx="8%" cy="0%" r="120%"><stop offset="0%" stop-color="#2a0a2e" stop-opacity="0.9"/><stop offset="60%" stop-color="#2a0a2e" stop-opacity="0"/></radialGradient>
   </defs>
@@ -53,11 +53,11 @@
     <text x="23" y="38" class="title c0" textLength="104" lengthAdjust="spacingAndGlyphs">cortexel</text>
     <rect x="23" y="46" width="34" height="2.5" rx="1.25" class="rule c0"/>
     <polygon points="370.0,16.0 371.5,20.0 375.7,20.1 372.4,22.8 373.5,26.9 370.0,24.5 366.5,26.9 367.6,22.8 364.3,20.1 368.5,20.0" class="glyph-fill c0"/><text x="360" y="27" text-anchor="end" class="badge c0">3</text>
-    <text x="23" y="60" class="desc">Agent-consumable scientific-visualization library</text>
-    <text x="23" y="78" class="desc">for neural simulations: VizSpec to spike rasters</text>
-    <text x="23" y="96" class="desc">&amp; STDP curves, provenance fail-closed.</text>
+    <text x="23" y="60" class="desc">Strict declarative JSON for neural-simulation</text>
+    <text x="23" y="78" class="desc">figures to deterministic accessible SVG,</text>
+    <text x="23" y="96" class="desc">exact-value tables and provenance artifacts.</text>
     <g><rect x="23" y="110" width="34" height="22" rx="6" class="chip c0"/><text x="40" y="125" text-anchor="middle" class="chip-label c0">TS</text></g>
-    <g><rect x="65" y="110" width="58" height="22" rx="6" class="chip c0"/><text x="94" y="125" text-anchor="middle" class="chip-label c0">React</text></g>
-    <g><rect x="131" y="110" width="58" height="22" rx="6" class="chip c0"/><text x="160" y="125" text-anchor="middle" class="chip-label c0">Three</text></g>
+    <g><rect x="65" y="110" width="42" height="22" rx="6" class="chip c0"/><text x="86" y="125" text-anchor="middle" class="chip-label c0">SVG</text></g>
+    <g><rect x="115" y="110" width="50" height="22" rx="6" class="chip c0"/><text x="140" y="125" text-anchor="middle" class="chip-label c0">JSON</text></g>
   </g>
 </svg>

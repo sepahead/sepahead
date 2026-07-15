@@ -11,9 +11,9 @@
 //
 // Live star counts: with a token (GitHub Actions provides GITHUB_TOKEN) each
 // public repo's stargazerCount is refreshed; the baked-in `stars` in data.mjs
-// is the no-token fallback. Private repos (currently prisoma) keep their lock
-// badge. Run by the work-cards.yml cron; a local run without a token uses the
-// fallback. Run: `node scripts/work-cards.mjs`.
+// is the no-token fallback. Phase and dataset cards keep their truthful status
+// badge instead. Run by the work-cards.yml cron; a local run without a token
+// uses the fallback. Run: `node scripts/work-cards.mjs`.
 
 import { writeFileSync, mkdirSync } from "node:fs";
 import { writeThemedPair } from "./theme-split.mjs";
@@ -26,9 +26,9 @@ const ASSETS_DIR = resolve(__dirname, "..", "assets");
 
 const projects = PROJECTS;
 // each public repo's current stargazerCount so the badges auto-update; the
-// `stars` in data.mjs is the no-token fallback. Private repos (currently
-// prisoma) keep their lock badge. Run by the work-cards.yml cron; a
-// local run without a token just uses the fallback.
+// `stars` in data.mjs is the no-token fallback. Phase and dataset repos retain
+// their semantic badge. Run by the work-cards.yml cron; a local run without a
+// token just uses the fallback.
 // ---------------------------------------------------------------------------
 async function hydrateStars(list) {
   const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN || "";
@@ -305,9 +305,13 @@ for (const p of projects) {
 
   const status = p.private
     ? "private"
-    : p.stars != null
-      ? `${p.stars} star${p.stars === 1 ? "" : "s"}`
-      : "";
+    : p.phase
+      ? p.phase
+      : p.dataset
+        ? "dataset"
+        : p.stars != null
+          ? `${p.stars} star${p.stars === 1 ? "" : "s"}`
+          : "";
   const aria = `${p.name}${status ? ` (${status})` : ""}: ${p.desc}`;
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${SVG_W} ${SVG_H}" width="${SVG_W}" height="${SVG_H}" role="img" aria-label="${escapeXML(aria)}">
@@ -374,7 +378,7 @@ ${body}
 </svg>
 `;
 
-  const slug = p.name.toLowerCase();
+  const slug = p.slug;
   const outPath = resolve(ASSETS_DIR, `work-card-${slug}.svg`);
   writeThemedPair(outPath, svg);
   console.log(`[work-cards] wrote ${outPath} (${svg.length} bytes)`);
