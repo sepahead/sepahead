@@ -9,9 +9,9 @@
 //     centroid (keeps the layout open and separates the bridge crossing);
 //   • each edge is stroked with a gradient from the source node's colour to the
 //     target node's colour; no arrowheads, just connections.
-// NCP's connections are PERSISTENT, live links: a glowing spine plus TWO
-// near-equal counter-flowing packet lanes (full-duplex, the edge echo of NCP's
-// dual-lane gate glyph).
+// NCP connections are OPTIONAL protocol-role paths, not claims of a live or
+// qualified deployment. Commander/body paths use two counter-flowing lanes;
+// read-only observer paths use one outward lane so authority is not implied.
 // Every project node is a bespoke "real object" mark on a machined border —
 // the crebain-badge / engram-medallion tier: NCP is a dual-lane contract gate
 // (perception ⇄ action through one checkpoint) on a solid amber badge seat;
@@ -70,10 +70,22 @@ const nodes = {
 for (const [id, n] of Object.entries(nodes)) n.label = (n.label || id).toUpperCase();
 
 const edges = [
-  { a: "engram",      b: "ncp" },
-  { a: "ncp",         b: "prisoma" },
-  { a: "ncp",         b: "crebain" },
-  { a: "pidrs",       b: "prisoma" },
+  // Optional NCP roles. `duplex` means protocol exchange, never shared
+  // authority; `read` means an outward read-only observer surface.
+  { a: "engram",      b: "ncp",       protocol: "duplex" },
+  { a: "ncp",         b: "prisoma",   protocol: "read" },
+  { a: "ncp",         b: "crebain",   protocol: "duplex" },
+  { a: "ncp",         b: "haldir",    protocol: "duplex" },
+  { a: "ncp",         b: "galadriel", protocol: "read", bow: -90 },
+
+  // Application-owned optional seams outside NCP stable-core authority.
+  { a: "engram",      b: "haldir",    bow: 120 }, // signed intent / decision receipt
+  { a: "haldir",      b: "galadriel" },           // deny-only assessment / disposition
+  { a: "crebain",     b: "galadriel" },           // separately declared telemetry/extension
+  { a: "galadriel",   b: "pidrs" },                // in-process library use; no wire role
+  { a: "prisoma",     b: "pidrs" },                // in-process library use; no wire role
+
+  // Research, labelled-export, tooling and dataset relationships.
   { a: "cobotatlas",  b: "prisoma" },
   { a: "melkor",      b: "prisoma" },
   { a: "reliefatlas", b: "prisoma" },
@@ -82,12 +94,33 @@ const edges = [
   { a: "crebain",     b: "reliefatlas" },
   { a: "cortexel",    b: "engram" },
   { a: "manwe",       b: "crebain" },
-  { a: "galadriel",   b: "crebain" },
-  { a: "galadriel",   b: "pidrs" },
-  { a: "ncp",         b: "haldir" },
-  { a: "haldir",      b: "galadriel" },
-  { a: "haldir",      b: "prisoma" },
 ];
+
+const edgeKey = (a, b) => [a, b].sort().join("--");
+const edgeKeys = new Set(edges.map(({ a, b }) => edgeKey(a, b)));
+if (edgeKeys.size !== edges.length) throw new Error("work graph contains a duplicate edge");
+for (const { a, b, protocol } of edges) {
+  if (!nodes[a] || !nodes[b]) throw new Error(`work graph edge names an unknown node: ${a}--${b}`);
+  if (protocol && a !== "ncp" && b !== "ncp") throw new Error(`protocol edge bypasses NCP: ${a}--${b}`);
+}
+for (const [a, b] of [
+  ["engram", "ncp"],
+  ["ncp", "crebain"],
+  ["ncp", "haldir"],
+  ["ncp", "galadriel"],
+  ["ncp", "prisoma"],
+  ["engram", "haldir"],
+  ["haldir", "galadriel"],
+]) {
+  if (!edgeKeys.has(edgeKey(a, b))) throw new Error(`work graph lacks required architecture edge: ${a}--${b}`);
+}
+for (const [a, b] of [
+  ["haldir", "prisoma"],
+  ["ncp", "pidrs"],
+  ["ncp", "cortexel"],
+]) {
+  if (edgeKeys.has(edgeKey(a, b))) throw new Error(`work graph contains forbidden authority edge: ${a}--${b}`);
+}
 
 // ---------------------------------------------------------------------------
 // Geometry.
@@ -177,13 +210,13 @@ const f1 = (v) => Number(v.toFixed(1));
 // ---------------------------------------------------------------------------
 const gradDefs = [];
 const calmEdges = [];
-const liveEdges = [];
-const flows = [];
+const contractEdges = [];
+const contractFlows = [];
 
 edges.forEach((e, i) => {
   const A = nodes[e.a];
   const B = nodes[e.b];
-  const live = e.a === "ncp" || e.b === "ncp";
+  const contract = Boolean(e.protocol);
   const ux0 = B.x - A.x, uy0 = B.y - A.y;
   const len = Math.hypot(ux0, uy0);
   const ux = ux0 / len, uy = uy0 / len;
@@ -200,7 +233,7 @@ edges.forEach((e, i) => {
   const out = (mid.x - centroid.x) * nx + (mid.y - centroid.y) * ny;
   const sign = out >= 0 ? 1 : -1;
   const chord = Math.hypot(p1.x - p0.x, p1.y - p0.y);
-  const bow = sign * Math.min(0.16 * chord, 26);
+  const bow = Number.isFinite(e.bow) ? e.bow : sign * Math.min(0.16 * chord, 26);
   const c = { x: mid.x + bow * nx, y: mid.y + bow * ny };
   const d = `M ${f1(p0.x)} ${f1(p0.y)} Q ${f1(c.x)} ${f1(c.y)} ${f1(p1.x)} ${f1(p1.y)}`;
 
@@ -210,22 +243,27 @@ edges.forEach((e, i) => {
       `<stop offset="0%" stop-color="${A.color}"/><stop offset="100%" stop-color="${B.color}"/></linearGradient>`
   );
 
-  if (live) {
-    // Glowing gradient spine with a slow opacity pulse…
-    liveEdges.push(
-      `<path d="${d}" fill="none" stroke="url(#${gid})" stroke-width="3" stroke-linecap="round" class="edge-live">` +
+  if (contract) {
+    // Glowing NCP contract spine. This denotes an optional protocol role, not a
+    // currently deployed, qualified or authority-sharing integration.
+    contractEdges.push(
+      `<path d="${d}" fill="none" stroke="url(#${gid})" stroke-width="3" stroke-linecap="round" class="edge-contract">` +
         `<animate attributeName="opacity" values="0.7;1;0.7" dur="2.8s" begin="${(i * 0.3).toFixed(2)}s" repeatCount="indefinite"/></path>`
     );
-    // …plus TWO near-equal counter-flowing packet lanes, offset across the chord
-    // normal (nx,ny) so they read full-duplex at any edge angle, the edge echo
-    // of NCP's dual-lane gate. 21 = two dash periods (jump-free); matched dur.
+    // Duplex commander/body roles get two counter-flowing lanes. Read-only
+    // observers get exactly one NCP→observer lane so the graph cannot suggest
+    // command, lifecycle or authority flow from the observer.
     const off = 2.4;
     const dF = `M ${f1(p0.x + off * nx)} ${f1(p0.y + off * ny)} Q ${f1(c.x + off * nx)} ${f1(c.y + off * ny)} ${f1(p1.x + off * nx)} ${f1(p1.y + off * ny)}`;
     const dR = `M ${f1(p0.x - off * nx)} ${f1(p0.y - off * ny)} Q ${f1(c.x - off * nx)} ${f1(c.y - off * ny)} ${f1(p1.x - off * nx)} ${f1(p1.y - off * ny)}`;
-    flows.push(
-      `<path d="${dF}" class="flow"><animate attributeName="stroke-dashoffset" from="21" to="0" dur="1.7s" repeatCount="indefinite"/></path>`,
-      `<path d="${dR}" class="flow flow-rev"><animate attributeName="stroke-dashoffset" from="0" to="21" dur="1.7s" repeatCount="indefinite"/></path>`
+    contractFlows.push(
+      `<path d="${dF}" class="contract-flow"><animate attributeName="stroke-dashoffset" from="21" to="0" dur="1.7s" repeatCount="indefinite"/></path>`
     );
+    if (e.protocol === "duplex") {
+      contractFlows.push(
+        `<path d="${dR}" class="contract-flow contract-flow-rev"><animate attributeName="stroke-dashoffset" from="0" to="21" dur="1.7s" repeatCount="indefinite"/></path>`
+      );
+    }
   } else {
     calmEdges.push(
       `<path d="${d}" fill="none" stroke="url(#${gid})" stroke-width="2" stroke-linecap="round" class="edge"/>`
@@ -1918,7 +1956,7 @@ const frame = `<g class="frame">
 // Assemble.
 // ---------------------------------------------------------------------------
 const aria =
-  "Conceptual project ecosystem map: NCP provides the contract layer around Engram, Prisoma, CREBAIN and Haldir; pid-rs is a direct Prisoma dependency and provides optional diagnostics used by Galadriel; Manwe targets candidate outputs for CREBAIN but has no drop-in adapter; Galadriel and CREBAIN retain component-level research interfaces without current cross-repository qualification; Melkor and the atlas projects represent 3D tooling and data inputs; Cortexel and Engram share a neural-simulation context. Lines denote code dependencies, research relationships, historical compatibility or intended integrations, not production deployment.";
+  "Conceptual standalone-first ecosystem map. Optional NCP role paths connect Engram as separate simulation responder or direct command proposer, CREBAIN as sole body and final software actuator admission authority, Haldir as gated command proposer, and Galadriel and Prisoma as read-only observers. Every command is only a proposal until CREBAIN independently admits it under a current session and bounded body-authority lease. In gated mode Engram sends Haldir-local signed intent that carries no NCP authority; Haldir independently creates and authorizes a new NCP command. A separate default-off Galadriel-Haldir edge carries deny-only assessment and authenticated disposition; its absence can never grant authority. Separately declared out-of-band CREBAIN telemetry may feed Galadriel. pid-rs is a protocol-neutral in-process library with no wire role, used optionally by Galadriel and Prisoma; Cortexel is a one-way labelled Engram export sink with no control path. Manwe, Melkor and atlas connections are research, tooling or data inputs, not control paths. NCP 1.0 is an unreleased, release-blocked candidate; no line claims production deployment or qualification.";
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
   <defs>
@@ -1972,9 +2010,9 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     :root { --hub-accent: #34d399; --cube-accent: #fb923c; --tri-accent: #a78bfa; color-scheme: light dark; }
     .cap        { font: 400 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6e7681; }
     .edge       { opacity: 0.55; }
-    .edge-live  { filter: url(#edgeGlow); }
-    .flow       { fill: none; stroke: #e2faff; stroke-width: 2.4; stroke-dasharray: 1.5 9; stroke-linecap: round; opacity: 0.9; }
-    .flow-rev   { stroke-width: 2; opacity: 0.78; }
+    .edge-contract  { filter: url(#edgeGlow); }
+    .contract-flow  { fill: none; stroke: #e2faff; stroke-width: 2.4; stroke-dasharray: 1.5 9; stroke-linecap: round; opacity: 0.9; }
+    .contract-flow-rev { stroke-width: 2; opacity: 0.78; }
     .chip       { fill: #0d1117; stroke-width: 1.5; }
     .chip-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; }
     .hub-fill   { fill: url(#hubGrad); }
@@ -2136,7 +2174,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       text { stroke: #ffffff; }
       :root { --hub-accent: #059669; --cube-accent: #c2410c; --tri-accent: #7c3aed; }
       .cap { fill: #57606a; }
-      .flow { stroke: #22d3ee; }
+      .contract-flow { stroke: #22d3ee; }
       .chip { fill: #ffffff; }
       .chip-label { fill: #1f2328; }
       .hub-glow { stroke: #059669; stroke-opacity: 0.12; }
@@ -2161,14 +2199,15 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
 
   <rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="16" class="panel"/>
   <text x="40" y="40" class="cap">THE&#160;SYSTEM&#160;//&#160;HOW&#160;THE&#160;WORK&#160;CONNECTS</text>
+  <text x="820" y="40" text-anchor="end" class="cap">STANDALONE&#160;CORES&#160;//&#160;OPTIONAL&#160;EDGES</text>
 
   <g transform="translate(0 ${VSHIFT})">
     <g class="edges">
       ${calmEdges.join("\n    ")}
-      ${liveEdges.join("\n    ")}
+      ${contractEdges.join("\n    ")}
     </g>
-    <g class="flows">
-      ${flows.join("\n    ")}
+    <g class="contract-flows">
+      ${contractFlows.join("\n    ")}
     </g>
     <g class="nodes">
       ${nodeEls.join("\n  ")}
