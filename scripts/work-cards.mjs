@@ -15,7 +15,7 @@
 // badge instead. Run by the work-cards.yml cron; a local run without a token
 // uses the fallback. Run: `node scripts/work-cards.mjs`.
 
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { writeThemedPair } from "./theme-split.mjs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -74,6 +74,22 @@ await hydrateStars(projects);
 async function hydrateDownloads(list) {
   for (const p of list) {
     if (!p.hf) continue;
+    // Sticky floor: all-time downloads are monotone, so the committed SVG's
+    // badge count is always a valid lower bound. Seeding from it means a
+    // transient HF API failure re-emits the last published number instead of
+    // regressing to the (older) baked-in fallback and committing a downgrade.
+    try {
+      const committed = readFileSync(
+        resolve(ASSETS_DIR, `work-card-${p.slug}-dark.svg`),
+        "utf8"
+      ).match(/class="badge c0">([\d,]+)<\/text>/);
+      if (committed) {
+        const prev = Number(committed[1].replace(/,/g, ""));
+        if (Number.isFinite(prev) && prev > (p.downloads ?? 0)) p.downloads = prev;
+      }
+    } catch {
+      // First generation: no committed SVG yet; the data.mjs fallback stands.
+    }
     try {
       const res = await fetch(
         `https://huggingface.co/api/datasets/${encodeURIComponent(p.hf).replace(/%2F/g, "/")}?expand[]=downloadsAllTime`,
@@ -318,8 +334,7 @@ function buildCard(p) {
     ${rule}
     ${badge}
     ${desc}
-    ${chips}
-    ${dl}
+    ${chips}${dl ? `\n    ${dl}` : ""}
   </g>`;
 
   return { gradDef, body };
