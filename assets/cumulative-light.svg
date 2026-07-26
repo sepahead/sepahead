@@ -54,11 +54,50 @@
       <stop offset="60%" stop-color="#d97706" stop-opacity="0.06"/>
       <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
     </radialGradient>
+    <linearGradient id="portalFieldGrad" gradientUnits="userSpaceOnUse" x1="686.9" y1="0" x2="792" y2="0">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.13"/>
+      <stop offset="45%" stop-color="#fbbf24" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="portalFieldGradLight" gradientUnits="userSpaceOnUse" x1="686.9" y1="0" x2="792" y2="0">
+      <stop offset="0%" stop-color="#d97706" stop-opacity="0.09"/>
+      <stop offset="45%" stop-color="#d97706" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="exitGold" gradientUnits="userSpaceOnUse" x1="686.9" y1="0" x2="792" y2="0">
+      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.95"/>
+      <stop offset="55%" stop-color="#f59e0b" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="exitCyan" gradientUnits="userSpaceOnUse" x1="686.9" y1="0" x2="792" y2="0">
+      <stop offset="0%" stop-color="#a5f3fc" stop-opacity="0.95"/>
+      <stop offset="55%" stop-color="#22d3ee" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="exitViolet" gradientUnits="userSpaceOnUse" x1="686.9" y1="0" x2="792" y2="0">
+      <stop offset="0%" stop-color="#c4b5fd" stop-opacity="0.95"/>
+      <stop offset="55%" stop-color="#a78bfa" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="exitGoldL" gradientUnits="userSpaceOnUse" x1="686.9" y1="0" x2="792" y2="0">
+      <stop offset="0%" stop-color="#92400e" stop-opacity="0.95"/>
+      <stop offset="55%" stop-color="#b45309" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#b45309" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="exitCyanL" gradientUnits="userSpaceOnUse" x1="686.9" y1="0" x2="792" y2="0">
+      <stop offset="0%" stop-color="#155e75" stop-opacity="0.95"/>
+      <stop offset="55%" stop-color="#0891b2" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#0891b2" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="exitVioletL" gradientUnits="userSpaceOnUse" x1="686.9" y1="0" x2="792" y2="0">
+      <stop offset="0%" stop-color="#5b21b6" stop-opacity="0.95"/>
+      <stop offset="55%" stop-color="#7c3aed" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+    </linearGradient>
     <filter id="portalGlow" filterUnits="userSpaceOnUse" x="640.9" y="58" width="92" height="200">
       <feGaussianBlur stdDeviation="3" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <clipPath id="portalIntake"><rect x="0" y="0" width="686.9" height="280"/></clipPath>
   </defs>
   <style>
     :root { }
@@ -79,17 +118,21 @@
     .cum-line { fill: none; stroke: url(#cumLineGrad); stroke-width: 2.5; stroke-opacity: 0.3; stroke-linecap: round; stroke-linejoin: round; filter: url(#lineGlow); }
     .cum-dot { fill: #a5f3fc; fill-opacity: 0.7; stroke: #22d3ee; stroke-width: 1.5; filter: url(#lineGlow); }
     .portal-seam { stroke: url(#portalGrad); stroke-width: 2.4; stroke-linecap: round; filter: url(#portalGlow); }
-    .portal-ring { fill: none; stroke-width: 1.2; }
-    .pr-violet { stroke: #a78bfa; }
-    .pr-cyan { stroke: #22d3ee; }
-    .pr-gold { stroke: #fbbf24; }
+    .portal-field { fill: url(#portalFieldGrad); }
+    .portal-ray { fill: none; stroke-width: 1; opacity: 0.4; }
+    .portal-pulse { fill: none; stroke-width: 1.8; stroke-linecap: round; }
+    .px-gold { stroke: url(#exitGold); }
+    .px-cyan { stroke: url(#exitCyan); }
+    .px-violet { stroke: url(#exitViolet); }
+    .portal-mote { stroke: none; }
+    .pm-gold { fill: #fde68a; }
+    .pm-cyan { fill: #a5f3fc; }
+    .pm-violet { fill: #c4b5fd; }
     .portal-streak { stroke-width: 1.6; stroke-linecap: round; }
     .ps-cyan { stroke: #22d3ee; }
     .ps-white { stroke: #fef3c7; }
     .ps-violet { stroke: #a78bfa; }
     .ps-gold { stroke: #fbbf24; }
-    .portal-comet { fill: none; stroke: #fde68a; stroke-width: 2.6; stroke-linecap: round; filter: url(#lineGlow); }
-    .portal-flare { fill: #fde68a; filter: url(#portalGlow); }
     .portal-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; letter-spacing: 2.5px; }
     /* Legibility halo. An image-embedded SVG resolves prefers-color-scheme from the
        OS/browser, NOT from GitHub's theme, so the two can disagree, e.g. GitHub in
@@ -113,11 +156,13 @@
       .cum-area { fill: url(#cumGradLight); }
       .cum-dot { fill: #0891b2; stroke: #0e7490; }
       .portal-seam { stroke: url(#portalGradLight); }
-      .portal-comet { stroke: #d97706; }
-      .portal-flare { fill: #d97706; }
-      .pr-violet { stroke: #7c3aed; }
-      .pr-cyan { stroke: #0891b2; }
-      .pr-gold { stroke: #d97706; }
+      .portal-field { fill: url(#portalFieldGradLight); }
+      .px-gold { stroke: url(#exitGoldL); }
+      .px-cyan { stroke: url(#exitCyanL); }
+      .px-violet { stroke: url(#exitVioletL); }
+      .pm-gold { fill: #b45309; }
+      .pm-cyan { fill: #0891b2; }
+      .pm-violet { fill: #7c3aed; }
       .ps-white { stroke: #b45309; }
       .ps-cyan { stroke: #0891b2; }
       .ps-violet { stroke: #7c3aed; }
@@ -143,6 +188,75 @@
   <line x1="56" y1="125.0" x2="792" y2="125.0" class="grid"/>
   <line x1="56" y1="92.0" x2="792" y2="92.0" class="grid"/>
   <line x1="56" y1="224" x2="792" y2="224" class="baseline"/>
+  
+  <g>
+    <rect x="686.9" y="92" width="105.1" height="132" class="portal-field">
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.3;1" begin="0s" dur="2.2s" fill="freeze"/>
+      <animate attributeName="opacity" values="1;0.65;1" begin="2.8s" dur="4s" repeatCount="indefinite"/>
+    </rect>
+    <path d="M 686.9 98 C 723.7 98 762.6 131.0 792 131.0" class="portal-ray px-gold" pathLength="1" stroke-dasharray="1 1">
+      <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.45;1" begin="0s" dur="2.3s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.3 0 0.2 1"/>
+    </path>
+    <path d="M 686.9 98 C 723.7 98 762.6 131.0 792 131.0" class="portal-pulse px-gold" pathLength="1" stroke-dasharray="0.09 0.91" opacity="0.9">
+      <animate attributeName="opacity" values="0;0;0.9" keyTimes="0;0.85;1" begin="0s" dur="2.8s" fill="freeze"/>
+      <animate attributeName="stroke-dashoffset" values="1;0" begin="2.8s" dur="2.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 0.85 0.55"/>
+    </path>
+    <path d="M 686.9 121 C 723.7 121 762.6 141.3 792 141.3" class="portal-ray px-cyan" pathLength="1" stroke-dasharray="1 1">
+      <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.45;1" begin="0s" dur="2.5s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.3 0 0.2 1"/>
+    </path>
+    <path d="M 686.9 121 C 723.7 121 762.6 141.3 792 141.3" class="portal-pulse px-cyan" pathLength="1" stroke-dasharray="0.07 0.93" opacity="0.9">
+      <animate attributeName="opacity" values="0;0;0.9" keyTimes="0;0.85;1" begin="0s" dur="2.8s" fill="freeze"/>
+      <animate attributeName="stroke-dashoffset" values="1;0" begin="2.8s" dur="3.3s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 0.85 0.55"/>
+    </path>
+    <path d="M 686.9 144 C 723.7 144 762.6 151.7 792 151.7" class="portal-ray px-violet" pathLength="1" stroke-dasharray="1 1">
+      <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.45;1" begin="0s" dur="2.4s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.3 0 0.2 1"/>
+    </path>
+    <path d="M 686.9 144 C 723.7 144 762.6 151.7 792 151.7" class="portal-pulse px-violet" pathLength="1" stroke-dasharray="0.08 0.92" opacity="0.9">
+      <animate attributeName="opacity" values="0;0;0.9" keyTimes="0;0.85;1" begin="0s" dur="2.8s" fill="freeze"/>
+      <animate attributeName="stroke-dashoffset" values="1;0" begin="2.8s" dur="2.9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 0.85 0.55"/>
+    </path>
+    <path d="M 686.9 172 C 723.7 172 762.6 164.3 792 164.3" class="portal-ray px-gold" pathLength="1" stroke-dasharray="1 1">
+      <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.45;1" begin="0s" dur="2.6s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.3 0 0.2 1"/>
+    </path>
+    <path d="M 686.9 172 C 723.7 172 762.6 164.3 792 164.3" class="portal-pulse px-gold" pathLength="1" stroke-dasharray="0.06 0.94" opacity="0.9">
+      <animate attributeName="opacity" values="0;0;0.9" keyTimes="0;0.85;1" begin="0s" dur="2.8s" fill="freeze"/>
+      <animate attributeName="stroke-dashoffset" values="1;0" begin="2.8s" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 0.85 0.55"/>
+    </path>
+    <path d="M 686.9 195 C 723.7 195 762.6 174.7 792 174.7" class="portal-ray px-cyan" pathLength="1" stroke-dasharray="1 1">
+      <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.45;1" begin="0s" dur="2.35s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.3 0 0.2 1"/>
+    </path>
+    <path d="M 686.9 195 C 723.7 195 762.6 174.7 792 174.7" class="portal-pulse px-cyan" pathLength="1" stroke-dasharray="0.09 0.91" opacity="0.9">
+      <animate attributeName="opacity" values="0;0;0.9" keyTimes="0;0.85;1" begin="0s" dur="2.8s" fill="freeze"/>
+      <animate attributeName="stroke-dashoffset" values="1;0" begin="2.8s" dur="2.75s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 0.85 0.55"/>
+    </path>
+    <path d="M 686.9 218 C 723.7 218 762.6 185.0 792 185.0" class="portal-ray px-violet" pathLength="1" stroke-dasharray="1 1">
+      <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.45;1" begin="0s" dur="2.55s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.3 0 0.2 1"/>
+    </path>
+    <path d="M 686.9 218 C 723.7 218 762.6 185.0 792 185.0" class="portal-pulse px-violet" pathLength="1" stroke-dasharray="0.07 0.93" opacity="0.9">
+      <animate attributeName="opacity" values="0;0;0.9" keyTimes="0;0.85;1" begin="0s" dur="2.8s" fill="freeze"/>
+      <animate attributeName="stroke-dashoffset" values="1;0" begin="2.8s" dur="3.15s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 0.85 0.55"/>
+    </path>
+    <circle cx="702.9" cy="110" r="1.1" class="portal-mote pm-cyan" opacity="0.35">
+      <animateTransform attributeName="transform" type="translate" values="-16 0;81.1 0" begin="2.8s" dur="2.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.5 0 0.85 0.5"/>
+      <animate attributeName="opacity" values="0;0.85;0.5;0" keyTimes="0;0.2;0.75;1" begin="2.8s" dur="2.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="720.9" cy="133" r="0.9" class="portal-mote pm-gold" opacity="0.35">
+      <animateTransform attributeName="transform" type="translate" values="-34 0;63.1 0" begin="3.4s" dur="2.7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.5 0 0.85 0.5"/>
+      <animate attributeName="opacity" values="0;0.85;0.5;0" keyTimes="0;0.2;0.75;1" begin="3.4s" dur="2.7s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="710.9" cy="158" r="1.3" class="portal-mote pm-violet" opacity="0.35">
+      <animateTransform attributeName="transform" type="translate" values="-24 0;73.1 0" begin="3.0s" dur="2.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.5 0 0.85 0.5"/>
+      <animate attributeName="opacity" values="0;0.85;0.5;0" keyTimes="0;0.2;0.75;1" begin="3.0s" dur="2.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="728.9" cy="183" r="0.9" class="portal-mote pm-gold" opacity="0.35">
+      <animateTransform attributeName="transform" type="translate" values="-42 0;55.1 0" begin="3.7s" dur="2.05s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.5 0 0.85 0.5"/>
+      <animate attributeName="opacity" values="0;0.85;0.5;0" keyTimes="0;0.2;0.75;1" begin="3.7s" dur="2.05s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="706.9" cy="206" r="1.1" class="portal-mote pm-cyan" opacity="0.35">
+      <animateTransform attributeName="transform" type="translate" values="-20 0;77.1 0" begin="3.2s" dur="2.55s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.5 0 0.85 0.5"/>
+      <animate attributeName="opacity" values="0;0.85;0.5;0" keyTimes="0;0.2;0.75;1" begin="3.2s" dur="2.55s" repeatCount="indefinite"/>
+    </circle>
+  </g>
   <path d="M 76.6 219.7 C 122.3 219.4 168.0 219.3 213.7 218.8 C 248.8 218.4 283.8 217.1 318.9 216.0 C 353.9 215.0 389.0 214.6 424.0 212.5 C 459.0 210.5 494.1 196.8 529.1 187.8 C 564.2 178.7 599.2 169.5 634.3 157.8 C 680.0 142.6 725.7 120.6 771.4 102.0 L 771.4 224 L 76.6 224 Z" class="cum-area">
     <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.2;1" begin="0s" dur="2s" fill="freeze"/>
   </path>
@@ -277,20 +391,6 @@
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.2s" fill="freeze"/>
       <animate attributeName="opacity" values="1;0.62;1" begin="2.8s" dur="3.6s" repeatCount="indefinite"/>
     </rect>
-    <g clip-path="url(#portalIntake)">
-      <ellipse cx="686.9" cy="158" rx="24" ry="58" class="portal-ring pr-violet" opacity="0.4">
-      <animate attributeName="rx" values="32;4" begin="2.6s" dur="2.7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.45 0 0.9 0.5"/>
-      <animate attributeName="opacity" values="0;0.55;0" keyTimes="0;0.45;1" begin="2.6s" dur="2.7s" repeatCount="indefinite"/>
-    </ellipse>
-      <ellipse cx="686.9" cy="158" rx="17" ry="50" class="portal-ring pr-cyan" opacity="0.4">
-      <animate attributeName="rx" values="25;4" begin="3.5s" dur="2.7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.45 0 0.9 0.5"/>
-      <animate attributeName="opacity" values="0;0.55;0" keyTimes="0;0.45;1" begin="3.5s" dur="2.7s" repeatCount="indefinite"/>
-    </ellipse>
-      <ellipse cx="686.9" cy="158" rx="10" ry="42" class="portal-ring pr-gold" opacity="0.4">
-      <animate attributeName="rx" values="18;4" begin="4.4s" dur="2.7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.45 0 0.9 0.5"/>
-      <animate attributeName="opacity" values="0;0.55;0" keyTimes="0;0.45;1" begin="4.4s" dur="2.7s" repeatCount="indefinite"/>
-    </ellipse>
-    </g>
     <line x1="667.9" y1="104" x2="680.9" y2="104" class="portal-streak ps-cyan" opacity="0.35">
       <animateTransform attributeName="transform" type="translate" values="-14 0;6 0" begin="2.8s" dur="1.3s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.5 0 0.9 0.45"/>
       <animate attributeName="opacity" values="0;0.95;0" keyTimes="0;0.7;1" begin="2.8s" dur="1.3s" repeatCount="indefinite"/>
@@ -311,15 +411,6 @@
       <animateTransform attributeName="transform" type="translate" values="-5 0;6 0" begin="3.15s" dur="1.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.5 0 0.9 0.45"/>
       <animate attributeName="opacity" values="0;0.95;0" keyTimes="0;0.7;1" begin="3.15s" dur="1.4s" repeatCount="indefinite"/>
     </line>
-    <path d="M 76.6 219.7 C 122.3 219.4 168.0 219.3 213.7 218.8 C 248.8 218.4 283.8 217.1 318.9 216.0 C 353.9 215.0 389.0 214.6 424.0 212.5 C 459.0 210.5 494.1 196.8 529.1 187.8 C 564.2 178.7 599.2 169.5 634.3 157.8 C 680.0 142.6 725.7 120.6 771.4 102.0" class="portal-comet" pathLength="1" stroke-dasharray="0.05 0.95" stroke-dashoffset="0.3054" opacity="0.95">
-      <animate attributeName="opacity" values="0;0;0.95" keyTimes="0;0.85;1" begin="0s" dur="2.8s" fill="freeze"/>
-      <animate attributeName="stroke-dashoffset" values="1.3054;0.3054" begin="2.8s" dur="4.2s" repeatCount="indefinite"/>
-    </path>
-    <circle cx="686.9" cy="137.0" r="2.2" class="portal-flare" opacity="0.5">
-      <animate attributeName="opacity" values="0;0;0.5" keyTimes="0;0.6;1" begin="0s" dur="2.8s" fill="freeze"/>
-      <animate attributeName="r" values="2.2;2.2;7;2.6;2.2" keyTimes="0;0.070;0.130;0.230;1" begin="2.8s" dur="4.2s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.4;0.45;1;0.5;0.4" keyTimes="0;0.070;0.130;0.230;1" begin="2.8s" dur="4.2s" repeatCount="indefinite"/>
-    </circle>
     <line x1="686.9" y1="92" x2="686.9" y2="224" class="portal-seam">
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
       <animate attributeName="stroke-width" values="0.5;0.5;3.6;2.4" keyTimes="0;0.25;0.75;1" begin="0s" dur="2.4s" fill="freeze"/>
