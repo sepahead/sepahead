@@ -67,5 +67,6 @@
     <text x="23" y="78" class="desc">signed intents, admission and lease checks,</text>
     <text x="23" y="96" class="desc">deterministic policy, signed receipts.</text>
     <g><rect x="23" y="110" width="50" height="22" rx="6" class="chip c0"/><text x="48" y="125" text-anchor="middle" class="chip-label c0">Rust</text></g>
+    
   </g>
 </svg>

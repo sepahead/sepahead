@@ -70,5 +70,6 @@
     <g><rect x="81" y="110" width="34" height="22" rx="6" class="chip c0"/><text x="98" y="125" text-anchor="middle" class="chip-label c0">TS</text></g>
     <g><rect x="123" y="110" width="66" height="22" rx="6" class="chip c0"/><text x="156" y="125" text-anchor="middle" class="chip-label c0">Python</text></g>
     <g><rect x="197" y="110" width="42" height="22" rx="6" class="chip c0"/><text x="218" y="125" text-anchor="middle" class="chip-label c0">C++</text></g>
+    
   </g>
 </svg>
