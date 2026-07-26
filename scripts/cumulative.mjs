@@ -543,43 +543,45 @@ function originDefs(mx, ox, sx) {
   const X = mx.toFixed(1);
   const B = ox.toFixed(1);
   return `<linearGradient id="originGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
-      <stop offset="0%" stop-color="#ea580c"/>
-      <stop offset="50%" stop-color="#fdba74"/>
-      <stop offset="100%" stop-color="#ea580c"/>
+      <stop offset="0%" stop-color="#e11d48"/>
+      <stop offset="50%" stop-color="#fda4af"/>
+      <stop offset="100%" stop-color="#e11d48"/>
     </linearGradient>
     <linearGradient id="originGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
-      <stop offset="0%" stop-color="#9a3412"/>
-      <stop offset="50%" stop-color="#ea580c"/>
-      <stop offset="100%" stop-color="#9a3412"/>
+      <stop offset="0%" stop-color="#9f1239"/>
+      <stop offset="50%" stop-color="#e11d48"/>
+      <stop offset="100%" stop-color="#9f1239"/>
     </linearGradient>
     <radialGradient id="originAuraGrad" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#fb923c" stop-opacity="0.14"/>
-      <stop offset="60%" stop-color="#fb923c" stop-opacity="0.085"/>
-      <stop offset="100%" stop-color="#fb923c" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#fb7185" stop-opacity="0.14"/>
+      <stop offset="60%" stop-color="#fb7185" stop-opacity="0.085"/>
+      <stop offset="100%" stop-color="#fb7185" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="originAuraGradLight" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#c2410c" stop-opacity="0.15"/>
-      <stop offset="60%" stop-color="#c2410c" stop-opacity="0.06"/>
-      <stop offset="100%" stop-color="#c2410c" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#be123c" stop-opacity="0.15"/>
+      <stop offset="60%" stop-color="#be123c" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#be123c" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="originGlassGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
-      <stop offset="0%" stop-color="#fdba74" stop-opacity="0.08"/>
-      <stop offset="50%" stop-color="#fed7aa" stop-opacity="0.28"/>
-      <stop offset="100%" stop-color="#fdba74" stop-opacity="0.08"/>
+      <stop offset="0%" stop-color="#fda4af" stop-opacity="0.08"/>
+      <stop offset="50%" stop-color="#fecdd3" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#fda4af" stop-opacity="0.08"/>
     </linearGradient>
     <linearGradient id="originGlassGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
-      <stop offset="0%" stop-color="#ea580c" stop-opacity="0.06"/>
-      <stop offset="50%" stop-color="#fb923c" stop-opacity="0.2"/>
-      <stop offset="100%" stop-color="#ea580c" stop-opacity="0.06"/>
+      <stop offset="0%" stop-color="#e11d48" stop-opacity="0.06"/>
+      <stop offset="50%" stop-color="#f43f5e" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#e11d48" stop-opacity="0.06"/>
     </linearGradient>
     <linearGradient id="originBand" gradientUnits="userSpaceOnUse" x1="${B}" y1="0" x2="${sx.toFixed(1)}" y2="0">
-      <stop offset="0%" stop-color="#fb923c" stop-opacity="0.09"/>
-      <stop offset="45%" stop-color="#f97316" stop-opacity="0.07"/>
+      <stop offset="0%" stop-color="#fb7185" stop-opacity="0.09"/>
+      <stop offset="40%" stop-color="#f43f5e" stop-opacity="0.07"/>
+      <stop offset="72%" stop-color="#fb923c" stop-opacity="0.09"/>
       <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.11"/>
     </linearGradient>
     <linearGradient id="originBandLight" gradientUnits="userSpaceOnUse" x1="${B}" y1="0" x2="${sx.toFixed(1)}" y2="0">
-      <stop offset="0%" stop-color="#c2410c" stop-opacity="0.11"/>
-      <stop offset="45%" stop-color="#b45309" stop-opacity="0.09"/>
+      <stop offset="0%" stop-color="#9f1239" stop-opacity="0.11"/>
+      <stop offset="40%" stop-color="#be123c" stop-opacity="0.09"/>
+      <stop offset="72%" stop-color="#c2410c" stop-opacity="0.12"/>
       <stop offset="100%" stop-color="#d97706" stop-opacity="0.16"/>
     </linearGradient>
     <filter id="originGlowSoft" filterUnits="userSpaceOnUse" x="${(mx - 46).toFixed(1)}" y="${PLOT_TOP - 34}" width="92" height="${PLOT_HEIGHT + 68}">
@@ -1225,9 +1227,9 @@ function renderSVG(model) {
     .origin-glass { fill: url(#originGlassGrad); }
     .origin-cell { fill: url(#originGlassGrad); stroke: url(#originGrad); stroke-width: 0.7; stroke-opacity: 0.8; }
     .origin-pore { fill: none; stroke: url(#originGrad); stroke-width: 0.9; stroke-opacity: 0.8; }
-    .origin-nucleolus { fill: #fed7aa; }
+    .origin-nucleolus { fill: #fecdd3; }
     .origin-band { fill: url(#originBand); }
-    .origin-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fb923c; letter-spacing: 2.5px; }
+    .origin-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fb7185; letter-spacing: 2.5px; }
     .gate-jamb { fill: none; stroke: url(#seamGrad); stroke-width: 1.2; filter: url(#seamGlowSoft); }
     .gate-fan { stroke: url(#seamGrad); stroke-width: 0.9; stroke-opacity: 0.55; }
     .gate-iris { fill: url(#seamGlassGrad); stroke: url(#seamGrad); stroke-width: 1.1; }
@@ -1237,7 +1239,7 @@ function renderSVG(model) {
     .gate-slit { fill: #fde68a; }
     .gate-led { fill: #fde68a; fill-opacity: 0.9; }
     .seam-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; letter-spacing: 2.5px; }
-    .drift-mote { fill: #fdba74; }
+    .drift-mote { fill: #fda4af; }
     .seam-mote { fill: #fbbf24; }
     .seam-mote-lime { fill: #bef264; }
     .intake-tail { stroke: url(#intakeTailGrad); stroke-width: 1.6; stroke-linecap: round; }
@@ -1289,11 +1291,11 @@ function renderSVG(model) {
       .origin-line { stroke: url(#originGradLight); filter: url(#originGlowSoft); }
       .origin-glass { fill: url(#originGlassGradLight); }
       .origin-aura { fill: url(#originAuraGradLight); }
-      .origin-cell { fill: url(#originGlassGradLight); stroke: #c2410c; stroke-width: 0.9; stroke-opacity: 0.9; }
-      .origin-pore { stroke: #c2410c; stroke-width: 1.1; stroke-opacity: 0.9; }
-      .origin-nucleolus { fill: #c2410c; }
+      .origin-cell { fill: url(#originGlassGradLight); stroke: #be123c; stroke-width: 0.9; stroke-opacity: 0.9; }
+      .origin-pore { stroke: #be123c; stroke-width: 1.1; stroke-opacity: 0.9; }
+      .origin-nucleolus { fill: #be123c; }
       .origin-band { fill: url(#originBandLight); }
-      .origin-text { fill: #9a3412; }
+      .origin-text { fill: #9f1239; }
       .gate-jamb, .gate-fan, .gate-iris-inner, .gate-rail { stroke: url(#seamGradLight); }
       .gate-iris { fill: url(#seamGlassGradLight); stroke: url(#seamGradLight); }
       .gate-port { fill: url(#seamGlassGradLight); stroke: url(#seamGradLight); }
@@ -1301,7 +1303,7 @@ function renderSVG(model) {
       .gate-led { fill: #b45309; }
       .seam-aura { fill: url(#seamAuraGradLight); }
       .seam-text { fill: #854d0e; }
-      .drift-mote { fill: #c2410c; }
+      .drift-mote { fill: #be123c; }
       .seam-mote { fill: #a16207; }
       .seam-mote-lime { fill: #65a30d; }
       .intake-tail { stroke: url(#intakeTailGradLight); }
