@@ -59,6 +59,5 @@
     <g><rect x="23" y="110" width="34" height="22" rx="6" class="chip c0"/><text x="40" y="125" text-anchor="middle" class="chip-label c0">TS</text></g>
     <g><rect x="65" y="110" width="42" height="22" rx="6" class="chip c0"/><text x="86" y="125" text-anchor="middle" class="chip-label c0">SVG</text></g>
     <g><rect x="115" y="110" width="50" height="22" rx="6" class="chip c0"/><text x="140" y="125" text-anchor="middle" class="chip-label c0">JSON</text></g>
-    
   </g>
 </svg>

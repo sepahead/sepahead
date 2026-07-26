@@ -58,6 +58,5 @@
     <text x="23" y="96" class="desc">tracking; Python core, Rust/Candle benchmarks.</text>
     <g><rect x="23" y="110" width="66" height="22" rx="6" class="chip c0"/><text x="56" y="125" text-anchor="middle" class="chip-label c0">Python</text></g>
     <g><rect x="97" y="110" width="50" height="22" rx="6" class="chip c0"/><text x="122" y="125" text-anchor="middle" class="chip-label c0">Rust</text></g>
-    
   </g>
 </svg>
