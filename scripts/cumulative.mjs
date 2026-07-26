@@ -45,6 +45,9 @@ const START_YEAR = Number(process.env.CUMULATIVE_START_YEAR) || 2014;
 // Years <= this are merged into the first, stacked bar.
 const STACK_THROUGH_YEAR =
   Number(process.env.CUMULATIVE_STACK_THROUGH) || 2020;
+// First year of the agentic-engineering era; the gold mirror seam sits in
+// the gap just before this year's bar.
+const SEAM_YEAR = Number(process.env.CUMULATIVE_SEAM_YEAR) || 2024;
 
 // ---------------------------------------------------------------------------
 // 0. Helpers
@@ -309,12 +312,12 @@ function portalDefs(px) {
       <stop offset="60%" stop-color="#4d7c0f" stop-opacity="0.14"/>
       <stop offset="100%" stop-color="#4d7c0f" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="portalFieldGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${R}" y2="0">
+    <linearGradient id="portalFieldGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${(px + 18).toFixed(1)}" y2="0">
       <stop offset="0%" stop-color="#84cc16" stop-opacity="0.30"/>
       <stop offset="45%" stop-color="#84cc16" stop-opacity="0.14"/>
       <stop offset="100%" stop-color="#84cc16" stop-opacity="0"/>
     </linearGradient>
-    <linearGradient id="portalFieldGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${R}" y2="0">
+    <linearGradient id="portalFieldGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${(px + 18).toFixed(1)}" y2="0">
       <stop offset="0%" stop-color="#4d7c0f" stop-opacity="0.14"/>
       <stop offset="45%" stop-color="#4d7c0f" stop-opacity="0.05"/>
       <stop offset="100%" stop-color="#4d7c0f" stop-opacity="0"/>
@@ -359,19 +362,22 @@ function portalFieldMarkup(px) {
   };
   const ray = (y, cls, drawDur, dash, pulseDur) =>
     `<path d="${rayPath(y)}" class="portal-ray ${cls}" pathLength="1" stroke-dasharray="1 1">
-      <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.45;1" begin="0s" dur="${drawDur}s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.3 0 0.2 1"/>
+      <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.6;1" begin="0s" dur="${drawDur}s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.3 0 0.2 1"/>
     </path>
     <path d="${rayPath(y)}" class="portal-pulse ${cls}" pathLength="1" stroke-dasharray="${dash} ${(1 - dash).toFixed(2)}" opacity="0.9">
       <animate attributeName="opacity" values="0;0;0.9" keyTimes="0;0.85;1" begin="0s" dur="2.8s" fill="freeze"/>
       <animate attributeName="stroke-dashoffset" values="1;0" begin="2.8s" dur="${pulseDur}s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 0.85 0.55"/>
     </path>`;
   // Star motes: tiny specks streaming left→right through the tunnel,
-  // accelerating and fading out before the right edge. Base = faint specks
-  // resting mid-field (part of the frozen tableau).
+  // accelerating and fading out before the right edge. Each one THROBS as
+  // it crosses the singularity: radius swells to ~2x right after the
+  // horizon and settles as it exits. Base = faint specks resting mid-field
+  // (part of the frozen tableau).
   const mote = (x0, y, r, cls, begin, dur) =>
     `<circle cx="${(px + x0).toFixed(1)}" cy="${y}" r="${r}" class="portal-mote ${cls}" opacity="0.35">
       <animateTransform attributeName="transform" type="translate" values="${-x0} 0;${(span - x0 - 8).toFixed(1)} 0" begin="${begin}" dur="${dur}" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.5 0 0.85 0.5"/>
-      <animate attributeName="opacity" values="0;0.85;0.5;0" keyTimes="0;0.2;0.75;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
+      <animate attributeName="r" values="${r};${(r * 2.1).toFixed(2)};${(r * 1.3).toFixed(2)};${r}" keyTimes="0;0.25;0.6;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0.55;0" keyTimes="0;0.25;0.75;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
     </circle>`;
   // Disintegrating waves: right-bowed wavefront arcs born at the seam that
   // drift SLOWLY down the tunnel to the end of the x-axis, their stroke
@@ -388,32 +394,32 @@ function portalFieldMarkup(px) {
   };
   return `
   <g>
-    <rect x="${X}" y="${PLOT_TOP}" width="${span.toFixed(1)}" height="${PLOT_HEIGHT}" class="portal-field">
-      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.3;1" begin="0s" dur="2.2s" fill="freeze"/>
+    <rect x="${X}" y="${PLOT_TOP}" width="18" height="${PLOT_HEIGHT}" class="portal-field">
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.55;1" begin="0s" dur="2.2s" fill="freeze"/>
       <animate attributeName="opacity" values="1;0.8;1" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
     </rect>
     <rect x="${(px - 26).toFixed(1)}" y="${PLOT_TOP}" width="44" height="${PLOT_HEIGHT}" fill="url(#portalAura)" class="portal-aura" opacity="0.7">
-      <animate attributeName="opacity" values="0;0;0.7" keyTimes="0;0.25;1" begin="0s" dur="2.2s" fill="freeze"/>
+      <animate attributeName="opacity" values="0;0;0.7" keyTimes="0;0.5;1" begin="0s" dur="2.2s" fill="freeze"/>
       <animate attributeName="opacity" values="0.7;0.45;0.7" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
     </rect>
-    <ellipse cx="${(px - 4).toFixed(1)}" cy="${midY}" rx="20" ry="64" class="rm-glowEl" opacity="0.7">
-      <animate attributeName="opacity" values="0;0;0.7" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
+    <ellipse cx="${(px - 4).toFixed(1)}" cy="${midY}" rx="15" ry="64" class="rm-glowEl" opacity="0.7">
+      <animate attributeName="opacity" values="0;0;0.7" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
       <animate attributeName="opacity" values="0.7;0.45;0.7" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
     </ellipse>
-    ${ray(98, "px-gold", 2.3, 0.09, 1.8)}
-    ${ray(121, "px-cyan", 2.5, 0.07, 1.8)}
-    ${ray(144, "px-violet", 2.4, 0.08, 1.8)}
-    ${ray(172, "px-gold", 2.6, 0.06, 1.8)}
-    ${ray(195, "px-cyan", 2.35, 0.09, 1.8)}
-    ${ray(218, "px-violet", 2.55, 0.07, 1.8)}
-    ${wave(10, 46, "pw-violet", "2.8s", "3.6s")}
-    ${wave(15, 38, "pw-cyan", "4.0s", "3.6s")}
-    ${wave(20, 31, "pw-gold", "5.2s", "3.6s")}
-    ${mote(16, 110, 1.1, "pm-cyan", "2.8s", "1.2s")}
-    ${mote(34, 133, 0.9, "pm-gold", "3.4s", "1.2s")}
-    ${mote(24, 158, 1.3, "pm-violet", "3.0s", "1.2s")}
-    ${mote(42, 183, 0.9, "pm-gold", "3.7s", "1.2s")}
-    ${mote(20, 206, 1.1, "pm-cyan", "3.2s", "1.2s")}
+    ${ray(98, "px-gold", 2.3, 0.09, 0.6)}
+    ${ray(121, "px-cyan", 2.5, 0.07, 0.6)}
+    ${ray(144, "px-violet", 2.4, 0.08, 0.6)}
+    ${ray(172, "px-gold", 2.6, 0.06, 0.6)}
+    ${ray(195, "px-cyan", 2.35, 0.09, 0.6)}
+    ${ray(218, "px-violet", 2.55, 0.07, 0.6)}
+    ${wave(10, 46, "pw-violet", "2.8s", "1.2s")}
+    ${wave(15, 38, "pw-cyan", "3.2s", "1.2s")}
+    ${wave(20, 31, "pw-gold", "3.6s", "1.2s")}
+    ${mote(16, 110, 1.1, "pm-cyan", "2.8s", "0.6s")}
+    ${mote(34, 133, 0.9, "pm-gold", "3.1s", "0.6s")}
+    ${mote(24, 158, 1.3, "pm-violet", "2.95s", "0.6s")}
+    ${mote(42, 183, 0.9, "pm-gold", "3.25s", "0.6s")}
+    ${mote(20, 206, 1.1, "pm-cyan", "3.4s", "0.6s")}
   </g>`;
 }
 
@@ -448,7 +454,7 @@ function portalMarkup(px, fromLabel, toLabel) {
     ${streak(172, 8, 5, "ps-gold", "3.6s", "1.2s")}
     ${streak(195, 7, 5, "ps-cyan", "3.15s", "1.2s")}
     <g filter="url(#portalWobble)" clip-path="url(#portalGap)">
-      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
       <ellipse cx="${CX}" cy="${midY}" rx="13" ry="54" class="rm-g1">
         <animateTransform attributeName="transform" type="rotate" values="0 ${CX} ${midY};4 ${CX} ${midY};0 ${CX} ${midY};-4 ${CX} ${midY};0 ${CX} ${midY}" begin="2.4s" dur="7.2s" repeatCount="indefinite"/>
       </ellipse>
@@ -469,6 +475,132 @@ function portalMarkup(px, fromLabel, toLabel) {
       </path>
     </g>
     <text x="${X}" y="${top - 8}" text-anchor="middle" class="portal-text">singularity
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.7;1" begin="0s" dur="2.6s" fill="freeze"/>
+      <animate attributeName="opacity" values="1;0.75;1" begin="2.6s" dur="3.6s" repeatCount="indefinite"/>
+    </text>
+  </g>`;
+}
+
+// Gold mirror seam: the revived double-line "glass" seam from the previous
+// design, now marking where the agentic-engineering era begins (the gap
+// before 2024). A soft gold band extends rightward from the seam and fades
+// out just before the green portal, so the two graphics never blend. Same
+// SMIL contract as everything else. All gradients/filters are
+// userSpaceOnUse (zero-width-bbox rule, see portalDefs).
+function seamDefs(sx, endX) {
+  const X = sx.toFixed(1);
+  const E = endX.toFixed(1);
+  return `<linearGradient id="seamGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="50%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="seamGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
+      <stop offset="0%" stop-color="#b45309"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <radialGradient id="seamAuraGrad" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.16"/>
+      <stop offset="60%" stop-color="#fbbf24" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="seamAuraGradLight" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#d97706" stop-opacity="0.15"/>
+      <stop offset="60%" stop-color="#d97706" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="seamGlassGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
+      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.08"/>
+      <stop offset="50%" stop-color="#fef3c7" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#fde68a" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="seamGlassGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.06"/>
+      <stop offset="50%" stop-color="#fbbf24" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.06"/>
+    </linearGradient>
+    <linearGradient id="seamFieldGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${E}" y2="0">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.16"/>
+      <stop offset="70%" stop-color="#fbbf24" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="seamFieldGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${E}" y2="0">
+      <stop offset="0%" stop-color="#d97706" stop-opacity="0.12"/>
+      <stop offset="70%" stop-color="#d97706" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="seamGlowSoft" filterUnits="userSpaceOnUse" x="${(sx - 46).toFixed(1)}" y="${PLOT_TOP - 34}" width="92" height="${PLOT_HEIGHT + 68}">
+      <feGaussianBlur stdDeviation="1.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>`;
+}
+
+// Gold era band behind the bars: seam → just before the portal, plus the
+// era's particle traffic. SPEED GRAMMAR: motion accelerates left→right
+// across the whole chart — pre-seam drifters crawl (7.2s), gold-era motes
+// cruise (3.6s), the portal intake streaks rush (1.2s), and past the
+// singularity the warp field snaps to 0.6s: an extreme jump, time itself
+// speeding up through the eras.
+function seamFieldMarkup(sx, endX) {
+  const span = endX - sx;
+  // Pre-seam drifters: near-still specks of the pre-agentic era, crawling
+  // toward the seam. Base = faint speck mid-journey (frozen tableau).
+  const drift = (x0, x1, y, r, begin) => {
+    const cx = (x0 + x1) / 2;
+    return `<circle cx="${cx.toFixed(1)}" cy="${y}" r="${r}" class="drift-mote" opacity="0.22">
+      <animateTransform attributeName="transform" type="translate" values="${(x0 - cx).toFixed(1)} 0;${(x1 - cx).toFixed(1)} 0" begin="${begin}" dur="7.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.3 0 0.7 1"/>
+      <animate attributeName="opacity" values="0;0.5;0.35;0" keyTimes="0;0.15;0.8;1" begin="${begin}" dur="7.2s" repeatCount="indefinite"/>
+    </circle>`;
+  };
+  // Gold-era motes: born at the seam, cruising toward the portal with a
+  // gentle accelerating ease. Base = faint speck resting mid-band.
+  const goldMote = (x0, y, r, begin) =>
+    `<circle cx="${(sx + x0).toFixed(1)}" cy="${y}" r="${r}" class="seam-mote" opacity="0.3">
+      <animateTransform attributeName="transform" type="translate" values="${-x0} 0;${(span - x0 - 6).toFixed(1)} 0" begin="${begin}" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.4 0 0.8 0.5"/>
+      <animate attributeName="opacity" values="0;0.7;0.45;0" keyTimes="0;0.2;0.75;1" begin="${begin}" dur="3.6s" repeatCount="indefinite"/>
+    </circle>`;
+  return `
+  <rect x="${sx.toFixed(1)}" y="${PLOT_TOP}" width="${span.toFixed(1)}" height="${PLOT_HEIGHT}" class="seam-field">
+    <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.3;1" begin="0s" dur="2.2s" fill="freeze"/>
+    <animate attributeName="opacity" values="1;0.8;1" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
+  </rect>
+  ${drift(PLOT_LEFT + 64, sx - 8, 122, 1.0, "2.8s")}
+  ${drift(PLOT_LEFT + 120, sx - 8, 168, 0.8, "4.6s")}
+  ${drift(PLOT_LEFT + 92, sx - 8, 202, 0.9, "6.2s")}
+  ${goldMote(14, 112, 1.1, "2.8s")}
+  ${goldMote(30, 150, 0.9, "3.4s")}
+  ${goldMote(22, 192, 1.0, "3.1s")}`;
+}
+
+// Mirror seam above the bars: aura, glass strip, twin gold lines, label.
+function seamMarkup(sx, fromLabel) {
+  const X = sx.toFixed(1);
+  const top = PLOT_TOP;
+  const bot = PLOT_BOTTOM;
+  const title = escapeXML(`agentic engineering since ${fromLabel}`);
+  return `
+  <g>
+    <title>${title}</title>
+    <rect x="${(sx - 22).toFixed(1)}" y="${top}" width="44" height="${bot - top}" fill="url(#seamAuraGrad)" class="seam-aura">
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.2s" fill="freeze"/>
+      <animate attributeName="opacity" values="1;0.62;1" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="${(sx - 2.8).toFixed(1)}" y="${top}" width="5.6" height="${bot - top}" class="seam-glass">
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
+      <animate attributeName="opacity" values="1;0.6;1" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
+    </rect>
+    <line x1="${(sx - 2.8).toFixed(1)}" y1="${top}" x2="${(sx - 2.8).toFixed(1)}" y2="${bot}" class="seam-line">
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
+      <animate attributeName="stroke-width" values="0.4;0.4;1.6;1.0" keyTimes="0;0.25;0.75;1" begin="0s" dur="2.4s" fill="freeze"/>
+      <animate attributeName="stroke-opacity" values="1;0.7;1" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
+    </line>
+    <line x1="${(sx + 2.8).toFixed(1)}" y1="${top}" x2="${(sx + 2.8).toFixed(1)}" y2="${bot}" class="seam-line">
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
+      <animate attributeName="stroke-width" values="0.4;0.4;1.6;1.0" keyTimes="0;0.25;0.75;1" begin="0s" dur="2.4s" fill="freeze"/>
+      <animate attributeName="stroke-opacity" values="1;0.7;1" begin="4.2s" dur="3.6s" repeatCount="indefinite"/>
+    </line>
+    <text x="${X}" y="${top - 8}" text-anchor="middle" class="seam-text">agentic engineering
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.55;1" begin="0s" dur="2.6s" fill="freeze"/>
       <animate attributeName="opacity" values="1;0.75;1" begin="2.6s" dur="3.6s" repeatCount="indefinite"/>
     </text>
@@ -556,9 +688,6 @@ function renderSVG(model) {
 
       // --- Normal single-year bar --------------------------------------------
       const isPeak = peak > 0 && row.total === peak;
-      // Peak pulse starts only AFTER the draw-in finishes (begin + dur), so
-      // the glow doesn't throb while the bar is still rising.
-      const pulseBegin = begin + dur;
       const title = `${row.label}: ${fmt(row.total)} contributions${
         row.isCurrent ? " (year in progress)" : ""
       } · cumulative ${fmt(row.cumulative)}`;
@@ -570,7 +699,7 @@ function renderSVG(model) {
       <title>${titleEsc}</title>
       <animate attributeName="height" from="0" to="${h.toFixed(1)}" begin="${begin.toFixed(2)}s" dur="${dur}s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
       <animate attributeName="y" from="${PLOT_BOTTOM}" to="${y.toFixed(1)}" begin="${begin.toFixed(2)}s" dur="${dur}s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
-      ${isPeak ? `<animate attributeName="opacity" values="1;0.65;1" dur="2.6s" begin="${pulseBegin.toFixed(2)}s" repeatCount="indefinite"/>` : ""}
+      ${isPeak ? `<animate attributeName="opacity" values="1;0.65;1" dur="3.6s" begin="2.6s" repeatCount="indefinite"/>` : ""}
     </rect>
     <g class="bar-label">
       <text x="${cx.toFixed(1)}" y="${(y - 8).toFixed(1)}" text-anchor="middle" class="value${isPeak ? " value-peak" : ""}">${fmt(row.total)}
@@ -668,10 +797,11 @@ function renderSVG(model) {
   </path>
   <path d="${cumLineD}" class="cum-line" pathLength="1" stroke-dasharray="1 1">
     <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.15;1" begin="0s" dur="2s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.4 0 0.2 1"/>
+    <animate attributeName="stroke-opacity" values="0.8;0.95;0.8" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
   </path>
   <circle cx="${endX.toFixed(1)}" cy="${endY.toFixed(1)}" r="3.5" class="cum-dot">
     <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.83;1" begin="0s" dur="2.3s" fill="freeze"/>
-    <animate attributeName="r" values="3.5;5;3.5" begin="2.3s" dur="2.4s" repeatCount="indefinite"/>
+    <animate attributeName="r" values="3.5;5;3.5" begin="2.3s" dur="3.6s" repeatCount="indefinite"/>
   </circle>`
     : "";
 
@@ -686,6 +816,15 @@ function renderSVG(model) {
     portalX != null
       ? portalMarkup(portalX, rows[curIdx - 1].label, rows[curIdx].label)
       : "";
+  // Gold mirror seam: gap before the agentic-engineering era's first year;
+  // its band's fade tail overlaps the portal aura's rising flank so gold
+  // hands luminance into green with no dead notch (crossfade, not blend).
+  const seamIdx = rows.findIndex((r) => r.label === String(SEAM_YEAR));
+  const seamX = seamIdx > 0 ? PLOT_LEFT + slot * seamIdx : null;
+  const seamEnd = portalX != null ? portalX - 12 : PLOT_RIGHT;
+  const seamDefsStr = seamX != null ? seamDefs(seamX, seamEnd) : "";
+  const seamField = seamX != null ? seamFieldMarkup(seamX, seamEnd) : "";
+  const seam = seamX != null ? seamMarkup(seamX, rows[seamIdx].label) : "";
   const rangeLabel = `${startYear}–${currentYear()}`;
   const warningBanner = warning
     ? `<text x="${W / 2}" y="${H - 8}" text-anchor="middle" class="warning">${escapeXML(
@@ -711,14 +850,16 @@ function renderSVG(model) {
     <linearGradient id="cumLineGrad" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#0891b2"/>
       <stop offset="55%" stop-color="#22d3ee"/>
-      <stop offset="100%" stop-color="#a5f3fc"/>
+      <stop offset="85%" stop-color="#a5f3fc"/>
+      <stop offset="100%" stop-color="#a3e635"/>
     </linearGradient>
     <!-- Light-mode variants: darker, more saturated so the curve, fill and dot
          keep good contrast on a white background. -->
     <linearGradient id="cumLineGradLight" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#0e7490"/>
       <stop offset="55%" stop-color="#0891b2"/>
-      <stop offset="100%" stop-color="#06b6d4"/>
+      <stop offset="85%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#65a30d"/>
     </linearGradient>
     <linearGradient id="cumGradLight" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#0891b2" stop-opacity="0.13"/>
@@ -734,6 +875,7 @@ function renderSVG(model) {
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     ${portalDefsStr}
+    ${seamDefsStr}
   </defs>
   <style>
     :root { color-scheme: light dark; }
@@ -752,14 +894,14 @@ function renderSVG(model) {
     .bar-glow { fill: #22d3ee; filter: url(#glow); opacity: 0.55; }
     .bar-label { opacity: 1; }
     .cum-area { fill: url(#cumGrad); }
-    .cum-line { fill: none; stroke: url(#cumLineGrad); stroke-width: 2.5; stroke-opacity: 0.3; stroke-linecap: round; stroke-linejoin: round; filter: url(#lineGlow); }
+    .cum-line { fill: none; stroke: url(#cumLineGrad); stroke-width: 3; stroke-opacity: 0.8; stroke-linecap: round; stroke-linejoin: round; filter: url(#lineGlow); }
     .cum-dot { fill: #a5f3fc; fill-opacity: 0.7; stroke: #22d3ee; stroke-width: 1.5; filter: url(#lineGlow); }
     .rm-glowEl { fill: url(#rmGlow); }
     .rm-g1 { fill: #4d7c0f; }
     .rm-g2 { fill: #84cc16; }
     .rm-g3 { fill: #bef264; }
-    .rm-core { fill: #f7fee7; }
-    .rm-swirl { fill: none; stroke: #ecfccb; stroke-width: 1.3; stroke-linecap: round; opacity: 0.7; }
+    .rm-core { fill: #a5f3fc; }
+    .rm-swirl { fill: none; stroke: #67e8f9; stroke-width: 1.3; stroke-linecap: round; opacity: 0.7; }
     .portal-field { fill: url(#portalFieldGrad); }
     .portal-ray { fill: none; stroke-width: 1; opacity: 0.4; }
     .portal-pulse { fill: none; stroke-width: 1.8; stroke-linecap: round; }
@@ -779,7 +921,13 @@ function renderSVG(model) {
     .ps-white { stroke: #ecfccb; }
     .ps-violet { stroke: #84cc16; }
     .ps-gold { stroke: #a3e635; }
-    .portal-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #a3e635; letter-spacing: 2.5px; }
+    .portal-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #22d3ee; letter-spacing: 2.5px; }
+    .seam-field { fill: url(#seamFieldGrad); }
+    .seam-line { stroke: url(#seamGrad); stroke-width: 1.0; stroke-linecap: round; filter: url(#seamGlowSoft); }
+    .seam-glass { fill: url(#seamGlassGrad); }
+    .seam-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; letter-spacing: 2.5px; }
+    .drift-mote { fill: #67e8f9; }
+    .seam-mote { fill: #fbbf24; }
     /* Legibility halo. An image-embedded SVG resolves prefers-color-scheme from the
        OS/browser, NOT from GitHub's theme, so the two can disagree, e.g. GitHub in
        dark mode while the OS reports "light" (common on mobile). That would paint the
@@ -787,7 +935,7 @@ function renderSVG(model) {
        paint-order stroke in the page-background colour is invisible in the matching
        case and only appears to outline the text when the scheme mismatches, so the
        numbers stay legible on either background. */
-    .headline, .sub, .value, .year, .portal-text { paint-order: stroke; stroke: #0d1117; stroke-width: 3; stroke-linejoin: round; }
+    .headline, .sub, .value, .year, .portal-text, .seam-text { paint-order: stroke; stroke: #0d1117; stroke-width: 3; stroke-linejoin: round; }
     @media (prefers-color-scheme: light) {
       .headline { fill: #0891b2; }
       .value-peak { fill: #0891b2; }
@@ -800,15 +948,15 @@ function renderSVG(model) {
       .grid { stroke: #eaeef2; }
       .baseline { stroke: #d0d7de; }
       .panel { fill: #0b1f2a; fill-opacity: 0.025; stroke: #0b1f2a; stroke-opacity: 0.08; }
-      .cum-line { stroke: url(#cumLineGradLight); stroke-opacity: 0.35; }
+      .cum-line { stroke: url(#cumLineGradLight); stroke-opacity: 0.75; }
       .cum-area { fill: url(#cumGradLight); }
       .cum-dot { fill: #0891b2; stroke: #0e7490; }
       .rm-glowEl { fill: url(#rmGlowLight); }
       .rm-g1 { fill: #4d7c0f; }
       .rm-g2 { fill: #84cc16; }
       .rm-g3 { fill: #bef264; }
-      .rm-core { fill: #f7fee7; }
-      .rm-swirl { stroke: #365314; }
+      .rm-core { fill: #cffafe; }
+      .rm-swirl { stroke: #0e7490; }
       .portal-field { fill: url(#portalFieldGradLight); }
       .px-gold { stroke: url(#exitGoldL); }
       .px-cyan { stroke: url(#exitCyanL); }
@@ -824,8 +972,15 @@ function renderSVG(model) {
       .ps-violet { stroke: #4d7c0f; }
       .ps-gold { stroke: #65a30d; }
       .portal-aura { fill: url(#portalAuraLight); }
-      .portal-text { fill: #365314; }
-      .headline, .sub, .value, .year, .portal-text { stroke: #ffffff; }
+      .portal-text { fill: #0e7490; }
+      .seam-field { fill: url(#seamFieldGradLight); }
+      .seam-line { stroke: url(#seamGradLight); filter: url(#seamGlowSoft); }
+      .seam-glass { fill: url(#seamGlassGradLight); }
+      .seam-aura { fill: url(#seamAuraGradLight); }
+      .seam-text { fill: #b45309; }
+      .drift-mote { fill: #0e7490; }
+      .seam-mote { fill: #b45309; }
+      .headline, .sub, .value, .year, .portal-text, .seam-text { stroke: #ffffff; }
     }
     @media (prefers-reduced-motion: reduce) {
       animate, animateTransform { display: none; }
@@ -843,9 +998,11 @@ function renderSVG(model) {
     : ""}
   ${gridlines}
   <line x1="${PLOT_LEFT}" y1="${PLOT_BOTTOM}" x2="${PLOT_RIGHT}" y2="${PLOT_BOTTOM}" class="baseline"/>
+  ${seamField}
   ${portalField}
   ${cumArea}
   ${bars}
+  ${seam}
   ${portal}
   ${warningBanner}
 </svg>`;
