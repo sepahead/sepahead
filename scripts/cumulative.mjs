@@ -265,6 +265,105 @@ const niceMax = (v) => {
   return step * mag;
 };
 
+// ---------------------------------------------------------------------------
+// Singularity portal: a gold warp seam drawn in the gap between the last
+// complete year and the in-progress year. Pure ornament with a story: the
+// yearly totals go near-vertical crossing that boundary, so the divider marks
+// it like an event horizon. Everything lives inside the inter-bar gap
+// (~41px), so no element ever overlaps a bar, a label or the curve's crest.
+// Same SMIL contract as the rest of the chart: the base (non-animated) state
+// IS the final state (no-SMIL surfaces show a finished portal), reveal delays
+// are keyTimes-encoded on begin="0s" animations, loops start only after the
+// reveal, and prefers-reduced-motion hides every <animate>/<animateTransform>.
+function portalDefs(px) {
+  // The glow filter MUST be userSpaceOnUse: a vertical line has a zero-width
+  // bounding box, so the default objectBoundingBox filter region collapses
+  // and some renderers drop the element entirely.
+  return `<linearGradient id="portalGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="50%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="portalGradLight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#b45309"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <radialGradient id="portalAura" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.26"/>
+      <stop offset="60%" stop-color="#fbbf24" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="portalAuraLight" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#d97706" stop-opacity="0.15"/>
+      <stop offset="60%" stop-color="#d97706" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="portalGlow" filterUnits="userSpaceOnUse" x="${(px - 46).toFixed(1)}" y="${PLOT_TOP - 34}" width="92" height="${PLOT_HEIGHT + 68}">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>`;
+}
+
+function portalMarkup(px, fromLabel, toLabel) {
+  const X = px.toFixed(1);
+  const top = PLOT_TOP;
+  const bot = PLOT_BOTTOM;
+  const title = escapeXML(`${fromLabel} → ${toLabel}: singularity begins`);
+
+  // Event-horizon ripples: two faint echoes that emanate outward from the
+  // seam and fade, like expanding wavefronts. Base = resting echo lines.
+  const ripple = (side, begin) =>
+    `<line x1="${(px + side * 7).toFixed(1)}" y1="${top + 8}" x2="${(px + side * 7).toFixed(1)}" y2="${bot - 8}" class="portal-ripple" opacity="0.3">
+      <animateTransform attributeName="transform" type="translate" values="0 0;${side * 13} 0" begin="${begin}" dur="2.6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.42;0" begin="${begin}" dur="2.6s" repeatCount="indefinite"/>
+    </line>`;
+
+  // Time-flow ticks: short horizontal dashes that shoot left→right THROUGH
+  // the seam, staying inside the inter-bar gap for their whole flight.
+  const tick = (y, begin, dur) =>
+    `<line x1="${(px - 16).toFixed(1)}" y1="${y}" x2="${(px - 5).toFixed(1)}" y2="${y}" class="portal-tick" opacity="0.4">
+      <animateTransform attributeName="transform" type="translate" values="-6 0;20 0" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.85;0" keyTimes="0;0.35;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
+    </line>`;
+
+  // Sparks: embers rising along the seam. Base = faint resting motes.
+  const spark = (dx, cy, r, baseOp, begin, dur) =>
+    `<circle cx="${(px + dx).toFixed(1)}" cy="${cy}" r="${r}" class="portal-spark" opacity="${baseOp}">
+      <animate attributeName="cy" values="${bot - 8};${top + 12}" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.15;0.7;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
+    </circle>`;
+
+  return `
+  <g>
+    <title>${title}</title>
+    <rect x="${(px - 22).toFixed(1)}" y="${top}" width="44" height="${bot - top}" fill="url(#portalAura)" class="portal-aura">
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.2s" fill="freeze"/>
+      <animate attributeName="opacity" values="1;0.62;1" begin="2.8s" dur="3.6s" repeatCount="indefinite"/>
+    </rect>
+    ${ripple(-1, "2.8s")}
+    ${ripple(1, "4.1s")}
+    <line x1="${X}" y1="${top}" x2="${X}" y2="${bot}" class="portal-seam" pathLength="1" stroke-dasharray="1 1">
+      <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.3;1" begin="0s" dur="2.6s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.3 0 0.2 1"/>
+      <animate attributeName="stroke-opacity" values="1;0.6;1" begin="2.8s" dur="3.6s" repeatCount="indefinite"/>
+    </line>
+    <line x1="${X}" y1="${top}" x2="${X}" y2="${bot}" class="portal-glint" pathLength="1" stroke-dasharray="0.16 0.84" stroke-dashoffset="0.55" opacity="0.9">
+      <animate attributeName="opacity" values="0;0;0.9" keyTimes="0;0.85;1" begin="0s" dur="2.8s" fill="freeze"/>
+      <animate attributeName="stroke-dashoffset" values="1.16;0.16" begin="2.8s" dur="2.6s" repeatCount="indefinite"/>
+    </line>
+    ${tick(106, "2.9s", "1.9s")}
+    ${tick(139, "3.7s", "2.3s")}
+    ${tick(207, "3.2s", "2.1s")}
+    ${spark(-1.5, 188, 1.6, 0.5, "2.8s", "3.1s")}
+    ${spark(1.5, 148, 1.2, 0.4, "3.9s", "3.7s")}
+    ${spark(0, 118, 1.4, 0.45, "4.7s", "3.4s")}
+    <text x="${X}" y="${top - 8}" text-anchor="middle" class="portal-text">singularity begins
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.55;1" begin="0s" dur="2.6s" fill="freeze"/>
+      <animate attributeName="opacity" values="1;0.75;1" begin="3.2s" dur="3.4s" repeatCount="indefinite"/>
+    </text>
+  </g>`;
+}
+
 function renderSVG(model) {
   const { rows, peak, avgGrowthPct, cumulative, warning, startYear } = model;
   const yMax = niceMax(peak);
@@ -455,6 +554,15 @@ function renderSVG(model) {
     : "";
 
   const headlineNum = fmt(cumulative);
+  // Portal placement: the slot boundary between the in-progress year and the
+  // year before it (skipped when there's no current-year bar, e.g. placeholder).
+  const curIdx = rows.findIndex((r) => r.isCurrent);
+  const portalX = curIdx > 0 ? PLOT_LEFT + slot * curIdx : null;
+  const portalDefsStr = portalX != null ? portalDefs(portalX) : "";
+  const portal =
+    portalX != null
+      ? portalMarkup(portalX, rows[curIdx - 1].label, rows[curIdx].label)
+      : "";
   const rangeLabel = `${startYear}–${currentYear()}`;
   const warningBanner = warning
     ? `<text x="${W / 2}" y="${H - 8}" text-anchor="middle" class="warning">${escapeXML(
@@ -502,6 +610,7 @@ function renderSVG(model) {
       <feGaussianBlur stdDeviation="7" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
+    ${portalDefsStr}
   </defs>
   <style>
     :root { color-scheme: light dark; }
@@ -521,6 +630,12 @@ function renderSVG(model) {
     .cum-area { fill: url(#cumGrad); }
     .cum-line { fill: none; stroke: url(#cumLineGrad); stroke-width: 2.5; stroke-opacity: 0.3; stroke-linecap: round; stroke-linejoin: round; filter: url(#lineGlow); }
     .cum-dot { fill: #a5f3fc; fill-opacity: 0.7; stroke: #22d3ee; stroke-width: 1.5; filter: url(#lineGlow); }
+    .portal-seam { stroke: url(#portalGrad); stroke-width: 2.4; stroke-linecap: round; filter: url(#portalGlow); }
+    .portal-glint { stroke: #fef3c7; stroke-width: 2.4; stroke-linecap: round; filter: url(#portalGlow); }
+    .portal-ripple { stroke: #fbbf24; stroke-width: 1; }
+    .portal-tick { stroke: #fbbf24; stroke-width: 1.4; stroke-linecap: round; }
+    .portal-spark { fill: #fde68a; }
+    .portal-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; letter-spacing: 2.5px; }
     /* Legibility halo. An image-embedded SVG resolves prefers-color-scheme from the
        OS/browser, NOT from GitHub's theme, so the two can disagree, e.g. GitHub in
        dark mode while the OS reports "light" (common on mobile). That would paint the
@@ -528,7 +643,7 @@ function renderSVG(model) {
        paint-order stroke in the page-background colour is invisible in the matching
        case and only appears to outline the text when the scheme mismatches, so the
        numbers stay legible on either background. */
-    .headline, .sub, .value, .year { paint-order: stroke; stroke: #0d1117; stroke-width: 3; stroke-linejoin: round; }
+    .headline, .sub, .value, .year, .portal-text { paint-order: stroke; stroke: #0d1117; stroke-width: 3; stroke-linejoin: round; }
     @media (prefers-color-scheme: light) {
       .headline { fill: #0891b2; }
       .sub { fill: #57606a; }
@@ -543,7 +658,14 @@ function renderSVG(model) {
       .cum-line { stroke: url(#cumLineGradLight); stroke-opacity: 0.35; }
       .cum-area { fill: url(#cumGradLight); }
       .cum-dot { fill: #0891b2; stroke: #0e7490; }
-      .headline, .sub, .value, .year { stroke: #ffffff; }
+      .portal-seam { stroke: url(#portalGradLight); }
+      .portal-glint { stroke: #f59e0b; }
+      .portal-ripple { stroke: #d97706; }
+      .portal-tick { stroke: #d97706; }
+      .portal-spark { fill: #d97706; }
+      .portal-aura { fill: url(#portalAuraLight); }
+      .portal-text { fill: #b45309; }
+      .headline, .sub, .value, .year, .portal-text { stroke: #ffffff; }
     }
     @media (prefers-reduced-motion: reduce) {
       animate, animateTransform { display: none; }
@@ -551,6 +673,7 @@ function renderSVG(model) {
          the end dot visible instead of stuck at their hidden start states. */
       .cum-line { stroke-dasharray: none; }
       .cum-dot { opacity: 1; }
+      .portal-seam { stroke-dasharray: none; }
     }
   </style>
   <rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="16" class="panel"/>
@@ -563,6 +686,7 @@ function renderSVG(model) {
   <line x1="${PLOT_LEFT}" y1="${PLOT_BOTTOM}" x2="${PLOT_RIGHT}" y2="${PLOT_BOTTOM}" class="baseline"/>
   ${cumArea}
   ${bars}
+  ${portal}
   ${warningBanner}
 </svg>`;
 }
