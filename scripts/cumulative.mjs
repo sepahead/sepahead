@@ -272,8 +272,8 @@ const niceMax = (v) => {
 // Singularity portal: a gold event-horizon seam in the gap between the last
 // complete year and the in-progress year, with a hyperdrive warp field
 // opening to its RIGHT. Motion language is strictly horizontal (time flows
-// left→right in this chart): spectrum streaks on the left accelerate into
-// the seam and are absorbed, and on the right a warp field of horizontal
+// left→right in this chart): intake meteors from the seam are absorbed at
+// the horizon, and on the right a warp field of horizontal
 // rays extends from the seam to the end of the x-axis, drawn BEHIND the
 // in-progress bar, with pulses born at the horizon that accelerate
 // rightward along the rays. Nothing moves vertically. Same SMIL contract as
@@ -430,26 +430,9 @@ function portalMarkup(px, fromLabel, toLabel) {
   const midY = (top + bot) / 2;
   const title = escapeXML(`${fromLabel} → ${toLabel}: singularity`);
 
-  // Hyperdrive streaks: short spectrum dashes accelerating left→right INTO
-  // the seam, brightening on approach and vanishing exactly at the horizon
-  // (absorbed — nothing ever crosses to the right side here; the warp field
-  // behind the bars continues the story). Rows below the neighbouring bar's
-  // top get a shorter runway so no streak ever overlaps a bar. Base = faint
-  // resting ticks just left of the seam.
-  const streak = (y, len, run, cls, begin, dur) =>
-    `<line x1="${(px - 6 - len).toFixed(1)}" y1="${y}" x2="${(px - 6).toFixed(1)}" y2="${y}" class="portal-streak ${cls}" opacity="0.35">
-      <animateTransform attributeName="transform" type="translate" values="${-run} 0;6 0" begin="${begin}" dur="${dur}" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 1 1"/>
-      <animate attributeName="opacity" values="0;0.95;0" keyTimes="0;0.7;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
-    </line>`;
-
   return `
   <g>
     <title>${title}</title>
-    ${streak(110, 13, 14, "ps-cyan", "2.8s", "1.2s")}
-    ${streak(134, 9, 12, "ps-white", "3.3s", "1.2s")}
-    ${streak(158, 12, 14, "ps-violet", "3.0s", "1.2s")}
-    ${streak(182, 8, 5, "ps-gold", "3.6s", "1.2s")}
-    ${streak(206, 7, 5, "ps-cyan", "3.15s", "1.2s")}
     <g filter="url(#portalWobble)" clip-path="url(#portalGap)">
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
       <ellipse cx="${CX}" cy="${midY}" rx="13" ry="54" class="rm-g1">
@@ -546,10 +529,53 @@ function seamDefs(sx, endX) {
       <stop offset="100%" stop-color="#d97706" stop-opacity="1"/>
     </linearGradient>
     <filter id="seamGlowSoft" filterUnits="userSpaceOnUse" x="${(sx - 46).toFixed(1)}" y="${PLOT_TOP - 34}" width="92" height="${PLOT_HEIGHT + 68}">
+      <feGaussianBlur stdDeviation="0.9" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>`;
+}
+
+// Origin-membrane defs: the organic living-bilayer construct lives at the
+// PLOT origin (the "human engineering" era, 2014 -> seam). It needs its OWN
+// userSpaceOnUse gradients and filter instances pinned to ox — reusing the
+// sx-pinned seam filters would clip the displaced strokes to an empty
+// region and silently blank the membrane.
+function originDefs(ox, sx) {
+  const X = ox.toFixed(1);
+  return `<linearGradient id="originGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="50%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="originGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
+      <stop offset="0%" stop-color="#a16207"/>
+      <stop offset="50%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#a16207"/>
+    </linearGradient>
+    <linearGradient id="originGlassGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
+      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.08"/>
+      <stop offset="50%" stop-color="#fef3c7" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#fde68a" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="originGlassGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.06"/>
+      <stop offset="50%" stop-color="#fbbf24" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.06"/>
+    </linearGradient>
+    <linearGradient id="originBand" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${sx.toFixed(1)}" y2="0">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.07"/>
+      <stop offset="55%" stop-color="#f59e0b" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="originBandLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${sx.toFixed(1)}" y2="0">
+      <stop offset="0%" stop-color="#a16207" stop-opacity="0.09"/>
+      <stop offset="55%" stop-color="#a16207" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#a16207" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="originGlowSoft" filterUnits="userSpaceOnUse" x="${(ox - 46).toFixed(1)}" y="${PLOT_TOP - 34}" width="92" height="${PLOT_HEIGHT + 68}">
       <feGaussianBlur stdDeviation="1.5" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <filter id="seamMembrane" filterUnits="userSpaceOnUse" x="${(sx - 18).toFixed(1)}" y="84" width="36" height="148">
+    <filter id="originMembrane" filterUnits="userSpaceOnUse" x="${(ox - 18).toFixed(1)}" y="84" width="36" height="148">
       <feTurbulence type="fractalNoise" baseFrequency="0.008 0.09" numOctaves="2" seed="11" result="n">
         <animate attributeName="baseFrequency" values="0.008 0.09;0.010 0.11;0.008 0.09" begin="2.4s" dur="6.8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.42 0 0.58 1;0.42 0 0.58 1"/>
       </feTurbulence>
@@ -560,7 +586,7 @@ function seamDefs(sx, endX) {
 // Gold era band behind the bars: seam → just before the portal, plus the
 // era's particle traffic. SPEED GRAMMAR: motion accelerates left→right
 // across the whole chart — pre-seam drifters crawl (7.2s), gold-era motes
-// cruise (3.6s), the portal intake streaks rush (1.2s), and past the
+// cruise (3.6s), the intake meteors rush (2.4s), and past the
 // singularity the warp field snaps to 0.6s: an extreme jump, time itself
 // speeding up through the eras.
 function seamFieldMarkup(sx, endX) {
@@ -650,12 +676,12 @@ function seamFieldMarkup(sx, endX) {
     <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.45;1" begin="0s" dur="2.4s" fill="freeze"/>
     <animate attributeName="opacity" values="1;0.8;1" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
   </path>
-  ${drift(PLOT_LEFT + 64, sx - 8, 134, 1.0, "2.8s")}
-  ${drift(PLOT_LEFT + 120, sx - 8, 182, 0.8, "4.6s")}
-  ${drift(PLOT_LEFT + 92, sx - 8, 158, 0.9, "6.2s")}
-  ${drift(PLOT_LEFT + 180, sx - 8, 110, 0.8, "3.6s")}
-  ${drift(PLOT_LEFT + 250, sx - 8, 206, 0.9, "5.4s")}
-  ${drift(PLOT_LEFT + 310, sx - 8, 134, 0.7, "7.0s")}
+  ${drift(PLOT_LEFT + 8, sx - 8, 134, 1.0, "2.8s")}
+  ${drift(PLOT_LEFT + 8, sx - 8, 182, 0.8, "4.6s")}
+  ${drift(PLOT_LEFT + 8, sx - 8, 158, 0.9, "6.2s")}
+  ${drift(PLOT_LEFT + 8, sx - 8, 110, 0.8, "3.6s")}
+  ${drift(PLOT_LEFT + 8, sx - 8, 206, 0.9, "5.4s")}
+  ${drift(PLOT_LEFT + 8, sx - 8, 134, 0.7, "7.0s")}
   ${goldMote(32, 134, 1.1, "2.8s")}
   ${goldMote(74, 182, 0.9, "4.0s")}
   ${goldMote(116, 110, 1.0, "5.2s")}
@@ -665,21 +691,107 @@ function seamFieldMarkup(sx, endX) {
   ${intake(206, "4.2s")}`;
 }
 
-// Mirror seam above the bars: aura, glass strip, twin gold lines, label.
+// Mirror seam above the bars: the Deco Turbine Gate. Sci-fi cyberpunk
+// mechanical art-deco: stepped ziggurat jambs, a sunburst fan, a faceted
+// octagon iris with a bright launch bore, two secondary launch ports and
+// marching circuit rails. Shape-language contract: the ORIGIN membrane is
+// curves + turbulence (organic), this gate is hard angles + zero
+// turbulence (machined), the portal is round (transcendent). Base state =
+// the fully-drawn OPEN gate; every loop starts AND ends at that state.
 function seamMarkup(sx, fromLabel) {
   const X = sx.toFixed(1);
   const top = PLOT_TOP;
   const bot = PLOT_BOTTOM;
+  const midY = 158;
   const title = escapeXML(`agentic engineering since ${fromLabel}`);
-  const L = (sx - 5.0).toFixed(1);
-  const Rr = (sx + 5.0).toFixed(1);
-  // Living-bilayer membrane: two dashed leaflets (the shared seamMembrane
-  // turbulence filter bends the straight source paths into wavy walls), an
-  // interlocking chain of gold vesicle cells nestled between them with a
-  // clearly larger nucleus at midY (ringed by a "nuclear envelope" pore),
-  // and pore rings on the intake-meteor lanes that dilate ("gulp") in sync
-  // with each meteor launch. Base state = complete frozen bilayer: dashes,
-  // cells and OPEN pores all render statically.
+  // Faceted octagon helper (flat-ish facets, machined look).
+  const oct = (cx, cy, r) => {
+    const pts = [];
+    for (let k = 0; k < 8; k++) {
+      const a = ((22.5 + k * 45) * Math.PI) / 180;
+      pts.push(`${(cx + r * Math.cos(a)).toFixed(1)},${(cy + r * Math.sin(a)).toFixed(1)}`);
+    }
+    return pts.join(" ");
+  };
+  // Stepped art-deco jambs (ziggurat pilasters), mirrored about sx.
+  const jamb = (s) => {
+    const x9 = (sx + s * 9).toFixed(1);
+    const x60 = (sx + s * 6).toFixed(1);
+    const x35 = (sx + s * 3.5).toFixed(1);
+    return `M ${x9} ${top} V 116 H ${x60} V 140 H ${x35} V 176 H ${x60} V 200 H ${x9} V ${bot}`;
+  };
+  // Two-sided sunburst: short intake spokes face the organic era, long
+  // launch spokes face the portal — a directional emitter, not a half-fan.
+  const fan = [
+    ...[-36, -24, -12, 0, 12, 24, 36].map((deg) => [deg, 20]),
+    ...[144, 168, 192, 216].map((deg) => [deg, 11]),
+  ]
+    .map(([deg, len]) => {
+      const a = (deg * Math.PI) / 180;
+      const x2 = (sx + len * Math.cos(a)).toFixed(1);
+      const y2 = (midY + len * Math.sin(a)).toFixed(1);
+      return `<line x1="${X}" y1="${midY}" x2="${x2}" y2="${y2}" class="gate-fan"/>`;
+    })
+    .join("\n      ");
+  // Launch-port fire pulses: recoil dims phase-locked to the intake-meteor
+  // begins; rest value (keyTimes 0 and 1) IS the open base state.
+  const fire = (begin) =>
+    `<animate attributeName="stroke-opacity" values="1;0.5;1;1" keyTimes="0;0.08;0.5;1" begin="${begin}" dur="2.4s" repeatCount="indefinite"/>`;
+  return `
+  <g>
+    <title>${title}</title>
+    <rect x="${(sx - 22).toFixed(1)}" y="${top}" width="44" height="${bot - top}" fill="url(#seamAuraGrad)" class="seam-aura">
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.2s" fill="freeze"/>
+      <animate attributeName="opacity" values="1;0.62;1" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="${(sx - 5).toFixed(1)}" y="${top}" width="10" height="${bot - top}" class="seam-glass">
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
+      <animate attributeName="opacity" values="1;0.6;1" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
+    </rect>
+    <g>
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
+      <path d="${jamb(-1)}" class="gate-jamb"/>
+      <path d="${jamb(1)}" class="gate-jamb"/>
+      ${fan}
+      <line x1="${(sx - 6).toFixed(1)}" y1="110" x2="${(sx - 6).toFixed(1)}" y2="206" class="gate-rail" stroke-dasharray="3 3">
+        <animate attributeName="stroke-dashoffset" values="0;6" begin="2.4s" dur="5.2s" repeatCount="indefinite"/>
+      </line>
+      <line x1="${(sx + 6).toFixed(1)}" y1="110" x2="${(sx + 6).toFixed(1)}" y2="206" class="gate-rail" stroke-dasharray="3 3">
+        <animate attributeName="stroke-dashoffset" values="6;0" begin="2.4s" dur="5.2s" repeatCount="indefinite"/>
+      </line>
+      <polygon points="${oct(sx, 110, 6)}" class="gate-port">${fire("2.6s")}</polygon>
+      <polygon points="${oct(sx, 206, 6)}" class="gate-port">${fire("4.2s")}</polygon>
+      <polygon points="${oct(sx, midY, 8.5)}" class="gate-iris">${fire("3.4s")}</polygon>
+      <polygon points="${oct(sx, midY, 4.5)}" class="gate-iris-inner">
+        <animateTransform attributeName="transform" type="rotate" values="0 ${X} ${midY};6 ${X} ${midY};0 ${X} ${midY}" begin="2.4s" dur="7.2s" repeatCount="indefinite"/>
+      </polygon>
+      <rect x="${(sx - 1).toFixed(1)}" y="150" width="2" height="16" rx="1" class="gate-slit">
+        <animate attributeName="height" values="16;19;16" begin="2.6s" dur="4.2s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="150;148.5;150" begin="2.6s" dur="4.2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0.6;1;1" keyTimes="0;0.08;0.5;1" begin="3.4s" dur="2.4s" repeatCount="indefinite"/>
+      </rect>
+    </g>
+    <text x="${X}" y="${top - 8}" text-anchor="middle" class="seam-text">agentic engineering
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.55;1" begin="0s" dur="2.6s" fill="freeze"/>
+      <animate attributeName="opacity" values="1;0.75;1" begin="2.6s" dur="3.6s" repeatCount="indefinite"/>
+    </text>
+  </g>`;
+}
+
+// Organic living-bilayer membrane at the plot ORIGIN: the "human
+// engineering" era wall that births the pre-seam drift motes. Two wavy
+// dashed leaflets (originMembrane turbulence), interlocking vesicle cells
+// with a nucleus + nucleolus at midY, and pore rings that dilate slowly in
+// sync with the drift-mote births on their lanes (7.2s — the slowest tempo
+// on the chart, per the left-to-right speed grammar). Base state = complete
+// frozen bilayer.
+function membraneMarkup(ox) {
+  const X = ox.toFixed(1);
+  const top = PLOT_TOP;
+  const bot = PLOT_BOTTOM;
+  const L = (ox - 5.0).toFixed(1);
+  const Rr = (ox + 5.0).toFixed(1);
+  const title = escapeXML("human engineering: the organic era");
   const cells = [
     [122, -1.8, 3.0, 5.2],
     [140, 1.8, 3.4, 6.0],
@@ -698,57 +810,57 @@ function seamMarkup(sx, fromLabel) {
           : cy === 176
             ? `<animate attributeName="ry" values="${ry};${(ry * 1.1).toFixed(1)};${ry}" begin="3.0s" dur="4.6s" repeatCount="indefinite"/>`
             : "";
-      return `<ellipse cx="${(sx + dx).toFixed(1)}" cy="${cy}" rx="${rx}" ry="${ry}" class="seam-cell" fill-opacity="${fo}">
+      return `<ellipse cx="${(ox + dx).toFixed(1)}" cy="${cy}" rx="${rx}" ry="${ry}" class="origin-cell" fill-opacity="${fo}">
         <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
         ${breathe}
       </ellipse>`;
     })
     .join("\n      ");
-  // Pore gulps phase-locked to the intake-meteor begins (2.6/3.4/4.2s, 2.4s).
-  // The middle pore is enlarged into a nuclear envelope hugging the nucleus.
+  // Pore exhales phase-locked to the drift-mote births on their lanes
+  // (110 -> 3.6s, 158 -> 6.2s, 206 -> 5.4s) at the slow 7.2s drift tempo.
   const pores = [
-    [110, "2.6s", 3.2, 5.2],
-    [158, "3.4s", 5.8, 9.8],
-    [206, "4.2s", 3.2, 5.2],
+    [110, "3.6s", 3.2, 5.2],
+    [158, "6.2s", 5.8, 9.8],
+    [206, "5.4s", 3.2, 5.2],
   ]
     .map(
-      ([y, begin, prx, pry]) => `<ellipse cx="${X}" cy="${y}" rx="${prx}" ry="${pry}" class="seam-pore">
+      ([y, begin, prx, pry]) => `<ellipse cx="${X}" cy="${y}" rx="${prx}" ry="${pry}" class="origin-pore">
         <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
-        <animate attributeName="rx" values="${(prx * 1.8).toFixed(1)};${prx};${prx};${(prx * 1.8).toFixed(1)}" keyTimes="0;0.08;0.92;1" begin="${begin}" dur="2.4s" repeatCount="indefinite"/>
-        <animate attributeName="ry" values="${(pry * 1.4).toFixed(1)};${pry};${pry};${(pry * 1.4).toFixed(1)}" keyTimes="0;0.08;0.92;1" begin="${begin}" dur="2.4s" repeatCount="indefinite"/>
-        <animate attributeName="stroke-opacity" values="1;0.8;0.8;1" keyTimes="0;0.08;0.92;1" begin="${begin}" dur="2.4s" repeatCount="indefinite"/>
+        <animate attributeName="rx" values="${(prx * 1.4).toFixed(1)};${prx};${prx};${(prx * 1.4).toFixed(1)}" keyTimes="0;0.08;0.92;1" begin="${begin}" dur="7.2s" repeatCount="indefinite"/>
+        <animate attributeName="ry" values="${(pry * 1.25).toFixed(1)};${pry};${pry};${(pry * 1.25).toFixed(1)}" keyTimes="0;0.08;0.92;1" begin="${begin}" dur="7.2s" repeatCount="indefinite"/>
+        <animate attributeName="stroke-opacity" values="1;0.8;0.8;1" keyTimes="0;0.08;0.92;1" begin="${begin}" dur="7.2s" repeatCount="indefinite"/>
       </ellipse>`
     )
     .join("\n      ");
   return `
   <g>
     <title>${title}</title>
-    <rect x="${(sx - 22).toFixed(1)}" y="${top}" width="44" height="${bot - top}" fill="url(#seamAuraGrad)" class="seam-aura">
+    <rect x="${(ox - 22).toFixed(1)}" y="${top}" width="44" height="${bot - top}" fill="url(#seamAuraGrad)" class="seam-aura">
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.2s" fill="freeze"/>
       <animate attributeName="opacity" values="1;0.62;1" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
     </rect>
-    <rect x="${L}" y="${top}" width="10" height="${bot - top}" class="seam-glass">
+    <rect x="${L}" y="${top}" width="10" height="${bot - top}" class="origin-glass">
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
       <animate attributeName="opacity" values="1;0.6;1" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
     </rect>
-    <g filter="url(#seamMembrane)">
-      <path d="M ${L} ${top} V ${bot}" class="seam-line" fill="none" stroke-dasharray="7 5">
+    <g filter="url(#originMembrane)">
+      <path d="M ${L} ${top} V ${bot}" class="origin-line" fill="none" stroke-dasharray="7 5">
         <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
         <animate attributeName="stroke-width" values="0.4;0.4;1.6;1.0" keyTimes="0;0.25;0.75;1" begin="0s" dur="2.4s" fill="freeze"/>
         <animate attributeName="stroke-dashoffset" values="0;12" begin="2.4s" dur="5.2s" repeatCount="indefinite"/>
       </path>
-      <path d="M ${Rr} ${top} V ${bot}" class="seam-line" fill="none" stroke-dasharray="6 6" stroke-dashoffset="4">
+      <path d="M ${Rr} ${top} V ${bot}" class="origin-line" fill="none" stroke-dasharray="6 6" stroke-dashoffset="4">
         <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
         <animate attributeName="stroke-width" values="0.4;0.4;1.6;1.0" keyTimes="0;0.25;0.75;1" begin="0s" dur="2.4s" fill="freeze"/>
         <animate attributeName="stroke-dashoffset" values="4;-8" begin="2.4s" dur="5.6s" repeatCount="indefinite"/>
       </path>
       ${vesicles}
-      <circle cx="${X}" cy="158" r="2.0" class="seam-nucleolus" opacity="0.9">
+      <circle cx="${X}" cy="158" r="2.0" class="origin-nucleolus" opacity="0.9">
         <animate attributeName="opacity" values="0;0;0.9" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
       </circle>
       ${pores}
     </g>
-    <text x="${X}" y="${top - 8}" text-anchor="middle" class="seam-text">agentic engineering
+    <text transform="rotate(-90 40 158)" x="40" y="158" text-anchor="middle" class="origin-text">human engineering
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.55;1" begin="0s" dur="2.6s" fill="freeze"/>
       <animate attributeName="opacity" values="1;0.75;1" begin="2.6s" dur="3.6s" repeatCount="indefinite"/>
     </text>
@@ -977,6 +1089,14 @@ function renderSVG(model) {
   const seamDefsStr = seamX != null ? seamDefs(seamX, PLOT_RIGHT) : "";
   const seamField = seamX != null ? seamFieldMarkup(seamX, seamEnd) : "";
   const seam = seamX != null ? seamMarkup(seamX, rows[seamIdx].label) : "";
+  const ox = PLOT_LEFT;
+  const originDefsStr = seamX != null ? originDefs(ox, seamX) : "";
+  const origin = seamX != null ? membraneMarkup(ox) : "";
+  const originBandRect = seamX != null
+    ? `<rect x="${ox}" y="${PLOT_TOP}" width="${(seamX - ox).toFixed(1)}" height="${PLOT_HEIGHT}" class="origin-band">
+    <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.3;1" begin="0s" dur="2.2s" fill="freeze"/>
+  </rect>`
+    : "";
   const rangeLabel = `${startYear}–${currentYear()}`;
   const warningBanner = warning
     ? `<text x="${W / 2}" y="${H - 8}" text-anchor="middle" class="warning">${escapeXML(
@@ -1028,6 +1148,7 @@ function renderSVG(model) {
     </filter>
     ${portalDefsStr}
     ${seamDefsStr}
+    ${originDefsStr}
   </defs>
   <style>
     :root { color-scheme: light dark; }
@@ -1067,18 +1188,23 @@ function renderSVG(model) {
     .pw-gold { stroke: #a3e635; }
     .pw-cyan { stroke: #bef264; }
     .pw-violet { stroke: #84cc16; }
-    .portal-streak { stroke-width: 1.6; stroke-linecap: round; }
-    .ps-cyan { stroke: #bef264; }
-    .ps-white { stroke: #ecfccb; }
-    .ps-violet { stroke: #84cc16; }
-    .ps-gold { stroke: #a3e635; }
     .portal-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #a3e635; letter-spacing: 2.5px; }
     .seam-field { fill: url(#seamFieldGrad); }
-    .seam-line { stroke: url(#seamGrad); stroke-width: 1.0; stroke-linecap: round; filter: url(#seamGlowSoft); }
     .seam-glass { fill: url(#seamGlassGrad); }
-    .seam-cell { fill: url(#seamGlassGrad); stroke: url(#seamGrad); stroke-width: 0.7; stroke-opacity: 0.8; }
-    .seam-pore { fill: none; stroke: url(#seamGrad); stroke-width: 0.9; stroke-opacity: 0.8; }
-    .seam-nucleolus { fill: #fde68a; }
+    .origin-line { stroke: url(#originGrad); stroke-width: 1.0; stroke-linecap: round; filter: url(#originGlowSoft); }
+    .origin-glass { fill: url(#originGlassGrad); }
+    .origin-cell { fill: url(#originGlassGrad); stroke: url(#originGrad); stroke-width: 0.7; stroke-opacity: 0.8; }
+    .origin-pore { fill: none; stroke: url(#originGrad); stroke-width: 0.9; stroke-opacity: 0.8; }
+    .origin-nucleolus { fill: #fde68a; }
+    .origin-band { fill: url(#originBand); }
+    .origin-text { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; letter-spacing: 1.5px; }
+    .gate-jamb { fill: none; stroke: url(#seamGrad); stroke-width: 1.2; filter: url(#seamGlowSoft); }
+    .gate-fan { stroke: url(#seamGrad); stroke-width: 0.9; stroke-opacity: 0.55; }
+    .gate-iris { fill: url(#seamGlassGrad); stroke: url(#seamGrad); stroke-width: 1.1; }
+    .gate-iris-inner { fill: none; stroke: url(#seamGrad); stroke-width: 1.0; }
+    .gate-port { fill: url(#seamGlassGrad); fill-opacity: 0.3; stroke: url(#seamGrad); stroke-width: 1.0; }
+    .gate-rail { stroke: url(#seamGrad); stroke-width: 1.0; stroke-opacity: 0.6; }
+    .gate-slit { fill: #fde68a; }
     .seam-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; letter-spacing: 2.5px; }
     .drift-mote { fill: #67e8f9; }
     .seam-mote { fill: #fbbf24; }
@@ -1094,7 +1220,7 @@ function renderSVG(model) {
        paint-order stroke in the page-background colour is invisible in the matching
        case and only appears to outline the text when the scheme mismatches, so the
        numbers stay legible on either background. */
-    .headline, .sub, .value, .year, .portal-text, .seam-text { paint-order: stroke; stroke: #0d1117; stroke-width: 3; stroke-linejoin: round; }
+    .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text { paint-order: stroke; stroke: #0d1117; stroke-width: 3; stroke-linejoin: round; }
     @media (prefers-color-scheme: light) {
       .headline { fill: #0891b2; }
       .value-peak { fill: #0891b2; }
@@ -1125,18 +1251,21 @@ function renderSVG(model) {
       .pw-gold { stroke: #65a30d; }
       .pw-cyan { stroke: #3f6212; }
       .pw-violet { stroke: #4d7c0f; }
-      .ps-white { stroke: #365314; }
-      .ps-cyan { stroke: #3f6212; }
-      .ps-violet { stroke: #4d7c0f; }
-      .ps-gold { stroke: #65a30d; }
       .portal-aura { fill: url(#portalAuraLight); }
       .portal-text { fill: #4d7c0f; }
       .seam-field { fill: url(#seamFieldGradLight); }
-      .seam-line { stroke: url(#seamGradLight); filter: url(#seamGlowSoft); }
       .seam-glass { fill: url(#seamGlassGradLight); }
-      .seam-cell { fill: url(#seamGlassGradLight); stroke: #a16207; stroke-width: 0.9; stroke-opacity: 0.9; }
-      .seam-pore { stroke: #a16207; stroke-width: 1.1; stroke-opacity: 0.9; }
-      .seam-nucleolus { fill: #b45309; }
+      .origin-line { stroke: url(#originGradLight); filter: url(#originGlowSoft); }
+      .origin-glass { fill: url(#originGlassGradLight); }
+      .origin-cell { fill: url(#originGlassGradLight); stroke: #a16207; stroke-width: 0.9; stroke-opacity: 0.9; }
+      .origin-pore { stroke: #a16207; stroke-width: 1.1; stroke-opacity: 0.9; }
+      .origin-nucleolus { fill: #b45309; }
+      .origin-band { fill: url(#originBandLight); }
+      .origin-text { fill: #854d0e; }
+      .gate-jamb, .gate-fan, .gate-iris-inner, .gate-rail { stroke: url(#seamGradLight); }
+      .gate-iris { fill: url(#seamGlassGradLight); stroke: url(#seamGradLight); }
+      .gate-port { fill: url(#seamGlassGradLight); stroke: url(#seamGradLight); }
+      .gate-slit { fill: #b45309; }
       .seam-aura { fill: url(#seamAuraGradLight); }
       .seam-text { fill: #854d0e; }
       .drift-mote { fill: #0e7490; }
@@ -1146,7 +1275,7 @@ function renderSVG(model) {
       .intake-head { fill: #a16207; }
       .intake-head-lime { fill: #4d7c0f; }
       .portal-boom { stroke: #4d7c0f; }
-      .headline, .sub, .value, .year, .portal-text, .seam-text { stroke: #ffffff; }
+      .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text { stroke: #ffffff; }
     }
     @media (prefers-reduced-motion: reduce) {
       animate, animateTransform { display: none; }
@@ -1164,10 +1293,12 @@ function renderSVG(model) {
     : ""}
   ${gridlines}
   <line x1="${PLOT_LEFT}" y1="${PLOT_BOTTOM}" x2="${PLOT_RIGHT}" y2="${PLOT_BOTTOM}" class="baseline"/>
+  ${originBandRect}
   ${seamField}
   ${portalField}
   ${cumArea}
   ${bars}
+  ${origin}
   ${seam}
   ${portal}
   ${warningBanner}
