@@ -368,16 +368,21 @@ function portalFieldMarkup(px) {
       <animate attributeName="opacity" values="0;0;0.9" keyTimes="0;0.85;1" begin="0s" dur="2.8s" fill="freeze"/>
       <animate attributeName="stroke-dashoffset" values="1;0" begin="2.8s" dur="${pulseDur}s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 0.85 0.55"/>
     </path>`;
-  // Star motes: tiny specks streaming left→right through the tunnel,
-  // accelerating and fading out before the right edge. Each one THROBS as
-  // it crosses the singularity: radius swells to ~2x right after the
-  // horizon and settles as it exits. Base = faint specks resting mid-field
-  // (part of the frozen tableau).
+  // Star motes: tiny specks streaming left→right through the tunnel. Each
+  // one BREAKS THE BARRIER at the singularity: a brief head-swell right at
+  // the crossing plus an expanding shockwave ring left behind at the horizon
+  // (vapour-cone style), which dissipates while the mote races on. Base =
+  // faint specks resting mid-field; the boom ring's base state is invisible
+  // (it's transient, so the frozen tableau simply omits it).
   const mote = (x0, y, r, cls, begin, dur) =>
     `<circle cx="${(px + x0).toFixed(1)}" cy="${y}" r="${r}" class="portal-mote ${cls}" opacity="0.35">
-      <animateTransform attributeName="transform" type="translate" values="${-x0} 0;${(span - x0 - 8).toFixed(1)} 0" begin="${begin}" dur="${dur}" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.5 0 0.85 0.5"/>
-      <animate attributeName="r" values="${r};${(r * 2.1).toFixed(2)};${(r * 1.3).toFixed(2)};${r}" keyTimes="0;0.25;0.6;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" values="${-x0} 0;${(span - x0 - 8).toFixed(1)} 0" begin="${begin}" dur="${dur}" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 1 1"/>
+      <animate attributeName="r" values="${r};${(r * 1.8).toFixed(2)};${r};${r}" keyTimes="0;0.1;0.28;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0;1;0.55;0" keyTimes="0;0.25;0.75;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="${(px + 2).toFixed(1)}" cy="${y}" r="1.5" class="portal-boom" opacity="0">
+      <animate attributeName="r" values="1.5;10;11" keyTimes="0;0.4;1" begin="${begin}" dur="${dur}" repeatCount="indefinite" calcMode="spline" keySplines="0.1 0.8 0.3 1;0 0 1 1"/>
+      <animate attributeName="opacity" values="0.75;0.2;0;0" keyTimes="0;0.28;0.45;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
     </circle>`;
   // Disintegrating waves: right-bowed wavefront arcs born at the seam that
   // drift SLOWLY down the tunnel to the end of the x-axis, their stroke
@@ -406,20 +411,20 @@ function portalFieldMarkup(px) {
       <animate attributeName="opacity" values="0;0;0.7" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
       <animate attributeName="opacity" values="0.7;0.45;0.7" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
     </ellipse>
-    ${ray(98, "px-gold", 2.3, 0.09, 0.6)}
-    ${ray(121, "px-cyan", 2.5, 0.07, 0.6)}
-    ${ray(144, "px-violet", 2.4, 0.08, 0.6)}
-    ${ray(172, "px-gold", 2.6, 0.06, 0.6)}
-    ${ray(195, "px-cyan", 2.35, 0.09, 0.6)}
-    ${ray(218, "px-violet", 2.55, 0.07, 0.6)}
+    ${ray(98, "px-gold", 2.3, 0.09, 0.9)}
+    ${ray(121, "px-cyan", 2.5, 0.07, 0.9)}
+    ${ray(144, "px-violet", 2.4, 0.08, 0.9)}
+    ${ray(172, "px-gold", 2.6, 0.06, 0.9)}
+    ${ray(195, "px-cyan", 2.35, 0.09, 0.9)}
+    ${ray(218, "px-violet", 2.55, 0.07, 0.9)}
     ${wave(10, 46, "pw-violet", "2.8s", "1.2s")}
     ${wave(15, 38, "pw-cyan", "3.2s", "1.2s")}
     ${wave(20, 31, "pw-gold", "3.6s", "1.2s")}
-    ${mote(16, 110, 1.1, "pm-cyan", "2.8s", "0.6s")}
-    ${mote(34, 133, 0.9, "pm-gold", "3.1s", "0.6s")}
-    ${mote(24, 158, 1.3, "pm-violet", "2.95s", "0.6s")}
-    ${mote(42, 183, 0.9, "pm-gold", "3.25s", "0.6s")}
-    ${mote(20, 206, 1.1, "pm-cyan", "3.4s", "0.6s")}
+    ${mote(16, 110, 1.1, "pm-cyan", "2.8s", "0.9s")}
+    ${mote(34, 133, 0.9, "pm-gold", "3.1s", "0.9s")}
+    ${mote(24, 158, 1.3, "pm-violet", "2.95s", "0.9s")}
+    ${mote(42, 183, 0.9, "pm-gold", "3.25s", "0.9s")}
+    ${mote(20, 206, 1.1, "pm-cyan", "3.4s", "0.9s")}
   </g>`;
 }
 
@@ -496,9 +501,9 @@ function seamDefs(sx, endX) {
       <stop offset="100%" stop-color="#f59e0b"/>
     </linearGradient>
     <linearGradient id="seamGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
-      <stop offset="0%" stop-color="#b45309"/>
-      <stop offset="50%" stop-color="#f59e0b"/>
-      <stop offset="100%" stop-color="#b45309"/>
+      <stop offset="0%" stop-color="#a16207"/>
+      <stop offset="50%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#a16207"/>
     </linearGradient>
     <radialGradient id="seamAuraGrad" cx="0.5" cy="0.5" r="0.5">
       <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.16"/>
@@ -522,13 +527,27 @@ function seamDefs(sx, endX) {
     </linearGradient>
     <linearGradient id="seamFieldGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${E}" y2="0">
       <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.16"/>
-      <stop offset="70%" stop-color="#fbbf24" stop-opacity="0.06"/>
-      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+      <stop offset="30%" stop-color="#eab308" stop-opacity="0.11"/>
+      <stop offset="55%" stop-color="#bef264" stop-opacity="0.13"/>
+      <stop offset="78%" stop-color="#a3e635" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#84cc16" stop-opacity="0.20"/>
     </linearGradient>
     <linearGradient id="seamFieldGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${E}" y2="0">
-      <stop offset="0%" stop-color="#d97706" stop-opacity="0.12"/>
-      <stop offset="70%" stop-color="#d97706" stop-opacity="0.04"/>
-      <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#a16207" stop-opacity="0.11"/>
+      <stop offset="30%" stop-color="#ca8a04" stop-opacity="0.08"/>
+      <stop offset="55%" stop-color="#a3e635" stop-opacity="0.09"/>
+      <stop offset="78%" stop-color="#65a30d" stop-opacity="0.11"/>
+      <stop offset="100%" stop-color="#4d7c0f" stop-opacity="0.14"/>
+    </linearGradient>
+    <linearGradient id="intakeTailGrad" gradientUnits="userSpaceOnUse" x1="${(sx + 10).toFixed(1)}" y1="0" x2="${(sx + 26).toFixed(1)}" y2="0">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0"/>
+      <stop offset="60%" stop-color="#fbbf24" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#fde68a" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="intakeTailGradLight" gradientUnits="userSpaceOnUse" x1="${(sx + 10).toFixed(1)}" y1="0" x2="${(sx + 26).toFixed(1)}" y2="0">
+      <stop offset="0%" stop-color="#b45309" stop-opacity="0"/>
+      <stop offset="60%" stop-color="#b45309" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#d97706" stop-opacity="1"/>
     </linearGradient>
     <filter id="seamGlowSoft" filterUnits="userSpaceOnUse" x="${(sx - 46).toFixed(1)}" y="${PLOT_TOP - 34}" width="92" height="${PLOT_HEIGHT + 68}">
       <feGaussianBlur stdDeviation="1.5" result="b"/>
@@ -557,9 +576,26 @@ function seamFieldMarkup(sx, endX) {
   // gentle accelerating ease. Base = faint speck resting mid-band.
   const goldMote = (x0, y, r, begin) =>
     `<circle cx="${(sx + x0).toFixed(1)}" cy="${y}" r="${r}" class="seam-mote" opacity="0.3">
-      <animateTransform attributeName="transform" type="translate" values="${-x0} 0;${(span - x0 - 6).toFixed(1)} 0" begin="${begin}" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.4 0 0.8 0.5"/>
+      <animateTransform attributeName="transform" type="translate" values="${-x0} 0;${(span - x0 - 6).toFixed(1)} 0" begin="${begin}" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.4 0 1 1"/>
       <animate attributeName="opacity" values="0;0.7;0.45;0" keyTimes="0;0.2;0.75;1" begin="${begin}" dur="3.6s" repeatCount="indefinite"/>
     </circle>`;
+  // Intake meteors: gold streaks with a bright head and a fading tail, born
+  // just after the seam, crossing the whole agentic-engineering band and
+  // diving INTO the portal — accelerating hard on approach (slow cruise ->
+  // sharp final rush). Drawn behind the bars. The tail gradient is
+  // userSpaceOnUse in the meteor's local coordinates, so it travels with the
+  // group. Base = faint resting meteor near the seam (frozen tableau).
+  const intake = (y, begin) => {
+    const x1 = sx + 10;
+    const x2 = x1 + 16;
+    const run = span + 12 - 10 - 16 - 2;
+    return `<g opacity="0.3">
+      <line x1="${x1.toFixed(1)}" y1="${y}" x2="${x2.toFixed(1)}" y2="${y}" class="intake-tail"/>
+      <circle cx="${x2.toFixed(1)}" cy="${y}" r="1.4" class="intake-head"/>
+      <animateTransform attributeName="transform" type="translate" values="0 0;${run.toFixed(1)} 0" begin="${begin}" dur="2.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.45 0 1 1"/>
+      <animate attributeName="opacity" values="0;0.5;1;0" keyTimes="0;0.2;0.9;1" begin="${begin}" dur="2.4s" repeatCount="indefinite"/>
+    </g>`;
+  };
   return `
   <rect x="${sx.toFixed(1)}" y="${PLOT_TOP}" width="${span.toFixed(1)}" height="${PLOT_HEIGHT}" class="seam-field">
     <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.3;1" begin="0s" dur="2.2s" fill="freeze"/>
@@ -570,7 +606,10 @@ function seamFieldMarkup(sx, endX) {
   ${drift(PLOT_LEFT + 92, sx - 8, 202, 0.9, "6.2s")}
   ${goldMote(14, 112, 1.1, "2.8s")}
   ${goldMote(30, 150, 0.9, "3.4s")}
-  ${goldMote(22, 192, 1.0, "3.1s")}`;
+  ${goldMote(22, 192, 1.0, "3.1s")}
+  ${intake(104, "2.6s")}
+  ${intake(138, "3.4s")}
+  ${intake(184, "3.0s")}`;
 }
 
 // Mirror seam above the bars: aura, glass strip, twin gold lines, label.
@@ -632,7 +671,11 @@ function renderSVG(model) {
     .map((row, i) => {
       const cx = PLOT_LEFT + slot * i + slot / 2;
       const x = cx - barW / 2;
-      const h = yMax > 0 ? (row.total / yMax) * PLOT_HEIGHT : 0;
+      // 2px floor so every non-zero year shows at least a visible tick.
+      const h =
+        yMax > 0 && row.total > 0
+          ? Math.max((row.total / yMax) * PLOT_HEIGHT, 2)
+          : 0;
       const y = PLOT_BOTTOM - h;
       // Staggered draw-in: each bar starts from the baseline and grows.
       const begin = 0.15 + i * 0.13; // seconds
@@ -646,7 +689,7 @@ function renderSVG(model) {
         // minimum visible band; exact counts live in the hover tooltips and the
         // bar's total label. Zero years are omitted entirely. The stack is thus
         // a qualitative "this bar spans several years" cue, not a proportional one.
-        const MIN_SEG_PX = 7;
+        const MIN_SEG_PX = 4;
         let accH = 0;
         const segs = row.segments
           .map((seg, si) => {
@@ -817,11 +860,12 @@ function renderSVG(model) {
       ? portalMarkup(portalX, rows[curIdx - 1].label, rows[curIdx].label)
       : "";
   // Gold mirror seam: gap before the agentic-engineering era's first year;
-  // its band's fade tail overlaps the portal aura's rising flank so gold
-  // hands luminance into green with no dead notch (crossfade, not blend).
+  // its band is ONE continuous gradient — gold at the seam, dimming
+  // mid-band, then picking up the singularity's green and intensifying
+  // right up to the portal (a single era-blend, not two fields).
   const seamIdx = rows.findIndex((r) => r.label === String(SEAM_YEAR));
   const seamX = seamIdx > 0 ? PLOT_LEFT + slot * seamIdx : null;
-  const seamEnd = portalX != null ? portalX - 12 : PLOT_RIGHT;
+  const seamEnd = portalX != null ? portalX : PLOT_RIGHT;
   const seamDefsStr = seamX != null ? seamDefs(seamX, seamEnd) : "";
   const seamField = seamX != null ? seamFieldMarkup(seamX, seamEnd) : "";
   const seam = seamX != null ? seamMarkup(seamX, rows[seamIdx].label) : "";
@@ -921,13 +965,16 @@ function renderSVG(model) {
     .ps-white { stroke: #ecfccb; }
     .ps-violet { stroke: #84cc16; }
     .ps-gold { stroke: #a3e635; }
-    .portal-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #22d3ee; letter-spacing: 2.5px; }
+    .portal-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #a3e635; letter-spacing: 2.5px; }
     .seam-field { fill: url(#seamFieldGrad); }
     .seam-line { stroke: url(#seamGrad); stroke-width: 1.0; stroke-linecap: round; filter: url(#seamGlowSoft); }
     .seam-glass { fill: url(#seamGlassGrad); }
     .seam-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; letter-spacing: 2.5px; }
     .drift-mote { fill: #67e8f9; }
     .seam-mote { fill: #fbbf24; }
+    .intake-tail { stroke: url(#intakeTailGrad); stroke-width: 1.6; stroke-linecap: round; }
+    .intake-head { fill: #fde68a; }
+    .portal-boom { fill: none; stroke: #d9f99d; stroke-width: 1.1; }
     /* Legibility halo. An image-embedded SVG resolves prefers-color-scheme from the
        OS/browser, NOT from GitHub's theme, so the two can disagree, e.g. GitHub in
        dark mode while the OS reports "light" (common on mobile). That would paint the
@@ -972,14 +1019,17 @@ function renderSVG(model) {
       .ps-violet { stroke: #4d7c0f; }
       .ps-gold { stroke: #65a30d; }
       .portal-aura { fill: url(#portalAuraLight); }
-      .portal-text { fill: #0e7490; }
+      .portal-text { fill: #4d7c0f; }
       .seam-field { fill: url(#seamFieldGradLight); }
       .seam-line { stroke: url(#seamGradLight); filter: url(#seamGlowSoft); }
       .seam-glass { fill: url(#seamGlassGradLight); }
       .seam-aura { fill: url(#seamAuraGradLight); }
-      .seam-text { fill: #b45309; }
+      .seam-text { fill: #a16207; }
       .drift-mote { fill: #0e7490; }
-      .seam-mote { fill: #b45309; }
+      .seam-mote { fill: #a16207; }
+      .intake-tail { stroke: url(#intakeTailGradLight); }
+      .intake-head { fill: #a16207; }
+      .portal-boom { stroke: #4d7c0f; }
       .headline, .sub, .value, .year, .portal-text, .seam-text { stroke: #ffffff; }
     }
     @media (prefers-reduced-motion: reduce) {
