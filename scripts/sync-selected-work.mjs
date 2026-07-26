@@ -124,7 +124,7 @@ function renderReadmeCards() {
       : `${project.name} — ${project.headline}`;
     const languageNote = project.languages.length ? ` Languages: ${project.languages.join(", ")}.` : "";
     const alt = `${project.name}: ${project.summary}${languageNote}`;
-    return `    <td><a href="${repoUrl(project)}" title="${html(title)}"><picture><source media="(prefers-color-scheme: dark)" srcset="${imageBase}-dark.svg"><source media="(prefers-color-scheme: light)" srcset="${imageBase}-light.svg"><img src="${imageBase}-light.svg" width="400" alt="${html(alt)}" loading="lazy"></picture></a></td>`;
+    return `    <td><a href="${repoUrl(project)}" title="${html(title)}"><picture><source media="(prefers-color-scheme: dark)" srcset="${imageBase}-dark.svg"><source media="(prefers-color-scheme: light)" srcset="${imageBase}-light.svg"><img src="${imageBase}-light.svg" width="400" height="152" decoding="async" alt="${html(alt)}" loading="lazy"></picture></a></td>`;
   });
 
   const rows = [];

@@ -72,7 +72,7 @@ function render(s) {
     </radialGradient>
   </defs>
   <style>
-    :root { --accent: ${aD}; color-scheme: light dark; }
+    :root { color-scheme: light dark; }
     .pill  { fill: ${panelD.fill}; fill-opacity: ${panelD.fillOpacity}; stroke: ${panelD.stroke}; stroke-opacity: ${panelD.strokeOpacity}; stroke-width: 1; }
     .seat  { fill: ${aD}; fill-opacity: 0.14; stroke: ${aD}; stroke-opacity: 0.85; stroke-width: 1.4; }
     .glyph { fill: ${aD}; }
@@ -86,28 +86,6 @@ function render(s) {
       .seat  { fill: ${aL}; fill-opacity: 0.10; stroke: ${aL}; }
       .glyph { fill: ${aL}; }
       .name  { fill: ${inkL}; }
-    }
-    /* Hover / click affordance — progressive enhancement (GitHub img sandboxes
-       the internal :hover of an img-embedded SVG, so this shows when the badge is
-       viewed directly or inline). Gated to hover-capable devices so a tap on
-       touch doesn't leave a sticky lifted/glowing state. */
-    @media (hover: hover) {
-      .badge-group {
-        cursor: pointer;
-        transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.22s ease;
-      }
-      .badge-group:hover { transform: translateY(-3px); filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.45)); }
-      .badge-group:hover .pill { stroke-opacity: 0.3; }
-      .badge-group:hover .seat { fill-opacity: 0.26; filter: drop-shadow(0 0 5px var(--accent)); }
-      .badge-group:hover .glyph { filter: drop-shadow(0 0 4px var(--accent)); }
-      .badge-group:active {
-        transform: translateY(-1px);
-        filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.3));
-        transition: transform 0.08s ease, filter 0.08s ease;
-      }
-      @media (prefers-reduced-motion: reduce) {
-        .badge-group, .badge-group:hover, .badge-group:active { transition: none; transform: none; }
-      }
     }
   </style>
   <g class="badge-group">

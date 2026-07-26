@@ -320,9 +320,7 @@ function portalDefs(px) {
     ${exit("exitVioletL", "#84cc16", "#65a30d")}
     <clipPath id="portalGap"><rect x="${(px - 24).toFixed(1)}" y="${PLOT_TOP - 24}" width="40" height="${PLOT_HEIGHT + 48}"/></clipPath>
     <filter id="portalWobble" filterUnits="userSpaceOnUse" x="${(px - 44).toFixed(1)}" y="${PLOT_TOP - 24}" width="88" height="${PLOT_HEIGHT + 48}">
-      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.05" numOctaves="3" seed="7" result="n">
-        <animate attributeName="baseFrequency" values="0.02 0.05;0.024 0.062;0.02 0.05" begin="2.4s" dur="7.2s" repeatCount="indefinite"/>
-      </feTurbulence>
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.05" numOctaves="3" seed="7" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="6" xChannelSelector="R" yChannelSelector="G"/>
     </filter>`;
 }
@@ -589,9 +587,7 @@ function originDefs(mx, ox, sx) {
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     <filter id="originMembrane" filterUnits="userSpaceOnUse" x="${(mx - 18).toFixed(1)}" y="84" width="36" height="148">
-      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.09" numOctaves="2" seed="11" result="n">
-        <animate attributeName="baseFrequency" values="0.008 0.09;0.010 0.11;0.008 0.09" begin="2.4s" dur="6.8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.42 0 0.58 1;0.42 0 0.58 1"/>
-      </feTurbulence>
+      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.09" numOctaves="2" seed="11" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="3.0" xChannelSelector="R" yChannelSelector="G"/>
     </filter>`;
 }
@@ -1270,10 +1266,6 @@ function renderSVG(model) {
       .cum-area { fill: url(#cumGradLight); }
       .cum-dot { fill: #0891b2; stroke: #0e7490; }
       .rm-glowEl { fill: url(#rmGlowLight); }
-      .rm-g1 { fill: #4d7c0f; }
-      .rm-g2 { fill: #84cc16; }
-      .rm-g3 { fill: #bef264; }
-      .rm-core { fill: #ecfccb; }
       .rm-swirl { stroke: #4d7c0f; }
       .px-gold { stroke: url(#exitGoldL); }
       .px-cyan { stroke: url(#exitCyanL); }

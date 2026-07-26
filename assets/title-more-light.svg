@@ -10,7 +10,6 @@
     </linearGradient>
   </defs>
   <style>
-    :root { }
     .prompt { font: 600 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6e7681; }
     .caret  { fill: #a78bfa; }
     .label  { font: 700 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; letter-spacing: 4px; }

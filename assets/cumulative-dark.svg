@@ -17,21 +17,6 @@
     </linearGradient>
     <!-- Light-mode variants: darker, more saturated so the curve, fill and dot
          keep good contrast on a white background. -->
-    <linearGradient id="cumLineGradLight" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#0e7490"/>
-      <stop offset="55%" stop-color="#0891b2"/>
-      <stop offset="85%" stop-color="#06b6d4"/>
-      <stop offset="100%" stop-color="#65a30d"/>
-    </linearGradient>
-    <linearGradient id="cumGradLight" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#0891b2" stop-opacity="0.13"/>
-      <stop offset="55%" stop-color="#0891b2" stop-opacity="0.05"/>
-      <stop offset="100%" stop-color="#0891b2" stop-opacity="0"/>
-    </linearGradient>
-    <filter id="lineGlow" x="-20%" y="-40%" width="140%" height="180%">
-      <feGaussianBlur stdDeviation="2.6" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
     <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
       <feGaussianBlur stdDeviation="7" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
@@ -41,20 +26,10 @@
       <stop offset="60%" stop-color="#84cc16" stop-opacity="0.10"/>
       <stop offset="100%" stop-color="#84cc16" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="portalAuraLight" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#4d7c0f" stop-opacity="0.15"/>
-      <stop offset="60%" stop-color="#4d7c0f" stop-opacity="0.06"/>
-      <stop offset="100%" stop-color="#4d7c0f" stop-opacity="0"/>
-    </radialGradient>
     <radialGradient id="rmGlow" cx="0.5" cy="0.5" r="0.5">
       <stop offset="0%" stop-color="#a3e635" stop-opacity="0.5"/>
       <stop offset="60%" stop-color="#84cc16" stop-opacity="0.2"/>
       <stop offset="100%" stop-color="#84cc16" stop-opacity="0"/>
-    </radialGradient>
-    <radialGradient id="rmGlowLight" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#65a30d" stop-opacity="0.35"/>
-      <stop offset="60%" stop-color="#4d7c0f" stop-opacity="0.14"/>
-      <stop offset="100%" stop-color="#4d7c0f" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="exitGold" gradientUnits="userSpaceOnUse" x1="686.9" y1="0" x2="792" y2="0">
       <stop offset="0%" stop-color="#d9f99d" stop-opacity="0.95"/>
@@ -71,26 +46,9 @@
       <stop offset="55%" stop-color="#a3e635" stop-opacity="0.5"/>
       <stop offset="100%" stop-color="#a3e635" stop-opacity="0"/>
     </linearGradient>
-    <linearGradient id="exitGoldL" gradientUnits="userSpaceOnUse" x1="686.9" y1="0" x2="792" y2="0">
-      <stop offset="0%" stop-color="#65a30d" stop-opacity="0.95"/>
-      <stop offset="55%" stop-color="#4d7c0f" stop-opacity="0.5"/>
-      <stop offset="100%" stop-color="#4d7c0f" stop-opacity="0"/>
-    </linearGradient>
-    <linearGradient id="exitCyanL" gradientUnits="userSpaceOnUse" x1="686.9" y1="0" x2="792" y2="0">
-      <stop offset="0%" stop-color="#4d7c0f" stop-opacity="0.95"/>
-      <stop offset="55%" stop-color="#365314" stop-opacity="0.5"/>
-      <stop offset="100%" stop-color="#365314" stop-opacity="0"/>
-    </linearGradient>
-    <linearGradient id="exitVioletL" gradientUnits="userSpaceOnUse" x1="686.9" y1="0" x2="792" y2="0">
-      <stop offset="0%" stop-color="#84cc16" stop-opacity="0.95"/>
-      <stop offset="55%" stop-color="#65a30d" stop-opacity="0.5"/>
-      <stop offset="100%" stop-color="#65a30d" stop-opacity="0"/>
-    </linearGradient>
     <clipPath id="portalGap"><rect x="662.9" y="68" width="40" height="180"/></clipPath>
     <filter id="portalWobble" filterUnits="userSpaceOnUse" x="642.9" y="68" width="88" height="180">
-      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.05" numOctaves="3" seed="7" result="n">
-        <animate attributeName="baseFrequency" values="0.02 0.05;0.024 0.062;0.02 0.05" begin="2.4s" dur="7.2s" repeatCount="indefinite"/>
-      </feTurbulence>
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.05" numOctaves="3" seed="7" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="6" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
     <linearGradient id="seamGrad" gradientUnits="userSpaceOnUse" x1="476.6" y1="92" x2="476.6" y2="224">
@@ -98,30 +56,15 @@
       <stop offset="50%" stop-color="#fde68a"/>
       <stop offset="100%" stop-color="#f59e0b"/>
     </linearGradient>
-    <linearGradient id="seamGradLight" gradientUnits="userSpaceOnUse" x1="476.6" y1="92" x2="476.6" y2="224">
-      <stop offset="0%" stop-color="#a16207"/>
-      <stop offset="50%" stop-color="#eab308"/>
-      <stop offset="100%" stop-color="#a16207"/>
-    </linearGradient>
     <radialGradient id="seamAuraGrad" cx="0.5" cy="0.5" r="0.5">
       <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.14"/>
       <stop offset="60%" stop-color="#fbbf24" stop-opacity="0.085"/>
       <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="seamAuraGradLight" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#d97706" stop-opacity="0.15"/>
-      <stop offset="60%" stop-color="#d97706" stop-opacity="0.06"/>
-      <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
-    </radialGradient>
     <linearGradient id="seamGlassGrad" gradientUnits="userSpaceOnUse" x1="476.6" y1="92" x2="476.6" y2="224">
       <stop offset="0%" stop-color="#fde68a" stop-opacity="0.08"/>
       <stop offset="50%" stop-color="#fef3c7" stop-opacity="0.28"/>
       <stop offset="100%" stop-color="#fde68a" stop-opacity="0.08"/>
-    </linearGradient>
-    <linearGradient id="seamGlassGradLight" gradientUnits="userSpaceOnUse" x1="476.6" y1="92" x2="476.6" y2="224">
-      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.06"/>
-      <stop offset="50%" stop-color="#fbbf24" stop-opacity="0.2"/>
-      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.06"/>
     </linearGradient>
     <linearGradient id="seamFieldGrad" gradientUnits="userSpaceOnUse" x1="476.6" y1="0" x2="792.0" y2="0">
       <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.11"/>
@@ -132,24 +75,10 @@
       <stop offset="84%" stop-color="#84cc16" stop-opacity="0.10"/>
       <stop offset="100%" stop-color="#84cc16" stop-opacity="0"/>
     </linearGradient>
-    <linearGradient id="seamFieldGradLight" gradientUnits="userSpaceOnUse" x1="476.6" y1="0" x2="792.0" y2="0">
-      <stop offset="0%" stop-color="#d97706" stop-opacity="0.16"/>
-      <stop offset="22%" stop-color="#eab308" stop-opacity="0.14"/>
-      <stop offset="35%" stop-color="#a3a80c" stop-opacity="0.14"/>
-      <stop offset="58%" stop-color="#84cc16" stop-opacity="0.15"/>
-      <stop offset="67%" stop-color="#4d7c0f" stop-opacity="0.15"/>
-      <stop offset="84%" stop-color="#4d7c0f" stop-opacity="0.09"/>
-      <stop offset="100%" stop-color="#4d7c0f" stop-opacity="0"/>
-    </linearGradient>
     <linearGradient id="intakeTailGrad" gradientUnits="userSpaceOnUse" x1="479.4" y1="0" x2="495.4" y2="0">
       <stop offset="0%" stop-color="#fbbf24" stop-opacity="0"/>
       <stop offset="60%" stop-color="#fbbf24" stop-opacity="0.55"/>
       <stop offset="100%" stop-color="#fde68a" stop-opacity="1"/>
-    </linearGradient>
-    <linearGradient id="intakeTailGradLight" gradientUnits="userSpaceOnUse" x1="479.4" y1="0" x2="495.4" y2="0">
-      <stop offset="0%" stop-color="#b45309" stop-opacity="0"/>
-      <stop offset="60%" stop-color="#b45309" stop-opacity="0.5"/>
-      <stop offset="100%" stop-color="#d97706" stop-opacity="1"/>
     </linearGradient>
     <filter id="seamGlowSoft" filterUnits="userSpaceOnUse" x="430.6" y="58" width="92" height="200">
       <feGaussianBlur stdDeviation="0.9" result="b"/>
@@ -160,30 +89,15 @@
       <stop offset="50%" stop-color="#fda4af"/>
       <stop offset="100%" stop-color="#e11d48"/>
     </linearGradient>
-    <linearGradient id="originGradLight" gradientUnits="userSpaceOnUse" x1="61.0" y1="92" x2="61.0" y2="224">
-      <stop offset="0%" stop-color="#9f1239"/>
-      <stop offset="50%" stop-color="#e11d48"/>
-      <stop offset="100%" stop-color="#9f1239"/>
-    </linearGradient>
     <radialGradient id="originAuraGrad" cx="0.5" cy="0.5" r="0.5">
       <stop offset="0%" stop-color="#fb7185" stop-opacity="0.14"/>
       <stop offset="60%" stop-color="#fb7185" stop-opacity="0.085"/>
       <stop offset="100%" stop-color="#fb7185" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="originAuraGradLight" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#be123c" stop-opacity="0.15"/>
-      <stop offset="60%" stop-color="#be123c" stop-opacity="0.06"/>
-      <stop offset="100%" stop-color="#be123c" stop-opacity="0"/>
-    </radialGradient>
     <linearGradient id="originGlassGrad" gradientUnits="userSpaceOnUse" x1="61.0" y1="92" x2="61.0" y2="224">
       <stop offset="0%" stop-color="#fda4af" stop-opacity="0.08"/>
       <stop offset="50%" stop-color="#fecdd3" stop-opacity="0.28"/>
       <stop offset="100%" stop-color="#fda4af" stop-opacity="0.08"/>
-    </linearGradient>
-    <linearGradient id="originGlassGradLight" gradientUnits="userSpaceOnUse" x1="61.0" y1="92" x2="61.0" y2="224">
-      <stop offset="0%" stop-color="#e11d48" stop-opacity="0.06"/>
-      <stop offset="50%" stop-color="#f43f5e" stop-opacity="0.2"/>
-      <stop offset="100%" stop-color="#e11d48" stop-opacity="0.06"/>
     </linearGradient>
     <linearGradient id="originBand" gradientUnits="userSpaceOnUse" x1="56.0" y1="0" x2="476.6" y2="0">
       <stop offset="0%" stop-color="#fb7185" stop-opacity="0.09"/>
@@ -191,25 +105,16 @@
       <stop offset="72%" stop-color="#fb923c" stop-opacity="0.09"/>
       <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.11"/>
     </linearGradient>
-    <linearGradient id="originBandLight" gradientUnits="userSpaceOnUse" x1="56.0" y1="0" x2="476.6" y2="0">
-      <stop offset="0%" stop-color="#9f1239" stop-opacity="0.11"/>
-      <stop offset="40%" stop-color="#be123c" stop-opacity="0.09"/>
-      <stop offset="72%" stop-color="#c2410c" stop-opacity="0.12"/>
-      <stop offset="100%" stop-color="#d97706" stop-opacity="0.16"/>
-    </linearGradient>
     <filter id="originGlowSoft" filterUnits="userSpaceOnUse" x="15.0" y="58" width="92" height="200">
       <feGaussianBlur stdDeviation="1.5" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     <filter id="originMembrane" filterUnits="userSpaceOnUse" x="43.0" y="84" width="36" height="148">
-      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.09" numOctaves="2" seed="11" result="n">
-        <animate attributeName="baseFrequency" values="0.008 0.09;0.010 0.11;0.008 0.09" begin="2.4s" dur="6.8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.42 0 0.58 1;0.42 0 0.58 1"/>
-      </feTurbulence>
+      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.09" numOctaves="2" seed="11" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="3.0" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
   </defs>
   <style>
-    :root { }
     .panel { fill: #ffffff; fill-opacity: 0.022; stroke: #ffffff; stroke-opacity: 0.07; }
     .headline { font: 700 28px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #22d3ee; letter-spacing: -1px; }
     .sub { font: 500 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }

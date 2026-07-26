@@ -42,10 +42,38 @@ function matchBlock(s, from) {
 
 const stripColorScheme = (s) => s.replace(/\s*color-scheme:\s*light dark;/g, "");
 
+// Remove paint-server/filter defs that nothing in this variant references.
+// Splitting themes orphans the other theme's url(#...) targets (e.g. *Light
+// gradients in the dark file); each orphan still costs bytes and parse time.
+// Iterates because removing one def can orphan another it referenced.
+const GC_TAGS = "linearGradient|radialGradient|filter|mask|clipPath";
+function gcDefs(svg) {
+  let out = svg;
+  for (;;) {
+    let removed = false;
+    out = out.replace(
+      new RegExp(`[ \\t]*<(${GC_TAGS})\\b[^>]*\\bid="([^"]+)"[^>]*(?:/>|>[\\s\\S]*?</\\1>)[ \\t]*\\n?`, "g"),
+      (m, _tag, id, offset, whole) => {
+        const rest = whole.slice(0, offset) + whole.slice(offset + m.length);
+        if (rest.includes(`url(#${id})`) || rest.includes(`href="#${id}"`)) return m;
+        removed = true;
+        return "";
+      },
+    );
+    if (!removed) break;
+  }
+  return out;
+}
+
+const cleanVariant = (s) => gcDefs(s).replace(/:root\s*\{\s*\}\s*\n?/g, "");
+
 export function splitThemes(svg) {
   const base = stripColorScheme(svg);
   const at = base.indexOf(LIGHT_MEDIA);
-  if (at === -1) return { dark: base, light: base }; // nothing theme-conditional
+  if (at === -1) {
+    const s = cleanVariant(base);
+    return { dark: s, light: s }; // nothing theme-conditional
+  }
 
   const block = matchBlock(base, at + LIGHT_MEDIA.length);
   if (!block) throw new Error("theme-split: unbalanced prefers-color-scheme block");
@@ -59,7 +87,7 @@ export function splitThemes(svg) {
   // light: unwrap — the inner rules apply unconditionally, after the dark base.
   const light = before + inner.trim() + after;
 
-  return { dark, light };
+  return { dark: cleanVariant(dark), light: cleanVariant(light) };
 }
 
 // Write `<combinedPath with -dark/-light before .svg>`; returns the two paths.
