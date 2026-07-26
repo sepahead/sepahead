@@ -314,23 +314,47 @@ function portalDefs(px) {
       <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="portalFieldGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${R}" y2="0">
-      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.13"/>
-      <stop offset="45%" stop-color="#fbbf24" stop-opacity="0.05"/>
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.20"/>
+      <stop offset="45%" stop-color="#fbbf24" stop-opacity="0.09"/>
       <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
     </linearGradient>
     <linearGradient id="portalFieldGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${R}" y2="0">
-      <stop offset="0%" stop-color="#d97706" stop-opacity="0.09"/>
-      <stop offset="45%" stop-color="#d97706" stop-opacity="0.03"/>
+      <stop offset="0%" stop-color="#d97706" stop-opacity="0.18"/>
+      <stop offset="45%" stop-color="#d97706" stop-opacity="0.07"/>
       <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="portalGlassGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
+      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.08"/>
+      <stop offset="50%" stop-color="#fef3c7" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#fde68a" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="portalGlassGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.06"/>
+      <stop offset="50%" stop-color="#fbbf24" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.06"/>
     </linearGradient>
     ${exit("exitGold", "#fde68a", "#f59e0b")}
     ${exit("exitCyan", "#a5f3fc", "#22d3ee")}
     ${exit("exitViolet", "#c4b5fd", "#a78bfa")}
-    ${exit("exitGoldL", "#92400e", "#b45309")}
-    ${exit("exitCyanL", "#155e75", "#0891b2")}
-    ${exit("exitVioletL", "#5b21b6", "#7c3aed")}
+    ${exit("exitGoldL", "#d97706", "#b45309")}
+    ${exit("exitCyanL", "#0891b2", "#0e7490")}
+    ${exit("exitVioletL", "#7c3aed", "#8b5cf6")}
+    <radialGradient id="throatGrad" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.5"/>
+      <stop offset="55%" stop-color="#fbbf24" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="throatGradLight" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.4"/>
+      <stop offset="55%" stop-color="#d97706" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
+    </radialGradient>
     <filter id="portalGlow" filterUnits="userSpaceOnUse" x="${(px - 46).toFixed(1)}" y="${PLOT_TOP - 34}" width="92" height="${PLOT_HEIGHT + 68}">
       <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="portalGlowSoft" filterUnits="userSpaceOnUse" x="${(px - 46).toFixed(1)}" y="${PLOT_TOP - 34}" width="92" height="${PLOT_HEIGHT + 68}">
+      <feGaussianBlur stdDeviation="1.5" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>`;
 }
@@ -350,9 +374,10 @@ function portalFieldMarkup(px) {
   const R = PLOT_RIGHT;
   const midY = (PLOT_TOP + PLOT_BOTTOM) / 2;
   const span = R - px;
-  // Vortex wall: starts horizontal at the seam, bends toward the midline.
+  // Vortex wall: starts horizontal at the seam, bends into a single
+  // vanishing point at (PLOT_RIGHT, midY) — the tunnel throat.
   const rayPath = (y) => {
-    const yEnd = midY + (y - midY) * 0.45;
+    const yEnd = midY;
     const c1x = (px + span * 0.35).toFixed(1);
     const c2x = (px + span * 0.72).toFixed(1);
     return `M ${X} ${y} C ${c1x} ${y} ${c2x} ${yEnd.toFixed(1)} ${R} ${yEnd.toFixed(1)}`;
@@ -390,22 +415,26 @@ function portalFieldMarkup(px) {
   <g>
     <rect x="${X}" y="${PLOT_TOP}" width="${span.toFixed(1)}" height="${PLOT_HEIGHT}" class="portal-field">
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.3;1" begin="0s" dur="2.2s" fill="freeze"/>
-      <animate attributeName="opacity" values="1;0.65;1" begin="2.8s" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.65;1" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
     </rect>
-    ${ray(98, "px-gold", 2.3, 0.09, 2.6)}
-    ${ray(121, "px-cyan", 2.5, 0.07, 3.3)}
-    ${ray(144, "px-violet", 2.4, 0.08, 2.9)}
-    ${ray(172, "px-gold", 2.6, 0.06, 3.6)}
-    ${ray(195, "px-cyan", 2.35, 0.09, 2.75)}
-    ${ray(218, "px-violet", 2.55, 0.07, 3.15)}
-    ${wave(10, 46, "pw-violet", "2.9s", "5.6s")}
-    ${wave(15, 38, "pw-cyan", "4.9s", "6.6s")}
-    ${wave(20, 31, "pw-gold", "6.9s", "6.0s")}
-    ${mote(16, 110, 1.1, "pm-cyan", "2.8s", "2.2s")}
-    ${mote(34, 133, 0.9, "pm-gold", "3.4s", "2.7s")}
-    ${mote(24, 158, 1.3, "pm-violet", "3.0s", "2.4s")}
-    ${mote(42, 183, 0.9, "pm-gold", "3.7s", "2.05s")}
-    ${mote(20, 206, 1.1, "pm-cyan", "3.2s", "2.55s")}
+    <ellipse cx="${R}" cy="${midY}" rx="30" ry="46" class="portal-throat">
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.4;1" begin="0s" dur="2.2s" fill="freeze"/>
+      <animate attributeName="opacity" values="1;0.6;1" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
+    </ellipse>
+    ${ray(98, "px-gold", 2.3, 0.09, 1.8)}
+    ${ray(121, "px-cyan", 2.5, 0.07, 1.8)}
+    ${ray(144, "px-violet", 2.4, 0.08, 1.8)}
+    ${ray(172, "px-gold", 2.6, 0.06, 1.8)}
+    ${ray(195, "px-cyan", 2.35, 0.09, 1.8)}
+    ${ray(218, "px-violet", 2.55, 0.07, 1.8)}
+    ${wave(10, 46, "pw-violet", "2.8s", "3.6s")}
+    ${wave(15, 38, "pw-cyan", "4.0s", "3.6s")}
+    ${wave(20, 31, "pw-gold", "5.2s", "3.6s")}
+    ${mote(16, 110, 1.1, "pm-cyan", "2.8s", "1.2s")}
+    ${mote(34, 133, 0.9, "pm-gold", "3.4s", "1.2s")}
+    ${mote(24, 158, 1.3, "pm-violet", "3.0s", "1.2s")}
+    ${mote(42, 183, 0.9, "pm-gold", "3.7s", "1.2s")}
+    ${mote(20, 206, 1.1, "pm-cyan", "3.2s", "1.2s")}
   </g>`;
 }
 
@@ -415,7 +444,7 @@ function portalMarkup(px, fromLabel, toLabel) {
   const X = px.toFixed(1);
   const top = PLOT_TOP;
   const bot = PLOT_BOTTOM;
-  const title = escapeXML(`${fromLabel} → ${toLabel}: singularity begins`);
+  const title = escapeXML(`${fromLabel} → ${toLabel}: singularity`);
 
   // Hyperdrive streaks: short spectrum dashes accelerating left→right INTO
   // the seam, brightening on approach and vanishing exactly at the horizon
@@ -434,21 +463,30 @@ function portalMarkup(px, fromLabel, toLabel) {
     <title>${title}</title>
     <rect x="${(px - 22).toFixed(1)}" y="${top}" width="44" height="${bot - top}" fill="url(#portalAura)" class="portal-aura">
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.2s" fill="freeze"/>
-      <animate attributeName="opacity" values="1;0.62;1" begin="2.8s" dur="3.6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.62;1" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
     </rect>
-    ${streak(104, 13, 14, "ps-cyan", "2.8s", "1.3s")}
-    ${streak(122, 9, 12, "ps-white", "3.3s", "1.1s")}
-    ${streak(141, 12, 14, "ps-violet", "3.0s", "1.5s")}
+    ${streak(104, 13, 14, "ps-cyan", "2.8s", "1.2s")}
+    ${streak(122, 9, 12, "ps-white", "3.3s", "1.2s")}
+    ${streak(141, 12, 14, "ps-violet", "3.0s", "1.2s")}
     ${streak(176, 8, 5, "ps-gold", "3.6s", "1.2s")}
-    ${streak(200, 7, 5, "ps-cyan", "3.15s", "1.4s")}
-    <line x1="${X}" y1="${top}" x2="${X}" y2="${bot}" class="portal-seam">
+    ${streak(200, 7, 5, "ps-cyan", "3.15s", "1.2s")}
+    <rect x="${(px - 2.8).toFixed(1)}" y="${top}" width="5.6" height="${bot - top}" class="portal-glass">
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
-      <animate attributeName="stroke-width" values="0.5;0.5;3.6;2.4" keyTimes="0;0.25;0.75;1" begin="0s" dur="2.4s" fill="freeze"/>
-      <animate attributeName="stroke-opacity" values="1;0.7;1" begin="2.9s" dur="3.8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.6;1" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
+    </rect>
+    <line x1="${(px - 2.8).toFixed(1)}" y1="${top}" x2="${(px - 2.8).toFixed(1)}" y2="${bot}" class="portal-seam">
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
+      <animate attributeName="stroke-width" values="0.4;0.4;2.8;1.8" keyTimes="0;0.25;0.75;1" begin="0s" dur="2.4s" fill="freeze"/>
+      <animate attributeName="stroke-opacity" values="1;0.7;1" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
     </line>
-    <text x="${X}" y="${top - 8}" text-anchor="middle" class="portal-text">singularity begins
+    <line x1="${(px + 2.8).toFixed(1)}" y1="${top}" x2="${(px + 2.8).toFixed(1)}" y2="${bot}" class="portal-seam">
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
+      <animate attributeName="stroke-width" values="0.4;0.4;2.8;1.8" keyTimes="0;0.25;0.75;1" begin="0s" dur="2.4s" fill="freeze"/>
+      <animate attributeName="stroke-opacity" values="1;0.7;1" begin="4.2s" dur="3.6s" repeatCount="indefinite"/>
+    </line>
+    <text x="${X}" y="${top - 8}" text-anchor="middle" class="portal-text">singularity
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.55;1" begin="0s" dur="2.6s" fill="freeze"/>
-      <animate attributeName="opacity" values="1;0.75;1" begin="3.2s" dur="3.4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.75;1" begin="2.6s" dur="3.6s" repeatCount="indefinite"/>
     </text>
   </g>`;
 }
@@ -551,7 +589,7 @@ function renderSVG(model) {
       ${isPeak ? `<animate attributeName="opacity" values="1;0.65;1" dur="2.6s" begin="${pulseBegin.toFixed(2)}s" repeatCount="indefinite"/>` : ""}
     </rect>
     <g class="bar-label">
-      <text x="${cx.toFixed(1)}" y="${(y - 8).toFixed(1)}" text-anchor="middle" class="value">${fmt(row.total)}
+      <text x="${cx.toFixed(1)}" y="${(y - 8).toFixed(1)}" text-anchor="middle" class="value${isPeak ? " value-peak" : ""}">${fmt(row.total)}
         <animate attributeName="y" from="${PLOT_BOTTOM}" to="${(y - 8).toFixed(1)}" begin="${begin.toFixed(2)}s" dur="${dur}s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
         <animate attributeName="opacity" from="0" to="1" begin="${(begin + dur * 0.6).toFixed(2)}s" dur="${(dur * 0.4).toFixed(2)}s" fill="freeze"/>
       </text>
@@ -716,9 +754,10 @@ function renderSVG(model) {
   <style>
     :root { color-scheme: light dark; }
     .panel { fill: #ffffff; fill-opacity: 0.022; stroke: #ffffff; stroke-opacity: 0.07; }
-    .headline { font: 700 38px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #22d3ee; letter-spacing: -1px; }
+    .headline { font: 700 28px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #22d3ee; fill-opacity: 0.85; letter-spacing: -1px; }
     .sub { font: 500 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
     .value { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; }
+    .value-peak { font: 700 15px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #22d3ee; }
     .year { font: 500 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
     .year-peak { font-weight: 700; fill: #22d3ee; }
     .axis { font: 400 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6e7681; }
@@ -731,7 +770,9 @@ function renderSVG(model) {
     .cum-area { fill: url(#cumGrad); }
     .cum-line { fill: none; stroke: url(#cumLineGrad); stroke-width: 2.5; stroke-opacity: 0.3; stroke-linecap: round; stroke-linejoin: round; filter: url(#lineGlow); }
     .cum-dot { fill: #a5f3fc; fill-opacity: 0.7; stroke: #22d3ee; stroke-width: 1.5; filter: url(#lineGlow); }
-    .portal-seam { stroke: url(#portalGrad); stroke-width: 2.4; stroke-linecap: round; filter: url(#portalGlow); }
+    .portal-seam { stroke: url(#portalGrad); stroke-width: 1.8; stroke-linecap: round; filter: url(#portalGlow); }
+    .portal-glass { fill: url(#portalGlassGrad); }
+    .portal-throat { fill: url(#throatGrad); }
     .portal-field { fill: url(#portalFieldGrad); }
     .portal-ray { fill: none; stroke-width: 1; opacity: 0.4; }
     .portal-pulse { fill: none; stroke-width: 1.8; stroke-linecap: round; }
@@ -762,6 +803,7 @@ function renderSVG(model) {
     .headline, .sub, .value, .year, .portal-text { paint-order: stroke; stroke: #0d1117; stroke-width: 3; stroke-linejoin: round; }
     @media (prefers-color-scheme: light) {
       .headline { fill: #0891b2; }
+      .value-peak { fill: #0891b2; }
       .sub { fill: #57606a; }
       .value { fill: #1f2328; }
       .year { fill: #57606a; }
@@ -774,7 +816,9 @@ function renderSVG(model) {
       .cum-line { stroke: url(#cumLineGradLight); stroke-opacity: 0.35; }
       .cum-area { fill: url(#cumGradLight); }
       .cum-dot { fill: #0891b2; stroke: #0e7490; }
-      .portal-seam { stroke: url(#portalGradLight); }
+      .portal-seam { stroke: url(#portalGradLight); filter: url(#portalGlowSoft); }
+      .portal-glass { fill: url(#portalGlassGradLight); }
+      .portal-throat { fill: url(#throatGradLight); }
       .portal-field { fill: url(#portalFieldGradLight); }
       .px-gold { stroke: url(#exitGoldL); }
       .px-cyan { stroke: url(#exitCyanL); }
