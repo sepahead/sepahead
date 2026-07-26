@@ -392,21 +392,43 @@ function renderSVG(model) {
       PLOT_BOTTOM - (row.cumulative / cumMax) * (PLOT_BOTTOM - CUM_TOP);
     return [px, cy];
   });
-  // Catmull-Rom → cubic-bézier smoothing for a flowing curve through the points.
+  // Monotone cubic (Fritsch–Carlson) → cubic-bézier smoothing. The data is a
+  // running cumulative total, so the curve must be non-decreasing everywhere;
+  // Catmull-Rom overshoots at flat→steep junctions (it drew a visible false
+  // dip between adjacent years). F-C clamps segment slopes so the interpolant
+  // preserves monotonicity while staying smooth through every exact point.
   const smoothPath = (pts) => {
     if (pts.length < 2)
       return pts.length ? `M ${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}` : "";
+    const n = pts.length;
+    const dx = [], dy = [], slope = [];
+    for (let i = 0; i < n - 1; i += 1) {
+      dx.push(pts[i + 1][0] - pts[i][0]);
+      dy.push(pts[i + 1][1] - pts[i][1]);
+      slope.push(dy[i] / dx[i]);
+    }
+    // Tangents: harmonic mean of neighbouring slopes when they agree in sign,
+    // zero at local extrema (F-C), one-sided at the ends.
+    const m = new Array(n);
+    m[0] = slope[0];
+    m[n - 1] = slope[n - 2];
+    for (let i = 1; i < n - 1; i += 1) {
+      if (slope[i - 1] * slope[i] <= 0) {
+        m[i] = 0;
+      } else {
+        const w1 = 2 * dx[i] + dx[i - 1];
+        const w2 = dx[i] + 2 * dx[i - 1];
+        m[i] = (w1 + w2) / (w1 / slope[i - 1] + w2 / slope[i]);
+      }
+    }
     let d = `M ${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
-    for (let i = 0; i < pts.length - 1; i += 1) {
-      const p0 = pts[i - 1] || pts[i];
-      const p1 = pts[i];
-      const p2 = pts[i + 1];
-      const p3 = pts[i + 2] || p2;
-      const c1x = p1[0] + (p2[0] - p0[0]) / 6;
-      const c1y = p1[1] + (p2[1] - p0[1]) / 6;
-      const c2x = p2[0] - (p3[0] - p1[0]) / 6;
-      const c2y = p2[1] - (p3[1] - p1[1]) / 6;
-      d += ` C ${c1x.toFixed(1)} ${c1y.toFixed(1)} ${c2x.toFixed(1)} ${c2y.toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+    for (let i = 0; i < n - 1; i += 1) {
+      const h = dx[i] / 3;
+      const c1x = pts[i][0] + h;
+      const c1y = pts[i][1] + m[i] * h;
+      const c2x = pts[i + 1][0] - h;
+      const c2y = pts[i + 1][1] - m[i + 1] * h;
+      d += ` C ${c1x.toFixed(1)} ${c1y.toFixed(1)} ${c2x.toFixed(1)} ${c2y.toFixed(1)} ${pts[i + 1][0].toFixed(1)} ${pts[i + 1][1].toFixed(1)}`;
     }
     return d;
   };
