@@ -412,15 +412,22 @@ function renderSVG(model) {
   };
   const cumLineD = smoothPath(cumPts);
   const [endX, endY] = cumPts[cumPts.length - 1] ?? [0, 0];
+  // IMPORTANT: base (non-animated) state must be the FINAL drawn state. GitHub
+  // serves this SVG through <img>/camo and some surfaces (mobile app, cached
+  // rasterizations, screenshots) never run SMIL; anything whose base state is
+  // hidden would simply never appear there. So the line/area/dot are visible
+  // by default, and the draw-in animations start at 0s with the reveal delay
+  // encoded in keyTimes (a begin-delayed animation would flash the final state
+  // before hiding it).
   const cumArea = cumPts.length
     ? `<path d="${cumLineD} L ${endX.toFixed(1)} ${PLOT_BOTTOM} L ${cumPts[0][0].toFixed(1)} ${PLOT_BOTTOM} Z" class="cum-area">
-    <animate attributeName="opacity" from="0" to="1" begin="0.4s" dur="1.6s" fill="freeze"/>
+    <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.2;1" begin="0s" dur="2s" fill="freeze"/>
   </path>
-  <path d="${cumLineD}" class="cum-line" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="1">
-    <animate attributeName="stroke-dashoffset" from="1" to="0" begin="0.3s" dur="1.7s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.4 0 0.2 1"/>
+  <path d="${cumLineD}" class="cum-line" pathLength="1" stroke-dasharray="1 1">
+    <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.15;1" begin="0s" dur="2s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.4 0 0.2 1"/>
   </path>
-  <circle cx="${endX.toFixed(1)}" cy="${endY.toFixed(1)}" r="3.5" class="cum-dot" opacity="0">
-    <animate attributeName="opacity" from="0" to="1" begin="1.9s" dur="0.4s" fill="freeze"/>
+  <circle cx="${endX.toFixed(1)}" cy="${endY.toFixed(1)}" r="3.5" class="cum-dot">
+    <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.83;1" begin="0s" dur="2.3s" fill="freeze"/>
     <animate attributeName="r" values="3.5;5;3.5" begin="2.3s" dur="2.4s" repeatCount="indefinite"/>
   </circle>`
     : "";
