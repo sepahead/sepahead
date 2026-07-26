@@ -35,7 +35,7 @@
      unauthenticated host, not the rate-limited API). Served from
      raw.githubusercontent.com so it never depends on a third-party card.
      Clicking opens GitHub's native contribution heatmap. -->
-<a href="https://github.com/sepahead#js-contribution-activity-description" title="Annual GitHub contributions of Sepehr Mahmoudian — opens the contribution heatmap"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/cumulative-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/cumulative-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/cumulative-light.svg" width="780" alt="Annual contributions from 2020 to present, with a running cumulative total; the peak year glows." loading="lazy"/></picture></a>
+<a href="https://github.com/sepahead#js-contribution-activity-description" title="Annual GitHub contributions of Sepehr Mahmoudian — opens the contribution heatmap"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/cumulative-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/cumulative-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/cumulative-dark.svg" width="780" alt="Annual contributions from 2020 to present, with a running cumulative total; the peak year glows." loading="lazy"/></picture></a>
 </p>
 
 <p align="center">

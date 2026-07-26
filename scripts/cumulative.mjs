@@ -396,11 +396,11 @@ function portalFieldMarkup(px) {
   };
   return `
   <g>
-    <rect x="${(px - 26).toFixed(1)}" y="${PLOT_TOP}" width="44" height="${PLOT_HEIGHT}" fill="url(#portalAura)" class="portal-aura" opacity="0.7">
+    <rect x="${(px - 30).toFixed(1)}" y="${PLOT_TOP}" width="40" height="${PLOT_HEIGHT}" fill="url(#portalAura)" class="portal-aura" opacity="0.7">
       <animate attributeName="opacity" values="0;0;0.7" keyTimes="0;0.5;1" begin="0s" dur="2.2s" fill="freeze"/>
       <animate attributeName="opacity" values="0.7;0.45;0.7" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
     </rect>
-    <ellipse cx="${(px - 4).toFixed(1)}" cy="${midY}" rx="15" ry="64" class="rm-glowEl" opacity="0.7">
+    <ellipse cx="${(px - 4).toFixed(1)}" cy="${midY}" rx="11" ry="64" class="rm-glowEl" opacity="0.7">
       <animate attributeName="opacity" values="0;0;0.7" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
       <animate attributeName="opacity" values="0.7;0.45;0.7" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
     </ellipse>
@@ -481,8 +481,8 @@ function seamDefs(sx, endX) {
       <stop offset="100%" stop-color="#a16207"/>
     </linearGradient>
     <radialGradient id="seamAuraGrad" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.16"/>
-      <stop offset="60%" stop-color="#fbbf24" stop-opacity="0.10"/>
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.14"/>
+      <stop offset="60%" stop-color="#fbbf24" stop-opacity="0.085"/>
       <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="seamAuraGradLight" cx="0.5" cy="0.5" r="0.5">
@@ -501,8 +501,8 @@ function seamDefs(sx, endX) {
       <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.06"/>
     </linearGradient>
     <linearGradient id="seamFieldGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${E}" y2="0">
-      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.14"/>
-      <stop offset="22%" stop-color="#eab308" stop-opacity="0.15"/>
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.11"/>
+      <stop offset="22%" stop-color="#eab308" stop-opacity="0.12"/>
       <stop offset="45%" stop-color="#bef264" stop-opacity="0.16"/>
       <stop offset="62%" stop-color="#a3e635" stop-opacity="0.18"/>
       <stop offset="67%" stop-color="#84cc16" stop-opacity="0.17"/>
@@ -510,10 +510,10 @@ function seamDefs(sx, endX) {
       <stop offset="100%" stop-color="#84cc16" stop-opacity="0"/>
     </linearGradient>
     <linearGradient id="seamFieldGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${E}" y2="0">
-      <stop offset="0%" stop-color="#a16207" stop-opacity="0.16"/>
-      <stop offset="22%" stop-color="#ca8a04" stop-opacity="0.12"/>
-      <stop offset="45%" stop-color="#a3e635" stop-opacity="0.14"/>
-      <stop offset="62%" stop-color="#65a30d" stop-opacity="0.16"/>
+      <stop offset="0%" stop-color="#d97706" stop-opacity="0.16"/>
+      <stop offset="22%" stop-color="#eab308" stop-opacity="0.14"/>
+      <stop offset="35%" stop-color="#a3a80c" stop-opacity="0.14"/>
+      <stop offset="58%" stop-color="#84cc16" stop-opacity="0.15"/>
       <stop offset="67%" stop-color="#4d7c0f" stop-opacity="0.15"/>
       <stop offset="84%" stop-color="#4d7c0f" stop-opacity="0.09"/>
       <stop offset="100%" stop-color="#4d7c0f" stop-opacity="0"/>
@@ -539,43 +539,54 @@ function seamDefs(sx, endX) {
 // userSpaceOnUse gradients and filter instances pinned to ox — reusing the
 // sx-pinned seam filters would clip the displaced strokes to an empty
 // region and silently blank the membrane.
-function originDefs(ox, sx) {
-  const X = ox.toFixed(1);
+function originDefs(mx, ox, sx) {
+  const X = mx.toFixed(1);
+  const B = ox.toFixed(1);
   return `<linearGradient id="originGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
-      <stop offset="0%" stop-color="#f59e0b"/>
-      <stop offset="50%" stop-color="#fde68a"/>
-      <stop offset="100%" stop-color="#f59e0b"/>
+      <stop offset="0%" stop-color="#ea580c"/>
+      <stop offset="50%" stop-color="#fdba74"/>
+      <stop offset="100%" stop-color="#ea580c"/>
     </linearGradient>
     <linearGradient id="originGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
-      <stop offset="0%" stop-color="#a16207"/>
-      <stop offset="50%" stop-color="#eab308"/>
-      <stop offset="100%" stop-color="#a16207"/>
+      <stop offset="0%" stop-color="#9a3412"/>
+      <stop offset="50%" stop-color="#ea580c"/>
+      <stop offset="100%" stop-color="#9a3412"/>
     </linearGradient>
+    <radialGradient id="originAuraGrad" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#fb923c" stop-opacity="0.14"/>
+      <stop offset="60%" stop-color="#fb923c" stop-opacity="0.085"/>
+      <stop offset="100%" stop-color="#fb923c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="originAuraGradLight" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#c2410c" stop-opacity="0.15"/>
+      <stop offset="60%" stop-color="#c2410c" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#c2410c" stop-opacity="0"/>
+    </radialGradient>
     <linearGradient id="originGlassGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
-      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.08"/>
-      <stop offset="50%" stop-color="#fef3c7" stop-opacity="0.28"/>
-      <stop offset="100%" stop-color="#fde68a" stop-opacity="0.08"/>
+      <stop offset="0%" stop-color="#fdba74" stop-opacity="0.08"/>
+      <stop offset="50%" stop-color="#fed7aa" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#fdba74" stop-opacity="0.08"/>
     </linearGradient>
     <linearGradient id="originGlassGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
-      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.06"/>
-      <stop offset="50%" stop-color="#fbbf24" stop-opacity="0.2"/>
-      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.06"/>
+      <stop offset="0%" stop-color="#ea580c" stop-opacity="0.06"/>
+      <stop offset="50%" stop-color="#fb923c" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#ea580c" stop-opacity="0.06"/>
     </linearGradient>
-    <linearGradient id="originBand" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${sx.toFixed(1)}" y2="0">
-      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.07"/>
-      <stop offset="55%" stop-color="#f59e0b" stop-opacity="0.06"/>
-      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    <linearGradient id="originBand" gradientUnits="userSpaceOnUse" x1="${B}" y1="0" x2="${sx.toFixed(1)}" y2="0">
+      <stop offset="0%" stop-color="#fb923c" stop-opacity="0.09"/>
+      <stop offset="45%" stop-color="#f97316" stop-opacity="0.07"/>
+      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.11"/>
     </linearGradient>
-    <linearGradient id="originBandLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${sx.toFixed(1)}" y2="0">
-      <stop offset="0%" stop-color="#a16207" stop-opacity="0.09"/>
-      <stop offset="55%" stop-color="#a16207" stop-opacity="0.05"/>
-      <stop offset="100%" stop-color="#a16207" stop-opacity="0"/>
+    <linearGradient id="originBandLight" gradientUnits="userSpaceOnUse" x1="${B}" y1="0" x2="${sx.toFixed(1)}" y2="0">
+      <stop offset="0%" stop-color="#c2410c" stop-opacity="0.11"/>
+      <stop offset="45%" stop-color="#b45309" stop-opacity="0.09"/>
+      <stop offset="100%" stop-color="#d97706" stop-opacity="0.16"/>
     </linearGradient>
-    <filter id="originGlowSoft" filterUnits="userSpaceOnUse" x="${(ox - 46).toFixed(1)}" y="${PLOT_TOP - 34}" width="92" height="${PLOT_HEIGHT + 68}">
+    <filter id="originGlowSoft" filterUnits="userSpaceOnUse" x="${(mx - 46).toFixed(1)}" y="${PLOT_TOP - 34}" width="92" height="${PLOT_HEIGHT + 68}">
       <feGaussianBlur stdDeviation="1.5" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <filter id="originMembrane" filterUnits="userSpaceOnUse" x="${(ox - 18).toFixed(1)}" y="84" width="36" height="148">
+    <filter id="originMembrane" filterUnits="userSpaceOnUse" x="${(mx - 18).toFixed(1)}" y="84" width="36" height="148">
       <feTurbulence type="fractalNoise" baseFrequency="0.008 0.09" numOctaves="2" seed="11" result="n">
         <animate attributeName="baseFrequency" values="0.008 0.09;0.010 0.11;0.008 0.09" begin="2.4s" dur="6.8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.42 0 0.58 1;0.42 0 0.58 1"/>
       </feTurbulence>
@@ -713,7 +724,17 @@ function seamMarkup(sx, fromLabel) {
     }
     return pts.join(" ");
   };
-  // Stepped art-deco jambs (ziggurat pilasters), mirrored about sx.
+  // 8-tooth indexing gear: 32 points, teeth every 45deg (rotationally
+  // symmetric, so a 45deg index step lands on an identical pose).
+  const gear = (cx, cy, rIn, rOut) => {
+    const pts = [];
+    for (let k = 0; k < 32; k++) {
+      const a = (k * 11.25 * Math.PI) / 180;
+      const r = k % 4 < 2 ? rOut : rIn;
+      pts.push(`${(cx + r * Math.cos(a)).toFixed(1)},${(cy + r * Math.sin(a)).toFixed(1)}`);
+    }
+    return pts.join(" ");
+  };
   const jamb = (s) => {
     const x9 = (sx + s * 9).toFixed(1);
     const x60 = (sx + s * 6).toFixed(1);
@@ -762,9 +783,16 @@ function seamMarkup(sx, fromLabel) {
       <polygon points="${oct(sx, 110, 6)}" class="gate-port">${fire("2.6s")}</polygon>
       <polygon points="${oct(sx, 206, 6)}" class="gate-port">${fire("4.2s")}</polygon>
       <polygon points="${oct(sx, midY, 8.5)}" class="gate-iris">${fire("3.4s")}</polygon>
-      <polygon points="${oct(sx, midY, 4.5)}" class="gate-iris-inner">
-        <animateTransform attributeName="transform" type="rotate" values="0 ${X} ${midY};6 ${X} ${midY};0 ${X} ${midY}" begin="2.4s" dur="7.2s" repeatCount="indefinite"/>
+      <polygon points="${gear(sx, midY, 4.2, 5.9)}" class="gate-iris-inner">
+        <animateTransform attributeName="transform" type="rotate" values="0 ${X} ${midY};0 ${X} ${midY};45 ${X} ${midY};45 ${X} ${midY}" keyTimes="0;0.55;0.72;1" begin="2.4s" dur="2.4s" repeatCount="indefinite"/>
       </polygon>
+      ${[[127, "2.4s"], [134, "2.7s"], [141, "3.0s"], [175, "3.6s"], [182, "3.9s"], [189, "4.2s"]]
+        .map(
+          ([ly, lb]) => `<rect x="${(sx - 0.9).toFixed(1)}" y="${ly}" width="1.8" height="1.8" rx="0.4" class="gate-led">
+        <animate attributeName="opacity" values="1;0.25;1;1" keyTimes="0;0.12;0.35;1" begin="${lb}" dur="2.4s" repeatCount="indefinite"/>
+      </rect>`
+        )
+        .join("\n      ")}
       <rect x="${(sx - 1).toFixed(1)}" y="150" width="2" height="16" rx="1" class="gate-slit">
         <animate attributeName="height" values="16;19;16" begin="2.6s" dur="4.2s" repeatCount="indefinite"/>
         <animate attributeName="y" values="150;148.5;150" begin="2.6s" dur="4.2s" repeatCount="indefinite"/>
@@ -835,7 +863,7 @@ function membraneMarkup(ox) {
   return `
   <g>
     <title>${title}</title>
-    <rect x="${(ox - 22).toFixed(1)}" y="${top}" width="44" height="${bot - top}" fill="url(#seamAuraGrad)" class="seam-aura">
+    <rect x="${(ox - 22).toFixed(1)}" y="${top}" width="44" height="${bot - top}" fill="url(#originAuraGrad)" class="origin-aura">
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.2s" fill="freeze"/>
       <animate attributeName="opacity" values="1;0.62;1" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
     </rect>
@@ -860,7 +888,7 @@ function membraneMarkup(ox) {
       </circle>
       ${pores}
     </g>
-    <text transform="rotate(-90 40 158)" x="40" y="158" text-anchor="middle" class="origin-text">human engineering
+    <text transform="rotate(-90 46 158)" x="46" y="158" text-anchor="middle" class="origin-text">human engineering
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.55;1" begin="0s" dur="2.6s" fill="freeze"/>
       <animate attributeName="opacity" values="1;0.75;1" begin="2.6s" dur="3.6s" repeatCount="indefinite"/>
     </text>
@@ -1090,11 +1118,13 @@ function renderSVG(model) {
   const seamField = seamX != null ? seamFieldMarkup(seamX, seamEnd) : "";
   const seam = seamX != null ? seamMarkup(seamX, rows[seamIdx].label) : "";
   const ox = PLOT_LEFT;
-  const originDefsStr = seamX != null ? originDefs(ox, seamX) : "";
-  const origin = seamX != null ? membraneMarkup(ox) : "";
+  const mx = PLOT_LEFT + 5;
+  const originDefsStr = seamX != null ? originDefs(mx, ox, seamX) : "";
+  const origin = seamX != null ? membraneMarkup(mx) : "";
   const originBandRect = seamX != null
     ? `<rect x="${ox}" y="${PLOT_TOP}" width="${(seamX - ox).toFixed(1)}" height="${PLOT_HEIGHT}" class="origin-band">
     <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.3;1" begin="0s" dur="2.2s" fill="freeze"/>
+    <animate attributeName="opacity" values="1;0.8;1" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
   </rect>`
     : "";
   const rangeLabel = `${startYear}–${currentYear()}`;
@@ -1153,7 +1183,7 @@ function renderSVG(model) {
   <style>
     :root { color-scheme: light dark; }
     .panel { fill: #ffffff; fill-opacity: 0.022; stroke: #ffffff; stroke-opacity: 0.07; }
-    .headline { font: 700 28px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #22d3ee; fill-opacity: 0.85; letter-spacing: -1px; }
+    .headline { font: 700 28px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #22d3ee; letter-spacing: -1px; }
     .sub { font: 500 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
     .value { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; }
     .value-peak { font: 700 15px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #22d3ee; }
@@ -1195,9 +1225,9 @@ function renderSVG(model) {
     .origin-glass { fill: url(#originGlassGrad); }
     .origin-cell { fill: url(#originGlassGrad); stroke: url(#originGrad); stroke-width: 0.7; stroke-opacity: 0.8; }
     .origin-pore { fill: none; stroke: url(#originGrad); stroke-width: 0.9; stroke-opacity: 0.8; }
-    .origin-nucleolus { fill: #fde68a; }
+    .origin-nucleolus { fill: #fed7aa; }
     .origin-band { fill: url(#originBand); }
-    .origin-text { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; letter-spacing: 1.5px; }
+    .origin-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fb923c; letter-spacing: 2.5px; }
     .gate-jamb { fill: none; stroke: url(#seamGrad); stroke-width: 1.2; filter: url(#seamGlowSoft); }
     .gate-fan { stroke: url(#seamGrad); stroke-width: 0.9; stroke-opacity: 0.55; }
     .gate-iris { fill: url(#seamGlassGrad); stroke: url(#seamGrad); stroke-width: 1.1; }
@@ -1205,8 +1235,9 @@ function renderSVG(model) {
     .gate-port { fill: url(#seamGlassGrad); fill-opacity: 0.3; stroke: url(#seamGrad); stroke-width: 1.0; }
     .gate-rail { stroke: url(#seamGrad); stroke-width: 1.0; stroke-opacity: 0.6; }
     .gate-slit { fill: #fde68a; }
+    .gate-led { fill: #fde68a; fill-opacity: 0.9; }
     .seam-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; letter-spacing: 2.5px; }
-    .drift-mote { fill: #67e8f9; }
+    .drift-mote { fill: #fdba74; }
     .seam-mote { fill: #fbbf24; }
     .seam-mote-lime { fill: #bef264; }
     .intake-tail { stroke: url(#intakeTailGrad); stroke-width: 1.6; stroke-linecap: round; }
@@ -1220,16 +1251,16 @@ function renderSVG(model) {
        paint-order stroke in the page-background colour is invisible in the matching
        case and only appears to outline the text when the scheme mismatches, so the
        numbers stay legible on either background. */
-    .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text { paint-order: stroke; stroke: #0d1117; stroke-width: 3; stroke-linejoin: round; }
+    .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text { paint-order: stroke; stroke: #0d1117; stroke-width: 2; stroke-linejoin: round; }
     @media (prefers-color-scheme: light) {
       .headline { fill: #0891b2; }
-      .value-peak { fill: #0891b2; }
+      .value-peak { fill: #0e7490; }
       .sub { fill: #57606a; }
       .value { fill: #1f2328; }
       .year { fill: #57606a; }
-      .year-peak { fill: #0891b2; }
+      .year-peak { fill: #0e7490; }
       .axis { fill: #6e7681; }
-      .warning { fill: #b45309; }
+      .warning { fill: #92400e; }
       .grid { stroke: #eaeef2; }
       .baseline { stroke: #d0d7de; }
       .panel { fill: #0b1f2a; fill-opacity: 0.025; stroke: #0b1f2a; stroke-opacity: 0.08; }
@@ -1252,23 +1283,25 @@ function renderSVG(model) {
       .pw-cyan { stroke: #3f6212; }
       .pw-violet { stroke: #4d7c0f; }
       .portal-aura { fill: url(#portalAuraLight); }
-      .portal-text { fill: #4d7c0f; }
+      .portal-text { fill: #3f6212; }
       .seam-field { fill: url(#seamFieldGradLight); }
       .seam-glass { fill: url(#seamGlassGradLight); }
       .origin-line { stroke: url(#originGradLight); filter: url(#originGlowSoft); }
       .origin-glass { fill: url(#originGlassGradLight); }
-      .origin-cell { fill: url(#originGlassGradLight); stroke: #a16207; stroke-width: 0.9; stroke-opacity: 0.9; }
-      .origin-pore { stroke: #a16207; stroke-width: 1.1; stroke-opacity: 0.9; }
-      .origin-nucleolus { fill: #b45309; }
+      .origin-aura { fill: url(#originAuraGradLight); }
+      .origin-cell { fill: url(#originGlassGradLight); stroke: #c2410c; stroke-width: 0.9; stroke-opacity: 0.9; }
+      .origin-pore { stroke: #c2410c; stroke-width: 1.1; stroke-opacity: 0.9; }
+      .origin-nucleolus { fill: #c2410c; }
       .origin-band { fill: url(#originBandLight); }
-      .origin-text { fill: #854d0e; }
+      .origin-text { fill: #9a3412; }
       .gate-jamb, .gate-fan, .gate-iris-inner, .gate-rail { stroke: url(#seamGradLight); }
       .gate-iris { fill: url(#seamGlassGradLight); stroke: url(#seamGradLight); }
       .gate-port { fill: url(#seamGlassGradLight); stroke: url(#seamGradLight); }
       .gate-slit { fill: #b45309; }
+      .gate-led { fill: #b45309; }
       .seam-aura { fill: url(#seamAuraGradLight); }
       .seam-text { fill: #854d0e; }
-      .drift-mote { fill: #0e7490; }
+      .drift-mote { fill: #c2410c; }
       .seam-mote { fill: #a16207; }
       .seam-mote-lime { fill: #65a30d; }
       .intake-tail { stroke: url(#intakeTailGradLight); }
