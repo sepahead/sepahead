@@ -169,6 +169,11 @@ export const PROJECTS = [
     headline: "Robot-simulation 3D mesh dataset",
     accent: "#60a5fa", light: "#2563eb", grad: "#0b1a33",
     dataset: true, repo: "sepahead/cobot-atlas",
+    // Published Hugging Face dataset id; work-cards.mjs refreshes `downloads`
+    // (ALL-TIME, not 30-day) from the public HF API on each run, `downloads`
+    // here is the offline fallback (same pattern as `stars`). relief-atlas
+    // gets its own `hf` once it is published on the Hub.
+    hf: "torusprime/cobot-atlas", downloads: 1729,
     desc: "Generation pipeline for 2,023 unique robot/cobot simulation meshes; 2,024 GLBs, 33.5 GB on Hugging Face with dataset and pipeline DOIs.",
     stack: ["Python"],
     summary: "cobot-atlas is a Python generation pipeline for a public MIT dataset of 2,023 unique glTF 2.0 Binary meshes (2,024 GLB files, 33.5 GB) for robot/cobot simulation, manipulation research, VLA training and benchmarking.",

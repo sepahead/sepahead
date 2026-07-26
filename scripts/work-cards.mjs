@@ -64,6 +64,37 @@ async function hydrateStars(list) {
 await hydrateStars(projects);
 
 // ---------------------------------------------------------------------------
+// Refresh ALL-TIME Hugging Face download totals for dataset cards carrying an
+// `hf` dataset id. The Hub's default `downloads` field is only a rolling
+// 30-day window; `expand[]=downloadsAllTime` returns the lifetime total, which
+// is what the card shows. Public endpoint, no token required, so unlike stars
+// this also refreshes on local runs; the baked-in `downloads` in data.mjs is
+// the offline/failure fallback (same pattern as `stars`).
+// ---------------------------------------------------------------------------
+async function hydrateDownloads(list) {
+  for (const p of list) {
+    if (!p.hf) continue;
+    try {
+      const res = await fetch(
+        `https://huggingface.co/api/datasets/${encodeURIComponent(p.hf).replace(/%2F/g, "/")}?expand[]=downloadsAllTime`,
+        { headers: { "User-Agent": "sepahead-work-cards/1.0" } }
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
+      if (typeof json.downloadsAllTime === "number") {
+        if (json.downloadsAllTime !== p.downloads) {
+          console.log(`[work-cards] ${p.hf}: ${p.downloads} -> ${json.downloadsAllTime} all-time downloads`);
+        }
+        p.downloads = json.downloadsAllTime;
+      }
+    } catch (e) {
+      console.warn(`[work-cards] HF downloads fetch failed for ${p.hf} (${e.message}); keeping ${p.downloads}.`);
+    }
+  }
+}
+await hydrateDownloads(projects);
+
+// ---------------------------------------------------------------------------
 // Card geometry. CARD_W/CARD_H match the original grid cells exactly. PAD_X
 // adds 1px transparent padding on each side so a README <table cellspacing="20">
 // yields a 22px gutter (1 + 20 + 1) — the same as the original grid's GUTTER —
@@ -144,6 +175,18 @@ function datasetPlates(cx, cy, cls) {
       return `<polygon points="${pts}" class="glyph-fill glyph-stroke ${cls}" fill-opacity="${op[i]}" stroke-width="1" stroke-linejoin="round"/>`;
     })
     .join("");
+}
+
+// Download glyph: arrow descending into a tray (the conventional "downloads"
+// mark), drawn stroke-only to match the other badge glyphs. Centred at (cx, cy).
+function downloadGlyph(cx, cy, cls) {
+  return (
+    `<g class="glyph-stroke ${cls}" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">` +
+    `<path d="M${(cx - 4.5).toFixed(1)} ${(cy + 4).toFixed(1)} h9"/>` +
+    `<path d="M${cx.toFixed(1)} ${(cy - 5).toFixed(1)} v6.5"/>` +
+    `<path d="M${(cx - 3).toFixed(1)} ${(cy - 1).toFixed(1)} L${cx.toFixed(1)} ${(cy + 1.5).toFixed(1)} L${(cx + 3).toFixed(1)} ${(cy - 1).toFixed(1)}"/>` +
+    `</g>`
+  );
 }
 
 // Star glyph (filled 5-point star) centred at (cx, cy), radius r.
@@ -243,6 +286,15 @@ function buildCard(p) {
     })
     .join("\n    ");
 
+  // All-time Hugging Face downloads (dataset cards with an `hf` id): a
+  // bottom-right readout on the chip row, mirroring the chips' baseline.
+  const fmtNum = (n) => Number(n).toLocaleString("en-US");
+  const dl =
+    p.dataset && p.downloads != null
+      ? downloadGlyph(x + CARD_W - PADR - 6, chipY + 10, cls) +
+        `<text x="${x + CARD_W - PADR - 16}" y="${chipY + 15}" text-anchor="end" class="badge ${cls}">${fmtNum(p.downloads)}</text>`
+      : "";
+
   // Spine: a solid accent bar normally; for `hint` cards a mid->bright silver
   // vertical gradient (dark/light variants toggled by prefers-color-scheme). Both
   // carry the `spine` class so the hover lift still applies.
@@ -267,6 +319,7 @@ function buildCard(p) {
     ${badge}
     ${desc}
     ${chips}
+    ${dl}
   </g>`;
 
   return { gradDef, body };
@@ -308,7 +361,7 @@ for (const p of projects) {
     : p.phase
       ? p.phase
       : p.dataset
-        ? "dataset"
+        ? `dataset${p.downloads != null ? `, ${Number(p.downloads).toLocaleString("en-US")} all-time downloads` : ""}`
         : p.stars != null
           ? `${p.stars} star${p.stars === 1 ? "" : "s"}`
           : "";
