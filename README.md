@@ -102,7 +102,35 @@
 <a href="https://github.com/sepahead/NCP/blob/main/docs/adr/B01_REVIEW_PACKET.md" title="Conceptual standalone-first ecosystem map — opens the exact NCP architecture review packet"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-graph-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-graph-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-graph-light.svg" width="820" alt="Conceptual standalone-first ecosystem map. Optional NCP role paths connect Engram as a simulation responder or direct command proposer, CREBAIN as sole body and final software actuator admission authority, Haldir as a gated command proposer, and Galadriel and Prisoma as read-only observers. Every command remains a proposal until CREBAIN independently admits it under current session and body-lease authority. In gated mode Engram sends Haldir-local signed intent carrying no NCP authority; Haldir independently creates and authorizes a new NCP command. A separate default-off Galadriel-Haldir seam carries deny-only assessment and authenticated disposition; absence never grants authority. Separately declared out-of-band CREBAIN telemetry may feed Galadriel. pid-rs is an in-process protocol-neutral library with no wire role; Cortexel is a one-way labelled Engram export sink with no control path. Other lines are research, tooling or data inputs, not control paths. NCP 1.0 remains an unreleased, release-blocked candidate; no line claims deployment or qualification." loading="lazy"/></picture></a>
 </p>
 
-<p align="center"><sub><b>Authority &amp; dependency:</b> every core runs standalone. NCP is an optional neutral contract: Engram has separate simulation/direct-proposal roles; Haldir is a gated command proposer; Galadriel and Prisoma only observe. Every command remains a proposal until CREBAIN independently admits it under its current session and bounded body-authority lease; CREBAIN alone owns body state and final software actuator admission. In gated mode Engram &rarr; Haldir carries local signed intent, not NCP authority; Haldir independently authorizes a new NCP command. Galadriel &harr; Haldir is a separate default-off deny-only assessment/authenticated-disposition seam whose absence never grants authority. CREBAIN &rarr; Galadriel telemetry is separately declared and outside NCP. pid-rs is an in-process library only, with no wire role; Cortexel is a one-way labelled-export sink with no control path. These are intended, historical, research or data relationships. NCP 1.0 remains an unreleased, release-blocked candidate&mdash;not a deployed or qualified integration.</sub></p>
+<!-- A human-readable guide to the graph. The SVG shows topology; this section
+     explains each cluster's job and preserves the authority boundaries that
+     matter. Keep it concise enough to scan before "More repositories". -->
+<table align="center">
+  <tr>
+    <td width="33%" valign="top">
+      <b>MODEL &amp; EXPLAIN</b><br/><br/>
+      <a href="https://github.com/sepahead/engram"><b>Engram</b></a> is the neural-modeling research core.
+      <a href="https://github.com/sepahead/prisoma"><b>Prisoma</b></a> builds auditable capture&#8594;intervention&#8594;replay experiments for embodied-policy diagnosis.
+      <a href="https://github.com/sepahead/pid-rs"><b>pid-rs</b></a> supplies protocol-neutral PID and mutual-information estimators in process.
+      <a href="https://github.com/sepahead/cortexel"><b>Cortexel</b></a> turns labelled results into deterministic, accessible figures and exact-value tables.
+    </td>
+    <td width="33%" valign="top">
+      <b>PROPOSE &amp; GOVERN</b><br/><br/>
+      <a href="https://github.com/sepahead/NCP"><b>NCP</b></a> is the optional, versioned contract between simulators, controllers, bodies and observers.
+      <a href="https://github.com/sepahead/haldir"><b>Haldir</b></a> validates signed local intent and independently prepares a newly authorized command with a signed decision receipt.
+      <a href="https://github.com/sepahead/crebain"><b>CREBAIN</b></a> owns body state and makes the final software actuator-admission decision under the current session and bounded lease.
+    </td>
+    <td width="33%" valign="top">
+      <b>PERCEIVE &amp; RECONSTRUCT</b><br/><br/>
+      <a href="https://github.com/sepahead/manwe"><b>Manwe</b></a> develops vision, audio, multicamera and tracking candidates.
+      <a href="https://github.com/sepahead/galadriel"><b>Galadriel</b></a> observes cross-sensor statistical consistency and can contribute deny-only assessment.
+      <a href="https://github.com/sepahead/melkor"><b>Melkor</b></a> handles deterministic Gaussian-splat conversion, inspection, completion and viewing.
+      The <a href="https://github.com/sepahead/cobot-atlas"><b>cobot</b></a> and <a href="https://github.com/sepahead/relief-atlas"><b>relief</b></a> atlases are data inputs, never control paths.
+    </td>
+  </tr>
+</table>
+
+<p align="center"><sub><b>Boundary that matters:</b> every core remains independently runnable, and every command remains a proposal until CREBAIN admits it. Galadriel and Prisoma are read-only observers; pid-rs has no wire role; Cortexel is a one-way export sink. Graph lines denote optional protocol roles, application-owned seams, library use, research relationships or data flow&mdash;not deployed or qualified integration. NCP 1.0 remains an unreleased, release-blocked candidate.</sub></p>
 
 <h3 align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-more-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-more-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-more-light.svg" width="820" alt="More repositories — public research code and tools"/></picture></h3>
 

@@ -12,3 +12,8 @@
 /preview.html
 /cxzoom.html
 /*.png
+
+# local AI-tool session/config dirs, machine-specific
+/.claude/
+/.playwright-mcp/
+/.qoder/
