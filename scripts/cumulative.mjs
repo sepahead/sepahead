@@ -318,8 +318,8 @@ function portalDefs(px) {
       <stop offset="100%" stop-color="#84cc16" stop-opacity="0"/>
     </linearGradient>
     <linearGradient id="portalFieldGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${(px + 18).toFixed(1)}" y2="0">
-      <stop offset="0%" stop-color="#4d7c0f" stop-opacity="0.14"/>
-      <stop offset="45%" stop-color="#4d7c0f" stop-opacity="0.05"/>
+      <stop offset="0%" stop-color="#4d7c0f" stop-opacity="0.22"/>
+      <stop offset="45%" stop-color="#4d7c0f" stop-opacity="0.08"/>
       <stop offset="100%" stop-color="#4d7c0f" stop-opacity="0"/>
     </linearGradient>
     ${exit("exitGold", "#d9f99d", "#84cc16")}
@@ -352,13 +352,14 @@ function portalFieldMarkup(px) {
   const R = PLOT_RIGHT;
   const midY = (PLOT_TOP + PLOT_BOTTOM) / 2;
   const span = R - px;
-  // Vortex wall: starts horizontal at the seam, bends into a single
-  // vanishing point at (PLOT_RIGHT, midY) — the tunnel throat.
+  // Exit cone: rays burst OUT of the portal mouth — born tight around the
+  // portal centre, diverging outward to full plot height at the right edge
+  // (the singularity expands what passes through it).
   const rayPath = (y) => {
-    const yEnd = midY;
-    const c1x = (px + span * 0.35).toFixed(1);
-    const c2x = (px + span * 0.72).toFixed(1);
-    return `M ${X} ${y} C ${c1x} ${y} ${c2x} ${yEnd.toFixed(1)} ${R} ${yEnd.toFixed(1)}`;
+    const yStart = midY + (y - midY) * 0.16;
+    const c1x = (px + span * 0.3).toFixed(1);
+    const c2x = (px + span * 0.68).toFixed(1);
+    return `M ${X} ${yStart.toFixed(1)} C ${c1x} ${yStart.toFixed(1)} ${c2x} ${y} ${R} ${y}`;
   };
   const ray = (y, cls, drawDur, dash, pulseDur) =>
     `<path d="${rayPath(y)}" class="portal-ray ${cls}" pathLength="1" stroke-dasharray="1 1">
@@ -366,7 +367,7 @@ function portalFieldMarkup(px) {
     </path>
     <path d="${rayPath(y)}" class="portal-pulse ${cls}" pathLength="1" stroke-dasharray="${dash} ${(1 - dash).toFixed(2)}" opacity="0.9">
       <animate attributeName="opacity" values="0;0;0.9" keyTimes="0;0.85;1" begin="0s" dur="2.8s" fill="freeze"/>
-      <animate attributeName="stroke-dashoffset" values="1;0" begin="2.8s" dur="${pulseDur}s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 0.85 0.55"/>
+      <animate attributeName="stroke-dashoffset" values="1;0" begin="2.8s" dur="${pulseDur}s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 1 1"/>
     </path>`;
   // Star motes: tiny specks streaming left→right through the tunnel. Each
   // one BREAKS THE BARRIER at the singularity: a brief head-swell right at
@@ -374,25 +375,31 @@ function portalFieldMarkup(px) {
   // (vapour-cone style), which dissipates while the mote races on. Base =
   // faint specks resting mid-field; the boom ring's base state is invisible
   // (it's transient, so the frozen tableau simply omits it).
-  const mote = (x0, y, r, cls, begin, dur) =>
-    `<circle cx="${(px + x0).toFixed(1)}" cy="${y}" r="${r}" class="portal-mote ${cls}" opacity="0.35">
-      <animateTransform attributeName="transform" type="translate" values="${-x0} 0;${(span - x0 - 8).toFixed(1)} 0" begin="${begin}" dur="${dur}" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 1 1"/>
+  const mote = (x0, y, r, cls, begin, dur) => {
+    // Diverging flight: enters the portal at the pinched mouth (near midY),
+    // spreads outward to its own lane by the right edge. (The arrival boom
+    // is owned by the intake meteors on the seam side — one cause, one bang.)
+    const dy0 = (midY - y) * 0.84;
+    return `<circle cx="${(px + x0).toFixed(1)}" cy="${y}" r="${r}" class="portal-mote ${cls}" opacity="0.35">
+      <animateTransform attributeName="transform" type="translate" values="${-x0} ${dy0.toFixed(1)};${(span - x0 - 8).toFixed(1)} 0" begin="${begin}" dur="${dur}" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 1 1"/>
       <animate attributeName="r" values="${r};${(r * 1.8).toFixed(2)};${r};${r}" keyTimes="0;0.1;0.28;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0;1;0.55;0" keyTimes="0;0.25;0.75;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="${(px + 2).toFixed(1)}" cy="${y}" r="1.5" class="portal-boom" opacity="0">
-      <animate attributeName="r" values="1.5;10;11" keyTimes="0;0.4;1" begin="${begin}" dur="${dur}" repeatCount="indefinite" calcMode="spline" keySplines="0.1 0.8 0.3 1;0 0 1 1"/>
-      <animate attributeName="opacity" values="0.75;0.2;0;0" keyTimes="0;0.28;0.45;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
     </circle>`;
+  };
   // Disintegrating waves: right-bowed wavefront arcs born at the seam that
   // drift SLOWLY down the tunnel to the end of the x-axis, their stroke
   // crumbling into fragments (animated dasharray) and fading as they go.
   // Base = a faint, partially-crumbled wave train near the mouth.
   const wave = (x0, h, cls, begin, dur) => {
     const wx = (px + x0).toFixed(1);
-    const d = `M ${wx} ${(midY - h).toFixed(1)} Q ${(px + x0 + 16).toFixed(1)} ${midY} ${wx} ${(midY + h).toFixed(1)}`;
-    return `<path d="${d}" class="portal-wave ${cls}" pathLength="1" stroke-dasharray="0.11 0.08" opacity="0.3">
-      <animateTransform attributeName="transform" type="translate" values="0 0;${(span - x0 - 20).toFixed(1)} 0" begin="${begin}" dur="${dur}" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.3 0 0.7 1"/>
+    // Expanding wavefront: leaves the mouth small, grows to full height h as
+    // it travels down the widening cone.
+    const arc = (hh) =>
+      `M ${wx} ${(midY - hh).toFixed(1)} Q ${(px + x0 + 16).toFixed(1)} ${midY} ${wx} ${(midY + hh).toFixed(1)}`;
+    const d0 = arc(h * 0.35);
+    return `<path d="${d0}" class="portal-wave ${cls}" pathLength="1" stroke-dasharray="0.11 0.08" opacity="0.3">
+      <animate attributeName="d" values="${d0};${arc(h)}" keyTimes="0;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" values="0 0;${(span - x0 - 20).toFixed(1)} 0" begin="${begin}" dur="${dur}" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.4 0 0.9 1"/>
       <animate attributeName="stroke-dasharray" values="1 0;0.28 0.05;0.04 0.15" keyTimes="0;0.45;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0;0.5;0.32;0" keyTimes="0;0.2;0.65;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
     </path>`;
@@ -411,19 +418,18 @@ function portalFieldMarkup(px) {
       <animate attributeName="opacity" values="0;0;0.7" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
       <animate attributeName="opacity" values="0.7;0.45;0.7" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
     </ellipse>
-    ${ray(98, "px-gold", 2.3, 0.09, 0.9)}
-    ${ray(121, "px-cyan", 2.5, 0.07, 0.9)}
-    ${ray(144, "px-violet", 2.4, 0.08, 0.9)}
-    ${ray(172, "px-gold", 2.6, 0.06, 0.9)}
-    ${ray(195, "px-cyan", 2.35, 0.09, 0.9)}
-    ${ray(218, "px-violet", 2.55, 0.07, 0.9)}
+    ${ray(110, "px-gold", 2.3, 0.09, 0.9)}
+    ${ray(134, "px-cyan", 2.5, 0.07, 0.9)}
+    ${ray(158, "px-violet", 2.4, 0.08, 0.9)}
+    ${ray(182, "px-gold", 2.6, 0.06, 0.9)}
+    ${ray(206, "px-cyan", 2.35, 0.09, 0.9)}
     ${wave(10, 46, "pw-violet", "2.8s", "1.2s")}
     ${wave(15, 38, "pw-cyan", "3.2s", "1.2s")}
     ${wave(20, 31, "pw-gold", "3.6s", "1.2s")}
     ${mote(16, 110, 1.1, "pm-cyan", "2.8s", "0.9s")}
-    ${mote(34, 133, 0.9, "pm-gold", "3.1s", "0.9s")}
+    ${mote(34, 134, 0.9, "pm-gold", "3.1s", "0.9s")}
     ${mote(24, 158, 1.3, "pm-violet", "2.95s", "0.9s")}
-    ${mote(42, 183, 0.9, "pm-gold", "3.25s", "0.9s")}
+    ${mote(42, 182, 0.9, "pm-gold", "3.25s", "0.9s")}
     ${mote(20, 206, 1.1, "pm-cyan", "3.4s", "0.9s")}
   </g>`;
 }
@@ -446,18 +452,18 @@ function portalMarkup(px, fromLabel, toLabel) {
   // resting ticks just left of the seam.
   const streak = (y, len, run, cls, begin, dur) =>
     `<line x1="${(px - 6 - len).toFixed(1)}" y1="${y}" x2="${(px - 6).toFixed(1)}" y2="${y}" class="portal-streak ${cls}" opacity="0.35">
-      <animateTransform attributeName="transform" type="translate" values="${-run} 0;6 0" begin="${begin}" dur="${dur}" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.5 0 0.9 0.45"/>
+      <animateTransform attributeName="transform" type="translate" values="${-run} 0;6 0" begin="${begin}" dur="${dur}" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 1 1"/>
       <animate attributeName="opacity" values="0;0.95;0" keyTimes="0;0.7;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
     </line>`;
 
   return `
   <g>
     <title>${title}</title>
-    ${streak(98, 13, 14, "ps-cyan", "2.8s", "1.2s")}
-    ${streak(121, 9, 12, "ps-white", "3.3s", "1.2s")}
-    ${streak(144, 12, 14, "ps-violet", "3.0s", "1.2s")}
-    ${streak(172, 8, 5, "ps-gold", "3.6s", "1.2s")}
-    ${streak(195, 7, 5, "ps-cyan", "3.15s", "1.2s")}
+    ${streak(110, 13, 14, "ps-cyan", "2.8s", "1.2s")}
+    ${streak(134, 9, 12, "ps-white", "3.3s", "1.2s")}
+    ${streak(158, 12, 14, "ps-violet", "3.0s", "1.2s")}
+    ${streak(182, 8, 5, "ps-gold", "3.6s", "1.2s")}
+    ${streak(206, 7, 5, "ps-cyan", "3.15s", "1.2s")}
     <g filter="url(#portalWobble)" clip-path="url(#portalGap)">
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
       <ellipse cx="${CX}" cy="${midY}" rx="13" ry="54" class="rm-g1">
@@ -526,25 +532,29 @@ function seamDefs(sx, endX) {
       <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.06"/>
     </linearGradient>
     <linearGradient id="seamFieldGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${E}" y2="0">
-      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.16"/>
-      <stop offset="30%" stop-color="#eab308" stop-opacity="0.11"/>
-      <stop offset="55%" stop-color="#bef264" stop-opacity="0.13"/>
-      <stop offset="78%" stop-color="#a3e635" stop-opacity="0.16"/>
-      <stop offset="100%" stop-color="#84cc16" stop-opacity="0.20"/>
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.14"/>
+      <stop offset="22%" stop-color="#eab308" stop-opacity="0.15"/>
+      <stop offset="45%" stop-color="#bef264" stop-opacity="0.16"/>
+      <stop offset="62%" stop-color="#a3e635" stop-opacity="0.18"/>
+      <stop offset="67%" stop-color="#84cc16" stop-opacity="0.17"/>
+      <stop offset="84%" stop-color="#84cc16" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#84cc16" stop-opacity="0"/>
     </linearGradient>
     <linearGradient id="seamFieldGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${E}" y2="0">
-      <stop offset="0%" stop-color="#a16207" stop-opacity="0.11"/>
-      <stop offset="30%" stop-color="#ca8a04" stop-opacity="0.08"/>
-      <stop offset="55%" stop-color="#a3e635" stop-opacity="0.09"/>
-      <stop offset="78%" stop-color="#65a30d" stop-opacity="0.11"/>
-      <stop offset="100%" stop-color="#4d7c0f" stop-opacity="0.14"/>
+      <stop offset="0%" stop-color="#a16207" stop-opacity="0.20"/>
+      <stop offset="22%" stop-color="#ca8a04" stop-opacity="0.15"/>
+      <stop offset="45%" stop-color="#a3e635" stop-opacity="0.17"/>
+      <stop offset="62%" stop-color="#65a30d" stop-opacity="0.20"/>
+      <stop offset="67%" stop-color="#4d7c0f" stop-opacity="0.19"/>
+      <stop offset="84%" stop-color="#4d7c0f" stop-opacity="0.11"/>
+      <stop offset="100%" stop-color="#4d7c0f" stop-opacity="0"/>
     </linearGradient>
-    <linearGradient id="intakeTailGrad" gradientUnits="userSpaceOnUse" x1="${(sx + 10).toFixed(1)}" y1="0" x2="${(sx + 26).toFixed(1)}" y2="0">
+    <linearGradient id="intakeTailGrad" gradientUnits="userSpaceOnUse" x1="${(sx + 2.8).toFixed(1)}" y1="0" x2="${(sx + 18.8).toFixed(1)}" y2="0">
       <stop offset="0%" stop-color="#fbbf24" stop-opacity="0"/>
       <stop offset="60%" stop-color="#fbbf24" stop-opacity="0.55"/>
       <stop offset="100%" stop-color="#fde68a" stop-opacity="1"/>
     </linearGradient>
-    <linearGradient id="intakeTailGradLight" gradientUnits="userSpaceOnUse" x1="${(sx + 10).toFixed(1)}" y1="0" x2="${(sx + 26).toFixed(1)}" y2="0">
+    <linearGradient id="intakeTailGradLight" gradientUnits="userSpaceOnUse" x1="${(sx + 2.8).toFixed(1)}" y1="0" x2="${(sx + 18.8).toFixed(1)}" y2="0">
       <stop offset="0%" stop-color="#b45309" stop-opacity="0"/>
       <stop offset="60%" stop-color="#b45309" stop-opacity="0.5"/>
       <stop offset="100%" stop-color="#d97706" stop-opacity="1"/>
@@ -572,44 +582,87 @@ function seamFieldMarkup(sx, endX) {
       <animate attributeName="opacity" values="0;0.5;0.35;0" keyTimes="0;0.15;0.8;1" begin="${begin}" dur="7.2s" repeatCount="indefinite"/>
     </circle>`;
   };
-  // Gold-era motes: born at the seam, cruising toward the portal with a
-  // gentle accelerating ease. Base = faint speck resting mid-band.
-  const goldMote = (x0, y, r, begin) =>
-    `<circle cx="${(sx + x0).toFixed(1)}" cy="${y}" r="${r}" class="seam-mote" opacity="0.3">
-      <animateTransform attributeName="transform" type="translate" values="${-x0} 0;${(span - x0 - 6).toFixed(1)} 0" begin="${begin}" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.4 0 1 1"/>
-      <animate attributeName="opacity" values="0;0.7;0.45;0" keyTimes="0;0.2;0.75;1" begin="${begin}" dur="3.6s" repeatCount="indefinite"/>
-    </circle>`;
-  // Intake meteors: gold streaks with a bright head and a fading tail, born
-  // just after the seam, crossing the whole agentic-engineering band and
-  // diving INTO the portal — accelerating hard on approach (slow cruise ->
-  // sharp final rush). Drawn behind the bars. The tail gradient is
-  // userSpaceOnUse in the meteor's local coordinates, so it travels with the
-  // group. Base = faint resting meteor near the seam (frozen tableau).
-  const intake = (y, begin) => {
-    const x1 = sx + 10;
-    const x2 = x1 + 16;
-    const run = span + 12 - 10 - 16 - 2;
-    return `<g opacity="0.3">
-      <line x1="${x1.toFixed(1)}" y1="${y}" x2="${x2.toFixed(1)}" y2="${y}" class="intake-tail"/>
-      <circle cx="${x2.toFixed(1)}" cy="${y}" r="1.4" class="intake-head"/>
-      <animateTransform attributeName="transform" type="translate" values="0 0;${run.toFixed(1)} 0" begin="${begin}" dur="2.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.45 0 1 1"/>
-      <animate attributeName="opacity" values="0;0.5;1;0" keyTimes="0;0.2;0.9;1" begin="${begin}" dur="2.4s" repeatCount="indefinite"/>
+  const midY = (PLOT_TOP + PLOT_BOTTOM) / 2;
+  // Gold-era motes: born at the seam, cruising toward the portal and
+  // funnelling toward its centre. Each is a gold/lime crossfade pair so the
+  // particle's colour tracks the band beneath it (gold hands off to green
+  // mid-flight instead of snapping at the portal).
+  const goldMote = (x0, y, r, begin) => {
+    const dy = ((midY - y) * 0.55).toFixed(1);
+    const cx = (sx + x0).toFixed(1);
+    const end = (span - x0 - 6).toFixed(1);
+    return `<g>
+      <circle cx="${cx}" cy="${y}" r="${r}" class="seam-mote" opacity="0.3">
+        <animate attributeName="opacity" values="0;0.7;0.35;0;0" keyTimes="0;0.2;0.5;0.72;1" begin="${begin}" dur="3.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="${cx}" cy="${y}" r="${r}" class="seam-mote-lime" opacity="0">
+        <animate attributeName="opacity" values="0;0;0.35;0.6;0" keyTimes="0;0.35;0.55;0.8;1" begin="${begin}" dur="3.6s" repeatCount="indefinite"/>
+      </circle>
+      <animateTransform attributeName="transform" type="translate" values="${-x0} 0;${end} ${dy}" begin="${begin}" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.4 0 1 1"/>
     </g>`;
   };
+  // Intake meteors: launched FROM the seam line itself, crossing the whole
+  // agentic-engineering band and diving INTO the portal mouth, accelerating
+  // the whole way, igniting at the horizon and decaying over the final
+  // approach. The head crossfades gold->lime mid-flight; the arrival
+  // detonates a shockwave ring on the same lane at the portal (transient,
+  // base-invisible). Tail gradient is userSpaceOnUse in local coordinates,
+  // so it travels with the group.
+  const intake = (y, begin) => {
+    const x1 = sx + 2.8;
+    const x2 = x1 + 16;
+    const dy = (midY - y) * 0.8;
+    const run = endX - 7 - x2;
+    const angle = ((Math.atan2(dy, run) * 180) / Math.PI).toFixed(2);
+    const boomX = (endX - 4).toFixed(1);
+    const boomY = (y + dy).toFixed(1);
+    return `<g opacity="0.3">
+      <g transform="rotate(${angle} ${x2.toFixed(1)} ${y})">
+        <line x1="${x1.toFixed(1)}" y1="${y}" x2="${x2.toFixed(1)}" y2="${y}" class="intake-tail"/>
+        <circle cx="${x2.toFixed(1)}" cy="${y}" r="1.4" class="intake-head">
+          <animate attributeName="opacity" values="1;1;0.25" keyTimes="0;0.55;1" begin="${begin}" dur="2.4s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="${x2.toFixed(1)}" cy="${y}" r="1.4" class="intake-head-lime" opacity="0">
+          <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.55;1" begin="${begin}" dur="2.4s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+      <animateTransform attributeName="transform" type="translate" values="0 0;${run.toFixed(1)} ${dy.toFixed(1)}" begin="${begin}" dur="2.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.45 0 1 1"/>
+      <animate attributeName="opacity" values="0;0.85;1;0.85;0" keyTimes="0;0.06;0.6;0.85;1" begin="${begin}" dur="2.4s" repeatCount="indefinite"/>
+    </g>
+    <circle cx="${boomX}" cy="${boomY}" r="1.5" class="portal-boom" opacity="0">
+      <animate attributeName="r" values="1.5;1.5;9;11" keyTimes="0;0.86;0.95;1" begin="${begin}" dur="2.4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0;0.75;0" keyTimes="0;0.86;0.9;1" begin="${begin}" dur="2.4s" repeatCount="indefinite"/>
+    </circle>`;
+  };
+  // Band narrows into the portal mouth: full plot height at the seam,
+  // pinched to the portal aperture (cone INTO the portal), then a matching
+  // wash expands back out to full height past the portal and dissolves at
+  // the axis end — one gradient carries the whole run seam -> portal -> edge.
+  const mouthHalf = 52;
+  const bandPath = `M ${sx.toFixed(1)} ${PLOT_TOP} L ${endX.toFixed(1)} ${(midY - mouthHalf).toFixed(1)} L ${endX.toFixed(1)} ${(midY + mouthHalf).toFixed(1)} L ${sx.toFixed(1)} ${PLOT_BOTTOM} Z`;
+  const washPath = `M ${endX.toFixed(1)} ${(midY - mouthHalf).toFixed(1)} L ${PLOT_RIGHT} ${PLOT_TOP} L ${PLOT_RIGHT} ${PLOT_BOTTOM} L ${endX.toFixed(1)} ${(midY + mouthHalf).toFixed(1)} Z`;
   return `
-  <rect x="${sx.toFixed(1)}" y="${PLOT_TOP}" width="${span.toFixed(1)}" height="${PLOT_HEIGHT}" class="seam-field">
+  <path d="${bandPath}" class="seam-field">
     <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.3;1" begin="0s" dur="2.2s" fill="freeze"/>
     <animate attributeName="opacity" values="1;0.8;1" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
-  </rect>
-  ${drift(PLOT_LEFT + 64, sx - 8, 122, 1.0, "2.8s")}
-  ${drift(PLOT_LEFT + 120, sx - 8, 168, 0.8, "4.6s")}
-  ${drift(PLOT_LEFT + 92, sx - 8, 202, 0.9, "6.2s")}
-  ${goldMote(14, 112, 1.1, "2.8s")}
-  ${goldMote(30, 150, 0.9, "3.4s")}
-  ${goldMote(22, 192, 1.0, "3.1s")}
-  ${intake(104, "2.6s")}
-  ${intake(138, "3.4s")}
-  ${intake(184, "3.0s")}`;
+  </path>
+  <path d="${washPath}" class="seam-field">
+    <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.45;1" begin="0s" dur="2.4s" fill="freeze"/>
+    <animate attributeName="opacity" values="1;0.8;1" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
+  </path>
+  ${drift(PLOT_LEFT + 64, sx - 8, 134, 1.0, "2.8s")}
+  ${drift(PLOT_LEFT + 120, sx - 8, 182, 0.8, "4.6s")}
+  ${drift(PLOT_LEFT + 92, sx - 8, 158, 0.9, "6.2s")}
+  ${drift(PLOT_LEFT + 180, sx - 8, 110, 0.8, "3.6s")}
+  ${drift(PLOT_LEFT + 250, sx - 8, 206, 0.9, "5.4s")}
+  ${drift(PLOT_LEFT + 310, sx - 8, 134, 0.7, "7.0s")}
+  ${goldMote(32, 134, 1.1, "2.8s")}
+  ${goldMote(74, 182, 0.9, "4.0s")}
+  ${goldMote(116, 110, 1.0, "5.2s")}
+  ${goldMote(158, 206, 0.9, "6.4s")}
+  ${intake(110, "2.6s")}
+  ${intake(158, "3.4s")}
+  ${intake(206, "4.2s")}`;
 }
 
 // Mirror seam above the bars: aura, glass strip, twin gold lines, label.
@@ -840,7 +893,7 @@ function renderSVG(model) {
   </path>
   <path d="${cumLineD}" class="cum-line" pathLength="1" stroke-dasharray="1 1">
     <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.15;1" begin="0s" dur="2s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.4 0 0.2 1"/>
-    <animate attributeName="stroke-opacity" values="0.8;0.95;0.8" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-opacity" values="0.38;0.48;0.38" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
   </path>
   <circle cx="${endX.toFixed(1)}" cy="${endY.toFixed(1)}" r="3.5" class="cum-dot">
     <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.83;1" begin="0s" dur="2.3s" fill="freeze"/>
@@ -866,7 +919,7 @@ function renderSVG(model) {
   const seamIdx = rows.findIndex((r) => r.label === String(SEAM_YEAR));
   const seamX = seamIdx > 0 ? PLOT_LEFT + slot * seamIdx : null;
   const seamEnd = portalX != null ? portalX : PLOT_RIGHT;
-  const seamDefsStr = seamX != null ? seamDefs(seamX, seamEnd) : "";
+  const seamDefsStr = seamX != null ? seamDefs(seamX, PLOT_RIGHT) : "";
   const seamField = seamX != null ? seamFieldMarkup(seamX, seamEnd) : "";
   const seam = seamX != null ? seamMarkup(seamX, rows[seamIdx].label) : "";
   const rangeLabel = `${startYear}–${currentYear()}`;
@@ -938,14 +991,14 @@ function renderSVG(model) {
     .bar-glow { fill: #22d3ee; filter: url(#glow); opacity: 0.55; }
     .bar-label { opacity: 1; }
     .cum-area { fill: url(#cumGrad); }
-    .cum-line { fill: none; stroke: url(#cumLineGrad); stroke-width: 3; stroke-opacity: 0.8; stroke-linecap: round; stroke-linejoin: round; filter: url(#lineGlow); }
+    .cum-line { fill: none; stroke: url(#cumLineGrad); stroke-width: 2; stroke-opacity: 0.38; stroke-linecap: round; stroke-linejoin: round; filter: url(#lineGlow); }
     .cum-dot { fill: #a5f3fc; fill-opacity: 0.7; stroke: #22d3ee; stroke-width: 1.5; filter: url(#lineGlow); }
     .rm-glowEl { fill: url(#rmGlow); }
     .rm-g1 { fill: #4d7c0f; }
     .rm-g2 { fill: #84cc16; }
     .rm-g3 { fill: #bef264; }
-    .rm-core { fill: #a5f3fc; }
-    .rm-swirl { fill: none; stroke: #67e8f9; stroke-width: 1.3; stroke-linecap: round; opacity: 0.7; }
+    .rm-core { fill: #ecfccb; }
+    .rm-swirl { fill: none; stroke: #d9f99d; stroke-width: 1.3; stroke-linecap: round; opacity: 0.7; }
     .portal-field { fill: url(#portalFieldGrad); }
     .portal-ray { fill: none; stroke-width: 1; opacity: 0.4; }
     .portal-pulse { fill: none; stroke-width: 1.8; stroke-linecap: round; }
@@ -972,8 +1025,10 @@ function renderSVG(model) {
     .seam-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; letter-spacing: 2.5px; }
     .drift-mote { fill: #67e8f9; }
     .seam-mote { fill: #fbbf24; }
+    .seam-mote-lime { fill: #bef264; }
     .intake-tail { stroke: url(#intakeTailGrad); stroke-width: 1.6; stroke-linecap: round; }
     .intake-head { fill: #fde68a; }
+    .intake-head-lime { fill: #bef264; }
     .portal-boom { fill: none; stroke: #d9f99d; stroke-width: 1.1; }
     /* Legibility halo. An image-embedded SVG resolves prefers-color-scheme from the
        OS/browser, NOT from GitHub's theme, so the two can disagree, e.g. GitHub in
@@ -995,15 +1050,15 @@ function renderSVG(model) {
       .grid { stroke: #eaeef2; }
       .baseline { stroke: #d0d7de; }
       .panel { fill: #0b1f2a; fill-opacity: 0.025; stroke: #0b1f2a; stroke-opacity: 0.08; }
-      .cum-line { stroke: url(#cumLineGradLight); stroke-opacity: 0.75; }
+      .cum-line { stroke: url(#cumLineGradLight); stroke-opacity: 0.32; }
       .cum-area { fill: url(#cumGradLight); }
       .cum-dot { fill: #0891b2; stroke: #0e7490; }
       .rm-glowEl { fill: url(#rmGlowLight); }
       .rm-g1 { fill: #4d7c0f; }
       .rm-g2 { fill: #84cc16; }
       .rm-g3 { fill: #bef264; }
-      .rm-core { fill: #cffafe; }
-      .rm-swirl { stroke: #0e7490; }
+      .rm-core { fill: #ecfccb; }
+      .rm-swirl { stroke: #4d7c0f; }
       .portal-field { fill: url(#portalFieldGradLight); }
       .px-gold { stroke: url(#exitGoldL); }
       .px-cyan { stroke: url(#exitCyanL); }
@@ -1027,8 +1082,10 @@ function renderSVG(model) {
       .seam-text { fill: #a16207; }
       .drift-mote { fill: #0e7490; }
       .seam-mote { fill: #a16207; }
+      .seam-mote-lime { fill: #65a30d; }
       .intake-tail { stroke: url(#intakeTailGradLight); }
       .intake-head { fill: #a16207; }
+      .intake-head-lime { fill: #4d7c0f; }
       .portal-boom { stroke: #4d7c0f; }
       .headline, .sub, .value, .year, .portal-text, .seam-text { stroke: #ffffff; }
     }
