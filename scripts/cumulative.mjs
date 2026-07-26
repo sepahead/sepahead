@@ -373,6 +373,19 @@ function portalFieldMarkup(px) {
       <animateTransform attributeName="transform" type="translate" values="${-x0} 0;${(span - x0 - 8).toFixed(1)} 0" begin="${begin}" dur="${dur}" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.5 0 0.85 0.5"/>
       <animate attributeName="opacity" values="0;0.85;0.5;0" keyTimes="0;0.2;0.75;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
     </circle>`;
+  // Disintegrating waves: right-bowed wavefront arcs born at the seam that
+  // drift SLOWLY down the tunnel to the end of the x-axis, their stroke
+  // crumbling into fragments (animated dasharray) and fading as they go.
+  // Base = a faint, partially-crumbled wave train near the mouth.
+  const wave = (x0, h, cls, begin, dur) => {
+    const wx = (px + x0).toFixed(1);
+    const d = `M ${wx} ${(midY - h).toFixed(1)} Q ${(px + x0 + 16).toFixed(1)} ${midY} ${wx} ${(midY + h).toFixed(1)}`;
+    return `<path d="${d}" class="portal-wave ${cls}" pathLength="1" stroke-dasharray="0.11 0.08" opacity="0.3">
+      <animateTransform attributeName="transform" type="translate" values="0 0;${(span - x0 - 20).toFixed(1)} 0" begin="${begin}" dur="${dur}" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.3 0 0.7 1"/>
+      <animate attributeName="stroke-dasharray" values="1 0;0.28 0.05;0.04 0.15" keyTimes="0;0.45;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.5;0.32;0" keyTimes="0;0.2;0.65;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
+    </path>`;
+  };
   return `
   <g>
     <rect x="${X}" y="${PLOT_TOP}" width="${span.toFixed(1)}" height="${PLOT_HEIGHT}" class="portal-field">
@@ -385,6 +398,9 @@ function portalFieldMarkup(px) {
     ${ray(172, "px-gold", 2.6, 0.06, 3.6)}
     ${ray(195, "px-cyan", 2.35, 0.09, 2.75)}
     ${ray(218, "px-violet", 2.55, 0.07, 3.15)}
+    ${wave(10, 46, "pw-violet", "2.9s", "5.6s")}
+    ${wave(15, 38, "pw-cyan", "4.9s", "6.6s")}
+    ${wave(20, 31, "pw-gold", "6.9s", "6.0s")}
     ${mote(16, 110, 1.1, "pm-cyan", "2.8s", "2.2s")}
     ${mote(34, 133, 0.9, "pm-gold", "3.4s", "2.7s")}
     ${mote(24, 158, 1.3, "pm-violet", "3.0s", "2.4s")}
@@ -726,6 +742,10 @@ function renderSVG(model) {
     .pm-gold { fill: #fde68a; }
     .pm-cyan { fill: #a5f3fc; }
     .pm-violet { fill: #c4b5fd; }
+    .portal-wave { fill: none; stroke-width: 1.3; stroke-linecap: round; }
+    .pw-gold { stroke: #fbbf24; }
+    .pw-cyan { stroke: #22d3ee; }
+    .pw-violet { stroke: #a78bfa; }
     .portal-streak { stroke-width: 1.6; stroke-linecap: round; }
     .ps-cyan { stroke: #22d3ee; }
     .ps-white { stroke: #fef3c7; }
@@ -762,6 +782,9 @@ function renderSVG(model) {
       .pm-gold { fill: #b45309; }
       .pm-cyan { fill: #0891b2; }
       .pm-violet { fill: #7c3aed; }
+      .pw-gold { stroke: #d97706; }
+      .pw-cyan { stroke: #0891b2; }
+      .pw-violet { stroke: #7c3aed; }
       .ps-white { stroke: #b45309; }
       .ps-cyan { stroke: #0891b2; }
       .ps-violet { stroke: #7c3aed; }
