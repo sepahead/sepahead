@@ -266,25 +266,30 @@ const niceMax = (v) => {
 };
 
 // ---------------------------------------------------------------------------
-// Singularity portal: a gold warp seam drawn in the gap between the last
-// complete year and the in-progress year. Pure ornament with a story: the
-// yearly totals go near-vertical crossing that boundary, so the divider marks
-// it like an event horizon. Everything lives inside the inter-bar gap
-// (~41px), so no element ever overlaps a bar, a label or the curve's crest.
-// Same SMIL contract as the rest of the chart: the base (non-animated) state
-// IS the final state (no-SMIL surfaces show a finished portal), reveal delays
-// are keyTimes-encoded on begin="0s" animations, loops start only after the
-// reveal, and prefers-reduced-motion hides every <animate>/<animateTransform>.
+// Singularity portal: a gold event-horizon seam in the gap between the last
+// complete year and the in-progress year, fed by a left→right hyperdrive
+// wormhole. Motion language is strictly horizontal (time flows left→right in
+// this chart): a comet pulse rides the cumulative curve across the plot and
+// dives through the seam (with a flash synced to the exact crossing), nested
+// funnel rings on the LEFT contract into the horizon, and spectrum streaks
+// accelerate into the seam and are absorbed there. Nothing animates upward
+// and nothing extends right of the seam (the comet continues only along the
+// chart's own pre-existing curve). Same SMIL contract as the rest of the
+// chart: the base (non-animated) state IS the finished state (no-SMIL
+// surfaces show a complete frozen tableau), reveal delays are keyTimes-
+// encoded on begin="0s" animations, loops start only after the reveal, and
+// prefers-reduced-motion hides every <animate>/<animateTransform>.
 function portalDefs(px) {
-  // The glow filter MUST be userSpaceOnUse: a vertical line has a zero-width
-  // bounding box, so the default objectBoundingBox filter region collapses
-  // and some renderers drop the element entirely.
-  return `<linearGradient id="portalGrad" x1="0" y1="0" x2="0" y2="1">
+  // The glow filter AND the seam gradients MUST be userSpaceOnUse: a vertical
+  // line has a zero-width bounding box, so objectBoundingBox filter regions
+  // collapse and objectBoundingBox gradient paints are disabled entirely
+  // (the seam would silently not render).
+  return `<linearGradient id="portalGrad" gradientUnits="userSpaceOnUse" x1="${px.toFixed(1)}" y1="${PLOT_TOP}" x2="${px.toFixed(1)}" y2="${PLOT_BOTTOM}">
       <stop offset="0%" stop-color="#f59e0b"/>
       <stop offset="50%" stop-color="#fde68a"/>
       <stop offset="100%" stop-color="#f59e0b"/>
     </linearGradient>
-    <linearGradient id="portalGradLight" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="portalGradLight" gradientUnits="userSpaceOnUse" x1="${px.toFixed(1)}" y1="${PLOT_TOP}" x2="${px.toFixed(1)}" y2="${PLOT_BOTTOM}">
       <stop offset="0%" stop-color="#b45309"/>
       <stop offset="50%" stop-color="#f59e0b"/>
       <stop offset="100%" stop-color="#b45309"/>
@@ -302,37 +307,66 @@ function portalDefs(px) {
     <filter id="portalGlow" filterUnits="userSpaceOnUse" x="${(px - 46).toFixed(1)}" y="${PLOT_TOP - 34}" width="92" height="${PLOT_HEIGHT + 68}">
       <feGaussianBlur stdDeviation="3" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>`;
+    </filter>
+    <clipPath id="portalIntake"><rect x="0" y="0" width="${px.toFixed(1)}" height="${H}"/></clipPath>`;
 }
 
-function portalMarkup(px, fromLabel, toLabel) {
+// `comet` (optional): { d, f, y } — the cumulative curve's path data, the
+// arc-length fraction at which it crosses the seam, and the y at that
+// crossing. Drives the pulse that rides the curve and the horizon flash
+// timed to fire exactly as the pulse pierces the seam.
+function portalMarkup(px, fromLabel, toLabel, comet) {
   const X = px.toFixed(1);
   const top = PLOT_TOP;
   const bot = PLOT_BOTTOM;
+  const midY = (top + bot) / 2;
   const title = escapeXML(`${fromLabel} → ${toLabel}: singularity begins`);
 
-  // Event-horizon ripples: two faint echoes that emanate outward from the
-  // seam and fade, like expanding wavefronts. Base = resting echo lines.
-  const ripple = (side, begin) =>
-    `<line x1="${(px + side * 7).toFixed(1)}" y1="${top + 8}" x2="${(px + side * 7).toFixed(1)}" y2="${bot - 8}" class="portal-ripple" opacity="0.3">
-      <animateTransform attributeName="transform" type="translate" values="0 0;${side * 13} 0" begin="${begin}" dur="2.6s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.42;0" begin="${begin}" dur="2.6s" repeatCount="indefinite"/>
+  // Wormhole intake: nested funnel rings LEFT of the seam (clipped there),
+  // each contracting horizontally into the horizon and fading — the tunnel
+  // wall seen side-on. Base = a static nested funnel.
+  const ring = (rx, ry, cls, begin, dur) =>
+    `<ellipse cx="${X}" cy="${midY}" rx="${rx}" ry="${ry}" class="portal-ring ${cls}" opacity="0.4">
+      <animate attributeName="rx" values="${rx + 8};4" begin="${begin}" dur="${dur}" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.45 0 0.9 0.5"/>
+      <animate attributeName="opacity" values="0;0.55;0" keyTimes="0;0.45;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
+    </ellipse>`;
+
+  // Hyperdrive streaks: short spectrum dashes accelerating left→right INTO
+  // the seam, brightening on approach and vanishing exactly at the horizon
+  // (absorbed — nothing ever crosses to the right side). Rows below the
+  // neighbouring bar's top get a shorter runway so no streak ever overlaps
+  // a bar. Base = faint resting ticks just left of the seam.
+  const streak = (y, len, run, cls, begin, dur) =>
+    `<line x1="${(px - 6 - len).toFixed(1)}" y1="${y}" x2="${(px - 6).toFixed(1)}" y2="${y}" class="portal-streak ${cls}" opacity="0.35">
+      <animateTransform attributeName="transform" type="translate" values="${-run} 0;6 0" begin="${begin}" dur="${dur}" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.5 0 0.9 0.45"/>
+      <animate attributeName="opacity" values="0;0.95;0" keyTimes="0;0.7;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
     </line>`;
 
-  // Time-flow ticks: short horizontal dashes that shoot left→right THROUGH
-  // the seam, staying inside the inter-bar gap for their whole flight.
-  const tick = (y, begin, dur) =>
-    `<line x1="${(px - 16).toFixed(1)}" y1="${y}" x2="${(px - 5).toFixed(1)}" y2="${y}" class="portal-tick" opacity="0.4">
-      <animateTransform attributeName="transform" type="translate" values="-6 0;20 0" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0.85;0" keyTimes="0;0.35;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
-    </line>`;
-
-  // Sparks: embers rising along the seam. Base = faint resting motes.
-  const spark = (dx, cy, r, baseOp, begin, dur) =>
-    `<circle cx="${(px + dx).toFixed(1)}" cy="${cy}" r="${r}" class="portal-spark" opacity="${baseOp}">
-      <animate attributeName="cy" values="${bot - 8};${top + 12}" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.15;0.7;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
+  // Comet: a bright pulse riding the cumulative curve left→right through the
+  // seam, plus a horizon flash at the crossing point, keyTimes-synced to the
+  // pulse's arrival. Base = pulse frozen just short of the horizon + a small
+  // marker at the crossing (a complete still image).
+  let cometEls = "";
+  if (comet) {
+    const DASH = 0.05;
+    const s0 = Math.max(0, comet.f - 0.18); // base: frozen approaching horizon
+    const oBase = 1 - s0;
+    const dur = 4.2;
+    // Leading edge reaches the seam when the dash start has advanced to
+    // (f - DASH); with linear travel that is at cycle fraction:
+    const tStar = Math.min(0.9, Math.max(0.08, comet.f - DASH - s0));
+    const k = (v) => v.toFixed(3);
+    const flashKeys = `0;${k(tStar - 0.06)};${k(tStar)};${k(tStar + 0.1)};1`;
+    cometEls = `<path d="${comet.d}" class="portal-comet" pathLength="1" stroke-dasharray="${DASH} ${(1 - DASH).toFixed(2)}" stroke-dashoffset="${oBase.toFixed(4)}" opacity="0.95">
+      <animate attributeName="opacity" values="0;0;0.95" keyTimes="0;0.85;1" begin="0s" dur="2.8s" fill="freeze"/>
+      <animate attributeName="stroke-dashoffset" values="${(oBase + 1).toFixed(4)};${oBase.toFixed(4)}" begin="2.8s" dur="${dur}s" repeatCount="indefinite"/>
+    </path>
+    <circle cx="${X}" cy="${comet.y.toFixed(1)}" r="2.2" class="portal-flare" opacity="0.5">
+      <animate attributeName="opacity" values="0;0;0.5" keyTimes="0;0.6;1" begin="0s" dur="2.8s" fill="freeze"/>
+      <animate attributeName="r" values="2.2;2.2;7;2.6;2.2" keyTimes="${flashKeys}" begin="2.8s" dur="${dur}s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.4;0.45;1;0.5;0.4" keyTimes="${flashKeys}" begin="2.8s" dur="${dur}s" repeatCount="indefinite"/>
     </circle>`;
+  }
 
   return `
   <g>
@@ -341,22 +375,22 @@ function portalMarkup(px, fromLabel, toLabel) {
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.2s" fill="freeze"/>
       <animate attributeName="opacity" values="1;0.62;1" begin="2.8s" dur="3.6s" repeatCount="indefinite"/>
     </rect>
-    ${ripple(-1, "2.8s")}
-    ${ripple(1, "4.1s")}
-    <line x1="${X}" y1="${top}" x2="${X}" y2="${bot}" class="portal-seam" pathLength="1" stroke-dasharray="1 1">
-      <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.3;1" begin="0s" dur="2.6s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.3 0 0.2 1"/>
-      <animate attributeName="stroke-opacity" values="1;0.6;1" begin="2.8s" dur="3.6s" repeatCount="indefinite"/>
+    <g clip-path="url(#portalIntake)">
+      ${ring(24, 58, "pr-violet", "2.6s", "2.7s")}
+      ${ring(17, 50, "pr-cyan", "3.5s", "2.7s")}
+      ${ring(10, 42, "pr-gold", "4.4s", "2.7s")}
+    </g>
+    ${streak(104, 13, 14, "ps-cyan", "2.8s", "1.3s")}
+    ${streak(122, 9, 12, "ps-white", "3.3s", "1.1s")}
+    ${streak(141, 12, 14, "ps-violet", "3.0s", "1.5s")}
+    ${streak(176, 8, 5, "ps-gold", "3.6s", "1.2s")}
+    ${streak(200, 7, 5, "ps-cyan", "3.15s", "1.4s")}
+    ${cometEls}
+    <line x1="${X}" y1="${top}" x2="${X}" y2="${bot}" class="portal-seam">
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
+      <animate attributeName="stroke-width" values="0.5;0.5;3.6;2.4" keyTimes="0;0.25;0.75;1" begin="0s" dur="2.4s" fill="freeze"/>
+      <animate attributeName="stroke-opacity" values="1;0.7;1" begin="2.9s" dur="3.8s" repeatCount="indefinite"/>
     </line>
-    <line x1="${X}" y1="${top}" x2="${X}" y2="${bot}" class="portal-glint" pathLength="1" stroke-dasharray="0.16 0.84" stroke-dashoffset="0.55" opacity="0.9">
-      <animate attributeName="opacity" values="0;0;0.9" keyTimes="0;0.85;1" begin="0s" dur="2.8s" fill="freeze"/>
-      <animate attributeName="stroke-dashoffset" values="1.16;0.16" begin="2.8s" dur="2.6s" repeatCount="indefinite"/>
-    </line>
-    ${tick(106, "2.9s", "1.9s")}
-    ${tick(139, "3.7s", "2.3s")}
-    ${tick(207, "3.2s", "2.1s")}
-    ${spark(-1.5, 188, 1.6, 0.5, "2.8s", "3.1s")}
-    ${spark(1.5, 148, 1.2, 0.4, "3.9s", "3.7s")}
-    ${spark(0, 118, 1.4, 0.45, "4.7s", "3.4s")}
     <text x="${X}" y="${top - 8}" text-anchor="middle" class="portal-text">singularity begins
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.55;1" begin="0s" dur="2.6s" fill="freeze"/>
       <animate attributeName="opacity" values="1;0.75;1" begin="3.2s" dur="3.4s" repeatCount="indefinite"/>
@@ -496,15 +530,12 @@ function renderSVG(model) {
   // Catmull-Rom overshoots at flat→steep junctions (it drew a visible false
   // dip between adjacent years). F-C clamps segment slopes so the interpolant
   // preserves monotonicity while staying smooth through every exact point.
-  const smoothPath = (pts) => {
-    if (pts.length < 2)
-      return pts.length ? `M ${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}` : "";
+  const fcTangents = (pts) => {
     const n = pts.length;
-    const dx = [], dy = [], slope = [];
+    const dx = [], slope = [];
     for (let i = 0; i < n - 1; i += 1) {
       dx.push(pts[i + 1][0] - pts[i][0]);
-      dy.push(pts[i + 1][1] - pts[i][1]);
-      slope.push(dy[i] / dx[i]);
+      slope.push((pts[i + 1][1] - pts[i][1]) / dx[i]);
     }
     // Tangents: harmonic mean of neighbouring slopes when they agree in sign,
     // zero at local extrema (F-C), one-sided at the ends.
@@ -520,16 +551,59 @@ function renderSVG(model) {
         m[i] = (w1 + w2) / (w1 / slope[i - 1] + w2 / slope[i]);
       }
     }
+    return m;
+  };
+  const bezierSegs = (pts) => {
+    const m = fcTangents(pts);
+    const segs = [];
+    for (let i = 0; i < pts.length - 1; i += 1) {
+      const h = (pts[i + 1][0] - pts[i][0]) / 3;
+      segs.push([
+        pts[i],
+        [pts[i][0] + h, pts[i][1] + m[i] * h],
+        [pts[i + 1][0] - h, pts[i + 1][1] - m[i + 1] * h],
+        pts[i + 1],
+      ]);
+    }
+    return segs;
+  };
+  const smoothPath = (pts) => {
+    if (pts.length < 2)
+      return pts.length ? `M ${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}` : "";
     let d = `M ${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
-    for (let i = 0; i < n - 1; i += 1) {
-      const h = dx[i] / 3;
-      const c1x = pts[i][0] + h;
-      const c1y = pts[i][1] + m[i] * h;
-      const c2x = pts[i + 1][0] - h;
-      const c2y = pts[i + 1][1] - m[i + 1] * h;
-      d += ` C ${c1x.toFixed(1)} ${c1y.toFixed(1)} ${c2x.toFixed(1)} ${c2y.toFixed(1)} ${pts[i + 1][0].toFixed(1)} ${pts[i + 1][1].toFixed(1)}`;
+    for (const [, c1, c2, p1] of bezierSegs(pts)) {
+      d += ` C ${c1[0].toFixed(1)} ${c1[1].toFixed(1)} ${c2[0].toFixed(1)} ${c2[1].toFixed(1)} ${p1[0].toFixed(1)} ${p1[1].toFixed(1)}`;
     }
     return d;
+  };
+  // Arc-length fraction (0..1) and y where the curve first crosses x=xTarget.
+  // Must be measured by ARC LENGTH, not x, because the comet dash rides the
+  // path via pathLength="1" stroke-dashoffset, which is arc-length-based.
+  const curveCrossing = (pts, xTarget) => {
+    if (pts.length < 2) return null;
+    const bez = (a, b, c, d, t) => {
+      const u = 1 - t;
+      return u * u * u * a + 3 * u * u * t * b + 3 * u * t * t * c + t * t * t * d;
+    };
+    const STEPS = 40;
+    let len = 0, crossLen = null, crossY = null;
+    for (const [p0, c1, c2, p1] of bezierSegs(pts)) {
+      let px = p0[0], py = p0[1];
+      for (let s = 1; s <= STEPS; s += 1) {
+        const t = s / STEPS;
+        const x = bez(p0[0], c1[0], c2[0], p1[0], t);
+        const y = bez(p0[1], c1[1], c2[1], p1[1], t);
+        len += Math.hypot(x - px, y - py);
+        if (crossLen == null && x >= xTarget) {
+          crossLen = len;
+          crossY = y;
+        }
+        px = x;
+        py = y;
+      }
+    }
+    if (crossLen == null || !(len > 0)) return null;
+    return { f: crossLen / len, y: crossY };
   };
   const cumLineD = smoothPath(cumPts);
   const [endX, endY] = cumPts[cumPts.length - 1] ?? [0, 0];
@@ -559,9 +633,11 @@ function renderSVG(model) {
   const curIdx = rows.findIndex((r) => r.isCurrent);
   const portalX = curIdx > 0 ? PLOT_LEFT + slot * curIdx : null;
   const portalDefsStr = portalX != null ? portalDefs(portalX) : "";
+  const crossing = portalX != null ? curveCrossing(cumPts, portalX) : null;
+  const comet = crossing ? { d: cumLineD, f: crossing.f, y: crossing.y } : null;
   const portal =
     portalX != null
-      ? portalMarkup(portalX, rows[curIdx - 1].label, rows[curIdx].label)
+      ? portalMarkup(portalX, rows[curIdx - 1].label, rows[curIdx].label, comet)
       : "";
   const rangeLabel = `${startYear}–${currentYear()}`;
   const warningBanner = warning
@@ -631,10 +707,17 @@ function renderSVG(model) {
     .cum-line { fill: none; stroke: url(#cumLineGrad); stroke-width: 2.5; stroke-opacity: 0.3; stroke-linecap: round; stroke-linejoin: round; filter: url(#lineGlow); }
     .cum-dot { fill: #a5f3fc; fill-opacity: 0.7; stroke: #22d3ee; stroke-width: 1.5; filter: url(#lineGlow); }
     .portal-seam { stroke: url(#portalGrad); stroke-width: 2.4; stroke-linecap: round; filter: url(#portalGlow); }
-    .portal-glint { stroke: #fef3c7; stroke-width: 2.4; stroke-linecap: round; filter: url(#portalGlow); }
-    .portal-ripple { stroke: #fbbf24; stroke-width: 1; }
-    .portal-tick { stroke: #fbbf24; stroke-width: 1.4; stroke-linecap: round; }
-    .portal-spark { fill: #fde68a; }
+    .portal-ring { fill: none; stroke-width: 1.2; }
+    .pr-violet { stroke: #a78bfa; }
+    .pr-cyan { stroke: #22d3ee; }
+    .pr-gold { stroke: #fbbf24; }
+    .portal-streak { stroke-width: 1.6; stroke-linecap: round; }
+    .ps-cyan { stroke: #22d3ee; }
+    .ps-white { stroke: #fef3c7; }
+    .ps-violet { stroke: #a78bfa; }
+    .ps-gold { stroke: #fbbf24; }
+    .portal-comet { fill: none; stroke: #fde68a; stroke-width: 2.6; stroke-linecap: round; filter: url(#lineGlow); }
+    .portal-flare { fill: #fde68a; filter: url(#portalGlow); }
     .portal-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; letter-spacing: 2.5px; }
     /* Legibility halo. An image-embedded SVG resolves prefers-color-scheme from the
        OS/browser, NOT from GitHub's theme, so the two can disagree, e.g. GitHub in
@@ -659,10 +742,15 @@ function renderSVG(model) {
       .cum-area { fill: url(#cumGradLight); }
       .cum-dot { fill: #0891b2; stroke: #0e7490; }
       .portal-seam { stroke: url(#portalGradLight); }
-      .portal-glint { stroke: #f59e0b; }
-      .portal-ripple { stroke: #d97706; }
-      .portal-tick { stroke: #d97706; }
-      .portal-spark { fill: #d97706; }
+      .portal-comet { stroke: #d97706; }
+      .portal-flare { fill: #d97706; }
+      .pr-violet { stroke: #7c3aed; }
+      .pr-cyan { stroke: #0891b2; }
+      .pr-gold { stroke: #d97706; }
+      .ps-white { stroke: #b45309; }
+      .ps-cyan { stroke: #0891b2; }
+      .ps-violet { stroke: #7c3aed; }
+      .ps-gold { stroke: #d97706; }
       .portal-aura { fill: url(#portalAuraLight); }
       .portal-text { fill: #b45309; }
       .headline, .sub, .value, .year, .portal-text { stroke: #ffffff; }
@@ -673,7 +761,6 @@ function renderSVG(model) {
          the end dot visible instead of stuck at their hidden start states. */
       .cum-line { stroke-dasharray: none; }
       .cum-dot { opacity: 1; }
-      .portal-seam { stroke-dasharray: none; }
     }
   </style>
   <rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="16" class="panel"/>
