@@ -22,7 +22,6 @@ const PROFILE_ID = `${SITE_URL}#profilepage`;
 const WORK_ID = `${SITE_URL}#selected-work`;
 const AVATAR_URL = "https://github.com/sepahead.png";
 const DATE_CREATED = "2026-06-21";
-const DATE_MODIFIED = "2026-07-15";
 const MODES = new Set(["--write", "--check"]);
 const mode = process.argv[2];
 
@@ -199,7 +198,6 @@ function renderJsonLd() {
       name: "Sepehr Mahmoudian — AI/ML Engineer in Berlin",
       description: "Profile of Sepehr Mahmoudian, a Berlin-based AI/ML engineer working across agentic systems, computational neuroscience, robotics and 3D software in Rust and Python.",
       dateCreated: DATE_CREATED,
-      dateModified: DATE_MODIFIED,
       inLanguage: "en",
       isPartOf: { "@id": WEBSITE_ID },
       mainEntity: { "@id": PERSON_ID },
@@ -239,7 +237,6 @@ function renderJsonLd() {
       url: SITE_URL,
       name: "Sepehr Mahmoudian",
       dateCreated: DATE_CREATED,
-      dateModified: DATE_MODIFIED,
       inLanguage: "en",
       about: { "@id": PERSON_ID },
     },
@@ -316,7 +313,6 @@ function renderSitemap() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>${SITE_URL}</loc>
-    <lastmod>${DATE_MODIFIED}</lastmod>
   </url>
 </urlset>
 `;

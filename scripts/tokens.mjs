@@ -8,7 +8,7 @@
 // [dark, light]
 export const PALETTE = {
   ink: ["#c9d1d9", "#1f2328"],
-  muted: ["#6e7681", "#57606a"],
+  muted: ["#8b949e", "#57606a"],
   rule: ["#30363d", "#d0d7de"],
   flow: ["#e2faff", "#22d3ee"],
   accents: {

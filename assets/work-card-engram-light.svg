@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 150" width="395" height="150" role="img" aria-label="engram (14 stars): Computational-neuroscience, spiking-network and neural-modeling research. Source release is planned after publication.">
   <defs>
-    <radialGradient id="wash0" cx="100%" cy="100%" r="120%"><stop offset="0%" stop-color="#1c2530" stop-opacity="0.9"/><stop offset="60%" stop-color="#1c2530" stop-opacity="0"/></radialGradient><linearGradient id="spine0" gradientUnits="userSpaceOnUse" x1="2.5" y1="14" x2="2.5" y2="136"><stop offset="0%" stop-color="#aeb8c4"/><stop offset="100%" stop-color="#dfe7ee"/></linearGradient><linearGradient id="spine0L" gradientUnits="userSpaceOnUse" x1="2.5" y1="14" x2="2.5" y2="136"><stop offset="0%" stop-color="#5b6672"/><stop offset="100%" stop-color="#6e7a87"/></linearGradient><radialGradient id="wash1" cx="8%" cy="0%" r="120%"><stop offset="0%" stop-color="#dfe7ee" stop-opacity="0.16"/><stop offset="55%" stop-color="#dfe7ee" stop-opacity="0"/></radialGradient>
+    <radialGradient id="wash0" cx="100%" cy="100%" r="120%"><stop offset="0%" stop-color="#1c2530" stop-opacity="0.9"/><stop offset="60%" stop-color="#1c2530" stop-opacity="0"/></radialGradient><linearGradient id="spine0" gradientUnits="userSpaceOnUse" x1="2.5" y1="14" x2="2.5" y2="136"><stop offset="0%" stop-color="#aeb8c4"/><stop offset="100%" stop-color="#dfe7ee"/></linearGradient><linearGradient id="spine0L" gradientUnits="userSpaceOnUse" x1="2.5" y1="14" x2="2.5" y2="136"><stop offset="0%" stop-color="#5b6672"/><stop offset="100%" stop-color="#5b6672"/></linearGradient><radialGradient id="wash1" cx="8%" cy="0%" r="120%"><stop offset="0%" stop-color="#dfe7ee" stop-opacity="0.16"/><stop offset="55%" stop-color="#dfe7ee" stop-opacity="0"/></radialGradient>
   </defs>
   <style>
     .card       { fill: #0d1117; fill-opacity: 1; stroke: #ffffff; stroke-opacity: 0.09; stroke-width: 1; }
@@ -19,7 +19,7 @@
       .wash { display: none; }
       .desc { fill: #57606a; }
       .chip { fill: #ffffff; fill-opacity: 0.7; }
-      .c0.title { fill: #6e7a87; } .c0.rule { fill: #5b6672; } .c0.spine { stroke: #5b6672; } .c0.badge { fill: #5b6672; } .c0.chip { stroke: #5b6672; } .c0.chip-label { fill: #5b6672; } .c0.glyph-fill { fill: #5b6672; } .c0.glyph-stroke { stroke: #5b6672; } .spine-dark { display: none; } .spine-light { display: inline; }
+      .c0.title { fill: #5b6672; } .c0.rule { fill: #5b6672; } .c0.spine { stroke: #5b6672; } .c0.badge { fill: #5b6672; } .c0.chip { stroke: #5b6672; } .c0.chip-label { fill: #5b6672; } .c0.glyph-fill { fill: #5b6672; } .c0.glyph-stroke { stroke: #5b6672; } .spine-dark { display: none; } .spine-light { display: inline; }
   </style>
   <g class="card-group">
     <rect x="1" y="0" width="393" height="150" rx="14" class="card"/>

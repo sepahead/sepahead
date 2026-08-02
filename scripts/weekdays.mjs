@@ -78,6 +78,7 @@ const DAY_COLORS = [
   "#f472b6", // Sun: pink
 ];
 const WINDOW_DAYS = 500; // ~16 months, long enough to smooth out one-off weeks.
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 // Reference timezone for "today". GitHub Actions runs in UTC with no notion of
 // the viewer's local timezone, so rather than UTC we anchor "today" to the
@@ -119,10 +120,12 @@ const FRAGMENT_URL = (login, year) =>
       )}/contributions?from=${year}-01-01`;
 
 // Parse "<N> contributions on <Month> <day>." or "No contributions on …"
-// out of a <tool-tip> body. Returns 0 for "No contributions" / unparseable.
+// out of a <tool-tip> body. Unknown wording is a schema failure, not zero.
 const parseTipCount = (tipText) => {
-  const m = tipText.match(/(\d+)\s+contributions?\b/i);
-  return m ? Number(m[1]) : 0; // "No contributions …" → 0
+  if (/^\s*No contributions\b/i.test(tipText)) return 0;
+  const m = tipText.match(/([\d,]+)\s+contributions?\b/i);
+  if (!m) throw new Error(`unrecognised contribution tool-tip: ${tipText.slice(0, 120)}`);
+  return Number(m[1].replace(/,/g, ""));
 };
 
 // IMPORTANT: the fragment lists days in ROW-MAJOR order: all Sundays first
@@ -144,33 +147,28 @@ async function parseFragment(html) {
     throw new Error("no data-date cells found in contributions fragment");
   }
 
-  // Defensive: if the counts and dates don't line up 1:1 (GitHub changes
-  // markup), fall back to data-level buckets so the chart still renders.
-  const useTips = tipBlocks.length === dates.length;
-  if (!useTips) {
-    console.warn(
-      `[weekdays] tool-tip count (${tipBlocks.length}) != date count (${dates.length}); ` +
-        `markup may have changed; falling back to data-level buckets (0..4 only, less precise).`
+  // A data-level is only a relative 0..4 intensity bucket. Treating it as an
+  // exact count would publish invented totals, so fail closed on any mismatch.
+  if (tipBlocks.length !== dates.length) {
+    throw new Error(
+      `tool-tip count (${tipBlocks.length}) != date count (${dates.length}); ` +
+        "contributions markup cannot be paired safely"
     );
   }
-  const LEVEL_MIDPOINTS = [0, 1, 3, 7, 12];
-  const levels = [...html.matchAll(/data-level="(\d)"/g)].map((m) => Number(m[1]));
 
   return dates.map((date, i) => {
     const d = new Date(date + "T00:00:00Z");
     return {
       date,
-      count: useTips
-        ? parseTipCount(tipBlocks[i] ?? "")
-        : LEVEL_MIDPOINTS[levels[i]] ?? 0,
+      count: parseTipCount(tipBlocks[i]),
       weekday: Number.isNaN(d.getTime()) ? -1 : toMonFirst(d.getUTCDay()),
-      precise: useTips,
+      precise: true,
     };
   });
 }
 
-async function fetchFragmentHtml(login, year) {
-  const res = await fetch(FRAGMENT_URL(login, year), {
+async function fetchFragmentHtml(login, year, fetchImpl = globalThis.fetch) {
+  const res = await fetchImpl(FRAGMENT_URL(login, year), {
     headers: {
       // A real browser UA: github.com sometimes varies markup for bots, and a
       // UA also avoids any bot-throttle heuristics. No auth needed; this is a
@@ -193,14 +191,14 @@ async function fetchFragmentHtml(login, year) {
 // year's ?from=YYYY-01-01 fragment to extend coverage backwards. Each fragment
 // covers a distinct date span, so concatenation never double-counts; aggregate()
 // trims anything outside the window by exact date.
-async function fetchDailyCounts(login) {
+async function fetchDailyCounts(login, fetchImpl = globalThis.fetch) {
   // "Today" in the reference timezone (Europe/Berlin), not UTC.
   const today = tzDateParts();
   const currentYear = today.year;
   // Earliest date the window could touch (anchored to the Berlin calendar day).
   const earliest = new Date(
     Date.UTC(today.year, today.month - 1, today.day) -
-      WINDOW_DAYS * 24 * 60 * 60 * 1000
+      (WINDOW_DAYS - 1) * DAY_MS
   );
   const years = new Set([currentYear]);
   for (let y = earliest.getUTCFullYear(); y < currentYear; y += 1) {
@@ -214,7 +212,11 @@ async function fetchDailyCounts(login) {
   for (const y of ordered) {
     // Current year → default fragment (rolling window ending today); prior
     // years → ?from=YYYY-01-01 (full calendar year).
-    const html = await fetchFragmentHtml(login, y === currentYear ? undefined : y);
+    const html = await fetchFragmentHtml(
+      login,
+      y === currentYear ? undefined : y,
+      fetchImpl
+    );
     parts.push(...(await parseFragment(html)));
   }
   return parts;
@@ -247,7 +249,9 @@ function aggregate(daily) {
     .sort();
   const newest = allDates[allDates.length - 1];
   const newestMs = newest ? Date.parse(newest + "T00:00:00Z") : Date.now();
-  const cutoffMs = newestMs - WINDOW_DAYS * 24 * 60 * 60 * 1000;
+  // The newest day is included, so subtract N - 1 days for an exact N-day
+  // inclusive window. Subtracting N included 501 cells while labelling it 500.
+  const cutoffMs = newestMs - (WINDOW_DAYS - 1) * DAY_MS;
 
   const weekdayTotal = new Array(7).fill(0);
   let used = 0;
@@ -276,7 +280,6 @@ function aggregate(daily) {
     if (Number.isNaN(t) || t > newestMs) continue;
     byDate.set(cell.date, cell.count);
   }
-  const DAY_MS = 24 * 60 * 60 * 1000;
   let streak = 0;
   let cursor = newestMs;
   // If the newest day is empty, begin from the previous day.
@@ -301,27 +304,7 @@ function aggregate(daily) {
 }
 
 // ---------------------------------------------------------------------------
-// 3. No-data placeholder (still valid SVG so the workflow artifact commits).
-// ---------------------------------------------------------------------------
-function placeholder(errorMessage) {
-  const fallback =
-    "Live contribution data could not be fetched: the github.com contributions fragment failed. Retry on the next daily cron.";
-  const warning = errorMessage
-    ? `Live contribution data could not be fetched: ${errorMessage}`
-    : fallback;
-  return {
-    perDay: DAY_LABELS.map((label) => ({ label, total: 0 })),
-    peakTotal: 0,
-    grandTotal: 0,
-    streak: 0,
-    windowDays: WINDOW_DAYS,
-    cellsUsed: 0,
-    warning,
-  };
-}
-
-// ---------------------------------------------------------------------------
-// 4. Render SVG: a percentage DONUT chart.
+// 3. Render SVG: a percentage DONUT chart.
 //    Layout: title/subtitle top; donut centered-left; legend right; caption.
 //    Each weekday is an annular slice ∝ its % share of the 500-day total.
 // ---------------------------------------------------------------------------
@@ -557,26 +540,39 @@ function renderSVG(model) {
 }
 
 // ---------------------------------------------------------------------------
-// 5. Pipeline.
+// 4. Pipeline.
 // ---------------------------------------------------------------------------
+async function loadModel(login = USERNAME, fetchImpl = globalThis.fetch) {
+  const daily = await fetchDailyCounts(login, fetchImpl);
+  console.log(
+    `[weekdays] parsed ${daily.length} day cells. precise=${daily.every((d) => d.precise)}`
+  );
+  const model = aggregate(daily);
+  if (model.cellsUsed !== WINDOW_DAYS) {
+    throw new Error(
+      `expected ${WINDOW_DAYS} distinct daily cells, parsed ${model.cellsUsed}; ` +
+        "refusing to publish a partial chart"
+    );
+  }
+  if (!(model.grandTotal > 0)) {
+    throw new Error(
+      "parsed 0 total contributions, likely a contributions-page markup change; " +
+        "refusing to publish a blank chart"
+    );
+  }
+  console.log(
+    `[weekdays] built ${model.perDay.length}-bar model over last ${model.windowDays} days ` +
+      `(${model.cellsUsed} cells summed); total=${model.grandTotal}; peak=${model.peakTotal}.`
+  );
+  return model;
+}
+
 async function main() {
   console.log(`[weekdays] fetching contributions fragment for ${USERNAME}…`);
-  let model;
-  try {
-    const daily = await fetchDailyCounts(USERNAME);
-    console.log(
-      `[weekdays] parsed ${daily.length} day cells. precise=${daily.every((d) => d.precise)}`
-    );
-    model = aggregate(daily);
-    console.log(
-      `[weekdays] built ${model.perDay.length}-bar model over last ${model.windowDays} days ` +
-        `(${model.cellsUsed} cells summed); total=${model.grandTotal}; peak=${model.peakTotal}.`
-    );
-  } catch (err) {
-    const msg = String(err?.message ?? err);
-    console.warn(`[weekdays] failed (reason below); using placeholder: ${msg}`);
-    model = placeholder(msg);
-  }
+  // Fetch and parse completely before touching the committed assets. A
+  // transient HTTP failure or markup change must leave the last known-good
+  // charts in place and fail the workflow instead of publishing a placeholder.
+  const model = await loadModel();
 
   const svg = renderSVG(model);
   mkdirSync(dirname(OUT_PATH), { recursive: true });
@@ -584,7 +580,20 @@ async function main() {
   console.log(`[weekdays] wrote ${OUT_PATH} (${svg.length} bytes)`);
 }
 
-main().catch((err) => {
-  console.error("[weekdays] FATAL:", err?.message ?? err);
-  process.exit(1);
-});
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+  main().catch((err) => {
+    console.error("[weekdays] FATAL:", err?.message ?? err);
+    process.exit(1);
+  });
+}
+
+export {
+  WINDOW_DAYS,
+  aggregate,
+  fetchDailyCounts,
+  fetchFragmentHtml,
+  loadModel,
+  parseFragment,
+  parseTipCount,
+  renderSVG,
+};

@@ -19,7 +19,7 @@
       .wash { display: none; }
       .desc { fill: #57606a; }
       .chip { fill: #ffffff; fill-opacity: 0.7; }
-      .c0.title { fill: #0d9488; } .c0.rule { fill: #0d9488; } .c0.spine { stroke: #0d9488; } .c0.badge { fill: #0d9488; } .c0.chip { stroke: #0d9488; } .c0.chip-label { fill: #0d9488; } .c0.glyph-fill { fill: #0d9488; } .c0.glyph-stroke { stroke: #0d9488; }
+      .c0.title { fill: #0f766e; } .c0.rule { fill: #0f766e; } .c0.spine { stroke: #0f766e; } .c0.badge { fill: #0f766e; } .c0.chip { stroke: #0f766e; } .c0.chip-label { fill: #0f766e; } .c0.glyph-fill { fill: #0f766e; } .c0.glyph-stroke { stroke: #0f766e; }
   </style>
   <g class="card-group">
     <rect x="1" y="0" width="393" height="150" rx="14" class="card"/>

@@ -5,7 +5,7 @@
     /* Theme colors mirror assets/weekdays.svg so the page reads as one system. */
     .wordmark { font: 700 40px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #22d3ee; letter-spacing: -1px; }
     .role     { font: 500 20px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; }
-    .meta     { font: 400 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6e7681; }
+    .meta     { font: 400 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
     .underline-base { stroke: #30363d; stroke-width: 2; fill: none; }
     /* All three rotating lines share one 15s/3-slot clock and the SAME
        transition, a terminal "decrypt" type-on reveal (left-to-right) with a

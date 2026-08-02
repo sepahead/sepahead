@@ -63,8 +63,12 @@ const sweepFwd = sweepDefs("sweepFwd", {
 });
 
 const railY = H - 22;
+const aria =
+  "Agentic stack manifest: the agents and environment I build with. " +
+  AGENTS.map((agent) => `${agent.name} (${agent.role}, ${agent.note})`).join("; ") +
+  ". The loop never sleeps.";
 
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Agentic stack manifest: the agents and environment I build with. Ghostty (terminal, GPU-native); herdr (multiplexer, agent herd); OMP (orchestrator platform, Pi upgraded with IDE wired in); Devin (harness, long-horizon); Zed (editor, collaborative IDE). The loop never sleeps.">
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
   <title>Agents manifest</title>
   <defs>${sweepFwd}</defs>
   <style>

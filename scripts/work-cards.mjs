@@ -10,10 +10,9 @@
 // reduced-motion safe, zero deps.
 //
 // Live star counts: with a token (GitHub Actions provides GITHUB_TOKEN) each
-// public repo's stargazerCount is refreshed; the baked-in `stars` in data.mjs
-// is the no-token fallback. Phase and dataset cards keep their truthful status
-// badge instead. Run by the work-cards.yml cron; a local run without a token
-// uses the fallback. Run: `node scripts/work-cards.mjs`.
+// public repo's stargazerCount is refreshed. Without one, the last published
+// card is the fallback, then data.mjs for a first generation. Phase and dataset
+// cards keep their truthful status badge. Run: `node scripts/work-cards.mjs`.
 
 import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { writeThemedPair } from "./theme-split.mjs";
@@ -31,9 +30,28 @@ const projects = PROJECTS;
 // token just uses the fallback.
 // ---------------------------------------------------------------------------
 async function hydrateStars(list) {
+  // Seed from the last published cards before consulting the network. The
+  // baked-in data is intentionally only a first-generation fallback and can
+  // lag the scheduled live counts.
+  for (const p of list) {
+    if (p.private || p.phase || p.dataset || !p.repo) continue;
+    try {
+      const committed = readFileSync(
+        resolve(ASSETS_DIR, `work-card-${p.slug}-dark.svg`),
+        "utf8"
+      ).match(/class="badge c0">([\d,]+)<\/text>/);
+      if (committed) {
+        const published = Number(committed[1].replace(/,/g, ""));
+        if (Number.isFinite(published)) p.stars = published;
+      }
+    } catch {
+      // First generation: no published card yet; data.mjs remains the fallback.
+    }
+  }
+
   const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN || "";
   if (!token) {
-    console.warn("[work-cards] no token; using baked-in star counts.");
+    console.warn("[work-cards] no token; using published/baked-in star counts.");
     return;
   }
   for (const p of list) {
@@ -57,7 +75,10 @@ async function hydrateStars(list) {
         p.stars = json.stargazers_count;
       }
     } catch (e) {
-      console.warn(`[work-cards] star fetch failed for ${p.repo} (${e.message}); keeping ${p.stars}.`);
+      throw new Error(
+        `[work-cards] star fetch failed for ${p.repo} (${e.message}); ` +
+          "refusing to overwrite published counts"
+      );
     }
   }
 }
@@ -98,10 +119,18 @@ async function hydrateDownloads(list) {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json();
       if (typeof json.downloadsAllTime === "number") {
-        if (json.downloadsAllTime !== p.downloads) {
-          console.log(`[work-cards] ${p.hf}: ${p.downloads} -> ${json.downloadsAllTime} all-time downloads`);
+        const floor = p.downloads ?? 0;
+        if (json.downloadsAllTime < floor) {
+          console.warn(
+            `[work-cards] ${p.hf}: API returned ${json.downloadsAllTime} below ` +
+              `the published all-time floor ${floor}; keeping ${floor}.`
+          );
+        } else if (json.downloadsAllTime !== floor) {
+          console.log(
+            `[work-cards] ${p.hf}: ${floor} -> ${json.downloadsAllTime} all-time downloads`
+          );
+          p.downloads = json.downloadsAllTime;
         }
-        p.downloads = json.downloadsAllTime;
       }
     } catch (e) {
       console.warn(`[work-cards] HF downloads fetch failed for ${p.hf} (${e.message}); keeping ${p.downloads}.`);

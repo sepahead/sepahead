@@ -12,12 +12,12 @@
     .spine { stroke: #a78bfa; stroke-width: 4; stroke-linecap: round; }
     .prompt{ font: 600 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #a78bfa; }
     .cmd   { font: 600 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; }
-    .arg, .flag { font: 600 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6e7681; }
+    .arg, .flag { font: 600 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
     .val, .root { font: 600 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #a78bfa; }
     .branch{ stroke: #a78bfa; stroke-opacity: 0.55; stroke-width: 1.4; fill: none; stroke-linecap: round; }
     .name  { font: 600 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; }
     .badge { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #a78bfa; }
-    .note  { font: 400 12.5px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6e7681; }
+    .note  { font: 400 12.5px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
     .rail  { stroke: #30363d; stroke-width: 1; }
     .flow  { fill: none; stroke: #e2faff; stroke-width: 2.4; stroke-dasharray: 1.5 9; stroke-linecap: round; opacity: 0.9; }
     .cursor{ fill: #a78bfa; animation: curblink 1s steps(1) infinite; }

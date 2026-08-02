@@ -12,7 +12,7 @@
 // carries the real click row). Theme-adaptive, reduced-motion safe, zero deps.
 // Run: `node scripts/repo-tree.mjs`.
 
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { writeThemedPair } from "./theme-split.mjs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -22,12 +22,31 @@ import { REPOS } from "./data.mjs";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT = resolve(__dirname, "..", "assets", "repo-tree.svg");
 
-// Live badge refresh (mirrors work-cards.mjs). With a token, read each badged
-// repo's current star/fork count; baked-in `count` is the no-token fallback.
+// Live badge refresh (mirrors work-cards.mjs). Seed from the last published
+// tree, then use authenticated live counts when available. data.mjs is only the
+// first-generation fallback.
 async function hydrateBadges(list) {
+  try {
+    const committed = readFileSync(
+      resolve(__dirname, "..", "assets", "repo-tree-dark.svg"),
+      "utf8"
+    );
+    const published = new Map(
+      [...committed.matchAll(
+        /class="name">([^<]+)<\/text><text[^>]*class="badge">(?:&#9733;|forks )([\d,]+)<\/text>/g
+      )].map((match) => [match[1], Number(match[2].replace(/,/g, ""))])
+    );
+    for (const r of list) {
+      const count = published.get(r.name);
+      if (Number.isFinite(count)) r.count = count;
+    }
+  } catch {
+    // First generation: no published tree yet; data.mjs remains the fallback.
+  }
+
   const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN || "";
   if (!token) {
-    console.warn("[repo-tree] no token; using baked-in badge counts.");
+    console.warn("[repo-tree] no token; using published/baked-in badge counts.");
     return;
   }
   for (const r of list) {
@@ -41,7 +60,10 @@ async function hydrateBadges(list) {
       const live = r.metric === "forks" ? j.forks_count : j.stargazers_count;
       if (typeof live === "number") r.count = live;
     } catch (e) {
-      console.warn(`[repo-tree] ${r.metric} fetch failed for ${r.repo} (${e.message}); keeping ${r.count}.`);
+      throw new Error(
+        `[repo-tree] ${r.metric} fetch failed for ${r.repo} (${e.message}); ` +
+          "refusing to overwrite published counts"
+      );
     }
   }
 }

@@ -53,20 +53,21 @@
     -webkit-font-smoothing: antialiased;
   }
   main { max-width: 720px; margin: 0 auto; }
-  a { color: #22d3ee; text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  .prompt { color: #6e7681; }
+  a { color: #22d3ee; text-decoration: underline; text-underline-offset: .16em; text-decoration-thickness: .08em; }
+  a:hover { text-decoration-thickness: .14em; }
+  a:focus-visible, summary:focus-visible { outline: 2px solid #fbbf24; outline-offset: 3px; border-radius: 2px; }
+  .prompt { color: #8b949e; }
   h1 { font-size: 30px; letter-spacing: .5px; margin: 0 0 4px; }
   .role { color: #a78bfa; font-weight: 600; }
-  .loc { color: #6e7681; }
+  .loc { color: #8b949e; }
   .accent { height: 2px; margin: 18px 0 2px; border-radius: 2px;
             background: linear-gradient(90deg, #22d3ee, #a78bfa 55%, rgba(167,139,250,0)); }
   .lede { margin: 22px 0 30px; }
   h2 {
     font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
-    color: #6e7681; margin: 34px 0 12px; font-weight: 600;
+    color: #8b949e; margin: 34px 0 12px; font-weight: 600;
   }
-  h2::before { content: "// "; opacity: .8; }
+  h2 .syntax { opacity: .8; }
   ul { list-style: none; margin: 0; padding: 0; }
   li { margin: 11px 0; }
   .tags { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -76,15 +77,16 @@
   }
   .proj b { color: #c9d1d9; font-weight: 600; }
   .proj span { color: #8b949e; }
-  .priv { color: #6e7681; font-size: 12px; border: 1px solid #30363d; border-radius: 4px; padding: 0 5px; margin-left: 6px; }
+  .priv { color: #8b949e; font-size: 12px; border: 1px solid #30363d; border-radius: 4px; padding: 0 5px; margin-left: 6px; }
   details { margin: 10px 0; border-top: 1px solid #21262d; padding-top: 10px; }
   summary { cursor: pointer; color: #c9d1d9; font-weight: 600; }
   details p { color: #8b949e; margin: 8px 0 0; }
   .links { display: flex; flex-wrap: wrap; gap: 18px; }
-  footer { margin-top: 44px; color: #6e7681; font-size: 12.5px; }
+  footer { margin-top: 44px; color: #8b949e; font-size: 12.5px; }
   @media (prefers-color-scheme: light) {
     body { background: #ffffff; color: #1f2328; }
     a { color: #0969da; }
+    a:focus-visible, summary:focus-visible { outline-color: #8250df; }
     .prompt, .loc, h2, .proj span, .priv, footer, details p { color: #57606a; }
     .role { color: #7c3aed; }
     .proj b, summary { color: #1f2328; }
@@ -106,7 +108,6 @@
       "name": "Sepehr Mahmoudian — AI/ML Engineer in Berlin",
       "description": "Profile of Sepehr Mahmoudian, a Berlin-based AI/ML engineer working across agentic systems, computational neuroscience, robotics and 3D software in Rust and Python.",
       "dateCreated": "2026-06-21",
-      "dateModified": "2026-07-15",
       "inLanguage": "en",
       "isPartOf": {
         "@id": "https://sepahead.github.io/sepahead/#website"
@@ -200,7 +201,6 @@
       "url": "https://sepahead.github.io/sepahead/",
       "name": "Sepehr Mahmoudian",
       "dateCreated": "2026-06-21",
-      "dateModified": "2026-07-15",
       "inLanguage": "en",
       "about": {
         "@id": "https://sepahead.github.io/sepahead/#person"
@@ -538,7 +538,7 @@
 <body>
 <main>
   <header>
-    <h1><span class="prompt">~/ </span>Sepehr Mahmoudian</h1>
+    <h1><span class="prompt" aria-hidden="true">~/ </span>Sepehr Mahmoudian</h1>
     <div><span class="role">AI/ML Engineer</span> <span class="loc">· Berlin, Germany · GitHub member since 2014</span></div>
     <div class="accent"></div>
   </header>
@@ -549,7 +549,7 @@
     information theory, neurorobotics and 3D vision. Mostly Rust and Python.
   </p>
 
-  <h2>Focus</h2>
+  <h2><span class="syntax" aria-hidden="true">// </span>Focus</h2>
   <div class="tags">
     <span class="tag">Agentic engineering</span>
     <span class="tag">Continual learning</span>
@@ -567,7 +567,7 @@
     <span class="tag">Python</span>
   </div>
 
-  <h2>Selected work</h2>
+  <h2><span class="syntax" aria-hidden="true">// </span>Selected work</h2>
   <!-- BEGIN GENERATED:selected-work:html -->
 <ul aria-label="Selected work">
     <li class="proj" id="work-engram"><a href="https://github.com/sepahead/engram"><b>engram</b></a> <span>: Engram Neural Modeling Labs is a public placeholder for computational-neuroscience, spiking-network and neural-modeling experiments; its repository says the code will be open-sourced after publication.</span></li>
@@ -585,14 +585,14 @@
   </ul>
 <!-- END GENERATED:selected-work:html -->
 
-  <h2>Writing &amp; research</h2>
+  <h2><span class="syntax" aria-hidden="true">// </span>Writing &amp; research</h2>
   <ul>
     <li class="proj"><a href="https://doi.org/10.5281/zenodo.3885793"><b>[Re] Measures for investigating the contextual modulation of information transmission</b></a> <span>: ReScience C 6(3), 2020 · <a href="https://github.com/sepahead/mahmoudian-2020-rescience">reproducibility repository</a>.</span></li>
     <li class="proj"><a href="https://scholar.google.com/citations?user=t3PSg8kAAAAJ"><b>Google Scholar</b></a> <span>: publications.</span></li>
     <li class="proj"><a href="https://substack.com/@torusprime"><b>Substack</b></a> <span>: notes &amp; essays.</span></li>
   </ul>
 
-  <h2>FAQ</h2>
+  <h2><span class="syntax" aria-hidden="true">// </span>FAQ</h2>
   <details>
     <summary>Who is Sepehr Mahmoudian?</summary>
     <p>An AI/ML engineer based in Berlin, Germany. He builds agentic systems and works across continual learning, knowledge graphs and RAG, with a background in computational neuroscience, information theory, neurorobotics and 3D vision. GitHub member since 2014.</p>
@@ -614,7 +614,7 @@
     <p>Berlin, Germany. By email at <a href="mailto:sepmhn@gmail.com">sepmhn@gmail.com</a>, or via the links below.</p>
   </details>
 
-  <h2>Elsewhere</h2>
+  <h2><span class="syntax" aria-hidden="true">// </span>Elsewhere</h2>
   <nav class="links" aria-label="External profiles and contact">
     <a href="https://github.com/sepahead">GitHub</a>
     <a href="https://www.linkedin.com/in/sepehr-mahmoudian-99367516/">LinkedIn</a>

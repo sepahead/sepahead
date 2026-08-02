@@ -1,19 +1,19 @@
+# macOS Finder metadata
+.DS_Store
 
 # local working clone of sepahead/melkor, not part of the profile repo
 /melkor/
 
-# Node tooling cruft (this repo is zero-dependency, hand-built SVGs). A stray
-# mermaid-cli experiment left these behind; ignore so they can never be staged.
-/node_modules/
-/package.json
-/package-lock.json
+# Installed Node dependencies are local build artifacts. Package manifests are
+# intentionally not ignored so future tooling changes cannot be hidden.
+node_modules/
 
 # scratch render/screenshot artifacts from local SVG previews
 /preview.html
 /cxzoom.html
-/*.png
 
 # local AI-tool session/config dirs, machine-specific
 /.claude/
+/.devin/
 /.playwright-mcp/
 /.qoder/

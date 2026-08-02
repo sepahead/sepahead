@@ -6,14 +6,13 @@ on:
     paths:
       - "README.md"
       - "docs/**"
-      - "scripts/data.mjs"
-      - "scripts/sync-selected-work.mjs"
-      - "scripts/work-cards.mjs"
-      - "scripts/work-graph.mjs"
-      - "scripts/section-titles.mjs"
-      - "scripts/theme-split.mjs"
-      - "scripts/tokens.mjs"
+      - "scripts/**"
       - "pics/crebain-logo.png"
+      - "assets/agents-*.svg"
+      - "assets/connect-*.svg"
+      - "assets/rail-*.svg"
+      - "assets/repo-tree-*.svg"
+      - "assets/social-*.svg"
       - "assets/work-card-*.svg"
       - "assets/work-graph-*.svg"
       - "assets/title-*.svg"
@@ -27,26 +26,26 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: "24"
 
       - name: Check source syntax and synchronized content
         run: |
-          node --check scripts/data.mjs
-          node --check scripts/sync-selected-work.mjs
-          node --check scripts/work-cards.mjs
-          node --check scripts/work-graph.mjs
-          node --check scripts/section-titles.mjs
-          node --check scripts/theme-split.mjs
-          node --check scripts/tokens.mjs
+          for script in scripts/*.mjs; do node --check "$script"; done
+          node --test scripts/*.test.mjs
           node scripts/sync-selected-work.mjs --check
 
       - name: Check deterministic generated SVGs
         run: |
+          node scripts/agents.mjs
+          node scripts/connect.mjs
+          node scripts/repo-tree.mjs
+          node scripts/socials.mjs
+          node scripts/toolbox-rails.mjs
           node scripts/work-graph.mjs
           node scripts/section-titles.mjs
-          git add --intent-to-add assets/work-graph-*.svg assets/title-*.svg
-          git diff --exit-code -- assets/work-graph-*.svg assets/title-*.svg
+          git add --intent-to-add assets/agents-*.svg assets/connect-*.svg assets/rail-*.svg assets/repo-tree-*.svg assets/social-*.svg assets/work-graph-*.svg assets/title-*.svg
+          git diff --exit-code -- assets/agents-*.svg assets/connect-*.svg assets/rail-*.svg assets/repo-tree-*.svg assets/social-*.svg assets/work-graph-*.svg assets/title-*.svg

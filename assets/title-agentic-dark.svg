@@ -11,10 +11,10 @@
   </defs>
   <style>
     .idx    { font: 700 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #34d399; letter-spacing: 1px; }
-    .prompt { font: 600 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6e7681; }
+    .prompt { font: 600 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
     .caret  { fill: #34d399; }
     .label  { font: 700 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; letter-spacing: 4px; }
-    .cap    { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6e7681; letter-spacing: 2px; }
+    .cap    { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; letter-spacing: 2px; }
     .spine  { stroke: #34d399; stroke-width: 4; stroke-linecap: round; }
     .rule   { stroke: #30363d; stroke-width: 1; }
     .cursor { fill: #34d399; animation: curblink 1s steps(1) 1.2s infinite; }

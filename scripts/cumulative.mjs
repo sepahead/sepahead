@@ -97,13 +97,15 @@ const FRAGMENT_URL = (login, year) =>
 
 // Parse "<N> contributions on <Month> <day>." for the fallback path.
 const parseTipCount = (tipText) => {
-  const m = tipText.match(/(\d+)\s+contributions?\b/i);
-  return m ? Number(m[1]) : 0;
+  if (/^\s*No contributions\b/i.test(tipText)) return 0;
+  const m = tipText.match(/([\d,]+)\s+contributions?\b/i);
+  if (!m) throw new Error(`unrecognised contribution tool-tip: ${tipText.slice(0, 120)}`);
+  return Number(m[1].replace(/,/g, ""));
 };
 
 
-async function fetchYearTotal(login, year) {
-  const res = await fetch(FRAGMENT_URL(login, year), {
+async function fetchYearTotal(login, year, fetchImpl = globalThis.fetch) {
+  const res = await fetchImpl(FRAGMENT_URL(login, year), {
     headers: {
       "User-Agent":
         "Mozilla/5.0 (compatible; sepahead-profile-cumulative-chart/1.0)",
@@ -119,8 +121,14 @@ async function fetchYearTotal(login, year) {
   const html = await res.text();
 
   // Primary: the embedded <h2> "... contributions in YYYY" total.
-  const h2 = html.match(/([\d,]+)\s+contributions\s+in\s+\d{4}/i);
+  const h2 = html.match(/([\d,]+)\s+contributions?\s+in\s+(\d{4})/i);
   if (h2) {
+    const responseYear = Number(h2[2]);
+    if (responseYear !== year) {
+      throw new Error(
+        `requested contribution year ${year}, response reported ${responseYear}`
+      );
+    }
     return { year, total: Number(h2[1].replace(/,/g, "")), source: "h2" };
   }
 
@@ -128,6 +136,11 @@ async function fetchYearTotal(login, year) {
   const tipBlocks = [
     ...html.matchAll(/<tool-tip[^>]*>([\s\S]*?)<\/tool-tip>/g),
   ].map((m) => m[1].trim());
+  if (tipBlocks.length === 0) {
+    throw new Error(
+      `contributions fragment for ${year} contained neither a yearly total nor daily tool-tips`
+    );
+  }
   const total = tipBlocks.reduce((s, t) => s + parseTipCount(t), 0);
   console.warn(
     `[cumulative] <h2> total missing for ${year}; summed ${tipBlocks.length} tool-tips → ${total}.`
@@ -135,10 +148,15 @@ async function fetchYearTotal(login, year) {
   return { year, total, source: "tooltip-sum" };
 }
 
-async function fetchYearTotals(login, startYear, endYear) {
+async function fetchYearTotals(
+  login,
+  startYear,
+  endYear,
+  fetchImpl = globalThis.fetch
+) {
   const out = [];
   for (let year = startYear; year <= endYear; year += 1) {
-    out.push(await fetchYearTotal(login, year));
+    out.push(await fetchYearTotal(login, year, fetchImpl));
   }
   return out; // ascending by year
 }
@@ -213,24 +231,7 @@ function buildModel(years) {
 }
 
 // ---------------------------------------------------------------------------
-// 3. No-data placeholder (still valid SVG so the workflow artifact commits).
-// ---------------------------------------------------------------------------
-function placeholder(errorMessage) {
-  const warning = errorMessage
-    ? `Live contribution data could not be fetched: ${errorMessage}`
-    : "Live contribution data could not be fetched.";
-  return {
-    rows: [],
-    peak: 0,
-    avgGrowthPct: null,
-    cumulative: 0,
-    startYear: START_YEAR,
-    warning,
-  };
-}
-
-// ---------------------------------------------------------------------------
-// 4. Render SVG.
+// 3. Render SVG.
 //    Layout: headline total top-left; a bar per year; faint gridlines.
 //    Bars: vertical cyan gradient, glowing + pulsing peak, staggered draw-in.
 // ---------------------------------------------------------------------------
@@ -1333,41 +1334,46 @@ function renderSVG(model) {
 }
 
 // ---------------------------------------------------------------------------
-// 5. Pipeline.
+// 4. Pipeline.
 // ---------------------------------------------------------------------------
+async function loadModel(
+  login = USERNAME,
+  fetchImpl = globalThis.fetch,
+  end = currentYear()
+) {
+  const years = await fetchYearTotals(
+    login,
+    START_YEAR,
+    end,
+    fetchImpl
+  );
+  const summary = years.map((y) => `${y.year}=${y.total}`).join(" ");
+  console.log(`[cumulative] ${summary}`);
+  const model = buildModel(years);
+  console.log(
+    `[cumulative] ${model.rows.length} bars; cumulative=${model.cumulative}; peak=${model.peak}; avgGrowth=${model.avgGrowthPct?.toFixed(1)}%/yr (sources: ${years
+      .map((y) => `${y.year}:${y.source}`)
+      .join(", ")}).`
+  );
+  // Silent-zero guard: this profile always has thousands of contributions, so
+  // a parsed total of 0 means GitHub changed both known markup forms.
+  if (!(model.cumulative > 0)) {
+    throw new Error(
+      `parsed 0 total contributions for ${START_YEAR}–${end}, likely a ` +
+        `contributions-page markup change; refusing to emit a blank chart`
+    );
+  }
+  return model;
+}
+
 async function main() {
   const end = currentYear();
   console.log(
     `[cumulative] fetching per-year totals for ${USERNAME}, ${START_YEAR}–${end}…`
   );
-  let model;
-  try {
-    const years = await fetchYearTotals(USERNAME, START_YEAR, end);
-    const summary = years.map((y) => `${y.year}=${y.total}`).join(" ");
-    console.log(`[cumulative] ${summary}`);
-    model = buildModel(years);
-    console.log(
-      `[cumulative] ${model.rows.length} bars; cumulative=${model.cumulative}; peak=${model.peak}; avgGrowth=${model.avgGrowthPct?.toFixed(1)}%/yr (sources: ${years
-        .map((y) => `${y.year}:${y.source}`)
-        .join(", ")}).`
-    );
-    // Silent-zero guard: this profile always has thousands of contributions, so
-    // a parsed total of 0 means GitHub changed BOTH the <h2> total AND the
-    // <tool-tip> fallback markup, a 200 OK with unrecognised HTML, which
-    // fetchYearTotal() does NOT throw on. Fail here so the catch below renders
-    // the visible placeholder banner instead of silently committing a blank
-    // chart to the live profile.
-    if (!(model.cumulative > 0)) {
-      throw new Error(
-        `parsed 0 total contributions for ${START_YEAR}–${end}, likely a ` +
-          `contributions-page markup change; refusing to emit a blank chart`
-      );
-    }
-  } catch (err) {
-    const msg = String(err?.message ?? err);
-    console.warn(`[cumulative] failed (reason below); using placeholder: ${msg}`);
-    model = placeholder(msg);
-  }
+  // Fetch and parse completely before touching the committed assets. Failed
+  // live data must preserve the last known-good chart and fail the workflow.
+  const model = await loadModel(USERNAME, globalThis.fetch, end);
 
   const svg = renderSVG(model);
   mkdirSync(dirname(OUT_PATH), { recursive: true });
@@ -1375,7 +1381,19 @@ async function main() {
   console.log(`[cumulative] wrote ${OUT_PATH} (${svg.length} bytes)`);
 }
 
-main().catch((err) => {
-  console.error("[cumulative] FATAL:", err?.message ?? err);
-  process.exit(1);
-});
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+  main().catch((err) => {
+    console.error("[cumulative] FATAL:", err?.message ?? err);
+    process.exit(1);
+  });
+}
+
+export {
+  START_YEAR,
+  buildModel,
+  fetchYearTotal,
+  fetchYearTotals,
+  loadModel,
+  parseTipCount,
+  renderSVG,
+};
