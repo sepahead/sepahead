@@ -1,8 +1,10 @@
 version: 2
+# Suppress routine version-update pull requests. Dependabot security alerts and
+# security updates use GitHub's separate security-update controls.
 updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
       day: monday
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 0
