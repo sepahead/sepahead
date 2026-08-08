@@ -48,6 +48,7 @@ jobs:
             tesseract-ocr \
             texlive-fonts-extra \
             texlive-fonts-recommended \
+            texlive-lang-german \
             texlive-latex-base \
             texlive-latex-extra
           python -m pip install --requirement source/final_generic/requirements-verify.txt
