@@ -1,0 +1,165 @@
+name: Sync phone-free web CVs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/sync-private-cv.yml"
+  schedule:
+    - cron: "23 4 * * *"
+  workflow_dispatch:
+  repository_dispatch:
+    types: [private-cv-updated]
+
+concurrency:
+  group: sync-private-cv
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out the private CV source read-only
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: sepahead/private_CV
+          path: source
+          ssh-key: ${{ secrets.PRIVATE_CV_READ_KEY }}
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: source/final_generic/requirements-verify.txt
+
+      - name: Install PDF build and verification tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends \
+            ghostscript \
+            lmodern \
+            poppler-utils \
+            tesseract-ocr \
+            texlive-fonts-extra \
+            texlive-fonts-recommended \
+            texlive-latex-base \
+            texlive-latex-extra
+          python -m pip install --requirement source/final_generic/requirements-verify.txt
+
+      - name: Force-build and verify the phone-free editions
+        working-directory: source/final_generic
+        run: make -B verify-web
+
+      - name: Prepare the verified release artifact
+        working-directory: source/final_generic
+        run: |
+          mkdir -p release-web
+          cp main_en_web.pdf release-web/Sepehr_Mahmoudian_CV_EN.pdf
+          cp main_de_web.pdf release-web/Sepehr_Mahmoudian_CV_DE.pdf
+          cd release-web
+          sha256sum \
+            Sepehr_Mahmoudian_CV_EN.pdf \
+            Sepehr_Mahmoudian_CV_DE.pdf > SHA256SUMS
+
+      - name: Upload the verified phone-free PDFs
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: phone-free-web-cvs
+          path: source/final_generic/release-web/
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
+
+  publish:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Download the verified release artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: phone-free-web-cvs
+          path: release
+
+      - name: Verify artifact checksums
+        working-directory: release
+        run: sha256sum --check SHA256SUMS
+
+      - name: Check out the public profile site with its write key
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: public-site
+          fetch-depth: 0
+          ssh-key: ${{ secrets.PUBLIC_CV_WRITE_KEY }}
+
+      - name: Publish only the verified public PDFs
+        run: |
+          mkdir -p public-site/docs/cv
+          cp release/Sepehr_Mahmoudian_CV_EN.pdf \
+            public-site/docs/cv/Sepehr_Mahmoudian_CV_EN.pdf
+          cp release/Sepehr_Mahmoudian_CV_DE.pdf \
+            public-site/docs/cv/Sepehr_Mahmoudian_CV_DE.pdf
+
+          cd public-site
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            docs/cv/Sepehr_Mahmoudian_CV_EN.pdf \
+            docs/cv/Sepehr_Mahmoudian_CV_DE.pdf
+
+          if git diff --cached --quiet; then
+            echo "The published web CVs are already current."
+          else
+            git commit -m "docs(cv): publish phone-free web editions"
+            pushed=false
+            for attempt in 1 2 3; do
+              git pull --rebase origin main
+              if git push origin HEAD:main; then
+                pushed=true
+                break
+              fi
+              echo "Push attempt ${attempt} raced another profile update; retrying."
+            done
+            if [ "$pushed" != true ]; then
+              exit 1
+            fi
+          fi
+
+      - name: Confirm GitHub Pages serves the verified bytes
+        run: |
+          check_live_pdf() {
+            local expected="$1"
+            local url="$2"
+            local downloaded="$3"
+            local matched=false
+            for attempt in $(seq 1 30); do
+              if curl --fail --silent --show-error --location \
+                --header 'Cache-Control: no-cache' \
+                "${url}?source=${GITHUB_SHA}&attempt=${attempt}" \
+                --output "$downloaded" && cmp --silent "$expected" "$downloaded"; then
+                matched=true
+                break
+              fi
+              sleep 10
+            done
+            if [ "$matched" != true ]; then
+              echo "GitHub Pages did not serve the verified PDF at ${url}" >&2
+              exit 1
+            fi
+          }
+
+          check_live_pdf \
+            release/Sepehr_Mahmoudian_CV_EN.pdf \
+            https://sepahead.github.io/sepahead/cv/Sepehr_Mahmoudian_CV_EN.pdf \
+            live-en.pdf
+          check_live_pdf \
+            release/Sepehr_Mahmoudian_CV_DE.pdf \
+            https://sepahead.github.io/sepahead/cv/Sepehr_Mahmoudian_CV_DE.pdf \
+            live-de.pdf
