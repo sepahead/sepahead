@@ -26,6 +26,12 @@
 <a href="https://x.com/SepAhead" title="Sepehr Mahmoudian on X (Twitter) — @SepAhead"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-x-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-x-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/social-x-light.svg" width="157" height="48" decoding="async" alt="Sepehr Mahmoudian on X (Twitter) — @SepAhead"/></picture></a>
 </p>
 
+<p align="center">
+<a href="https://sepahead.github.io/sepahead/cv/Sepehr_Mahmoudian_CV_EN.pdf"><strong>Curriculum Vitae · English</strong></a>
+&nbsp;·&nbsp;
+<a href="https://sepahead.github.io/sepahead/cv/Sepehr_Mahmoudian_CV_DE.pdf"><strong>Lebenslauf · Deutsch</strong></a>
+</p>
+
 <h3 align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-pulse-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-pulse-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-pulse-light.svg" width="820" height="50" decoding="async" loading="lazy" alt="The pulse — GitHub contribution activity"/></picture></h3>
 
 <p align="center">

@@ -21,6 +21,9 @@ const WEBSITE_ID = `${SITE_URL}#website`;
 const PROFILE_ID = `${SITE_URL}#profilepage`;
 const WORK_ID = `${SITE_URL}#selected-work`;
 const AVATAR_URL = "https://github.com/sepahead.png";
+const CV_URL = `${SITE_URL}cv/`;
+const CV_EN_URL = `${CV_URL}Sepehr_Mahmoudian_CV_EN.pdf`;
+const CV_DE_URL = `${CV_URL}Sepehr_Mahmoudian_CV_DE.pdf`;
 const DATE_CREATED = "2026-06-21";
 const MODES = new Set(["--write", "--check"]);
 const mode = process.argv[2];
@@ -300,6 +303,10 @@ ${more.join("\n")}
 - Google Scholar: https://scholar.google.com/citations?user=t3PSg8kAAAAJ
 - Substack: https://substack.com/@torusprime
 
+## Curriculum vitae
+- English PDF: ${CV_EN_URL}
+- German PDF: ${CV_DE_URL}
+
 ## Links
 - Web: ${SITE_URL}
 ${socials.join("\n")}
@@ -313,6 +320,9 @@ function renderSitemap() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>${SITE_URL}</loc>
+  </url>
+  <url>
+    <loc>${CV_URL}</loc>
   </url>
 </urlset>
 `;

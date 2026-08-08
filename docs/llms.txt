@@ -33,6 +33,10 @@ robotics, sensor fusion, 3D vision, Gaussian splatting, Rust and Python.
 - Google Scholar: https://scholar.google.com/citations?user=t3PSg8kAAAAJ
 - Substack: https://substack.com/@torusprime
 
+## Curriculum vitae
+- English PDF: https://sepahead.github.io/sepahead/cv/Sepehr_Mahmoudian_CV_EN.pdf
+- German PDF: https://sepahead.github.io/sepahead/cv/Sepehr_Mahmoudian_CV_DE.pdf
+
 ## Links
 - Web: https://sepahead.github.io/sepahead/
 - LinkedIn: https://www.linkedin.com/in/sepehr-mahmoudian-99367516/
