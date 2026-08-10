@@ -568,45 +568,47 @@ const WAVE_RY_OUTER = artRy(23 / 12); // 46
 const WAVE_RY_MID = artRy(19 / 12); // 38
 const WAVE_RY_INNER = artRy(31 / 24); // 31
 
-// The new age: 20 rays of light fanning out from the singularity boundary.
-// Each ray is a tapered luminous beam — narrow at the source, widening slightly
-// at its destination — filled with a radial gradient that fades from bright
-// ivory at the core to warm amber at the edges. Rays are arranged in a fan:
-// central rays are longest and brightest, edge rays are shorter and dimmer,
-// together creating a dramatic dawn-illumination effect. One shared phase
-// opacity applied to the complete tableau.
+// The new age: 20 rays of light streaming down from above — like divine
+// illumination pouring into the future from the top of the chart.
+// Each ray is a tapered luminous beam — narrow at the top source, widening
+// slightly at its destination — filled with a radial gradient that fades
+// from bright ivory at the core to warm amber at the edges. Rays fan outward
+// from nearly-vertical: central rays are longest and brightest, edge rays are
+// shorter and dimmer, together creating a dramatic top-down illumination.
+// One shared phase opacity applied to the complete tableau.
 const NEW_AGE_OPACITY = 0.65;
-// 20 rays: each defined by {angle} in degrees from horizontal (0=right,
-// negative=up), {len} in pixels, {w} width at destination, {o} opacity factor.
+// 20 rays fanning downward from the top-centre of the new age area.
+// 0° = horizontal right, 90° = straight down. Central rays go nearly straight
+// down; edge rays fan outward to the sides.
 const NEW_AGE_RAYS = [
-  // Central core — straight ahead, longest and brightest
-  { angle: -8, len: 96, w: 5.0, o: 1.00 },
-  { angle: -4, len: 100, w: 5.5, o: 1.00 },
-  { angle: 0, len: 103, w: 6.0, o: 1.00 },
-  { angle: 4, len: 100, w: 5.5, o: 1.00 },
-  { angle: 8, len: 96, w: 5.0, o: 1.00 },
-  // Inner upper fan
-  { angle: -14, len: 92, w: 4.4, o: 0.92 },
-  { angle: -21, len: 86, w: 4.0, o: 0.85 },
-  { angle: -29, len: 78, w: 3.5, o: 0.78 },
-  // Inner lower fan
-  { angle: 14, len: 92, w: 4.4, o: 0.92 },
-  { angle: 21, len: 86, w: 4.0, o: 0.85 },
-  { angle: 29, len: 78, w: 3.5, o: 0.78 },
-  // Mid upper fan
-  { angle: -37, len: 68, w: 3.0, o: 0.68 },
-  { angle: -46, len: 58, w: 2.6, o: 0.58 },
-  // Mid lower fan
-  { angle: 37, len: 68, w: 3.0, o: 0.68 },
-  { angle: 46, len: 58, w: 2.6, o: 0.58 },
-  // Outer upper fan — shorter, dimmer
-  { angle: -55, len: 48, w: 2.2, o: 0.48 },
-  { angle: -65, len: 38, w: 1.8, o: 0.38 },
-  // Outer lower fan
-  { angle: 55, len: 48, w: 2.2, o: 0.48 },
-  { angle: 65, len: 38, w: 1.8, o: 0.38 },
-  // Steep accent — farthest reach
-  { angle: -75, len: 30, w: 1.5, o: 0.28 },
+  // Central core — straight down, longest and brightest
+  { angle: 88, len: 115, w: 6.0, o: 1.00 },
+  { angle: 89, len: 118, w: 5.5, o: 1.00 },
+  { angle: 90, len: 120, w: 6.0, o: 1.00 },
+  { angle: 91, len: 118, w: 5.5, o: 1.00 },
+  { angle: 92, len: 115, w: 6.0, o: 1.00 },
+  // Inner right fan
+  { angle: 84, len: 110, w: 4.4, o: 0.92 },
+  { angle: 80, len: 104, w: 4.0, o: 0.85 },
+  { angle: 76, len: 96, w: 3.5, o: 0.78 },
+  // Inner left fan
+  { angle: 96, len: 110, w: 4.4, o: 0.92 },
+  { angle: 100, len: 104, w: 4.0, o: 0.85 },
+  { angle: 104, len: 96, w: 3.5, o: 0.78 },
+  // Mid right fan
+  { angle: 72, len: 84, w: 3.0, o: 0.68 },
+  { angle: 68, len: 72, w: 2.6, o: 0.58 },
+  // Mid left fan
+  { angle: 108, len: 84, w: 3.0, o: 0.68 },
+  { angle: 112, len: 72, w: 2.6, o: 0.58 },
+  // Outer right — shorter, dimmer
+  { angle: 64, len: 58, w: 2.2, o: 0.48 },
+  { angle: 60, len: 46, w: 1.8, o: 0.38 },
+  // Outer left
+  { angle: 116, len: 58, w: 2.2, o: 0.48 },
+  { angle: 120, len: 46, w: 1.8, o: 0.38 },
+  // Steep accent
+  { angle: 56, len: 36, w: 1.5, o: 0.28 },
 ];
 
 // ---------------------------------------------------------------------------
@@ -785,8 +787,9 @@ function enlightenmentDefs() {
 }
 
 function enlightenmentMarkup(portalX) {
-  const srcX = portalX + 3;
-  const srcY = MID_Y;
+  // Rays stream down from the top of the new-age zone — like light from above.
+  const srcX = (portalX + PLOT_RIGHT) / 2;
+  const srcY = PLOT_TOP + 6;
   // Each ray is a tapered polygon: narrow at the source, widening at the tip.
   // The beam runs from the singularity boundary out into the new age.
   const rayPolygon = (ray, i) => {
@@ -813,18 +816,18 @@ function enlightenmentMarkup(portalX) {
     const opacity = (ray.o * NEW_AGE_OPACITY).toFixed(2);
     return `<polygon points="${points.join(" ")}" class="new-age-ray" opacity="${opacity}"/>`;
   };
-  // Terraforming seeds: particles that emerge from the singularity boundary
-  // at the same y-positions as portal motes, travel along the light rays,
-  // and bloom at their destination — seed landing, sprouting, transforming.
-  // Continuation of the singularity's portal-mote particles, now golden.
-  const seedYPositions = LANES; // same lanes as portal motes, creating continuity
+  // Terraforming seeds: particles that emerge from the same top source,
+  // travel along the light rays, and bloom at their destination — seed
+  // landing, sprouting, transforming. Fan across the source's horizontal span.
   const terraformSeed = (i) => {
     const ray = NEW_AGE_RAYS[Math.floor(i * 2.2) % 20];
     const rad = (ray.angle * Math.PI) / 180;
     const ex = srcX + ray.len * Math.cos(rad);
     const ey = srcY + ray.len * Math.sin(rad);
-    const sy = seedYPositions[i % seedYPositions.length];
-    const sx = srcX + 2;
+    // Seeds emerge from varied positions across the top source
+    const spread = (i / 11) * 8 - 4; // spread -4..+4 around srcX
+    const sx = srcX + spread;
+    const sy = srcY;
     const begin = (i * 0.35).toFixed(2);
     const r = (1.4 - i * 0.06).toFixed(2);
     // Bloom ring at destination: expands and fades as seed arrives
@@ -842,7 +845,7 @@ function enlightenmentMarkup(portalX) {
   };
   return `
   <g class="narrative-enlightenment">
-    <title>the new age: 20 rays of light fanning from the singularity, terraforming seeds bloom at their destination</title>
+    <title>the new age: 20 rays of light streaming from above, terraforming seeds bloom at their destination</title>
     ${NEW_AGE_RAYS.map(rayPolygon).join("\n    ")}
     ${Array.from({length: 12}, (_, i) => terraformSeed(i)).join("\n    ")}
   </g>
@@ -1767,7 +1770,7 @@ function renderSVG(model) {
     futureRows.length > 1
       ? `${futureRows[0].label} to ${futureRows[1].label} are an unstarted future runway; the enlightenment phase sits between them`
       : "",
-    "the visual phase motif continues into 20 rays of light fanning from the singularity into the future",
+    "the visual phase motif continues into 20 rays of light streaming from above into the future",
   ].filter(Boolean);
   // Hedge the superlative while the record-holder is the year still running.
   // "peak 6,240 in 2026" alongside "2026 is still in progress" in the same

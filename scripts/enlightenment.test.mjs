@@ -58,17 +58,17 @@ test("new age phase has 20 rays, 12 terraforming seeds with bloom rings", () => 
     assert.match(nearby, /attributeName="r"/, `seed ${i} must pulse in size (terraforming bloom)`);
   }
 
-  // Every ray must fan rightward
+  // Every ray must fan downward (from top source toward bottom)
   for (const [i, ray] of rays.entries()) {
     const pts = (attrOf(ray, "points") || "").trim().split(/\s+/);
-    const xs = pts.filter((_, idx) => idx % 2 === 0).map(Number);
-    const leftX = Math.min(...xs.slice(0, 2));
-    const rightX = Math.max(...xs.slice(2, 4));
-    assert.ok(leftX < rightX, `ray ${i} must fan rightward`);
+    const ys = pts.filter((_, idx) => idx % 2 === 1).map(Number);
+    const topY = Math.min(...ys.slice(0, 2));   // source edge (top)
+    const botY = Math.max(...ys.slice(2, 4));   // destination edge (bottom)
+    assert.ok(topY < botY, `ray ${i} must fan downward (top=${topY}, bottom=${botY})`);
   }
 
   const aria = out.match(/aria-label="([^"]*)"/)?.[1] ?? "";
-  assert.match(aria, /20 rays of light fanning from the singularity/);
+  assert.match(aria, /20 rays of light streaming from above/);
 });
 
 test("new age uses dedicated ray gradient and glow filter", () => {

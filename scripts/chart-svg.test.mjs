@@ -294,12 +294,12 @@ test("written assets retain bounded ray geometry", () => {
     for (const ray of rays) {
       const pts = (ray.match(/points="([^"]+)"/)?.[1] || "").trim().split(/\s+/);
       assert.ok(pts.length >= 8, `${theme}: ray must have 4+ points`);
-      // Source points (first two) must be near the singularity boundary (~688)
-      const x0 = Number(pts[0]);
-      assert.ok(x0 > 685 && x0 < 750, `${theme}: ray source x=${x0} must be near boundary`);
-      // Destination points (last two) must extend right
-      const x2 = Number(pts[2]);
-      assert.ok(x2 > x0, `${theme}: ray must extend rightward`);
+      // Source points (first two) must be near the top of the plot
+      const y0 = Number(pts[1]);
+      assert.ok(y0 > 115 && y0 < 150, `${theme}: ray source y=${y0} must be near plot top`);
+      // Destination points (last two) must extend downward
+      const y2 = Number(pts[3]);
+      assert.ok(y2 > y0, `${theme}: ray must extend downward`);
     }
   }
 });
