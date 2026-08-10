@@ -289,11 +289,13 @@
     /* Enlightenment is the final authored atmosphere: a quiet gold/ivory
        threshold in the upper-right. Rays travel down-left and terminate inside
        the plot; they never become a new data encoding. */
+    /* Every authored enlightenment part shares one phase opacity. The gradient
+       stop opacities below remain colour falloff, not per-part intensity. */
     .narrative-enlightenment { pointer-events: none; opacity: 0.52; }
-    .enlightenment-cloud-glow { fill: url(#enlightenmentCloud); filter: url(#enlightenmentGlow); opacity: 0.62; }
-    .enlightenment-cloud { fill: url(#enlightenmentCloud); stroke: #fde68a; stroke-width: 0.8; stroke-opacity: 0.56; }
-    .enlightenment-cloud-core { fill: #fff7cc; fill-opacity: 0.7; filter: url(#enlightenmentGlow); }
-    .enlightenment-cloud-hole { fill: #0d1117; fill-opacity: 0.76; stroke: #fff7cc; stroke-opacity: 0.32; stroke-width: 0.7; }
+    .enlightenment-cloud-glow { fill: url(#enlightenmentCloud); filter: url(#enlightenmentGlow); }
+    .enlightenment-cloud { fill: url(#enlightenmentCloud); stroke: #fde68a; stroke-width: 0.8; }
+    .enlightenment-cloud-core { fill: #fff7cc; filter: url(#enlightenmentGlow); }
+    .enlightenment-cloud-hole { fill: #0d1117; stroke: #fff7cc; stroke-width: 0.7; }
     .enlightenment-ray { fill: url(#enlightenmentRayGrad); stroke: none; filter: url(#enlightenmentGlow); }
     .enlightenment-ray-highlight { fill: none; stroke: #fff7cc; stroke-width: 0.65; stroke-linecap: round; }
     .enlightenment-trace-line { fill: none; stroke: #fff7cc; stroke-width: 0.9; stroke-linecap: round; }
@@ -470,8 +472,6 @@
       .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text, .enlightenment-text { stroke: #ffffff; }
     @media (prefers-reduced-motion: reduce) {
       animate, animateTransform { display: none; }
-      .enlightenment-cloud-glow, .enlightenment-cloud-core { opacity: 1; }
-      .narrative-enlightenment { opacity: 0.52; }
       /* With the draw-in animation disabled, force the curve fully drawn and
          the end dot visible instead of stuck at their hidden start states. */
       .cum-line { stroke-dasharray: none; }
@@ -706,98 +706,80 @@
 
   <g class="narrative-enlightenment">
     <title>age of enlightenment: bounded golden cloud aperture and diagonal rays</title>
-    <ellipse cx="770" cy="140" rx="31" ry="23" class="enlightenment-cloud-glow">
-      <animate attributeName="opacity" values="0.55;0.82;0.55" begin="0.8s" dur="5.6s" repeatCount="indefinite"/>
-    </ellipse>
+    <ellipse cx="770" cy="140" rx="31" ry="23" class="enlightenment-cloud-glow"/>
     <ellipse cx="770" cy="140" rx="19" ry="14" class="enlightenment-cloud"/>
-    <ellipse cx="767" cy="141" rx="12" ry="8" class="enlightenment-cloud-core">
-      <animate attributeName="rx" values="12;14;12" begin="0.8s" dur="5.6s" repeatCount="indefinite"/>
-    </ellipse>
+    <ellipse cx="767" cy="141" rx="12" ry="8" class="enlightenment-cloud-core"/>
     <ellipse cx="767" cy="141" rx="9" ry="6" class="enlightenment-cloud-hole"/>
-    <path d="M 752.8 129.1 C 743.1 159.5 651.3 187.4 627.9 230.0 C 652.4 188.7 746.9 164.5 757.2 134.9 Z" class="enlightenment-ray enlightenment-liquid-ray" opacity="0.78">
+    <path d="M 752.8 129.1 C 743.1 159.5 651.3 187.4 627.9 230.0 C 652.4 188.7 746.9 164.5 757.2 134.9 Z" class="enlightenment-ray enlightenment-liquid-ray">
       <animate attributeName="d" values="M 752.8 129.1 C 743.1 159.5 651.3 187.4 627.9 230.0 C 652.4 188.7 746.9 164.5 757.2 134.9 Z;M 752.8 129.1 C 750.1 159.5 658.3 187.4 627.9 230.0 C 659.4 188.7 753.9 164.5 757.2 134.9 Z;M 752.8 129.1 C 743.1 159.5 651.3 187.4 627.9 230.0 C 652.4 188.7 746.9 164.5 757.2 134.9 Z" keyTimes="0;0.5;1" begin="0.00s" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
-      <animate attributeName="opacity" values="0.5;0.88;0.5" begin="0.00s" dur="4.8s" repeatCount="indefinite"/>
     </path>
     <path d="M 630.9 226.0 C 681.9 190.0 748.0 158.0 755.0 133.4" class="enlightenment-ray-highlight" pathLength="1" stroke-dasharray="0.08 0.18" stroke-dashoffset="0">
       <animate attributeName="d" values="M 630.9 226.0 C 681.9 190.0 748.0 158.0 755.0 133.4;M 630.9 226.0 C 674.9 190.0 755.0 158.0 755.0 133.4;M 630.9 226.0 C 681.9 190.0 748.0 158.0 755.0 133.4" keyTimes="0;0.5;1" begin="0.00s" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
       <animate attributeName="stroke-dashoffset" values="1;0" begin="0.00s" dur="3.2s" repeatCount="indefinite"/>
     </path>
-    <path d="M 751.7 132.7 C 742.1 163.1 670.2 200.3 647.0 243.1 C 671.8 201.9 747.9 168.9 758.3 139.3 Z" class="enlightenment-ray enlightenment-liquid-ray" opacity="0.78">
+    <path d="M 751.7 132.7 C 742.1 163.1 670.2 200.3 647.0 243.1 C 671.8 201.9 747.9 168.9 758.3 139.3 Z" class="enlightenment-ray enlightenment-liquid-ray">
       <animate attributeName="d" values="M 751.7 132.7 C 742.1 163.1 670.2 200.3 647.0 243.1 C 671.8 201.9 747.9 168.9 758.3 139.3 Z;M 751.7 132.7 C 735.1 163.1 663.2 200.3 647.0 243.1 C 664.8 201.9 740.9 168.9 758.3 139.3 Z;M 751.7 132.7 C 742.1 163.1 670.2 200.3 647.0 243.1 C 671.8 201.9 747.9 168.9 758.3 139.3 Z" keyTimes="0;0.5;1" begin="0.34s" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
-      <animate attributeName="opacity" values="0.5;0.88;0.5" begin="0.34s" dur="4.8s" repeatCount="indefinite"/>
     </path>
     <path d="M 650.0 239.1 C 701.0 203.1 748.0 162.0 755.0 137.4" class="enlightenment-ray-highlight" pathLength="1" stroke-dasharray="0.08 0.18" stroke-dashoffset="0">
       <animate attributeName="d" values="M 650.0 239.1 C 701.0 203.1 748.0 162.0 755.0 137.4;M 650.0 239.1 C 708.0 203.1 741.0 162.0 755.0 137.4;M 650.0 239.1 C 701.0 203.1 748.0 162.0 755.0 137.4" keyTimes="0;0.5;1" begin="0.34s" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
       <animate attributeName="stroke-dashoffset" values="1;0" begin="0.34s" dur="3.2s" repeatCount="indefinite"/>
     </path>
-    <path d="M 750.3 136.4 C 740.9 166.8 689.0 212.1 666.1 255.0 C 691.3 213.8 749.1 173.2 759.7 143.6 Z" class="enlightenment-ray enlightenment-liquid-ray" opacity="0.78">
+    <path d="M 750.3 136.4 C 740.9 166.8 689.0 212.1 666.1 255.0 C 691.3 213.8 749.1 173.2 759.7 143.6 Z" class="enlightenment-ray enlightenment-liquid-ray">
       <animate attributeName="d" values="M 750.3 136.4 C 740.9 166.8 689.0 212.1 666.1 255.0 C 691.3 213.8 749.1 173.2 759.7 143.6 Z;M 750.3 136.4 C 747.9 166.8 696.0 212.1 666.1 255.0 C 698.3 213.8 756.1 173.2 759.7 143.6 Z;M 750.3 136.4 C 740.9 166.8 689.0 212.1 666.1 255.0 C 691.3 213.8 749.1 173.2 759.7 143.6 Z" keyTimes="0;0.5;1" begin="0.68s" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
-      <animate attributeName="opacity" values="0.5;0.88;0.5" begin="0.68s" dur="4.8s" repeatCount="indefinite"/>
     </path>
     <path d="M 669.1 251.0 C 720.1 215.0 748.0 166.0 755.0 141.4" class="enlightenment-ray-highlight" pathLength="1" stroke-dasharray="0.08 0.18" stroke-dashoffset="0">
       <animate attributeName="d" values="M 669.1 251.0 C 720.1 215.0 748.0 166.0 755.0 141.4;M 669.1 251.0 C 713.1 215.0 755.0 166.0 755.0 141.4;M 669.1 251.0 C 720.1 215.0 748.0 166.0 755.0 141.4" keyTimes="0;0.5;1" begin="0.68s" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
       <animate attributeName="stroke-dashoffset" values="1;0" begin="0.68s" dur="3.2s" repeatCount="indefinite"/>
     </path>
-    <path d="M 751.8 141.0 C 742.1 171.4 711.4 174.3 688.2 217.0 C 713.0 175.7 747.9 176.6 758.2 147.0 Z" class="enlightenment-ray enlightenment-liquid-ray" opacity="0.78">
+    <path d="M 751.8 141.0 C 742.1 171.4 711.4 174.3 688.2 217.0 C 713.0 175.7 747.9 176.6 758.2 147.0 Z" class="enlightenment-ray enlightenment-liquid-ray">
       <animate attributeName="d" values="M 751.8 141.0 C 742.1 171.4 711.4 174.3 688.2 217.0 C 713.0 175.7 747.9 176.6 758.2 147.0 Z;M 751.8 141.0 C 735.1 171.4 704.4 174.3 688.2 217.0 C 706.0 175.7 740.9 176.6 758.2 147.0 Z;M 751.8 141.0 C 742.1 171.4 711.4 174.3 688.2 217.0 C 713.0 175.7 747.9 176.6 758.2 147.0 Z" keyTimes="0;0.5;1" begin="1.02s" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
-      <animate attributeName="opacity" values="0.5;0.88;0.5" begin="1.02s" dur="4.8s" repeatCount="indefinite"/>
     </path>
     <path d="M 691.2 213.0 C 742.2 177.0 748.0 170.0 755.0 145.4" class="enlightenment-ray-highlight" pathLength="1" stroke-dasharray="0.08 0.18" stroke-dashoffset="0">
       <animate attributeName="d" values="M 691.2 213.0 C 742.2 177.0 748.0 170.0 755.0 145.4;M 691.2 213.0 C 749.2 177.0 741.0 170.0 755.0 145.4;M 691.2 213.0 C 742.2 177.0 748.0 170.0 755.0 145.4" keyTimes="0;0.5;1" begin="1.02s" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
       <animate attributeName="stroke-dashoffset" values="1;0" begin="1.02s" dur="3.2s" repeatCount="indefinite"/>
     </path>
-    <path d="M 752.4 145.8 C 742.7 176.1 732.2 161.5 708.8 204.0 C 733.5 162.5 747.3 179.9 757.6 150.2 Z" class="enlightenment-ray enlightenment-liquid-ray" opacity="0.78">
+    <path d="M 752.4 145.8 C 742.7 176.1 732.2 161.5 708.8 204.0 C 733.5 162.5 747.3 179.9 757.6 150.2 Z" class="enlightenment-ray enlightenment-liquid-ray">
       <animate attributeName="d" values="M 752.4 145.8 C 742.7 176.1 732.2 161.5 708.8 204.0 C 733.5 162.5 747.3 179.9 757.6 150.2 Z;M 752.4 145.8 C 749.7 176.1 739.2 161.5 708.8 204.0 C 740.5 162.5 754.3 179.9 757.6 150.2 Z;M 752.4 145.8 C 742.7 176.1 732.2 161.5 708.8 204.0 C 733.5 162.5 747.3 179.9 757.6 150.2 Z" keyTimes="0;0.5;1" begin="1.36s" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
-      <animate attributeName="opacity" values="0.5;0.88;0.5" begin="1.36s" dur="4.8s" repeatCount="indefinite"/>
     </path>
     <path d="M 711.8 200.0 C 762.8 164.0 748.0 174.0 755.0 149.4" class="enlightenment-ray-highlight" pathLength="1" stroke-dasharray="0.08 0.18" stroke-dashoffset="0">
       <animate attributeName="d" values="M 711.8 200.0 C 762.8 164.0 748.0 174.0 755.0 149.4;M 711.8 200.0 C 755.8 164.0 755.0 174.0 755.0 149.4;M 711.8 200.0 C 762.8 164.0 748.0 174.0 755.0 149.4" keyTimes="0;0.5;1" begin="1.36s" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
       <animate attributeName="stroke-dashoffset" values="1;0" begin="1.36s" dur="3.2s" repeatCount="indefinite"/>
     </path>
-    <g class="enlightenment-trace" opacity="0.72">
+    <g class="enlightenment-trace">
       <path d="M 693.9 139.1 L 719.9 130.1 L 734.0 144.0" pathLength="1" stroke-dasharray="0.035 0.085" class="enlightenment-fragment">
         <animate attributeName="stroke-dashoffset" values="0;1" begin="0.00s" dur="3.4s" repeatCount="indefinite"/>
-        <animate attributeName="stroke-opacity" values="0.8;0.2;0" keyTimes="0;0.62;1" begin="0.00s" dur="3.4s" repeatCount="indefinite"/>
       </path>
       <path d="M 691.9 139.1 C 739.9 133.1 688.0 157.0 760.0 135.0" pathLength="1" stroke-dasharray="0.07 0.11" class="enlightenment-trace-line">
         <animate attributeName="stroke-dashoffset" values="0;1" begin="0.00s" dur="3.4s" repeatCount="indefinite"/>
-        <animate attributeName="stroke-opacity" values="0.25;0.9;0.25" begin="0.00s" dur="3.4s" repeatCount="indefinite"/>
       </path>
       <circle cx="691.9" cy="139.1" r="1.10" class="enlightenment-spark">
         <animateTransform attributeName="transform" type="translate" values="0 0;68.1 -4.1" begin="0.00s" dur="3.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.35 0 0.8 1"/>
-        <animate attributeName="opacity" values="0;0.95;0.55;0" keyTimes="0;0.16;0.72;1" begin="0.00s" dur="3.4s" repeatCount="indefinite"/>
       </circle>
     </g>
-    <g class="enlightenment-trace" opacity="0.72">
+    <g class="enlightenment-trace">
       <path d="M 693.9 192.0 L 719.9 176.0 L 739.0 147.0" pathLength="1" stroke-dasharray="0.035 0.085" class="enlightenment-fragment">
         <animate attributeName="stroke-dashoffset" values="0;1" begin="0.42s" dur="3.4s" repeatCount="indefinite"/>
-        <animate attributeName="stroke-opacity" values="0.8;0.2;0" keyTimes="0;0.62;1" begin="0.42s" dur="3.4s" repeatCount="indefinite"/>
       </path>
       <path d="M 691.9 190.0 C 739.9 181.0 693.0 164.0 765.0 142.0" pathLength="1" stroke-dasharray="0.07 0.11" class="enlightenment-trace-line">
         <animate attributeName="stroke-dashoffset" values="0;1" begin="0.42s" dur="3.4s" repeatCount="indefinite"/>
-        <animate attributeName="stroke-opacity" values="0.25;0.9;0.25" begin="0.42s" dur="3.4s" repeatCount="indefinite"/>
       </path>
       <circle cx="691.9" cy="190.0" r="0.98" class="enlightenment-spark">
         <animateTransform attributeName="transform" type="translate" values="0 0;73.1 -48.0" begin="0.42s" dur="3.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.35 0 0.8 1"/>
-        <animate attributeName="opacity" values="0;0.95;0.55;0" keyTimes="0;0.16;0.72;1" begin="0.42s" dur="3.4s" repeatCount="indefinite"/>
       </circle>
     </g>
-    <g class="enlightenment-trace" opacity="0.72">
+    <g class="enlightenment-trace">
       <path d="M 693.9 244.9 L 719.9 221.9 L 743.0 148.0" pathLength="1" stroke-dasharray="0.035 0.085" class="enlightenment-fragment">
         <animate attributeName="stroke-dashoffset" values="0;1" begin="0.84s" dur="3.4s" repeatCount="indefinite"/>
-        <animate attributeName="stroke-opacity" values="0.8;0.2;0" keyTimes="0;0.62;1" begin="0.84s" dur="3.4s" repeatCount="indefinite"/>
       </path>
       <path d="M 691.9 240.9 C 739.9 228.9 697.0 169.0 769.0 147.0" pathLength="1" stroke-dasharray="0.07 0.11" class="enlightenment-trace-line">
         <animate attributeName="stroke-dashoffset" values="0;1" begin="0.84s" dur="3.4s" repeatCount="indefinite"/>
-        <animate attributeName="stroke-opacity" values="0.25;0.9;0.25" begin="0.84s" dur="3.4s" repeatCount="indefinite"/>
       </path>
       <circle cx="691.9" cy="240.9" r="0.86" class="enlightenment-spark">
         <animateTransform attributeName="transform" type="translate" values="0 0;77.1 -93.9" begin="0.84s" dur="3.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.35 0 0.8 1"/>
-        <animate attributeName="opacity" values="0;0.95;0.55;0" keyTimes="0;0.16;0.72;1" begin="0.84s" dur="3.4s" repeatCount="indefinite"/>
       </circle>
     </g>
   </g>
-  <g class="enlightenment-label">
+  <g class="enlightenment-label" opacity="0.52">
     <text x="790.0" y="112.0" text-anchor="end" class="enlightenment-text">age of enlightenment</text>
   </g>
   <path d="M 76.6 252.9 C 122.3 251.9 168.0 251.8 213.7 249.8 C 248.8 248.4 283.8 235.9 318.9 227.9 C 353.9 219.8 389.0 212.1 424.0 201.3 C 469.7 187.2 515.4 164.4 561.1 146.0 L 561.1 260 L 76.6 260 Z" class="cum-area">

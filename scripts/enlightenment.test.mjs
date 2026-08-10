@@ -136,8 +136,22 @@ test("enlightenment gradient transitions green to lime to gold to ivory", () => 
   assert.match(out, /id="enlightenmentRayGrad"/);
 });
 
-test("enlightenment has explicit dark/light palette and reduced-motion rules", () => {
-  const { dark, light } = splitThemes(svg());
+test("all enlightenment parts share one phase opacity", () => {
+  const out = svg();
+  const shared = "0.52";
+  const tableauStart = out.indexOf('<g class="narrative-enlightenment">');
+  const labelStart = out.indexOf('<g class="enlightenment-label"');
+  assert.ok(tableauStart >= 0 && labelStart > tableauStart, "expected enlightenment groups");
+  const tableau = out.slice(tableauStart, labelStart);
+  assert.doesNotMatch(
+    tableau,
+    /(?:opacity|fill-opacity|stroke-opacity)=|attributeName="(?:opacity|stroke-opacity|fill-opacity)"/,
+    "enlightenment parts must inherit one shared opacity rather than pulsing independently"
+  );
+  const label = out.slice(labelStart, out.indexOf("</g>", labelStart) + 4);
+  assert.match(label, new RegExp(`opacity="${shared}"`));
+
+  const { dark, light } = splitThemes(out);
   for (const [name, out] of Object.entries({ dark, light })) {
     const css = styleBlocks(out)[0];
       assert.ok(css.includes(".enlightenment-ray"), `${name}: missing liquid-ray CSS`);
@@ -148,4 +162,38 @@ test("enlightenment has explicit dark/light palette and reduced-motion rules", (
   const lightCss = styleBlocks(light)[0];
   assert.ok(declarationsOf(lightCss, ".enlightenment-ray").length >= 1);
   assert.ok(lightCss.includes("enlightenmentRayGradLight"));
+
+  for (const [name, css] of Object.entries({ dark, light })) {
+    const reducedMotion = css.match(/@media \(prefers-reduced-motion: reduce\) \{([\s\S]*?)\n    \}/)?.[1] ?? "";
+    assert.doesNotMatch(
+      reducedMotion,
+      /\.enlightenment-[^{]+\s*\{[^}]*\b(?:opacity|fill-opacity|stroke-opacity)\s*:/,
+      `${name}: reduced motion must not add a child opacity that compounds the shared parent opacity`
+    );
+    assert.match(
+      css,
+      new RegExp(`\\.narrative-enlightenment\\s*\\{[^}]*opacity:\\s*${shared}`),
+      `${name}: missing shared enlightenment opacity`
+    );
+  }
+  for (const [name, css] of Object.entries({ dark, light })) {
+    for (const selector of [
+      "enlightenment-cloud-glow",
+      "enlightenment-cloud",
+      "enlightenment-cloud-core",
+      "enlightenment-cloud-hole",
+      "enlightenment-ray",
+      "enlightenment-ray-highlight",
+      "enlightenment-trace-line",
+      "enlightenment-fragment",
+      "enlightenment-spark",
+    ]) {
+      const rule = css.match(new RegExp(`\\.${selector}\\s*\\{([^}]*)\\}`))?.[1] ?? "";
+      assert.doesNotMatch(
+        rule,
+        /(?:^|;)\\s*(?:opacity|fill-opacity|stroke-opacity)\\s*:/,
+        `${name}: ${selector} must inherit the shared enlightenment opacity`
+      );
+    }
+  }
 });

@@ -574,6 +574,11 @@ const WAVE_RY_INNER = artRy(31 / 24); // 31
 // new axis. Their silhouette borrows the narrow, rounded, vertical liquid spine
 // language of the Prisoma mark without importing its purple palette into this
 // chart's existing green-to-gold transition.
+// One shared phase opacity. It is applied to the complete enlightenment tableau
+// (including its separate label group) rather than tuning each cloud, ribbon,
+// trace, and spark independently. The gradients retain their authored stop
+// opacities because those describe colour falloff, not different part opacity.
+const ENLIGHTENMENT_OPACITY = 0.52;
 const ENLIGHTENMENT_CLOUD_CX = PLOT_RIGHT - 22;
 const ENLIGHTENMENT_CLOUD_CY = PLOT_TOP + 20;
 const ENLIGHTENMENT_CLOUD_RX = 19;
@@ -833,9 +838,8 @@ function enlightenmentMarkup(portalX) {
     const d1 = liquidRayPath(end, i, 7);
     const h0 = liquidRayHighlight(end, i);
     const h1 = liquidRayHighlight(end, i, 7);
-    return `<path d="${d0}" class="enlightenment-ray enlightenment-liquid-ray" opacity="0.78">
+    return `<path d="${d0}" class="enlightenment-ray enlightenment-liquid-ray">
       <animate attributeName="d" values="${d0};${d1};${d0}" keyTimes="0;0.5;1" begin="${begin}s" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
-      <animate attributeName="opacity" values="0.5;0.88;0.5" begin="${begin}s" dur="4.8s" repeatCount="indefinite"/>
     </path>
     <path d="${h0}" class="enlightenment-ray-highlight" pathLength="1" stroke-dasharray="0.08 0.18" stroke-dashoffset="0">
       <animate attributeName="d" values="${h0};${h1};${h0}" keyTimes="0;0.5;1" begin="${begin}s" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
@@ -851,36 +855,29 @@ function enlightenmentMarkup(portalX) {
     const c2y = target.y + 22;
     const d = `M ${sx.toFixed(1)} ${sy.toFixed(1)} C ${c1x.toFixed(1)} ${c1y.toFixed(1)} ${c2x.toFixed(1)} ${c2y.toFixed(1)} ${target.x.toFixed(1)} ${target.y.toFixed(1)}`;
     const fragmentD = `M ${(sx + 2).toFixed(1)} ${(sy + i * 2).toFixed(1)} L ${(sx + 28).toFixed(1)} ${(sy - 9 - i * 5).toFixed(1)} L ${(target.x - 26).toFixed(1)} ${(target.y + 9 - i * 4).toFixed(1)}`;
-    return `<g class="enlightenment-trace" opacity="0.72">
+    return `<g class="enlightenment-trace">
       <path d="${fragmentD}" pathLength="1" stroke-dasharray="0.035 0.085" class="enlightenment-fragment">
         <animate attributeName="stroke-dashoffset" values="0;1" begin="${(i * 0.42).toFixed(2)}s" dur="3.4s" repeatCount="indefinite"/>
-        <animate attributeName="stroke-opacity" values="0.8;0.2;0" keyTimes="0;0.62;1" begin="${(i * 0.42).toFixed(2)}s" dur="3.4s" repeatCount="indefinite"/>
       </path>
       <path d="${d}" pathLength="1" stroke-dasharray="0.07 0.11" class="enlightenment-trace-line">
         <animate attributeName="stroke-dashoffset" values="0;1" begin="${(i * 0.42).toFixed(2)}s" dur="3.4s" repeatCount="indefinite"/>
-        <animate attributeName="stroke-opacity" values="0.25;0.9;0.25" begin="${(i * 0.42).toFixed(2)}s" dur="3.4s" repeatCount="indefinite"/>
       </path>
       <circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${(1.1 - i * 0.12).toFixed(2)}" class="enlightenment-spark">
         <animateTransform attributeName="transform" type="translate" values="0 0;${(target.x - sx).toFixed(1)} ${(target.y - sy).toFixed(1)}" begin="${(i * 0.42).toFixed(2)}s" dur="3.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.35 0 0.8 1"/>
-        <animate attributeName="opacity" values="0;0.95;0.55;0" keyTimes="0;0.16;0.72;1" begin="${(i * 0.42).toFixed(2)}s" dur="3.4s" repeatCount="indefinite"/>
       </circle>
     </g>`;
   };
   return `
   <g class="narrative-enlightenment">
     <title>age of enlightenment: bounded golden cloud aperture and diagonal rays</title>
-    <ellipse cx="${cloudX}" cy="${cloudY}" rx="${ENLIGHTENMENT_CLOUD_RX + 12}" ry="${ENLIGHTENMENT_CLOUD_RY + 9}" class="enlightenment-cloud-glow">
-      <animate attributeName="opacity" values="0.55;0.82;0.55" begin="0.8s" dur="5.6s" repeatCount="indefinite"/>
-    </ellipse>
+    <ellipse cx="${cloudX}" cy="${cloudY}" rx="${ENLIGHTENMENT_CLOUD_RX + 12}" ry="${ENLIGHTENMENT_CLOUD_RY + 9}" class="enlightenment-cloud-glow"/>
     <ellipse cx="${cloudX}" cy="${cloudY}" rx="${ENLIGHTENMENT_CLOUD_RX}" ry="${ENLIGHTENMENT_CLOUD_RY}" class="enlightenment-cloud"/>
-    <ellipse cx="${cloudX - 3}" cy="${cloudY + 1}" rx="${ENLIGHTENMENT_CLOUD_RX - 7}" ry="${ENLIGHTENMENT_CLOUD_RY - 6}" class="enlightenment-cloud-core">
-      <animate attributeName="rx" values="${ENLIGHTENMENT_CLOUD_RX - 7};${ENLIGHTENMENT_CLOUD_RX - 5};${ENLIGHTENMENT_CLOUD_RX - 7}" begin="0.8s" dur="5.6s" repeatCount="indefinite"/>
-    </ellipse>
+    <ellipse cx="${cloudX - 3}" cy="${cloudY + 1}" rx="${ENLIGHTENMENT_CLOUD_RX - 7}" ry="${ENLIGHTENMENT_CLOUD_RY - 6}" class="enlightenment-cloud-core"/>
     <ellipse cx="${cloudX - 3}" cy="${cloudY + 1}" rx="${ENLIGHTENMENT_CLOUD_RX - 10}" ry="${ENLIGHTENMENT_CLOUD_RY - 8}" class="enlightenment-cloud-hole"/>
     ${ENLIGHTENMENT_RAY_ENDS.map(ray).join("\n    ")}
     ${ENLIGHTENMENT_PARTICLE_TARGETS.map((target, i) => trace(LANES[i * 2], target, i)).join("\n    ")}
   </g>
-  <g class="enlightenment-label">
+  <g class="enlightenment-label" opacity="${ENLIGHTENMENT_OPACITY}">
     <text x="${(PLOT_RIGHT - 2).toFixed(1)}" y="${(PLOT_TOP - 8).toFixed(1)}" text-anchor="end" class="enlightenment-text">age of enlightenment</text>
   </g>`;
 }
@@ -1931,11 +1928,13 @@ function renderSVG(model) {
     /* Enlightenment is the final authored atmosphere: a quiet gold/ivory
        threshold in the upper-right. Rays travel down-left and terminate inside
        the plot; they never become a new data encoding. */
-    .narrative-enlightenment { pointer-events: none; opacity: 0.52; }
-    .enlightenment-cloud-glow { fill: url(#enlightenmentCloud); filter: url(#enlightenmentGlow); opacity: 0.62; }
-    .enlightenment-cloud { fill: url(#enlightenmentCloud); stroke: #fde68a; stroke-width: 0.8; stroke-opacity: 0.56; }
-    .enlightenment-cloud-core { fill: #fff7cc; fill-opacity: 0.7; filter: url(#enlightenmentGlow); }
-    .enlightenment-cloud-hole { fill: #0d1117; fill-opacity: 0.76; stroke: #fff7cc; stroke-opacity: 0.32; stroke-width: 0.7; }
+    /* Every authored enlightenment part shares one phase opacity. The gradient
+       stop opacities below remain colour falloff, not per-part intensity. */
+    .narrative-enlightenment { pointer-events: none; opacity: ${ENLIGHTENMENT_OPACITY}; }
+    .enlightenment-cloud-glow { fill: url(#enlightenmentCloud); filter: url(#enlightenmentGlow); }
+    .enlightenment-cloud { fill: url(#enlightenmentCloud); stroke: #fde68a; stroke-width: 0.8; }
+    .enlightenment-cloud-core { fill: #fff7cc; filter: url(#enlightenmentGlow); }
+    .enlightenment-cloud-hole { fill: #0d1117; stroke: #fff7cc; stroke-width: 0.7; }
     .enlightenment-ray { fill: url(#enlightenmentRayGrad); stroke: none; filter: url(#enlightenmentGlow); }
     .enlightenment-ray-highlight { fill: none; stroke: #fff7cc; stroke-width: 0.65; stroke-linecap: round; }
     .enlightenment-trace-line { fill: none; stroke: #fff7cc; stroke-width: 0.9; stroke-linecap: round; }
@@ -2114,8 +2113,6 @@ function renderSVG(model) {
     }
     @media (prefers-reduced-motion: reduce) {
       animate, animateTransform { display: none; }
-      .enlightenment-cloud-glow, .enlightenment-cloud-core { opacity: 1; }
-      .narrative-enlightenment { opacity: 0.52; }
       /* With the draw-in animation disabled, force the curve fully drawn and
          the end dot visible instead of stuck at their hidden start states. */
       .cum-line { stroke-dasharray: none; }
