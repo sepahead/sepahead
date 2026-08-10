@@ -5,8 +5,8 @@
 // the project's repo page — links inside an <img>-embedded SVG are NOT clickable
 // on GitHub, but a markdown image link [![alt](card.svg)](url) is. The visual
 // language is unchanged from the previous single-panel work-cards.svg: rounded
-// card, per-project accent spine + wash, status badge (stars / lock), one-liner
-// and stack chips, ui-monospace. Theme-adaptive (prefers-color-scheme),
+// card, per-project accent spine + wash, status badge (stars / phase / dataset /
+// lock), one-liner and stack chips, ui-monospace. Theme-adaptive (prefers-color-scheme),
 // reduced-motion safe, zero deps.
 //
 // Live star counts: with a token (GitHub Actions provides GITHUB_TOKEN) each

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // scripts/cumulative.mjs
 // Generates assets/cumulative.svg, an annual contribution bar chart
-// (2020 → current year) with a headline cumulative total.
+// (grouped 2014–22, then one bar per year through the current year, plus a
+// zero placeholder for next year) with a headline cumulative total.
 // Zero npm dependencies; uses the global `fetch` (Node 20+).
 //
 // DESIGN COUSIN of weekdays.svg: same design language (brand cyan, monospace,
@@ -15,8 +16,10 @@
 // ?from=YYYY-01-01 query param that returns that FULL calendar year, and embeds
 // the per-year total in an <h2 id="js-contribution-activity-description">:
 //     <h2 ...>1,676\n contributions\n in 2024</h2>
-// We loop from=2020-01-01 .. from=<currentYear>-01-01 and parse that total
-// (one regex per year, robust to the whitespace/newlines between tokens).
+// We loop from=<START_YEAR>-01-01 .. from=<currentYear>-01-01 and parse that
+// total (one regex per year, robust to whitespace/newlines between tokens).
+// The trailing next-year placeholder bar is NEVER fetched: a year that hasn't
+// started has no fragment, so requesting one would 404 or return junk.
 // This host is NOT api.github.com, so it is not subject to the 60/hr
 // unauthenticated rate limit that is permanently exhausted on Actions runners.
 //
@@ -38,13 +41,13 @@ const USERNAME = process.env.GH_USERNAME || "sepahead";
 // authenticated contributionsCollection total). So the unauthenticated numbers
 // are already complete, and we avoid a PAT that could expose private repos.
 // First year of activity on GitHub for this user (account created 2014). The
-// early years (2014–2020) were sparse, so rather than seven tiny standalone
+// early years (2014–2022) were sparse, so rather than nine tiny standalone
 // bars they are collapsed into ONE stacked, multi-colour bar (a segment per
-// year). 2021 onward each get their own bar.
+// year). 2023 onward each get their own bar.
 const START_YEAR = Number(process.env.CUMULATIVE_START_YEAR) || 2014;
 // Years <= this are merged into the first, stacked bar.
 const STACK_THROUGH_YEAR =
-  Number(process.env.CUMULATIVE_STACK_THROUGH) || 2020;
+  Number(process.env.CUMULATIVE_STACK_THROUGH) || 2022;
 // First year of the agentic-engineering era; the gold mirror seam sits in
 // the gap just before this year's bar.
 const SEAM_YEAR = Number(process.env.CUMULATIVE_SEAM_YEAR) || 2024;
@@ -63,6 +66,12 @@ const escapeXML = (s) => String(s).replace(/[&<>"']/g, (c) => XML_ENTITIES[c]);
 
 // 1,234 -> "1,234" (en-US grouping). Browsers render SVG <text> locale-agnostic.
 const fmt = (n) => Number(n).toLocaleString("en-US");
+// Tooltips ARE user-visible on hover, and the earliest year in the real series
+// is a single contribution, so the plural has to be derived from the count
+// rather than assumed: "1 contributions" shipped in the committed asset until
+// this existed. One helper, so every count-plus-noun surface agrees.
+export const contributionCount = (n) =>
+  `${fmt(n)} contribution${Number(n) === 1 ? "" : "s"}`;
 
 // Reference timezone for "today" / the in-progress year. GitHub Actions runs in
 // UTC and has no notion of the viewer's local timezone, so we can't use "the
@@ -164,8 +173,22 @@ async function fetchYearTotals(
 // ---------------------------------------------------------------------------
 // 2. Build the render model (add cumulative + flag the in-progress year).
 // ---------------------------------------------------------------------------
+// Every row carries an explicit `kind`, and the aggregates below filter on
+// KIND rather than on year arithmetic. That is what keeps the synthesized
+// next-year placeholder out of the peak, the growth rate, the headline total
+// and the cumulative curve by construction: a zero-total row mistaken for the
+// newest COMPLETE year would, for example, drive the CAGR to -100%.
+//   stack   - the grouped early-years bar
+//   year    - a complete, measured year
+//   current - the in-progress year (measured, but partial)
+//   future  - next year: synthesized, zero, never fetched
 function buildModel(years) {
-  // Peak single-year total (for y-axis scaling) across ALL years.
+  // One read, so a build that straddles midnight in the reference timezone
+  // can't disagree with itself about which year is "current".
+  const thisYear = currentYear();
+
+  // Peak single-year total (for y-axis scaling) across the MEASURED years.
+  // `years` only ever holds fetched years, so the placeholder can't be peak.
   let peak = 0;
   for (const y of years) if (y.total > peak) peak = y.total;
 
@@ -181,11 +204,13 @@ function buildModel(years) {
     cumulative += earlyTotal;
     const firstYear = early[0].year;
     rows.push({
+      kind: "stack",
       isStack: true,
       isCurrent: false,
+      isFuture: false,
       total: earlyTotal,
       cumulative,
-      // e.g. 2014–20
+      // e.g. 2014–22
       label: `${firstYear}–${String(STACK_THROUGH_YEAR).slice(2)}`,
       segments: early.map((y) => ({ year: y.year, total: y.total })),
     });
@@ -194,30 +219,64 @@ function buildModel(years) {
   // Bars 1..n: one per year after the stack cutoff.
   for (const y of late) {
     cumulative += y.total;
+    const isCurrent = y.year === thisYear;
     rows.push({
+      kind: isCurrent ? "current" : "year",
       isStack: false,
-      isCurrent: y.year === currentYear(),
+      isCurrent,
+      isFuture: false,
+      year: y.year,
       total: y.total,
       cumulative,
       label: String(y.year),
     });
   }
 
+  // Trailing runway: next year, not started. SYNTHESIZED, never fetched — a
+  // year that hasn't begun has no contributions fragment to parse. It carries
+  // the running cumulative forward unchanged so its tooltip still reads
+  // sensibly, but it contributes nothing to any aggregate.
+  rows.push({
+    kind: "future",
+    isStack: false,
+    isCurrent: false,
+    isFuture: true,
+    year: thisYear + 1,
+    total: 0,
+    cumulative,
+    label: String(thisYear + 1),
+  });
+
   // Average year-over-year PERCENT growth (CAGR, geometric mean of the YoY
   // ratios, robust to wild single-year swings). Measured over the post-stack
-  // era (years >= STACK_THROUGH_YEAR), complete years only: the sparse pre-2020
-  // years would explode a percentage, and the in-progress year would understate
-  // it. null when there isn't enough data.
+  // era (years >= STACK_THROUGH_YEAR), COMPLETE years only: the sparse
+  // pre-2022 years would explode a percentage, and the in-progress year would
+  // understate it. null when there isn't enough data.
+  // `y.year < thisYear` (not `!== thisYear`) is deliberate: it excludes the
+  // in-progress year AND anything dated later, so no future/placeholder year
+  // can ever be mistaken for the final complete year and crater the CAGR.
+  // Window: the individually-plotted complete years only. The base must be
+  // STRICTLY after STACK_THROUGH_YEAR — a base year that is absorbed into the
+  // grouped history bar is not visible as a bar, so the headline rate would be
+  // computed from a year the viewer cannot see (and the base silently changes
+  // meaning whenever the grouping moves). Deriving the bound from
+  // STACK_THROUGH_YEAR keeps the two in lockstep.
   const growthYears = years.filter(
-    (y) => y.year >= STACK_THROUGH_YEAR && y.year !== currentYear()
+    (y) => y.year > STACK_THROUGH_YEAR && y.year < thisYear
   );
   let avgGrowthPct = null;
+  let growthBaseYear = null;
   if (growthYears.length >= 2) {
     const first = growthYears[0];
     const last = growthYears[growthYears.length - 1];
     const periods = last.year - first.year;
     if (first.total > 0 && periods > 0) {
       avgGrowthPct = (Math.pow(last.total / first.total, 1 / periods) - 1) * 100;
+      // Assigned in the SAME branch as the rate, never beside it. The label
+      // reads "since <growthBaseYear>", so a base recorded where no rate was
+      // computed -- or a rate with no base -- would advertise a window the
+      // number was never measured over.
+      growthBaseYear = first.year;
     }
   }
 
@@ -225,6 +284,7 @@ function buildModel(years) {
     rows,
     peak,
     avgGrowthPct,
+    growthBaseYear,
     cumulative,
     startYear: years[0]?.year ?? START_YEAR,
   };
@@ -236,20 +296,182 @@ function buildModel(years) {
 //    Bars: vertical cyan gradient, glowing + pulsing peak, staggered draw-in.
 // ---------------------------------------------------------------------------
 const W = 820;
-const H = 280;
+const H = 300;
 const PAD_LEFT = 56;
 const PAD_RIGHT = 28;
 const HEAD_TOP = 26; // headline number
-const PLOT_TOP = 92;
-const PLOT_BOTTOM = 224; // baseline; year labels sit below
+const PLOT_TOP = 104;
+const PLOT_BOTTOM = 244; // baseline; year labels sit below
 const PLOT_HEIGHT = PLOT_BOTTOM - PLOT_TOP;
 const PLOT_LEFT = PAD_LEFT;
 const PLOT_RIGHT = W - PAD_RIGHT;
 const PLOT_WIDTH = PLOT_RIGHT - PLOT_LEFT;
 
+// --- Reserved value-label band ---------------------------------------------
+// Every bar draws its value label ABOVE its own top edge, i.e. OUTSIDE the
+// bar. When bars were scaled into the FULL plot height, a bar approaching
+// 100% of scale pushed that label clean out of the plot and into the era
+// captions (which sit at PLOT_TOP - 8). That is a STRUCTURAL collision, not
+// a data accident: it fired as soon as the peak year passed ~85% of scale.
+//
+// The cure is to reserve the top of the plot. Bars scale into BAR_HEIGHT and
+// are clamped at BAR_CEILING, so LABEL_BAND px of clearance always remains
+// above the tallest bar for its label plus the peak bar's soft glow --
+// whatever the data does. Gridlines, the baseline, the era bands, the
+// cumulative curve and all decoration art still span the FULL
+// PLOT_TOP..PLOT_BOTTOM box; only the BARS are inset.
+const LABEL_BAND = 26;
+const BAR_HEIGHT = PLOT_HEIGHT - LABEL_BAND;
+const BAR_CEILING = PLOT_TOP + LABEL_BAND;
+
+// Single source of truth for bar scaling, shared by BOTH bar paths (the
+// stacked history bar and the normal single-year bars) so that neither can
+// bypass the reserved band. 2px floor so every non-zero year keeps a
+// visible tick.
+// Floor so every non-zero year shows at least a visible tick, and the gap
+// between a bar top and its value label. Both are leaf values, but they are
+// named because other derived constants below are expressed in terms of them.
+const BAR_MIN_H = 2;
+const VALUE_LABEL_GAP = 8;
+const scaledBarHeight = (total, yMax) =>
+  yMax > 0 && total > 0 ? Math.max((total / yMax) * BAR_HEIGHT, BAR_MIN_H) : 0;
+// Top edge of a bar of height h, clamped out of the reserved label band.
+const clampedBarTop = (h) => Math.max(PLOT_BOTTOM - h, BAR_CEILING);
+// Lowest baseline a value label can take. DERIVED from BAR_CEILING rather than
+// restated as a literal: clampedBarTop already guarantees top >= BAR_CEILING,
+// so this is a pure backstop and the two numbers cannot drift apart the way an
+// independent "PLOT_TOP + 12" could (that literal was in fact unreachable, and
+// silently encoded a different clearance from the one the band actually gives).
+const LABEL_MIN_Y = BAR_CEILING - VALUE_LABEL_GAP;
+const valueLabelBaseline = (top) =>
+  Math.max(top - VALUE_LABEL_GAP, LABEL_MIN_Y);
+
+// Corner radius shared by the bars and by the in-progress cap that is drawn on
+// top of one. A bar's top edge is only FLAT between x + BAR_RADIUS and
+// x + barW - BAR_RADIUS; outside that the rx corner curves away and the pixels
+// are transparent. Deriving the cap's inset from the same constant is what
+// stops the cap overhanging into thin air if the radius is ever retuned.
+const BAR_RADIUS = 5;
+
+// IN-PROGRESS CUE. The current year's bar is a PARTIAL total, but rendered like
+// any other bar it reads as a finished one - and it is currently also the peak,
+// so it carries the peak glow that shouts "record" rather than "still running".
+// The cue is a dashed cap with a slowly marching dash offset, drawn exactly ON
+// the bar's top edge.
+//
+// "Exactly on the edge" is load-bearing, not cosmetic. The only gap between a
+// bar top and its value label is 8px (the label baseline is top - 8, and digits
+// have no descenders so their ink bottom IS the baseline), and the label also
+// carries a 2px legibility halo. Anything floated into that gap would collide.
+// Sitting on the edge instead means the cue can never intrude into the reserved
+// LABEL_BAND, whatever the bar height.
+//
+// The dash offset animates 0 -> BAR_CAP_PERIOD, so the period MUST equal
+// dash + gap for the loop to be seamless; the CSS dasharray and the animation
+// are both derived from these two numbers so they cannot drift apart.
+const BAR_CAP_DASH = 5;
+const BAR_CAP_GAP = 3;
+const BAR_CAP_PERIOD = BAR_CAP_DASH + BAR_CAP_GAP;
+// Minimum bar height that can carry the in-progress cap. The cap is a 2px
+// stroke centred ON the bar's top edge, so it consumes ~2px of the bar's own
+// height. On a bar at or near the 2px minimum floor - every January, when the
+// current year has only a handful of contributions - the cap would cover
+// essentially the whole bar and read AS the bar rather than as a marker on it.
+// Below this height the cue is simply not emitted (no dead markup, no dead
+// SMIL); the dimmed year label and the hover tooltip still say the year is in
+// progress, so nothing is actually lost.
+const BAR_CAP_WIDTH = 2;
+// Suppress the cap on a near-empty bar. DERIVED from the cap's own stroke
+// width: the cap is centred on the bar's top edge, so it consumes about
+// BAR_CAP_WIDTH of the bar's height; below twice that the cap would cover
+// essentially the whole bar and read as the bar itself rather than as a cue.
+// The year label and the tooltip still say "in progress" when it is suppressed.
+const BAR_CAP_MIN_H = BAR_CAP_WIDTH * 2;
+
+// NEXT-YEAR RUNWAY. The trailing placeholder is drawn as a short dashed ghost
+// outline resting on the baseline, NOT as a zero-height bar and not as a tick
+// laid over the baseline (which just read as a rendering artifact of the solid
+// full-width baseline underneath it). An outlined, clearly empty slot reads as
+// deliberate headroom for a year that has not started. Expressed as a fraction
+// of the plot so it stays proportional if PLOT_HEIGHT is retuned.
+// Snapped to 1dp to match the LANE/artRy convention. The snapping is
+// load-bearing rather than cosmetic: this value is interpolated straight into
+// geometry attributes, so rounding AT THE SOURCE is what keeps 13-digit floats
+// out of the emitted SVG and makes the .toFixed(1) at the call site meaningful
+// instead of decorative.
+// Tallest the next-year runway outline is ever allowed to be. This gets its OWN
+// constant and is deliberately NOT derived from BAR_RADIUS: the two happen to
+// want the same handful of pixels today, but one governs data honesty and the
+// other is pure corner styling, so retuning the bars' radius for looks must
+// never silently change how large an empty slot is allowed to render.
+// The previous "PLOT_HEIGHT * 0.09" (12.6px) was a data-honesty bug, not just a
+// styling choice: at yMax 8,000 a measured year of 236 contributions renders
+// 3.4px tall, so an EMPTY placeholder was drawn ~4x taller than a real bar.
+const GHOST_MAX_H = 5;
+// The runway outline's stroke and dash pattern live here rather than as CSS
+// literals so there is one source of truth for them: they are read both by the
+// style block (interpolated, same convention as BAR_CAP_WIDTH and the cap
+// dasharray) and by the reasoning below about how short the outline may get.
+const GHOST_STROKE = 1.5;
+const GHOST_DASH = 4;
+// Corner-radius cap for the runway outline, kept well below half its height so
+// the rect reads as a short bar-shaped lip rather than a stadium.
+const GHOST_RX_MAX = 2;
+
+// Height of the runway outline for a given render: never taller than the
+// SHORTEST measured bar, so an empty slot can never out-tower real data no
+// matter how yMax moves. Snapped to 1dp like every other derived geometry
+// value, since it is interpolated straight into height/y attributes.
+//
+// There is deliberately NO legibility floor here, and that is a structural
+// argument rather than a preference. A floor can only ever RAISE the height, so
+// a floor that respects this ceiling is dead code, while a floor that overrides
+// it lets an EMPTY slot out-tower a measured year. Honesty therefore wins: it is
+// the one property a data chart cannot trade away, and the slot's meaning is
+// carried independently by its dimmed year label and its title text.
+// No floor is needed in practice either. scaledBarHeight floors every measured
+// bar at BAR_MIN_H (2px), so the outline always lands in [BAR_MIN_H,
+// GHOST_MAX_H]; at GHOST_STROKE (1.5px) the top and bottom strokes still leave a
+// gap even at 2px, so the hollow never fills in and reads as a solid sliver.
+const ghostHeightFor = (rows, yMax) => {
+  const measured = rows
+    .filter((row) => !row.isFuture && row.total > 0)
+    .map((row) => scaledBarHeight(row.total, yMax));
+  const h = measured.length ? Math.min(GHOST_MAX_H, ...measured) : GHOST_MAX_H;
+  // TRUNCATE, do not round. Rounding to 1dp can push the outline a hair ABOVE
+  // the shortest measured bar (a 2.75px bar would snap the runway up to 2.8px),
+  // which is precisely the honesty bound this helper exists to hold. Flooring can
+  // only ever shorten the outline, so the bound survives snapping by
+  // construction instead of relying on the call site rounding identically.
+  // No risk of collapsing to nothing: scaledBarHeight already floors every
+  // measured bar at BAR_MIN_H, so h is always at least 2.
+  return Math.floor(h * 10) / 10;
+};
+
+// DECORATION LANES. The portal warp rays, the seam gate's launch ports and
+// rails, the membrane's vesicles and pores and every particle track used to be
+// hardcoded at y = 110/134/158/182/206. Those literals silently encoded ONE
+// plot box (92..224): move PLOT_TOP/PLOT_BOTTOM and the entire tableau would
+// keep sitting at the old coordinates while the bars, gridlines and baseline
+// moved out from under it. Deriving every lane from the live plot box keeps the
+// art in sync with any future resize by construction.
+const MID_Y = (PLOT_TOP + PLOT_BOTTOM) / 2;
+// One lane step. Five lanes (k = -2..2) span 8/11 of the plot height, which
+// reproduces the historical 24px step exactly at PLOT_HEIGHT = 132 (132/5.5 =
+// 24). Fractional k addresses the in-between machined details (gate jambs at
+// +/-1.75 and +/-0.75, membrane cells at +/-1.5).
+const LANE_STEP = PLOT_HEIGHT / 5.5;
+// Rounded to 0.1 so emitted path data stays compact after a resize (and stays
+// byte-identical to the old integer literals at the historical plot size).
+const LANE = (k) => Math.round((MID_Y + k * LANE_STEP) * 10) / 10;
+const LANES = [-2, -1, 0, 1, 2].map(LANE);
+
 // Distinct colours for the stacked history bar, one per early year (oldest
 // first, drawn from the baseline up). Harmonious with the cyan theme but
 // individually distinguishable; cycles if there are more years than colours.
+// Nine entries for the nine grouped years 2014–22 — keep this list at least as
+// long as the group, or the cycle silently repaints late years with an early
+// year's colour and the per-year breakdown stops being readable.
 const STACK_COLORS = [
   "#a78bfa", // violet
   "#60a5fa", // blue
@@ -258,16 +480,83 @@ const STACK_COLORS = [
   "#fbbf24", // amber
   "#fb7185", // rose
   "#f472b6", // pink
+  "#2dd4bf", // teal
+  "#818cf8", // indigo
 ];
 
-// "Nice" rounded-up max for the y-axis (e.g. 1996 -> 2000; 1676 -> 2000).
+// Colour for one segment of the grouped history bar. FAILS LOUDLY instead of
+// cycling. The palette holds exactly as many colours as the default grouping
+// has years, so there is zero headroom, and the previous "index modulo length"
+// wrapped around in silence: a tenth segment reused the first colour and two
+// different years became indistinguishable bands of the same bar.
+//
+// That is reachable WITHOUT editing this file. Both CUMULATIVE_START_YEAR and
+// CUMULATIVE_STACK_THROUGH are environment overrides, so START_YEAR 2010 alone
+// already asks for thirteen segments. A thrown error names the cause; a reused
+// colour just quietly misrepresents the data, which is worse.
+const stackColorFor = (index) => {
+  if (index >= STACK_COLORS.length) {
+    throw new Error(
+      `[cumulative] the grouped history bar needs at least ${index + 1} ` +
+        `distinct segment colours but STACK_COLORS has ${STACK_COLORS.length}. ` +
+        `Widening the grouping via CUMULATIVE_STACK_THROUGH or CUMULATIVE_START_YEAR ` +
+        `requires adding colours to match, or two years render identically.`
+    );
+  }
+  return STACK_COLORS[index];
+};
+
+// "Nice" rounded-up max for the y-axis (e.g. 1676 -> 2000; 4206 -> 5000).
+// The ladder is deliberately FINER than the classic 1/2/5/10: with only those
+// steps the tallest bar swung between 50% and 100% of the plot, so a peak
+// crossing a power of ten (5,000 -> 5,001 snapping yMax to 10,000) halved every
+// bar in the chart overnight. These steps keep the tallest bar in a ~75-100%
+// band year-round, which matters now that the in-progress year is heading for
+// 6,000+ (6,000 -> 6,000 = a full-height bar; 6,001 -> 8,000 = 75%).
+// A 100%-fill bar is safe because bars are scaled into a reserved band that
+// leaves room above them for their own value labels.
+const NICE_STEPS = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10];
 const niceMax = (v) => {
   if (v <= 0) return 1;
   const mag = Math.pow(10, Math.floor(Math.log10(v)));
   const n = v / mag;
-  const step = n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10;
+  const step = NICE_STEPS.find((s) => n <= s) ?? 10;
   return step * mag;
 };
+
+// ---------------------------------------------------------------------------
+// Decoration-art VERTICAL EXTENTS.
+//
+// The portal/gate/membrane art is drawn around MID_Y, and its half-heights were
+// originally authored as raw pixel numbers for a 132px plot (LANE_STEP = 24).
+// That made every extent silently wrong the moment the plot grew: the lanes
+// tracked the new box while the shells, swirls and funnel mouth stayed sized
+// for the old one, so the whole portal read as proportionally shrunken.
+//
+// So express each extent in LANES (multiples of LANE_STEP) instead. The
+// multipliers are exact rationals chosen to reproduce the authored pixel values
+// at LANE_STEP = 24, so introducing them is a numeric no-op today and a
+// verifiable regression check; changing PLOT_HEIGHT now rescales the art with
+// the plot automatically. Deliberately NOT named `snap` — a helper by that name
+// may already exist and a duplicate top-level const is a SyntaxError.
+const artRy = (lanes) => Math.round(LANE_STEP * lanes * 10) / 10;
+
+// Event-horizon glow shells, outermost -> core (authored 64/54/40/27/12).
+const PORTAL_AURA_RY = artRy(8 / 3); // 64: past the outer lanes, with margin
+const PORTAL_HALO_RY = artRy(2.25); // 54: outer shell
+const PORTAL_SHELL_RY = artRy(5 / 3); // 40: mid shell
+const PORTAL_INNER_RY = artRy(1.125); // 27: inner shell
+const PORTAL_CORE_RY = artRy(0.5); // 12: bright core
+// Accretion swirls. The arc RADIUS and the arc ENDPOINT offsets must stay in
+// lockstep: derive one and not the other and the arc distorts on resize.
+const SWIRL_RY_OUTER = artRy(2); // 48: exactly the outer lane pair
+const SWIRL_RY_INNER = artRy(17 / 12); // 34
+// Half-height of the funnel mouth where the era band pinches into the portal.
+const MOUTH_HALF = artRy(13 / 6); // 52
+// Disintegrating wavefront arcs, largest first (authored 46/38/31).
+const WAVE_RY_OUTER = artRy(23 / 12); // 46
+const WAVE_RY_MID = artRy(19 / 12); // 38
+const WAVE_RY_INNER = artRy(31 / 24); // 31
 
 // ---------------------------------------------------------------------------
 // Singularity portal: a gold event-horizon seam in the gap between the last
@@ -339,7 +628,7 @@ function portalDefs(px) {
 function portalFieldMarkup(px) {
   const X = px.toFixed(1);
   const R = PLOT_RIGHT;
-  const midY = (PLOT_TOP + PLOT_BOTTOM) / 2;
+  const midY = MID_Y;
   const span = R - px;
   // Exit cone: rays burst OUT of the portal mouth — born tight around the
   // portal centre, diverging outward to full plot height at the right edge
@@ -399,23 +688,23 @@ function portalFieldMarkup(px) {
       <animate attributeName="opacity" values="0;0;0.7" keyTimes="0;0.5;1" begin="0s" dur="2.2s" fill="freeze"/>
       <animate attributeName="opacity" values="0.7;0.45;0.7" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
     </rect>
-    <ellipse cx="${(px - 4).toFixed(1)}" cy="${midY}" rx="11" ry="64" class="rm-glowEl" opacity="0.7">
+    <ellipse cx="${(px - 4).toFixed(1)}" cy="${midY}" rx="11" ry="${PORTAL_AURA_RY}" class="rm-glowEl" opacity="0.7">
       <animate attributeName="opacity" values="0;0;0.7" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
       <animate attributeName="opacity" values="0.7;0.45;0.7" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
     </ellipse>
-    ${ray(110, "px-gold", 2.3, 0.09, 0.9)}
-    ${ray(134, "px-cyan", 2.5, 0.07, 0.9)}
-    ${ray(158, "px-violet", 2.4, 0.08, 0.9)}
-    ${ray(182, "px-gold", 2.6, 0.06, 0.9)}
-    ${ray(206, "px-cyan", 2.35, 0.09, 0.9)}
-    ${wave(10, 46, "pw-violet", "2.8s", "1.2s")}
-    ${wave(15, 38, "pw-cyan", "3.2s", "1.2s")}
-    ${wave(20, 31, "pw-gold", "3.6s", "1.2s")}
-    ${mote(16, 110, 1.1, "pm-cyan", "2.8s", "0.9s")}
-    ${mote(34, 134, 0.9, "pm-gold", "3.1s", "0.9s")}
-    ${mote(24, 158, 1.3, "pm-violet", "2.95s", "0.9s")}
-    ${mote(42, 182, 0.9, "pm-gold", "3.25s", "0.9s")}
-    ${mote(20, 206, 1.1, "pm-cyan", "3.4s", "0.9s")}
+    ${ray(LANES[0], "px-gold", 2.3, 0.09, 0.9)}
+    ${ray(LANES[1], "px-cyan", 2.5, 0.07, 0.9)}
+    ${ray(LANES[2], "px-violet", 2.4, 0.08, 0.9)}
+    ${ray(LANES[3], "px-gold", 2.6, 0.06, 0.9)}
+    ${ray(LANES[4], "px-cyan", 2.35, 0.09, 0.9)}
+    ${wave(10, WAVE_RY_OUTER, "pw-violet", "2.8s", "1.2s")}
+    ${wave(15, WAVE_RY_MID, "pw-cyan", "3.2s", "1.2s")}
+    ${wave(20, WAVE_RY_INNER, "pw-gold", "3.6s", "1.2s")}
+    ${mote(16, LANES[0], 1.1, "pm-cyan", "2.8s", "0.9s")}
+    ${mote(34, LANES[1], 0.9, "pm-gold", "3.1s", "0.9s")}
+    ${mote(24, LANES[2], 1.3, "pm-violet", "2.95s", "0.9s")}
+    ${mote(42, LANES[3], 0.9, "pm-gold", "3.25s", "0.9s")}
+    ${mote(20, LANES[4], 1.1, "pm-cyan", "3.4s", "0.9s")}
   </g>`;
 }
 
@@ -434,22 +723,22 @@ function portalMarkup(px, fromLabel, toLabel) {
     <title>${title}</title>
     <g filter="url(#portalWobble)" clip-path="url(#portalGap)">
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
-      <ellipse cx="${CX}" cy="${midY}" rx="13" ry="54" class="rm-g1">
+      <ellipse cx="${CX}" cy="${midY}" rx="13" ry="${PORTAL_HALO_RY}" class="rm-g1">
         <animateTransform attributeName="transform" type="rotate" values="0 ${CX} ${midY};4 ${CX} ${midY};0 ${CX} ${midY};-4 ${CX} ${midY};0 ${CX} ${midY}" begin="2.4s" dur="7.2s" repeatCount="indefinite"/>
       </ellipse>
-      <ellipse cx="${CX}" cy="${midY}" rx="9.5" ry="40" class="rm-g2">
+      <ellipse cx="${CX}" cy="${midY}" rx="9.5" ry="${PORTAL_SHELL_RY}" class="rm-g2">
         <animateTransform attributeName="transform" type="rotate" values="0 ${CX} ${midY};-5 ${CX} ${midY};0 ${CX} ${midY};5 ${CX} ${midY};0 ${CX} ${midY}" keyTimes="0;0.28;0.5;0.78;1" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
       </ellipse>
-      <ellipse cx="${CX}" cy="${midY}" rx="6" ry="27" class="rm-g3">
+      <ellipse cx="${CX}" cy="${midY}" rx="6" ry="${PORTAL_INNER_RY}" class="rm-g3">
         <animateTransform attributeName="transform" type="rotate" values="0 ${CX} ${midY};6 ${CX} ${midY};0 ${CX} ${midY};-6 ${CX} ${midY};0 ${CX} ${midY}" keyTimes="0;0.22;0.5;0.72;1" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
       </ellipse>
-      <ellipse cx="${CX}" cy="${midY}" rx="3" ry="12" class="rm-core">
-        <animate attributeName="ry" values="12;14.5;12" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
+      <ellipse cx="${CX}" cy="${midY}" rx="3" ry="${PORTAL_CORE_RY}" class="rm-core">
+        <animate attributeName="ry" values="${PORTAL_CORE_RY};${artRy(0.605)};${PORTAL_CORE_RY}" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
       </ellipse>
-      <path d="M ${CX} ${(midY - 48).toFixed(1)} A 11.5 48 0 1 1 ${(px - 4.1).toFixed(1)} ${(midY - 48).toFixed(1)} Z" class="rm-swirl" pathLength="1" stroke-dasharray="0.16 0.09">
+      <path d="M ${CX} ${(midY - SWIRL_RY_OUTER).toFixed(1)} A 11.5 ${SWIRL_RY_OUTER} 0 1 1 ${(px - 4.1).toFixed(1)} ${(midY - SWIRL_RY_OUTER).toFixed(1)} Z" class="rm-swirl" pathLength="1" stroke-dasharray="0.16 0.09">
         <animate attributeName="stroke-dashoffset" values="1;0" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
       </path>
-      <path d="M ${CX} ${(midY - 34).toFixed(1)} A 7.5 34 0 1 1 ${(px - 4.1).toFixed(1)} ${(midY - 34).toFixed(1)} Z" class="rm-swirl" pathLength="1" stroke-dasharray="0.13 0.12">
+      <path d="M ${CX} ${(midY - SWIRL_RY_INNER).toFixed(1)} A 7.5 ${SWIRL_RY_INNER} 0 1 1 ${(px - 4.1).toFixed(1)} ${(midY - SWIRL_RY_INNER).toFixed(1)} Z" class="rm-swirl" pathLength="1" stroke-dasharray="0.13 0.12">
         <animate attributeName="stroke-dashoffset" values="0;1" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
       </path>
     </g>
@@ -587,7 +876,7 @@ function originDefs(mx, ox, sx) {
       <feGaussianBlur stdDeviation="1.5" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <filter id="originMembrane" filterUnits="userSpaceOnUse" x="${(mx - 18).toFixed(1)}" y="84" width="36" height="148">
+    <filter id="originMembrane" filterUnits="userSpaceOnUse" x="${(mx - 18).toFixed(1)}" y="${PLOT_TOP - 8}" width="36" height="${PLOT_HEIGHT + 16}">
       <feTurbulence type="fractalNoise" baseFrequency="0.008 0.09" numOctaves="2" seed="11" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="3.0" xChannelSelector="R" yChannelSelector="G"/>
     </filter>`;
@@ -610,7 +899,7 @@ function seamFieldMarkup(sx, endX) {
       <animate attributeName="opacity" values="0;0.5;0.35;0" keyTimes="0;0.15;0.8;1" begin="${begin}" dur="7.2s" repeatCount="indefinite"/>
     </circle>`;
   };
-  const midY = (PLOT_TOP + PLOT_BOTTOM) / 2;
+  const midY = MID_Y;
   // Gold-era motes: born at the seam, cruising toward the portal and
   // funnelling toward its centre. Each is a gold/lime crossfade pair so the
   // particle's colour tracks the band beneath it (gold hands off to green
@@ -666,7 +955,7 @@ function seamFieldMarkup(sx, endX) {
   // with CURVED walls: flat near the seam, diving hard at the portal (trumpet
   // funnel in), then flaring back out along the same curvature as the exit
   // rays. One gradient carries the whole run seam -> portal -> axis end.
-  const mouthHalf = 52;
+  const mouthHalf = MOUTH_HALF;
   const mTop = (midY - mouthHalf).toFixed(1);
   const mBot = (midY + mouthHalf).toFixed(1);
   const E = endX.toFixed(1);
@@ -686,19 +975,19 @@ function seamFieldMarkup(sx, endX) {
     <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.45;1" begin="0s" dur="2.4s" fill="freeze"/>
     <animate attributeName="opacity" values="1;0.8;1" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
   </path>
-  ${drift(PLOT_LEFT + 8, sx - 8, 134, 1.0, "2.8s")}
-  ${drift(PLOT_LEFT + 8, sx - 8, 182, 0.8, "4.6s")}
-  ${drift(PLOT_LEFT + 8, sx - 8, 158, 0.9, "6.2s")}
-  ${drift(PLOT_LEFT + 8, sx - 8, 110, 0.8, "3.6s")}
-  ${drift(PLOT_LEFT + 8, sx - 8, 206, 0.9, "5.4s")}
-  ${drift(PLOT_LEFT + 8, sx - 8, 134, 0.7, "7.0s")}
-  ${goldMote(32, 134, 1.1, "2.8s")}
-  ${goldMote(74, 182, 0.9, "4.0s")}
-  ${goldMote(116, 110, 1.0, "5.2s")}
-  ${goldMote(158, 206, 0.9, "6.4s")}
-  ${intake(110, "2.6s")}
-  ${intake(158, "3.4s")}
-  ${intake(206, "4.2s")}`;
+  ${drift(PLOT_LEFT + 8, sx - 8, LANES[1], 1.0, "2.8s")}
+  ${drift(PLOT_LEFT + 8, sx - 8, LANES[3], 0.8, "4.6s")}
+  ${drift(PLOT_LEFT + 8, sx - 8, LANES[2], 0.9, "6.2s")}
+  ${drift(PLOT_LEFT + 8, sx - 8, LANES[0], 0.8, "3.6s")}
+  ${drift(PLOT_LEFT + 8, sx - 8, LANES[4], 0.9, "5.4s")}
+  ${drift(PLOT_LEFT + 8, sx - 8, LANES[1], 0.7, "7.0s")}
+  ${goldMote(32, LANES[1], 1.1, "2.8s")}
+  ${goldMote(74, LANES[3], 0.9, "4.0s")}
+  ${goldMote(116, LANES[0], 1.0, "5.2s")}
+  ${goldMote(158, LANES[4], 0.9, "6.4s")}
+  ${intake(LANES[0], "2.6s")}
+  ${intake(LANES[2], "3.4s")}
+  ${intake(LANES[4], "4.2s")}`;
 }
 
 // Mirror seam above the bars: the Deco Turbine Gate. Sci-fi cyberpunk
@@ -712,7 +1001,7 @@ function seamMarkup(sx, fromLabel) {
   const X = sx.toFixed(1);
   const top = PLOT_TOP;
   const bot = PLOT_BOTTOM;
-  const midY = 158;
+  const midY = MID_Y;
   const title = escapeXML(`agentic engineering since ${fromLabel}`);
   // Faceted octagon helper (flat-ish facets, machined look).
   const oct = (cx, cy, r) => {
@@ -734,11 +1023,18 @@ function seamMarkup(sx, fromLabel) {
     }
     return pts.join(" ");
   };
+  // Stepped ziggurat shoulders. The four steps ride the half-lanes either side
+  // of the iris (+/-1.75 and +/-0.75 lane steps), so the jamb keeps its
+  // machined proportions at any plot height.
+  const jTop = LANE(-1.75);
+  const jUpper = LANE(-0.75);
+  const jLower = LANE(0.75);
+  const jBot = LANE(1.75);
   const jamb = (s) => {
     const x9 = (sx + s * 9).toFixed(1);
     const x60 = (sx + s * 6).toFixed(1);
     const x35 = (sx + s * 3.5).toFixed(1);
-    return `M ${x9} ${top} V 116 H ${x60} V 140 H ${x35} V 176 H ${x60} V 200 H ${x9} V ${bot}`;
+    return `M ${x9} ${top} V ${jTop} H ${x60} V ${jUpper} H ${x35} V ${jLower} H ${x60} V ${jBot} H ${x9} V ${bot}`;
   };
   // Two-sided sunburst: short intake spokes face the organic era, long
   // launch spokes face the portal — a directional emitter, not a half-fan.
@@ -773,28 +1069,28 @@ function seamMarkup(sx, fromLabel) {
       <path d="${jamb(-1)}" class="gate-jamb"/>
       <path d="${jamb(1)}" class="gate-jamb"/>
       ${fan}
-      <line x1="${(sx - 6).toFixed(1)}" y1="110" x2="${(sx - 6).toFixed(1)}" y2="206" class="gate-rail" stroke-dasharray="3 3">
+      <line x1="${(sx - 6).toFixed(1)}" y1="${LANES[0]}" x2="${(sx - 6).toFixed(1)}" y2="${LANES[4]}" class="gate-rail" stroke-dasharray="3 3">
         <animate attributeName="stroke-dashoffset" values="0;6" begin="2.4s" dur="5.2s" repeatCount="indefinite"/>
       </line>
-      <line x1="${(sx + 6).toFixed(1)}" y1="110" x2="${(sx + 6).toFixed(1)}" y2="206" class="gate-rail" stroke-dasharray="3 3">
+      <line x1="${(sx + 6).toFixed(1)}" y1="${LANES[0]}" x2="${(sx + 6).toFixed(1)}" y2="${LANES[4]}" class="gate-rail" stroke-dasharray="3 3">
         <animate attributeName="stroke-dashoffset" values="6;0" begin="2.4s" dur="5.2s" repeatCount="indefinite"/>
       </line>
-      <polygon points="${oct(sx, 110, 6)}" class="gate-port">${fire("2.6s")}</polygon>
-      <polygon points="${oct(sx, 206, 6)}" class="gate-port">${fire("4.2s")}</polygon>
+      <polygon points="${oct(sx, LANES[0], 6)}" class="gate-port">${fire("2.6s")}</polygon>
+      <polygon points="${oct(sx, LANES[4], 6)}" class="gate-port">${fire("4.2s")}</polygon>
       <polygon points="${oct(sx, midY, 8.5)}" class="gate-iris">${fire("3.4s")}</polygon>
       <polygon points="${gear(sx, midY, 4.2, 5.9)}" class="gate-iris-inner">
         <animateTransform attributeName="transform" type="rotate" values="0 ${X} ${midY};0 ${X} ${midY};45 ${X} ${midY};45 ${X} ${midY}" keyTimes="0;0.55;0.72;1" begin="2.4s" dur="2.4s" repeatCount="indefinite"/>
       </polygon>
-      ${[[127, "2.4s"], [134, "2.7s"], [141, "3.0s"], [175, "3.6s"], [182, "3.9s"], [189, "4.2s"]]
+      ${[[LANES[1] - 7, "2.4s"], [LANES[1], "2.7s"], [LANES[1] + 7, "3.0s"], [LANES[3] - 7, "3.6s"], [LANES[3], "3.9s"], [LANES[3] + 7, "4.2s"]]
         .map(
           ([ly, lb]) => `<rect x="${(sx - 0.9).toFixed(1)}" y="${ly}" width="1.8" height="1.8" rx="0.4" class="gate-led">
         <animate attributeName="opacity" values="1;0.25;1;1" keyTimes="0;0.12;0.35;1" begin="${lb}" dur="2.4s" repeatCount="indefinite"/>
       </rect>`
         )
         .join("\n      ")}
-      <rect x="${(sx - 1).toFixed(1)}" y="150" width="2" height="16" rx="1" class="gate-slit">
+      <rect x="${(sx - 1).toFixed(1)}" y="${midY - 8}" width="2" height="16" rx="1" class="gate-slit">
         <animate attributeName="height" values="16;19;16" begin="2.6s" dur="4.2s" repeatCount="indefinite"/>
-        <animate attributeName="y" values="150;148.5;150" begin="2.6s" dur="4.2s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="${midY - 8};${midY - 9.5};${midY - 8}" begin="2.6s" dur="4.2s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values="1;0.6;1;1" keyTimes="0;0.08;0.5;1" begin="3.4s" dur="2.4s" repeatCount="indefinite"/>
       </rect>
     </g>
@@ -819,24 +1115,24 @@ function membraneMarkup(ox) {
   const L = (ox - 5.0).toFixed(1);
   const Rr = (ox + 5.0).toFixed(1);
   const title = escapeXML("human engineering: the organic era");
+  // Interlocking vesicles down the bilayer, on the half-lanes either side of the
+  // nucleus (+/-1.5 and +/-0.75 lane steps). Each row carries its OWN breathing
+  // timing: the previous version matched `cy === 158/140/176` to decide which
+  // cells animate, which silently stopped matching (and dropped the animation)
+  // as soon as the lane became a derived float.
   const cells = [
-    [122, -1.8, 3.0, 5.2],
-    [140, 1.8, 3.4, 6.0],
-    [158, 0, 4.4, 8.0],
-    [176, 1.8, 3.4, 6.0],
-    [194, -1.8, 3.0, 5.2],
+    { cy: LANE(-1.5), dx: -1.8, rx: 3.0, ry: 5.2, nucleus: false, breathe: null },
+    { cy: LANE(-0.75), dx: 1.8, rx: 3.4, ry: 6.0, nucleus: false, breathe: { scale: 1.1, begin: "2.6s", dur: "3.8s" } },
+    { cy: LANE(0), dx: 0, rx: 4.4, ry: 8.0, nucleus: true, breathe: { scale: 1.11, begin: "2.4s", dur: "4.2s" } },
+    { cy: LANE(0.75), dx: 1.8, rx: 3.4, ry: 6.0, nucleus: false, breathe: { scale: 1.1, begin: "3.0s", dur: "4.6s" } },
+    { cy: LANE(1.5), dx: -1.8, rx: 3.0, ry: 5.2, nucleus: false, breathe: null },
   ];
   const vesicles = cells
-    .map(([cy, dx, rx, ry]) => {
-      const isNucleus = cy === 158;
-      const fo = isNucleus ? 0.85 : 0.5;
-      const breathe = isNucleus
-        ? `<animate attributeName="ry" values="${ry};${(ry * 1.11).toFixed(1)};${ry}" begin="2.4s" dur="4.2s" repeatCount="indefinite"/>`
-        : cy === 140
-          ? `<animate attributeName="ry" values="${ry};${(ry * 1.1).toFixed(1)};${ry}" begin="2.6s" dur="3.8s" repeatCount="indefinite"/>`
-          : cy === 176
-            ? `<animate attributeName="ry" values="${ry};${(ry * 1.1).toFixed(1)};${ry}" begin="3.0s" dur="4.6s" repeatCount="indefinite"/>`
-            : "";
+    .map(({ cy, dx, rx, ry, nucleus, breathe: b }) => {
+      const fo = nucleus ? 0.85 : 0.5;
+      const breathe = b
+        ? `<animate attributeName="ry" values="${ry};${(ry * b.scale).toFixed(1)};${ry}" begin="${b.begin}" dur="${b.dur}" repeatCount="indefinite"/>`
+        : "";
       return `<ellipse cx="${(ox + dx).toFixed(1)}" cy="${cy}" rx="${rx}" ry="${ry}" class="origin-cell" fill-opacity="${fo}">
         <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
         ${breathe}
@@ -844,11 +1140,11 @@ function membraneMarkup(ox) {
     })
     .join("\n      ");
   // Pore exhales phase-locked to the drift-mote births on their lanes
-  // (110 -> 3.6s, 158 -> 6.2s, 206 -> 5.4s) at the slow 7.2s drift tempo.
+  // (top -> 3.6s, middle -> 6.2s, bottom -> 5.4s) at the slow 7.2s drift tempo.
   const pores = [
-    [110, "3.6s", 3.2, 5.2],
-    [158, "6.2s", 5.8, 9.8],
-    [206, "5.4s", 3.2, 5.2],
+    [LANES[0], "3.6s", 3.2, 5.2],
+    [LANES[2], "6.2s", 5.8, 9.8],
+    [LANES[4], "5.4s", 3.2, 5.2],
   ]
     .map(
       ([y, begin, prx, pry]) => `<ellipse cx="${X}" cy="${y}" rx="${prx}" ry="${pry}" class="origin-pore">
@@ -882,12 +1178,12 @@ function membraneMarkup(ox) {
         <animate attributeName="stroke-dashoffset" values="4;-8" begin="2.4s" dur="5.6s" repeatCount="indefinite"/>
       </path>
       ${vesicles}
-      <circle cx="${X}" cy="158" r="2.0" class="origin-nucleolus" opacity="0.9">
+      <circle cx="${X}" cy="${MID_Y}" r="2.0" class="origin-nucleolus" opacity="0.9">
         <animate attributeName="opacity" values="0;0;0.9" keyTimes="0;0.25;1" begin="0s" dur="2.4s" fill="freeze"/>
       </circle>
       ${pores}
     </g>
-    <text transform="rotate(-90 46 158)" x="46" y="158" text-anchor="middle" class="origin-text">human engineering
+    <text transform="rotate(-90 46 ${MID_Y})" x="46" y="${MID_Y}" text-anchor="middle" class="origin-text">human engineering
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.55;1" begin="0s" dur="2.6s" fill="freeze"/>
       <animate attributeName="opacity" values="1;0.75;1" begin="2.6s" dur="3.6s" repeatCount="indefinite"/>
     </text>
@@ -895,13 +1191,49 @@ function membraneMarkup(ox) {
 }
 
 function renderSVG(model) {
-  const { rows, peak, avgGrowthPct, cumulative, warning, startYear } = model;
+  const {
+    rows,
+    peak,
+    avgGrowthPct,
+    growthBaseYear,
+    cumulative,
+    warning,
+    startYear,
+  } = model;
   const yMax = niceMax(peak);
   const n = rows.length || 1;
 
   // Bar geometry: even spacing across the plot width.
   const slot = PLOT_WIDTH / n;
   const barW = Math.min(slot * 0.62, 64);
+  // Runway outline height for THIS render: capped by the shortest measured bar
+  // (see ghostHeightFor), so an empty slot can never out-tower real data.
+  const ghostH = ghostHeightFor(rows, yMax);
+  // Corner radius must stay well BELOW half the height. At exactly half, a rect
+  // becomes a stadium, and because ghostH is only a few pixels the previous
+  // "min(BAR_RADIUS, ghostH / 2)" always picked ghostH / 2: the BAR_RADIUS arm
+  // was dead and the outline was ALWAYS a pill, i.e. the one shape this cue is
+  // meant not to be. A third of the height keeps it rounded but bar-like.
+  // Snapped to 1dp like every other derived geometry value. GHOST_RX_MAX does not
+  // bind at today's GHOST_MAX_H (5 / 3 is comfortably under 2); it is a guard so
+  // that raising GHOST_MAX_H later cannot quietly round the lip back into a pill.
+  const ghostRx = Math.round(Math.min(GHOST_RX_MAX, ghostH / 3) * 10) / 10;
+  // Bar heights come from the module-level scale and nowhere else. This is a
+  // partial application of scaledBarHeight, NOT a second implementation of it,
+  // so both the normal bars and the stacked history bar are structurally unable
+  // to escape the reserved label band.
+  const barHeightFor = (total) => scaledBarHeight(total, yMax);
+  // Honesty ceiling for the min-band-inflated history stack: it must stay
+  // visibly SHORTER than the shortest single year that genuinely beat it, so
+  // padding nine sparse segments up to legibility can never make the grouped
+  // bar out-tower a year several times its size.
+  const stackRow = rows.find((r) => r.isStack);
+  const tallerYears = stackRow
+    ? rows.filter((r) => !r.isStack && r.total > stackRow.total)
+    : [];
+  const stackCeiling = tallerYears.length
+    ? Math.min(...tallerYears.map((r) => barHeightFor(r.total))) - 6
+    : BAR_HEIGHT;
 
   // Faint horizontal gridlines only; NO numeric y-axis. The bars and the
   // cumulative curve live on different scales, so a single labelled axis would
@@ -920,10 +1252,7 @@ function renderSVG(model) {
       const cx = PLOT_LEFT + slot * i + slot / 2;
       const x = cx - barW / 2;
       // 2px floor so every non-zero year shows at least a visible tick.
-      const h =
-        yMax > 0 && row.total > 0
-          ? Math.max((row.total / yMax) * PLOT_HEIGHT, 2)
-          : 0;
+      const h = barHeightFor(row.total);
       const y = PLOT_BOTTOM - h;
       // Staggered draw-in: each bar starts from the baseline and grows.
       const begin = 0.15 + i * 0.13; // seconds
@@ -933,30 +1262,58 @@ function renderSVG(model) {
       if (row.isStack) {
         // These early years are so sparse (single/double digits) that a strictly
         // proportional stack would be a few invisible sub-pixel slivers. To make
-        // the per-year breakdown actually legible, each NON-ZERO year gets a
-        // minimum visible band; exact counts live in the hover tooltips and the
-        // bar's total label. Zero years are omitted entirely. The stack is thus
-        // a qualitative "this bar spans several years" cue, not a proportional one.
-        const MIN_SEG_PX = 4;
+        // the per-year breakdown legible, each NON-ZERO year gets a minimum
+        // visible band; exact counts live in the hover tooltips and the bar's
+        // total label. Zero years are omitted entirely. So the stack is a
+        // qualitative "this bar spans several years" cue, not a proportional one.
+        //
+        // BUT that inflation is now bounded twice over, because grouping nine
+        // years (2014-22) at a flat 4px floor would pad a ~500-contribution
+        // group up to the height of a year three times larger:
+        //   1. the per-segment floor shrinks as the segment count grows, and
+        //   2. the assembled stack is rescaled uniformly if it would reach
+        //      `stackCeiling` (see above), which keeps it strictly shorter than
+        //      the shortest single year that genuinely beat it.
+        // Rank between the grouped bar and any real year is therefore always
+        // read correctly, while every segment stays visible.
+        const nonZero = row.segments.filter((s) => s.total > 0).length || 1;
+        const MIN_SEG_PX = Math.min(4, Math.max(1.5, 24 / nonZero));
+        const rawSegs = row.segments.map((seg, si) => {
+          if (seg.total <= 0) return null; // omit empty years, keep colour order
+          const prop = yMax > 0 ? (seg.total / yMax) * BAR_HEIGHT : 0;
+          return { seg, si, sh: Math.max(prop, MIN_SEG_PX) };
+        });
+        const rawH = rawSegs.reduce((s, r) => s + (r ? r.sh : 0), 0);
+        // Uniform squeeze: preserves colour order and relative segment sizes.
+        const squeeze =
+          rawH > stackCeiling && rawH > 0 ? Math.max(stackCeiling, 8) / rawH : 1;
         let accH = 0;
-        const segs = row.segments
-          .map((seg, si) => {
-            if (seg.total <= 0) return ""; // omit empty years, keep colour order
-            const prop = yMax > 0 ? (seg.total / yMax) * PLOT_HEIGHT : 0;
-            const sh = Math.max(prop, MIN_SEG_PX);
+        const segs = rawSegs
+          .map((entry) => {
+            if (!entry) return "";
+            const { seg, si } = entry;
+            const sh = entry.sh * squeeze;
             const sy = PLOT_BOTTOM - accH - sh;
             accH += sh;
-            const color = STACK_COLORS[si % STACK_COLORS.length];
+            const color = stackColorFor(si);
             const segTitle = escapeXML(
-              `${seg.year}: ${fmt(seg.total)} contributions`
+              `${seg.year}: ${contributionCount(seg.total)}`
             );
-            return `<rect x="${x.toFixed(1)}" y="${sy.toFixed(1)}" width="${barW.toFixed(1)}" height="${sh.toFixed(1)}" fill="${color}"><title>${segTitle}</title></rect>`;
+            // The stack-seg class is load-bearing for the TESTS, not for
+            // styling: every segment carries its own inline per-year fill and
+            // no CSS rule targets this class, so it looks unused. Without it
+            // the segments are unaddressable, and the honesty ceiling that
+            // stops nine minimum-inflated segments out-towering a genuinely
+            // larger single year had no coverage at all. Do not remove it as
+            // dead markup.
+            return `<rect x="${x.toFixed(1)}" y="${sy.toFixed(1)}" width="${barW.toFixed(1)}" height="${sh.toFixed(1)}" fill="${color}" class="stack-seg"><title>${segTitle}</title></rect>`;
           })
+          .filter(Boolean)
           .join("\n    ");
         // Actual rendered top of the (min-band-inflated) stack.
         const stackTop = PLOT_BOTTOM - accH;
         const stackTitle = escapeXML(
-          `${row.label}: ${fmt(row.total)} contributions (stacked by year) · cumulative ${fmt(row.cumulative)}`
+          `${row.label}: ${contributionCount(row.total)} (stacked by year) · cumulative ${fmt(row.cumulative)}`
         );
         // Round only the top edge of the whole stack, matching the other bars.
         const clipId = `stackClip${i}`;
@@ -969,7 +1326,7 @@ function renderSVG(model) {
       <animate attributeName="opacity" from="0" to="1" begin="${begin.toFixed(2)}s" dur="${dur}s" fill="freeze"/>
     </g>
     <g class="bar-label">
-      <text x="${cx.toFixed(1)}" y="${(stackTop - 8).toFixed(1)}" text-anchor="middle" class="value">${fmt(row.total)}
+      <text x="${cx.toFixed(1)}" y="${valueLabelBaseline(stackTop).toFixed(1)}" text-anchor="middle" class="value">${fmt(row.total)}
         <animate attributeName="opacity" from="0" to="1" begin="${(begin + dur * 0.6).toFixed(2)}s" dur="${(dur * 0.4).toFixed(2)}s" fill="freeze"/>
       </text>
     </g>
@@ -977,24 +1334,69 @@ function renderSVG(model) {
   </g>`;
       }
 
+      // --- Next-year runway placeholder --------------------------------------
+      // Deliberately NOT a data bar: a zero-height year would read as "measured
+      // zero". Instead it is a dashed GHOST OUTLINE (see ghostHeightFor, which
+      // keeps it no taller than the shortest measured bar) resting on
+      // the baseline plus a dimmed label, so the empty slot reads as deliberate
+      // headroom for the year ahead. An outline is used rather than a tick on
+      // the baseline because a tick sits on top of the solid full-width
+      // baseline and just reads as a rendering artifact. No animation at all,
+      // so the static (no-SMIL) state is already correct.
+      if (row.isFuture) {
+        const futureTitle = escapeXML(`${row.label}: not started yet`);
+        return `
+  <g class="future-slot">
+    <title>${futureTitle}</title>
+    <rect x="${x.toFixed(1)}" y="${(PLOT_BOTTOM - ghostH).toFixed(1)}" width="${barW.toFixed(1)}" height="${ghostH.toFixed(1)}" rx="${ghostRx.toFixed(1)}" class="future-ghost"/>
+    <text x="${cx.toFixed(1)}" y="${PLOT_BOTTOM + 22}" text-anchor="middle" class="year year-future">${escapeXML(row.label)}</text>
+  </g>`;
+      }
+
       // --- Normal single-year bar --------------------------------------------
-      const isPeak = peak > 0 && row.total === peak;
-      const title = `${row.label}: ${fmt(row.total)} contributions${
+      // Future rows are excluded explicitly: a 0-total row must never be able to
+      // tie for peak, even if every measured year were somehow zero.
+      const isPeak = !row.isFuture && peak > 0 && row.total === peak;
+      // One source of truth for "this bar wears the in-progress cap", used both
+      // to emit the cap and to suppress the peak's pulse below (2026 is
+      // typically BOTH peak and current, and the glow + pulse + cap stacked on
+      // one bar is visually muddy — the pulse is the one that can go).
+      // barW guard: the cap spans x + BAR_RADIUS .. x + barW - BAR_RADIUS, which
+      // inverts if a bar is ever narrower than two corner radii.
+      const hasCap =
+        row.isCurrent && h >= BAR_CAP_MIN_H && barW > 2 * BAR_RADIUS;
+      // Inset the cap fully ONTO the bar instead of centring it on the top edge.
+      // Centred, half the stroke hung over the background and the on-bar half
+      // was a near-invisible 1.45:1 against the bar's own cyan; sitting fully on
+      // the bar lets one dark stroke carry real contrast (see .bar-cap).
+      const capY = y + BAR_CAP_WIDTH / 2;
+      const title = `${row.label}: ${contributionCount(row.total)}${
         row.isCurrent ? " (year in progress)" : ""
       } · cumulative ${fmt(row.cumulative)}`;
       const titleEsc = escapeXML(title);
       return `
   <g>
-    ${isPeak ? `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="5" class="bar-glow"/>` : ""}
-    <rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="5" class="bar${isPeak ? " peak" : ""}">
+    ${isPeak ? `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="${BAR_RADIUS}" class="bar-glow"/>` : ""}
+    <rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="${BAR_RADIUS}" class="bar${isPeak ? " peak" : ""}">
       <title>${titleEsc}</title>
       <animate attributeName="height" from="0" to="${h.toFixed(1)}" begin="${begin.toFixed(2)}s" dur="${dur}s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
       <animate attributeName="y" from="${PLOT_BOTTOM}" to="${y.toFixed(1)}" begin="${begin.toFixed(2)}s" dur="${dur}s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
-      ${isPeak ? `<animate attributeName="opacity" values="1;0.65;1" dur="3.6s" begin="2.6s" repeatCount="indefinite"/>` : ""}
+      ${isPeak && !hasCap ? `<animate attributeName="opacity" values="1;0.65;1" dur="3.6s" begin="2.6s" repeatCount="indefinite"/>` : ""}
     </rect>
+    ${/* In-progress cue. Authored at its FINAL y so the no-SMIL and
+         reduced-motion states already render correctly; the animations only
+         carry it up into place and then march the dashes. */
+      hasCap
+        ? `<line x1="${(x + BAR_RADIUS).toFixed(1)}" y1="${capY.toFixed(1)}" x2="${(x + barW - BAR_RADIUS).toFixed(1)}" y2="${capY.toFixed(1)}" class="bar-cap">
+      <animate attributeName="y1" from="${PLOT_BOTTOM}" to="${capY.toFixed(1)}" begin="${begin.toFixed(2)}s" dur="${dur}s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
+      <animate attributeName="y2" from="${PLOT_BOTTOM}" to="${capY.toFixed(1)}" begin="${begin.toFixed(2)}s" dur="${dur}s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
+      <animate attributeName="stroke-dashoffset" from="0" to="${BAR_CAP_PERIOD}" begin="${(begin + dur).toFixed(2)}s" dur="2s" repeatCount="indefinite"/>
+    </line>`
+        : ""
+    }
     <g class="bar-label">
-      <text x="${cx.toFixed(1)}" y="${(y - 8).toFixed(1)}" text-anchor="middle" class="value${isPeak ? " value-peak" : ""}">${fmt(row.total)}
-        <animate attributeName="y" from="${PLOT_BOTTOM}" to="${(y - 8).toFixed(1)}" begin="${begin.toFixed(2)}s" dur="${dur}s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
+      <text x="${cx.toFixed(1)}" y="${valueLabelBaseline(y).toFixed(1)}" text-anchor="middle" class="value${isPeak ? " value-peak" : ""}">${fmt(row.total)}
+        <animate attributeName="y" from="${PLOT_BOTTOM}" to="${valueLabelBaseline(y).toFixed(1)}" begin="${begin.toFixed(2)}s" dur="${dur}s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
         <animate attributeName="opacity" from="0" to="1" begin="${(begin + dur * 0.6).toFixed(2)}s" dur="${(dur * 0.4).toFixed(2)}s" fill="freeze"/>
       </text>
     </g>
@@ -1009,15 +1411,25 @@ function renderSVG(model) {
   // it can't share the bars' y-axis); we map 0..finalCumulative down to a top
   // margin so the curve crests just below the gridlines at the most recent bar.
   const cumMax = cumulative > 0 ? cumulative : 1;
-  const CUM_TOP = PLOT_TOP + 10; // leave headroom so the crest isn't clipped
-  const cumPts = rows.map((row, i) => {
+  // Ceiling for the cumulative curve. DERIVED from BAR_CEILING so the curve
+  // respects the SAME reserved label band the bars do. Pinning it to a separate
+  // "PLOT_TOP + 10" put the crest and its end dot at y=114, i.e. 16px INSIDE the
+  // band, where they crossed the right-most value labels the band exists to
+  // protect. Bars and curve now share one ceiling.
+  const CUM_TOP = BAR_CEILING;
+  // MEASURED rows only. The trailing next-year placeholder carries the running
+  // total forward unchanged, so including it would append a flat dead tail and
+  // park the end dot over an empty slot. Future rows are always appended last,
+  // so slicing them off keeps every remaining index aligned with its slot.
+  const cumRows = rows.filter((row) => !row.isFuture);
+  const cumPts = cumRows.map((row, i) => {
     const cx = PLOT_LEFT + slot * i + slot / 2;
     // Anchor the ends to the bar EDGES (not centres): the curve starts at the
-    // left edge of the first bar and finishes at the right edge of the last bar,
-    // so the line + area span the full width of the bar chart.
+    // left edge of the first bar and finishes at the right edge of the last
+    // measured bar, so the line + area span the measured width of the chart.
     let px = cx;
     if (i === 0) px = cx - barW / 2;
-    if (i === rows.length - 1) px = cx + barW / 2;
+    if (i === cumRows.length - 1) px = cx + barW / 2;
     const cy =
       PLOT_BOTTOM - (row.cumulative / cumMax) * (PLOT_BOTTOM - CUM_TOP);
     return [px, cy];
@@ -1110,7 +1522,7 @@ function renderSVG(model) {
   // its band is ONE continuous gradient — gold at the seam, dimming
   // mid-band, then picking up the singularity's green and intensifying
   // right up to the portal (a single era-blend, not two fields).
-  const seamIdx = rows.findIndex((r) => r.label === String(SEAM_YEAR));
+  const seamIdx = rows.findIndex((r) => r.year === SEAM_YEAR);
   const seamX = seamIdx > 0 ? PLOT_LEFT + slot * seamIdx : null;
   const seamEnd = portalX != null ? portalX : PLOT_RIGHT;
   const seamDefsStr = seamX != null ? seamDefs(seamX, PLOT_RIGHT) : "";
@@ -1133,8 +1545,81 @@ function renderSVG(model) {
       )}</text>`
     : "";
 
+  // Spell out BOTH caveats a sighted reader gets from the visuals: the newest
+  // bar is a partial year, and the trailing slot is an empty placeholder.
+  const currentRow = rows.find((r) => r.isCurrent);
+  const futureRow = rows.find((r) => r.isFuture);
+  // The grouped history bar MUST be announced: without it a screen-reader user
+  // is told the range starts in 2014 but never learns the first bar is a
+  // multi-year aggregate rather than a single year. The per-segment title
+  // elements carry that detail visually, but they are not exposed inside an
+  // image role, so this sentence is the only place it can be conveyed. Keep the
+  // facts here in step with the README alt text so the two cannot drift.
+  // stackRow is already bound near the top of renderSVG, where it clamps the
+  // grouped bar's height against genuinely taller single years. Reuse that
+  // binding: a second const for the same value in the same function scope is a
+  // SyntaxError, and re-deriving it would let the two copies drift apart.
+  // Name the peak YEAR, not just its value. A sighted reader can see which bar
+  // is highlighted; a screen-reader user was previously told only the number.
+  const peakRow =
+    peak > 0 ? rows.find((row) => !row.isFuture && row.total === peak) : null;
+  // The growth rate is drawn as visible <text> in the panel corner, but this
+  // SVG carries role="img" plus an aria-label, which makes the whole subtree
+  // presentational: a screen reader announces the aria-label and NOTHING else,
+  // so a figure that lives only in the markup is unreachable. Build the rate
+  // and its window ONCE here and feed both surfaces from it, so the panel and
+  // the sentence can never state different numbers.
+  // The window travels with the rate on purpose. An unqualified "+193%/yr"
+  // invites the reader to apply it to the whole startYear-onward span, when it
+  // is measured only across the individually plotted complete years -- the
+  // classic misleading-statistic shape, and the one claim on this panel a
+  // reader could not otherwise check.
+  const growthRate =
+    avgGrowthPct != null && growthBaseYear != null
+      ? `${avgGrowthPct >= 0 ? "+" : ""}${Math.round(
+          avgGrowthPct
+        )}%/yr since ${growthBaseYear}`
+      : null;
+  const ariaNotes = [
+    // Spell BOTH years out in full here. The visible axis label is compact
+      // ("2014-22") because it has to fit under a bar, but a screen reader
+      // renders that abbreviation awkwardly, and it also diverges from the
+      // README alt text. The range is startYear through the grouping boundary
+      // by construction, so deriving it cannot drift from what is drawn.
+    stackRow
+      ? `${startYear} to ${STACK_THROUGH_YEAR} are grouped into one stacked bar totalling ${fmt(
+          stackRow.total
+        )}`
+      : "",
+    // The same string the panel corner shows, with the word spelled out:
+    // "avg" is what fits the panel width, but a screen reader renders the
+    // abbreviation poorly. Same compact-visible / spoken-in-full split as the
+    // axis label above, and the figure itself is shared so it cannot drift.
+    growthRate ? `average growth ${growthRate}` : "",
+    currentRow ? `${currentRow.label} is still in progress` : "",
+    futureRow ? `${futureRow.label} is an empty placeholder for the year ahead` : "",
+  ].filter(Boolean);
+  // Hedge the superlative while the record-holder is the year still running.
+  // "peak 6,240 in 2026" alongside "2026 is still in progress" in the same
+  // sentence undercuts itself: the number is the highest MEASURED so far and
+  // keeps moving until the year closes. When the record belongs to a year that
+  // is actually over, "peak" is exact and stays.
+  // Declared after ariaNotes so it can test against the SAME currentRow that
+  // phrases the in-progress clause, instead of re-deriving "the newest year"
+  // and letting the two drift. Compared by label rather than by identity, so a
+  // future currentRow that is a copy rather than the same row object cannot
+  // quietly turn the hedge off.
+  const peakUnfinished =
+    peakRow != null && currentRow != null && peakRow.label === currentRow.label;
+  const peakPhrase = peakRow
+    ? `${peakUnfinished ? "highest so far" : "peak"} ${fmt(peak)} in ${
+        peakRow.label
+      }`
+    : `peak ${fmt(peak)} in a single year`;
   const aria = cumulative > 0
-    ? `Cumulative contributions ${rangeLabel}: ${fmt(cumulative)} total, peak ${fmt(peak)} in a single year`
+    ? `Cumulative contributions ${rangeLabel}: ${fmt(cumulative)} total, ${peakPhrase}, shown as annual bars with a running cumulative total curve${
+        ariaNotes.length ? `. ${ariaNotes.join("; ")}` : ""
+      }`
     : `Cumulative contributions ${rangeLabel}: no data`;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
@@ -1188,12 +1673,88 @@ function renderSVG(model) {
     .value-peak { font: 700 15px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #22d3ee; }
     .year { font: 500 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
     .year-peak { font-weight: 700; fill: #22d3ee; }
+    /* Next-year runway: dimmed so it reads as "not yet", not as a zero result.
+       CONTRAST FLOOR, do not lower: .year is #8b949e, which is 6.15:1 on the dark
+       background. Opacity composites toward the BACKDROP, so this ONE value has
+       to clear the 4.5:1 normal-text minimum for a 13px label in BOTH themes.
+       Measured on the blended result: dark #8b949e over #0d1117 gives 5.19:1,
+       light #57606a over #ffffff gives 5.02:1. Earlier values failed on the LIGHT
+       side while dark passed and hid it -- 0.85 was 4.48:1 light versus 4.73:1
+       dark, and 0.45 was 2.17:1. Light is the binding constraint here, so any
+       future retune has to be checked against white, not just the dark canvas.
+       Opacity is used rather than an explicit fill because it is CASCADE-SAFE:
+       theme-split appends the unwrapped light rules AFTER the base ones, so a
+       light .year fill would outrank an equal-specificity .year-future fill and
+       erase the cue entirely, whereas opacity is a different property and
+       composes with whichever fill the active theme supplies. The dim stays
+       shallow on purpose: the dashed runway outline below is the primary "not
+       yet" cue, so the label only has to hint at it while remaining legible.
+       The COMPUTED per-theme ratio is asserted in the chart contrast tests, not
+       this literal, so raising it can never silently break either theme. */
+    .year-future { opacity: 0.9; }
+    /* Next-year runway outline. Dashed and unfilled so the slot reads as an
+       empty placeholder rather than a measured zero-height result. */
+    /* Butt caps (the default) are load-bearing on every dashed stroke here:
+       stroke-linecap: round extends each dash by stroke-width/2 at BOTH ends,
+       which at these small dash/gap sizes closes the gaps and renders as a
+       near-solid line, defeating the "not a measured value" cue entirely. */
+    /* Non-text graphical objects need 3:1 (WCAG 1.4.11), and #30363d on the dark
+       background was only 1.49:1 -- effectively invisible for an element that
+       CONVEYS INFORMATION rather than merely structuring the plot the way .grid
+       and .baseline do. #6e7681 is already in this palette and measures 4.1:1 on
+       the dark background and 4.6:1 on white, so it needs no light override. */
+    .future-ghost { fill: none; stroke: #6e7681; stroke-width: ${GHOST_STROKE}; stroke-dasharray: ${GHOST_DASH} ${GHOST_DASH}; }
     .axis { font: 400 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6e7681; }
     .warning { font: 500 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; }
     .grid { stroke: #21262d; stroke-width: 1; }
     .baseline { stroke: #30363d; stroke-width: 1; }
     .bar { fill: url(#barGrad); }
     .bar-glow { fill: #22d3ee; filter: url(#glow); opacity: 0.55; }
+    /* In-progress cue: a dashed cap on the current (partial) year's bar, so a
+       bar that is still growing never reads as a finished total. Drawn exactly
+       ON the bar's top edge, so it cannot reach into the reserved LABEL_BAND.
+       pointer-events: none keeps it from stealing hover from the bar's own
+       tooltip. The dasharray is derived from the same constants as the
+       marching dash-offset animation so the loop stays seamless. */
+    /* In-progress cap: an ADDITIVE light-cyan dashed edge, deliberately not a
+       subtractive notch stroked in the background/halo colour. A background-
+       matched stroke silently becomes a visible smear the moment the page or
+       halo colour changes; an additive tint from the existing palette cannot.
+       Butt caps for the same reason as .future-ghost above, and the arithmetic
+       is worth stating because it is the regression oracle: a round linecap
+       extends every dash by stroke-width/2 at BOTH ends, so at stroke-width 2 a
+       BAR_CAP_DASH/BAR_CAP_GAP of 5/3 would render as ~7px dashes separated by
+       ~1px gaps - visually solid, and the whole "still accumulating" cue is
+       lost. Keep the caps butt (the CSS default) whenever either value changes.
+       The stroke is ADDITIVE cyan (#a5f3fc dark, #0e7490 light - both already in
+       the palette) rather than a background-coloured subtractive notch, so it
+       cannot silently break if the halo or background colour ever changes.
+       EDITOR FOOTGUN: this comment lives inside the SVG template literal AND
+       inside style content, so two characters are forbidden here. A backtick
+       terminates the surrounding template literal (that already truncated this
+       file once). A raw less-than sign is a FATAL XML parse error: style
+       content is ordinary character data, not CDATA, so the whole image fails
+       to render. Spell both out in prose, as this comment does, and never
+       paste an element name in angle brackets. Guarded by
+       scripts/chart-svg.test.mjs, which strict-scans the generated SVG. */
+    /* DARK cyan, and the same value in both themes. The cap is inset fully onto
+       the bar (see capY), and .bar is url(#barGrad) with no light-mode override,
+       so the only background it is ever measured against is that theme-invariant
+       cyan -- one value therefore suffices and a light override would be dead
+       code. Luminance, not hue, is what buys contrast here: the previous light
+       cyan #a5f3fc measured 1.45:1 against the bar, and the amber #fbbf24 in this
+       palette is no better at 1.09:1 because both are bright.
+       So go the other way and stroke it in the PAGE BACKGROUND colour: the
+       dashes then read as notches eroding an unfinished top edge rather than as
+       decoration laid on top of it, and #0d1117 measures roughly 10:1 against
+       the bar. (#0e7490, tried before this, came to about 2.98:1 -- a shade
+       UNDER the 3:1 WCAG 1.4.11 minimum for a graphical object.)
+       Background-coloured strokes are already this file's convention; the text
+       legibility halos work the same way.
+       ONE value is correct here: .bar is a theme-invariant cyan gradient with
+       no light variant, so that cyan is the only backdrop this is ever measured
+       against, and a light override would be dead code. */
+    .bar-cap { stroke: #0d1117; stroke-width: ${BAR_CAP_WIDTH}; stroke-dasharray: ${BAR_CAP_DASH} ${BAR_CAP_GAP}; pointer-events: none; }
     .bar-label { opacity: 1; }
     .cum-area { fill: url(#cumGrad); }
     .cum-line { fill: none; stroke: url(#cumLineGrad); stroke-width: 1.5; stroke-opacity: 0.2; stroke-linecap: round; stroke-linejoin: round; }
@@ -1316,8 +1877,8 @@ function renderSVG(model) {
   <rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="16" class="panel"/>
   <text x="${PAD_LEFT}" y="${HEAD_TOP + 32}" class="headline">${headlineNum}</text>
   <text x="${PAD_LEFT}" y="${HEAD_TOP + 60}" class="sub">total contributions since ${startYear}</text>
-  ${avgGrowthPct != null
-    ? `<text x="${PLOT_RIGHT}" y="${HEAD_TOP}" text-anchor="end" class="sub">avg growth ${avgGrowthPct >= 0 ? "+" : ""}${Math.round(avgGrowthPct)}%/yr</text>`
+  ${growthRate
+    ? `<text x="${PLOT_RIGHT}" y="${HEAD_TOP}" text-anchor="end" class="sub">avg growth ${escapeXML(growthRate)}</text>`
     : ""}
   ${gridlines}
   <line x1="${PLOT_LEFT}" y1="${PLOT_BOTTOM}" x2="${PLOT_RIGHT}" y2="${PLOT_BOTTOM}" class="baseline"/>
@@ -1350,13 +1911,16 @@ async function loadModel(
   const summary = years.map((y) => `${y.year}=${y.total}`).join(" ");
   console.log(`[cumulative] ${summary}`);
   const model = buildModel(years);
+  const placeholders = model.rows.filter((r) => r.isFuture).length;
   console.log(
-    `[cumulative] ${model.rows.length} bars; cumulative=${model.cumulative}; peak=${model.peak}; avgGrowth=${model.avgGrowthPct?.toFixed(1)}%/yr (sources: ${years
+    `[cumulative] ${model.rows.length - placeholders} measured bars + ${placeholders} placeholder; cumulative=${model.cumulative}; peak=${model.peak}; avgGrowth=${model.avgGrowthPct?.toFixed(1)}%/yr (sources: ${years
       .map((y) => `${y.year}:${y.source}`)
       .join(", ")}).`
   );
   // Silent-zero guard: this profile always has thousands of contributions, so
-  // a parsed total of 0 means GitHub changed both known markup forms.
+  // a parsed total of 0 means GitHub changed both known markup forms. The
+  // synthesized placeholder contributes 0 to `cumulative`, so it can never mask
+  // a genuine parse failure here.
   if (!(model.cumulative > 0)) {
     throw new Error(
       `parsed 0 total contributions for ${START_YEAR}–${end}, likely a ` +
@@ -1388,7 +1952,14 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   });
 }
 
+// ONE export site, so there is a single place to see the module's surface.
+// Every constant here is the source of truth for a bound that a test asserts
+// against: a test that restates the literal instead silently stops testing the
+// renderer the moment the constant is retuned.
 export {
+  BAR_CEILING,
+  GHOST_MAX_H,
+  STACK_THROUGH_YEAR,
   START_YEAR,
   buildModel,
   fetchYearTotal,

@@ -65,7 +65,12 @@ function gcDefs(svg) {
   return out;
 }
 
-const cleanVariant = (s) => gcDefs(s).replace(/:root\s*\{\s*\}\s*\n?/g, "");
+// Generated SVGs are committed verbatim; strip indentation from blank lines so
+// equivalent theme variants do not fail repository whitespace checks.
+const cleanVariant = (s) =>
+  gcDefs(s)
+    .replace(/:root\s*\{\s*\}\s*\n?/g, "")
+    .replace(/[ \t]+$/gm, "");
 
 export function splitThemes(svg) {
   const base = stripColorScheme(svg);

@@ -17,6 +17,7 @@ on:
       - "assets/work-graph-*.svg"
       - "assets/title-*.svg"
       - ".github/workflows/content.yml"
+      - ".github/workflows/sync-private-cv.yml"
 
 permissions:
   contents: read

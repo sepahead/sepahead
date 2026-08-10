@@ -3,14 +3,78 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Curriculum Vitae — Sepehr Mahmoudian</title>
-<meta name="description" content="Public English and German curriculum vitae editions for Sepehr Mahmoudian, AI/ML engineer in Berlin.">
+<title>Sepehr Mahmoudian CV / Lebenslauf — Senior AI Engineer, Berlin</title>
+<meta name="description" content="Download Sepehr Mahmoudian's English CV or German Lebenslauf: domain-specific AI agent harnesses, LLM/VLM evaluation and research software.">
 <meta name="author" content="Sepehr Mahmoudian">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <link rel="canonical" href="https://sepahead.github.io/sepahead/cv/">
 <link rel="icon" href="https://github.com/sepahead.png">
-<link rel="alternate" hreflang="en" type="application/pdf" href="https://sepahead.github.io/sepahead/cv/Sepehr_Mahmoudian_CV_EN.pdf">
-<link rel="alternate" hreflang="de" type="application/pdf" href="https://sepahead.github.io/sepahead/cv/Sepehr_Mahmoudian_CV_DE.pdf">
+<link rel="sitemap" type="application/xml" href="https://sepahead.github.io/sepahead/sitemap.xml">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sepehr Mahmoudian">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="de_DE">
+<meta property="og:title" content="Sepehr Mahmoudian CV / Lebenslauf — Senior AI Engineer, Berlin">
+<meta property="og:description" content="Public three-page CV editions covering domain-specific AI agent harnesses, LLM/VLM evaluation, computational neuroscience and multimodal 3D perception.">
+<meta property="og:url" content="https://sepahead.github.io/sepahead/cv/">
+<meta property="og:image" content="https://github.com/sepahead.png">
+<meta property="og:image:alt" content="GitHub avatar of Sepehr Mahmoudian (@sepahead)">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@SepAhead">
+<meta name="twitter:title" content="Sepehr Mahmoudian CV / Lebenslauf — Senior AI Engineer, Berlin">
+<meta name="twitter:description" content="Public English CV and German Lebenslauf covering domain-specific AI agent harnesses, LLM/VLM evaluation and research software.">
+<meta name="twitter:image" content="https://github.com/sepahead.png">
+<meta name="twitter:image:alt" content="GitHub avatar of Sepehr Mahmoudian (@sepahead)">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": "https://sepahead.github.io/sepahead/cv/#cv-page",
+      "url": "https://sepahead.github.io/sepahead/cv/",
+      "name": "Sepehr Mahmoudian CV / Lebenslauf",
+      "description": "Public three-page English and German curriculum vitae editions covering domain-specific AI agents and custom harnesses, LLM/VLM evaluation and research software.",
+      "inLanguage": ["en", "de"],
+      "isPartOf": { "@id": "https://sepahead.github.io/sepahead/#website" },
+      "about": { "@id": "https://sepahead.github.io/sepahead/#person" },
+      "hasPart": [
+        { "@id": "https://sepahead.github.io/sepahead/cv/Sepehr_Mahmoudian_CV_EN.pdf#document" },
+        { "@id": "https://sepahead.github.io/sepahead/cv/Sepehr_Mahmoudian_CV_DE.pdf#document" }
+      ]
+    },
+    {
+      "@type": "DigitalDocument",
+      "@id": "https://sepahead.github.io/sepahead/cv/Sepehr_Mahmoudian_CV_EN.pdf#document",
+      "url": "https://sepahead.github.io/sepahead/cv/Sepehr_Mahmoudian_CV_EN.pdf",
+      "name": "Sepehr Mahmoudian — English Curriculum Vitae",
+      "description": "Public three-page English CV for Sepehr Mahmoudian, Senior AI Engineer in Berlin.",
+      "inLanguage": "en",
+      "encodingFormat": "application/pdf",
+      "author": { "@id": "https://sepahead.github.io/sepahead/#person" },
+      "about": { "@id": "https://sepahead.github.io/sepahead/#person" },
+      "isPartOf": { "@id": "https://sepahead.github.io/sepahead/cv/#cv-page" }
+    },
+    {
+      "@type": "DigitalDocument",
+      "@id": "https://sepahead.github.io/sepahead/cv/Sepehr_Mahmoudian_CV_DE.pdf#document",
+      "url": "https://sepahead.github.io/sepahead/cv/Sepehr_Mahmoudian_CV_DE.pdf",
+      "name": "Sepehr Mahmoudian — Deutscher Lebenslauf",
+      "description": "Öffentlicher dreiseitiger Lebenslauf von Sepehr Mahmoudian, Senior-KI-Entwickler in Berlin.",
+      "inLanguage": "de",
+      "encodingFormat": "application/pdf",
+      "author": { "@id": "https://sepahead.github.io/sepahead/#person" },
+      "about": { "@id": "https://sepahead.github.io/sepahead/#person" },
+      "isPartOf": { "@id": "https://sepahead.github.io/sepahead/cv/#cv-page" }
+    }
+  ]
+}
+</script>
 <style>
   :root { color-scheme: dark light; }
   * { box-sizing: border-box; }
@@ -31,6 +95,9 @@
     border-radius: 2px;
     background: linear-gradient(90deg, #22d3ee, #a78bfa 55%, rgba(167,139,250,0));
   }
+  .profile-copy { margin: 20px 0 0; }
+  .profile-copy p { margin: 10px 0; }
+  .profile-copy [lang="de"] { color: #a5adb7; }
   .choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 28px 0; }
   .choice {
     display: block;
@@ -49,7 +116,7 @@
   @media (max-width: 560px) { .choices { grid-template-columns: 1fr; } }
   @media (prefers-color-scheme: light) {
     body { background: #fff; color: #1f2328; }
-    .role, .choice span { color: #57606a; }
+    .role, .choice span, .profile-copy [lang="de"] { color: #57606a; }
     .choice { border-color: #d0d7de; color: #0969da; }
     .choice:hover { border-color: #0969da; }
     .choice strong { color: #1f2328; }
@@ -61,20 +128,23 @@
 <body>
 <main>
   <div class="role">Sepehr Mahmoudian</div>
-  <h1>Curriculum Vitae</h1>
+  <h1>CV / Lebenslauf</h1>
   <div class="accent" aria-hidden="true"></div>
-  <p>Choose the public three-page edition:</p>
+  <div class="profile-copy">
+    <p>Senior AI Engineer in Berlin with more than a decade of experience across applied AI, research software and computational neuroscience. The public three-page CV covers domain-specific AI agents and custom harnesses, LLM/VLM evaluation and traceability, knowledge graphs and Graph RAG, information-theoretic representation analysis and Partial Information Decomposition (PID), robotics and multimodal 3D perception.</p>
+    <p lang="de">Senior-KI-Entwickler in Berlin mit mehr als zehn Jahren Erfahrung in angewandter KI, Forschungssoftware und Computational Neuroscience. Der öffentlich zugängliche, dreiseitige Lebenslauf behandelt domänenspezifische KI-Agenten und maßgeschneiderte Agenten-Harnesses, LLM-/VLM-Evaluation sowie Lauf- und Ergebnistracing, Wissensgraphen und Graph RAG, informationstheoretische Repräsentationsanalyse und Partial Information Decomposition (PID), Robotik sowie multimodale 3D-Wahrnehmung.</p>
+  </div>
   <div class="choices">
-    <a class="choice" href="Sepehr_Mahmoudian_CV_EN.pdf" type="application/pdf">
-      <strong>English</strong>
-      <span>Curriculum Vitae · PDF</span>
+    <a class="choice" href="https://sepahead.github.io/sepahead/cv/Sepehr_Mahmoudian_CV_EN.pdf" type="application/pdf" hreflang="en" lang="en">
+      <strong>Download the English CV</strong>
+      <span>Three-page public edition · PDF</span>
     </a>
-    <a class="choice" href="Sepehr_Mahmoudian_CV_DE.pdf" type="application/pdf" lang="de">
-      <strong>Deutsch</strong>
-      <span>Lebenslauf · PDF</span>
+    <a class="choice" href="https://sepahead.github.io/sepahead/cv/Sepehr_Mahmoudian_CV_DE.pdf" type="application/pdf" hreflang="de" lang="de">
+      <strong>Deutschen Lebenslauf öffnen</strong>
+      <span>Öffentliche Fassung · 3 Seiten · PDF</span>
     </a>
   </div>
-  <p class="back"><a href="../">Back to the profile</a></p>
+  <p class="back"><a href="../">Back to the profile / Zurück zum Profil</a></p>
 </main>
 </body>
 </html>
