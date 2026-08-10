@@ -844,11 +844,28 @@ function enlightenmentMarkup(portalX) {
         <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="${(parseFloat(begin)+1.0).toFixed(2)}s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>`;
   };
+  // Diffraction interference bands on the outer "wing" rays only —
+  // the central core (angles 88-92) stays pure, like Tyrael's angelic wings.
+  const interferenceLine = (ray, i) => {
+    if (ray.angle >= 88 && ray.angle <= 92) return "";
+    const rad = (ray.angle * Math.PI) / 180;
+    const cosA = Math.cos(rad);
+    const sinA = Math.sin(rad);
+    const ex = srcX + ray.len * cosA;
+    const ey = srcY + ray.len * sinA;
+    const sw = ray.w * 0.85;
+    const begin = (i * 0.22).toFixed(2);
+    const period = 9;
+    return `<line x1="${srcX.toFixed(1)}" y1="${srcY.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#ffffff" stroke-width="${sw.toFixed(1)}" stroke-opacity="0.30" stroke-dasharray="5 4" class="new-age-interference">
+        <animate attributeName="stroke-dashoffset" values="0;${-period}" begin="${begin}s" dur="1.6s" repeatCount="indefinite"/>
+      </line>`;
+  };
   return `
   <g class="narrative-enlightenment">
-    <title>the new age: 20 rays of light streaming from above with spectral color fringing</title>
+    <title>the new age: 20 rays with spectral fringing, winged interference bands on the sides</title>
     ${NEW_AGE_RAYS.map(rayPolygon).join("\n    ")}
     ${NEW_AGE_RAYS.map((r, i) => spectralFringe(r, i)).join("\n    ")}
+    ${NEW_AGE_RAYS.map((r, i) => interferenceLine(r, i)).join("\n    ")}
   </g>
   <g class="new-age-label" opacity="${NEW_AGE_OPACITY}">
     <text x="${(PLOT_RIGHT - 2).toFixed(1)}" y="${(PLOT_TOP - 8).toFixed(1)}" text-anchor="end" class="new-age-text">the new age</text>
@@ -1771,7 +1788,7 @@ function renderSVG(model) {
     futureRows.length > 1
       ? `${futureRows[0].label} to ${futureRows[1].label} are an unstarted future runway; the enlightenment phase sits between them`
       : "",
-    "the visual phase motif continues into 20 rays of light streaming from above with spectral color fringing",
+    "the visual phase motif continues into 20 rays of light with spectral fringing and winged interference bands",
   ].filter(Boolean);
   // Hedge the superlative while the record-holder is the year still running.
   // "peak 6,240 in 2026" alongside "2026 is still in progress" in the same
@@ -1906,6 +1923,7 @@ function renderSVG(model) {
     .narrative-enlightenment { pointer-events: none; opacity: ${NEW_AGE_OPACITY}; }
     .new-age-ray { fill: url(#newAgeRayGrad); stroke: none; filter: url(#newAgeGlow); mix-blend-mode: screen; }
     .new-age-fringe { pointer-events: none; stroke-linejoin: round; }
+    .new-age-interference { pointer-events: none; stroke-linecap: butt; }
     .new-age-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fde68a; letter-spacing: 2px; }
     .grid { stroke: #21262d; stroke-width: 1; }
     .baseline { stroke: #30363d; stroke-width: 1; }
@@ -2067,6 +2085,7 @@ function renderSVG(model) {
       .portal-boom { stroke: #4d7c0f; }
       .new-age-ray { fill: url(#newAgeRayGradLight); stroke: none; }
       .new-age-fringe { }
+      .new-age-interference { stroke: #fef3c7; }
       .new-age-text { fill: #92400e; }
       .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text, .new-age-text { stroke: #ffffff; }
     }
