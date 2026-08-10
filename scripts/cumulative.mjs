@@ -569,8 +569,11 @@ const WAVE_RY_MID = artRy(19 / 12); // 38
 const WAVE_RY_INNER = artRy(31 / 24); // 31
 
 // Enlightenment aperture: a bounded upper-right destination, not a fourth data
-// series. Rays begin in this cloud-hole and travel diagonally down-left, stopping
-// inside the plot so they read as direction and release rather than a new axis.
+// series. Liquid ribbons begin in this cloud-hole and travel diagonally down-left,
+// stopping inside the plot so they read as direction and release rather than a
+// new axis. Their silhouette borrows the narrow, rounded, vertical liquid spine
+// language of the Prisoma mark without importing its purple palette into this
+// chart's existing green-to-gold transition.
 const ENLIGHTENMENT_CLOUD_CX = PLOT_RIGHT - 22;
 const ENLIGHTENMENT_CLOUD_CY = PLOT_TOP + 20;
 const ENLIGHTENMENT_CLOUD_RX = 19;
@@ -775,12 +778,65 @@ function enlightenmentMarkup(portalX) {
   const cloudX = ENLIGHTENMENT_CLOUD_CX;
   const cloudY = ENLIGHTENMENT_CLOUD_CY;
   const cloudEdgeX = cloudX - ENLIGHTENMENT_CLOUD_RX + 4;
-  const ray = (end, i) => {
+  // Prisoma-inspired liquid rays: each one is a closed, tapered ribbon rather
+  // than a straight stroke. The neck is broad where it leaves the aperture,
+  // the body bends in two gentle S-curves, and the lower-left tip dissolves to
+  // a point before it can touch a bar or the plot edge. The phase parameter
+  // gives SMIL a nearby alternate silhouette, so the motion is a slow liquid
+  // sway rather than a line-dash gimmick.
+  const liquidRayPath = (end, i, phase = 0) => {
     const startY = cloudY - 8 + i * 4;
-    return `<line x1="${cloudEdgeX.toFixed(1)}" y1="${startY.toFixed(1)}" x2="${end.x.toFixed(1)}" y2="${end.y.toFixed(1)}" class="enlightenment-ray" pathLength="1" stroke-dasharray="0.16 0.08" opacity="0.78">
-      <animate attributeName="stroke-dashoffset" values="0;0.24;0" begin="${(i * 0.34).toFixed(2)}s" dur="4.8s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.5;0.88;0.5" begin="${(i * 0.34).toFixed(2)}s" dur="4.8s" repeatCount="indefinite"/>
-    </line>`;
+    const width = [7.2, 9.4, 11.8, 8.8, 6.8][i];
+    const sway = (i % 2 === 0 ? 1 : -1) * phase;
+    const sx = cloudEdgeX;
+    const ex = end.x;
+    const ey = end.y;
+    const length = Math.hypot(ex - sx, ey - startY);
+    const nx = -(ey - startY) / length;
+    const ny = (ex - sx) / length;
+    const offset = (point, amount) => ({
+      x: point.x + nx * amount,
+      y: point.y + ny * amount,
+    });
+    const start = { x: sx, y: startY };
+    const c1 = { x: sx - 10 + sway, y: startY + 30 };
+    const c2 = { x: ex + 24 + sway, y: ey - 42 };
+    const left = offset(start, width / 2);
+    const leftC1 = offset(c1, width * 0.44);
+    const leftC2 = offset(c2, width * 0.12);
+    const right = offset(start, -width / 2);
+    const rightC1 = offset(c1, -width * 0.44);
+    const rightC2 = offset(c2, -width * 0.12);
+    const p = (point) => `${point.x.toFixed(1)} ${point.y.toFixed(1)}`;
+    return [
+      `M ${p(left)}`,
+      `C ${p(leftC1)} ${p(leftC2)} ${p(end)}`,
+      `C ${p(rightC2)} ${p(rightC1)} ${p(right)}`,
+      "Z",
+    ].join(" ");
+  };
+  const liquidRayHighlight = (end, i, phase = 0) => {
+    const startY = cloudY - 8 + i * 4;
+    const sx = cloudEdgeX;
+    const ex = end.x;
+    const ey = end.y;
+    const sway = (i % 2 === 0 ? 1 : -1) * phase;
+    return `M ${sx.toFixed(1)} ${(startY + 1.4).toFixed(1)} C ${(sx - 7 + sway).toFixed(1)} ${(startY + 26).toFixed(1)} ${(ex + 54 - sway).toFixed(1)} ${(ey - 40).toFixed(1)} ${(ex + 3).toFixed(1)} ${(ey - 4).toFixed(1)}`;
+  };
+  const ray = (end, i) => {
+    const begin = (i * 0.34).toFixed(2);
+    const d0 = liquidRayPath(end, i);
+    const d1 = liquidRayPath(end, i, 7);
+    const h0 = liquidRayHighlight(end, i);
+    const h1 = liquidRayHighlight(end, i, 7);
+    return `<path d="${d0}" class="enlightenment-ray enlightenment-liquid-ray" opacity="0.78">
+      <animate attributeName="d" values="${d0};${d1};${d0}" keyTimes="0;0.5;1" begin="${begin}s" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
+      <animate attributeName="opacity" values="0.5;0.88;0.5" begin="${begin}s" dur="4.8s" repeatCount="indefinite"/>
+    </path>
+    <path d="${h0}" class="enlightenment-ray-highlight" pathLength="1" stroke-dasharray="0.08 0.18" stroke-dashoffset="0">
+      <animate attributeName="d" values="${h0};${h1};${h0}" keyTimes="0;0.5;1" begin="${begin}s" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
+      <animate attributeName="stroke-dashoffset" values="0;0.26;0" begin="${begin}s" dur="3.2s" repeatCount="indefinite"/>
+    </path>`;
   };
   const trace = (startY, target, i) => {
     const sx = portalX + 5;
@@ -1876,7 +1932,8 @@ function renderSVG(model) {
     .enlightenment-cloud { fill: url(#enlightenmentCloud); stroke: #fde68a; stroke-width: 0.8; stroke-opacity: 0.56; }
     .enlightenment-cloud-core { fill: #fff7cc; fill-opacity: 0.7; filter: url(#enlightenmentGlow); }
     .enlightenment-cloud-hole { fill: #0d1117; fill-opacity: 0.76; stroke: #fff7cc; stroke-opacity: 0.32; stroke-width: 0.7; }
-    .enlightenment-ray { fill: none; stroke: url(#enlightenmentRayGrad); stroke-width: 1.15; stroke-linecap: round; filter: url(#enlightenmentGlow); }
+    .enlightenment-ray { fill: url(#enlightenmentRayGrad); stroke: none; filter: url(#enlightenmentGlow); }
+    .enlightenment-ray-highlight { fill: none; stroke: #fff7cc; stroke-width: 0.65; stroke-linecap: round; }
     .enlightenment-trace-line { fill: none; stroke: #fff7cc; stroke-width: 0.9; stroke-linecap: round; }
     .enlightenment-fragment { fill: none; stroke: #fde68a; stroke-width: 1.1; stroke-linecap: round; }
     .enlightenment-spark { fill: #fff7cc; filter: url(#enlightenmentGlow); }
@@ -2043,7 +2100,8 @@ function renderSVG(model) {
       .enlightenment-cloud { fill: url(#enlightenmentCloudLight); stroke: #b45309; }
       .enlightenment-cloud-core { fill: #fff7cc; }
       .enlightenment-cloud-hole { fill: #ffffff; fill-opacity: 0.88; stroke: #b45309; }
-      .enlightenment-ray { stroke: url(#enlightenmentRayGradLight); }
+      .enlightenment-ray { fill: url(#enlightenmentRayGradLight); stroke: none; }
+      .enlightenment-ray-highlight { stroke: #fff7cc; }
       .enlightenment-trace-line { stroke: #a16207; }
       .enlightenment-fragment { stroke: #d97706; }
       .enlightenment-spark { fill: #b45309; }

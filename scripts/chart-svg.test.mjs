@@ -227,6 +227,116 @@ for (const [label, currentTotal] of CASES) {
   });
 }
 
+test("the liquid enlightenment ribbons survive every branch", () => {
+  for (const [label, currentTotal] of CASES) {
+    const svg = render(currentTotal);
+    assert.equal(
+      (svg.match(/class="[^"]*\benlightenment-liquid-ray\b[^"]*"/g) || []).length,
+      5,
+      `expected five closed liquid ribbons (${label})`
+    );
+    assert.equal(
+      (svg.match(/class="[^"]*\benlightenment-ray-highlight\b[^"]*"/g) || []).length,
+      5,
+      `expected five moving ribbon highlights (${label})`
+    );
+    for (const path of svg.match(/<path[^>]*class="[^"]*\benlightenment-liquid-ray\b[^"]*"[^>]*>/g) || []) {
+      assert.match(path, /d="M [^\"]+ Z"/, `liquid ribbon must be a closed silhouette (${label})`);
+      assert.doesNotMatch(path, /stroke-dasharray/, `liquid ribbon must not regress to a dashed line (${label})`);
+      const nums = [...path.matchAll(/-?[\d.]+/g)].map((m) => Number(m[0]));
+      // M left-edge, C left controls + pointed tip, C right controls + right edge.
+      // These bounds force a narrow downward ribbon rather than a broad loop.
+      assert.ok(nums[6] < nums[0] - 20, `ribbon tip must be materially down-left (${label})`);
+      assert.ok(nums[7] > nums[1] + 35, `ribbon tip must descend from the cloud (${label})`);
+      assert.ok(nums[12] - nums[0] < 16, `ribbon launch width must stay narrow (${label})`);
+    }
+  }
+});
+
+test("written dark/light assets preserve liquid ribbons and legacy gradient opacity", () => {
+  const expectedStops = {
+    enlightenmentCloud: ["0.92", "0.46", "0"],
+    enlightenmentCloudLight: ["0.98", "0.44", "0"],
+    enlightenmentRayGrad: ["0.98", "0.82", "0.32"],
+    enlightenmentRayGradLight: ["0.98", "0.78", "0.42"],
+  };
+  for (const theme of ["dark", "light"]) {
+    const asset = readFileSync(resolve(REPO_ROOT, `assets/cumulative-${theme}.svg`), "utf8");
+    assert.equal(
+      (asset.match(/class="[^"]*\benlightenment-liquid-ray\b[^"]*"/g) || []).length,
+      5,
+      `${theme}: written asset must contain five liquid ribbons`
+    );
+    assert.equal(
+      (asset.match(/class="[^"]*\benlightenment-ray-highlight\b[^"]*"/g) || []).length,
+      5,
+      `${theme}: written asset must contain five ribbon highlights`
+    );
+    const activeGradientIds =
+      theme === "dark"
+        ? ["enlightenmentCloud", "enlightenmentRayGrad"]
+        : Object.keys(expectedStops);
+    for (const id of activeGradientIds) {
+      const block = asset.match(new RegExp(`<(?:linear|radial)Gradient id="${id}"[^>]*>([\\s\\S]*?)</(?:linear|radial)Gradient>`))?.[1] ?? "";
+      assert.deepEqual(
+        [...block.matchAll(/stop-opacity="([^"]+)"/g)].map((m) => m[1]),
+        expectedStops[id],
+        `${theme}: ${id} stop opacities must remain unchanged`
+      );
+    }
+    assert.match(asset, /\.narrative-enlightenment\s*\{[^}]*opacity:\s*0\.52/);
+  }
+});
+
+test("written assets retain bounded liquid-ray geometry", () => {
+  for (const theme of ["dark", "light"]) {
+    const asset = readFileSync(resolve(REPO_ROOT, `assets/cumulative-${theme}.svg`), "utf8");
+    const ribbons = asset.match(/<path[^>]*class="[^\"]*\benlightenment-liquid-ray\b[^\"]*"[^>]*>/g) || [];
+    assert.equal(ribbons.length, 5, `${theme}: expected five written liquid ribbons`);
+    const tips = [];
+    for (const ribbon of ribbons) {
+      const d = ribbon.match(/d="([^\"]+)"/)?.[1] || "";
+      assert.match(d, /^M [^\"]+ Z$/, `${theme}: ribbon must be a closed path`);
+      const nums = [...d.matchAll(/-?[\d.]+/g)].map((m) => Number(m[0]));
+      assert.ok(nums[6] < nums[0] - 20, `${theme}: ribbon tip must be down-left`);
+      assert.ok(nums[7] > nums[1] + 35, `${theme}: ribbon tip must descend`);
+      tips.push([nums[6], nums[7]]);
+    }
+    for (let i = 1; i < tips.length; i += 1) {
+      assert.ok(
+        tips[i][0] > tips[i - 1][0],
+        `${theme}: liquid-ray tips must remain ordered left-to-right`
+      );
+    }
+  }
+});
+
+test("legacy phase gradients retain their authored opacity snapshots", () => {
+  const expected = {
+    seamFieldGrad: ["0.11", "0.12", "0.16", "0.18", "0.17", "0.16", "0.14", "0.11", "0.07"],
+    seamFieldGradLight: ["0.16", "0.14", "0.14", "0.15", "0.15", "0.14", "0.12", "0.10", "0.07"],
+    originBand: ["0.09", "0.07", "0.09", "0.11"],
+    originBandLight: ["0.11", "0.09", "0.12", "0.16"],
+    cumGrad: ["0.16", "0.06", "0"],
+    cumGradLight: ["0.13", "0.05", "0"],
+  };
+  for (const theme of ["dark", "light"]) {
+    const asset = readFileSync(resolve(REPO_ROOT, `assets/cumulative-${theme}.svg`), "utf8");
+    const activeIds = theme === "dark"
+      ? Object.keys(expected).filter((id) => !id.endsWith("Light"))
+      : Object.keys(expected);
+    for (const id of activeIds) {
+      const stops = expected[id];
+      const block = asset.match(new RegExp(`<(?:linear|radial)Gradient id="${id}"[^>]*>([\\s\\S]*?)</(?:linear|radial)Gradient>`))?.[1] ?? "";
+      assert.deepEqual(
+        [...block.matchAll(/stop-opacity="([^"]+)"/g)].map((m) => m[1]),
+        stops,
+        `${theme}: ${id} opacity snapshot changed`
+      );
+    }
+  }
+});
+
 test("future runway slots render on every branch", () => {
   for (const [label, currentTotal] of CASES) {
     const svg = render(currentTotal);

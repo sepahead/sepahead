@@ -35,7 +35,9 @@ test("enlightenment phase has a bounded cloud, diagonal rays, and singularity tr
   assert.equal(tagsWithClass(out, "ellipse", "enlightenment-cloud").length, 1);
   assert.equal(tagsWithClass(out, "ellipse", "enlightenment-cloud-core").length, 1);
   assert.equal(tagsWithClass(out, "ellipse", "enlightenment-cloud-hole").length, 1);
-  assert.equal(tagsWithClass(out, "line", "enlightenment-ray").length, 5);
+  const liquidRays = tagsWithClass(out, "path", "enlightenment-liquid-ray");
+  assert.equal(liquidRays.length, 5);
+  assert.equal(tagsWithClass(out, "path", "enlightenment-ray-highlight").length, 5);
   assert.equal(tagsWithClass(out, "path", "enlightenment-trace-line").length, 3);
   assert.equal(tagsWithClass(out, "path", "enlightenment-fragment").length, 3);
   assert.equal(tagsWithClass(out, "circle", "enlightenment-spark").length, 3);
@@ -52,16 +54,25 @@ test("enlightenment phase has a bounded cloud, diagonal rays, and singularity tr
   assert.ok(number(attrOf(hole, "rx"), "hole rx") < cloudRx);
   assert.ok(number(attrOf(hole, "ry"), "hole ry") < cloudRy);
 
-  for (const [i, line] of tagsWithClass(out, "line", "enlightenment-ray").entries()) {
-    const x1 = number(attrOf(line, "x1"), `ray ${i} x1`);
-    const y1 = number(attrOf(line, "y1"), `ray ${i} y1`);
-    const x2 = number(attrOf(line, "x2"), `ray ${i} x2`);
-    const y2 = number(attrOf(line, "y2"), `ray ${i} y2`);
-    assert.ok(x1 > x2, `ray ${i} must travel right-to-left toward lower-left`);
-    assert.ok(y1 < y2, `ray ${i} must travel top-right to bottom-left`);
-    assert.ok(x2 > 56 && x2 < 792, `ray ${i} endpoint must stay inside plot bounds`);
-    assert.ok(y2 > 120 && y2 < 260, `ray ${i} endpoint must stay inside plot bounds`);
-    assert.ok(Math.abs(x1 - cloudX) < cloudRx + 8, `ray ${i} must launch from the cloud aperture`);
+  for (const [i, ray] of liquidRays.entries()) {
+    const d = attrOf(ray, "d");
+    assert.match(d, /^M /, `liquid ray ${i} must have a path`);
+    assert.match(d, / Z$/, `liquid ray ${i} must close into a tapered ribbon`);
+    const nums = [...d.matchAll(/-?[\d.]+/g)].map((m) => Number(m[0]));
+    const xs = nums.filter((_, index) => index % 2 === 0);
+    const ys = nums.filter((_, index) => index % 2 === 1);
+    assert.ok(xs[0] > Math.min(...xs), `ray ${i} must travel down-left from its aperture`);
+    assert.ok(ys[0] < Math.max(...ys), `ray ${i} must descend from its aperture`);
+    assert.ok(Math.min(...xs) > 56 && Math.max(...xs) < 792, `ray ${i} must stay inside horizontal plot bounds`);
+    assert.ok(Math.min(...ys) >= 120 && Math.max(...ys) < 260, `ray ${i} must stay inside vertical plot bounds`);
+    assert.ok(
+      Math.abs(xs[0] - (cloudX - cloudRx + 4)) <= 6,
+      `ray ${i} must launch within the cloud-edge ribbon width`
+    );
+    assert.ok(
+      Math.min(...xs) < xs[0] - 1,
+      `ray ${i} must taper toward a lower-left tip`
+    );
   }
 
   const futureGhosts = tagsWithClass(out, "rect", "future-ghost");
@@ -105,7 +116,8 @@ test("enlightenment has explicit dark/light palette and reduced-motion rules", (
   const { dark, light } = splitThemes(svg());
   for (const [name, out] of Object.entries({ dark, light })) {
     const css = styleBlocks(out)[0];
-    assert.ok(css.includes(".enlightenment-ray"), `${name}: missing ray CSS`);
+      assert.ok(css.includes(".enlightenment-ray"), `${name}: missing liquid-ray CSS`);
+    assert.ok(css.includes(".enlightenment-ray-highlight"), `${name}: missing ray highlight CSS`);
     assert.ok(css.includes(".enlightenment-text"), `${name}: missing label CSS`);
     assert.ok(css.includes("animate, animateTransform { display: none; }"), `${name}: missing reduced-motion rule`);
   }
