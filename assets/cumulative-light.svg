@@ -283,9 +283,10 @@
        the plot; they never become a new data encoding. */
     /* Every authored enlightenment part shares one phase opacity. The gradient
        stop opacities below remain colour falloff, not per-part intensity. */
-    .narrative-enlightenment { pointer-events: none; opacity: 0.52; }
+    .narrative-enlightenment { pointer-events: none; opacity: 0.65; }
     .new-age-ray { fill: url(#newAgeRayGrad); stroke: none; filter: url(#newAgeGlow); mix-blend-mode: screen; }
-    .new-age-spark { fill: #ffffff; filter: url(#newAgeGlow); }
+    .new-age-seed-core { fill: #ffffff; filter: url(#newAgeGlow); }
+    .new-age-bloom { fill: none; stroke: #fff7cc; stroke-width: 0.8; }
     .new-age-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fde68a; letter-spacing: 2px; }
     .grid { stroke: #21262d; stroke-width: 1; }
     .baseline { stroke: #30363d; stroke-width: 1; }
@@ -445,7 +446,8 @@
       .intake-head-lime { fill: #4d7c0f; }
       .portal-boom { stroke: #4d7c0f; }
       .new-age-ray { fill: url(#newAgeRayGradLight); stroke: none; }
-      .new-age-spark { fill: #ffffff; }
+      .new-age-seed-core { fill: #ffffff; }
+      .new-age-bloom { stroke: #fbbf24; }
       .new-age-text { fill: #92400e; }
       .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text, .new-age-text { stroke: #ffffff; }
     @media (prefers-reduced-motion: reduce) {
@@ -683,59 +685,149 @@
   </g>
 
   <g class="narrative-enlightenment">
-    <title>the new age: 20 rays of light fanning from the singularity into the future</title>
-    <polygon points="690.0 190.7 785.2 178.5 784.7 174.8 689.8 189.3" class="new-age-ray" opacity="0.52"/>
-    <polygon points="689.9 190.7 789.8 185.1 789.5 180.9 689.8 189.3" class="new-age-ray" opacity="0.52"/>
-    <polygon points="689.9 190.8 792.9 192.3 792.9 187.8 689.9 189.2" class="new-age-ray" opacity="0.52"/>
-    <polygon points="689.8 190.7 789.5 199.1 789.8 194.9 689.9 189.3" class="new-age-ray" opacity="0.52"/>
-    <polygon points="689.8 190.7 784.7 205.2 785.2 201.5 690.0 189.3" class="new-age-ray" opacity="0.52"/>
-    <polygon points="690.0 190.7 779.5 169.4 778.7 166.1 689.7 189.3" class="new-age-ray" opacity="0.48"/>
-    <polygon points="690.1 190.6 770.7 160.6 769.6 157.8 689.6 189.4" class="new-age-ray" opacity="0.44"/>
-    <polygon points="690.2 190.5 758.7 153.4 757.4 151.0 689.6 189.5" class="new-age-ray" opacity="0.41"/>
-    <polygon points="689.7 190.7 778.7 213.9 779.5 210.6 690.0 189.3" class="new-age-ray" opacity="0.48"/>
-    <polygon points="689.6 190.6 769.6 222.2 770.7 219.4 690.1 189.4" class="new-age-ray" opacity="0.44"/>
-    <polygon points="689.6 190.5 757.4 229.0 758.7 226.6 690.2 189.5" class="new-age-ray" opacity="0.41"/>
-    <polygon points="690.2 190.5 744.9 150.0 743.4 148.1 689.5 189.5" class="new-age-ray" opacity="0.35"/>
-    <polygon points="690.3 190.4 730.9 149.0 729.4 147.5 689.4 189.6" class="new-age-ray" opacity="0.30"/>
-    <polygon points="689.5 190.5 743.4 231.9 744.9 230.0 690.2 189.5" class="new-age-ray" opacity="0.35"/>
-    <polygon points="689.4 190.4 729.4 232.5 730.9 231.0 690.3 189.6" class="new-age-ray" opacity="0.30"/>
-    <polygon points="690.3 190.3 718.1 151.2 716.7 150.2 689.4 189.7" class="new-age-ray" opacity="0.25"/>
-    <polygon points="690.3 190.2 706.6 155.9 705.2 155.2 689.4 189.8" class="new-age-ray" opacity="0.20"/>
-    <polygon points="689.4 190.3 716.7 229.8 718.1 228.8 690.3 189.7" class="new-age-ray" opacity="0.25"/>
-    <polygon points="689.4 190.2 705.2 224.8 706.6 224.1 690.3 189.8" class="new-age-ray" opacity="0.20"/>
-    <polygon points="690.3 190.1 698.2 161.2 697.0 160.9 689.4 189.9" class="new-age-ray" opacity="0.15"/>
-    <circle cx="695.9" cy="130.0" r="1.60" class="new-age-spark">
-      <animateTransform attributeName="transform" type="translate" values="0 0;89.1 46.6" begin="0.00s" dur="3.8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.88 1"/>
-    </circle>
-    <circle cx="695.9" cy="142.0" r="1.48" class="new-age-spark">
-      <animateTransform attributeName="transform" type="translate" values="0 0;97.0 48.0" begin="0.35s" dur="3.8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.88 1"/>
-    </circle>
-    <circle cx="695.9" cy="154.0" r="1.36" class="new-age-spark">
-      <animateTransform attributeName="transform" type="translate" values="0 0;89.1 49.4" begin="0.70s" dur="3.8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.88 1"/>
-    </circle>
-    <circle cx="695.9" cy="166.0" r="1.24" class="new-age-spark">
-      <animateTransform attributeName="transform" type="translate" values="0 0;74.3 -6.8" begin="1.05s" dur="3.8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.88 1"/>
-    </circle>
-    <circle cx="695.9" cy="178.0" r="1.12" class="new-age-spark">
-      <animateTransform attributeName="transform" type="translate" values="0 0;83.3 34.3" begin="1.40s" dur="3.8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.88 1"/>
-    </circle>
-    <circle cx="695.9" cy="190.0" r="1.00" class="new-age-spark">
-      <animateTransform attributeName="transform" type="translate" values="0 0;48.3 -40.9" begin="1.75s" dur="3.8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.88 1"/>
-    </circle>
-    <circle cx="695.9" cy="202.0" r="0.88" class="new-age-spark">
-      <animateTransform attributeName="transform" type="translate" values="0 0;48.3 28.9" begin="2.10s" dur="3.8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.88 1"/>
-    </circle>
-    <circle cx="695.9" cy="214.0" r="0.76" class="new-age-spark">
-      <animateTransform attributeName="transform" type="translate" values="0 0;21.5 -63.3" begin="2.45s" dur="3.8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.88 1"/>
-    </circle>
-    <circle cx="695.9" cy="226.0" r="0.64" class="new-age-spark">
-      <animateTransform attributeName="transform" type="translate" values="0 0;21.5 3.3" begin="2.80s" dur="3.8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.88 1"/>
-    </circle>
-    <circle cx="695.9" cy="238.0" r="0.52" class="new-age-spark">
-      <animateTransform attributeName="transform" type="translate" values="0 0;1.8 -77.0" begin="3.15s" dur="3.8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.88 1"/>
-    </circle>
+    <title>the new age: 20 rays of light fanning from the singularity, terraforming seeds bloom at their destination</title>
+    <polygon points="690.0 190.8 785.3 179.1 784.6 174.2 689.7 189.2" class="new-age-ray" opacity="0.65"/>
+    <polygon points="689.9 190.8 789.8 185.8 789.4 180.3 689.8 189.2" class="new-age-ray" opacity="0.65"/>
+    <polygon points="689.9 190.9 792.9 193.0 792.9 187.0 689.9 189.1" class="new-age-ray" opacity="0.65"/>
+    <polygon points="689.8 190.8 789.4 199.7 789.8 194.2 689.9 189.2" class="new-age-ray" opacity="0.65"/>
+    <polygon points="689.7 190.8 784.6 205.8 785.3 200.9 690.0 189.2" class="new-age-ray" opacity="0.65"/>
+    <polygon points="690.0 190.7 779.7 169.9 778.6 165.6 689.7 189.3" class="new-age-ray" opacity="0.60"/>
+    <polygon points="690.1 190.7 770.9 161.0 769.4 157.3 689.6 189.3" class="new-age-ray" opacity="0.55"/>
+    <polygon points="690.2 190.6 758.9 153.7 757.2 150.7 689.5 189.4" class="new-age-ray" opacity="0.51"/>
+    <polygon points="689.7 190.7 778.6 214.4 779.7 210.1 690.0 189.3" class="new-age-ray" opacity="0.60"/>
+    <polygon points="689.6 190.7 769.4 222.7 770.9 219.0 690.1 189.3" class="new-age-ray" opacity="0.55"/>
+    <polygon points="689.5 190.6 757.2 229.3 758.9 226.3 690.2 189.4" class="new-age-ray" opacity="0.51"/>
+    <polygon points="690.2 190.5 745.1 150.3 743.3 147.9 689.5 189.5" class="new-age-ray" opacity="0.44"/>
+    <polygon points="690.3 190.4 731.1 149.2 729.2 147.4 689.4 189.6" class="new-age-ray" opacity="0.38"/>
+    <polygon points="689.5 190.5 743.3 232.1 745.1 229.7 690.2 189.5" class="new-age-ray" opacity="0.44"/>
+    <polygon points="689.4 190.4 729.2 232.6 731.1 230.8 690.3 189.6" class="new-age-ray" opacity="0.38"/>
+    <polygon points="690.3 190.3 718.3 151.3 716.5 150.0 689.4 189.7" class="new-age-ray" opacity="0.31"/>
+    <polygon points="690.4 190.2 706.7 155.9 705.1 155.2 689.4 189.8" class="new-age-ray" opacity="0.25"/>
+    <polygon points="689.4 190.3 716.5 230.0 718.3 228.7 690.3 189.7" class="new-age-ray" opacity="0.31"/>
+    <polygon points="689.4 190.2 705.1 224.8 706.7 224.1 690.4 189.8" class="new-age-ray" opacity="0.25"/>
+    <polygon points="690.4 190.1 698.3 161.2 696.9 160.8 689.4 189.9" class="new-age-ray" opacity="0.18"/>
+    <g class="new-age-seed">
+      <circle cx="691.9" cy="139.1" r="1.40" class="new-age-seed-core">
+        <animateTransform attributeName="transform" type="translate" values="0 0;93.1 37.5" begin="0.00s" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.85 1"/>
+        <animate attributeName="r" values="1.40;2.10;1.40" keyTimes="0;0.45;1" begin="0.00s" dur="3.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="784.9" cy="176.6" r="1.5" class="new-age-bloom">
+        <animate attributeName="r" values="1.5;6.5;2.0" keyTimes="0;0.45;1" begin="3.20s" dur="1.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.55;0;0" keyTimes="0;0.7;1" begin="3.20s" dur="1.4s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    <g class="new-age-seed">
+      <circle cx="691.9" cy="164.5" r="1.34" class="new-age-seed-core">
+        <animateTransform attributeName="transform" type="translate" values="0 0;101.0 25.5" begin="0.35s" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.85 1"/>
+        <animate attributeName="r" values="1.34;2.01;1.34" keyTimes="0;0.45;1" begin="0.35s" dur="3.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="792.9" cy="190.0" r="1.5" class="new-age-bloom">
+        <animate attributeName="r" values="1.5;6.5;2.0" keyTimes="0;0.45;1" begin="3.55s" dur="1.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.55;0;0" keyTimes="0;0.7;1" begin="3.55s" dur="1.4s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    <g class="new-age-seed">
+      <circle cx="691.9" cy="190.0" r="1.28" class="new-age-seed-core">
+        <animateTransform attributeName="transform" type="translate" values="0 0;93.1 13.4" begin="0.70s" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.85 1"/>
+        <animate attributeName="r" values="1.28;1.92;1.28" keyTimes="0;0.45;1" begin="0.70s" dur="3.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="784.9" cy="203.4" r="1.5" class="new-age-bloom">
+        <animate attributeName="r" values="1.5;6.5;2.0" keyTimes="0;0.45;1" begin="3.90s" dur="1.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.55;0;0" keyTimes="0;0.7;1" begin="3.90s" dur="1.4s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    <g class="new-age-seed">
+      <circle cx="691.9" cy="215.5" r="1.22" class="new-age-seed-core">
+        <animateTransform attributeName="transform" type="translate" values="0 0;78.3 -56.3" begin="1.05s" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.85 1"/>
+        <animate attributeName="r" values="1.22;1.83;1.22" keyTimes="0;0.45;1" begin="1.05s" dur="3.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="770.1" cy="159.2" r="1.5" class="new-age-bloom">
+        <animate attributeName="r" values="1.5;6.5;2.0" keyTimes="0;0.45;1" begin="4.25s" dur="1.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.55;0;0" keyTimes="0;0.7;1" begin="4.25s" dur="1.4s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    <g class="new-age-seed">
+      <circle cx="691.9" cy="240.9" r="1.16" class="new-age-seed-core">
+        <animateTransform attributeName="transform" type="translate" values="0 0;87.3 -28.6" begin="1.40s" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.85 1"/>
+        <animate attributeName="r" values="1.16;1.74;1.16" keyTimes="0;0.45;1" begin="1.40s" dur="3.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="779.1" cy="212.3" r="1.5" class="new-age-bloom">
+        <animate attributeName="r" values="1.5;6.5;2.0" keyTimes="0;0.45;1" begin="4.60s" dur="1.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.55;0;0" keyTimes="0;0.7;1" begin="4.60s" dur="1.4s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    <g class="new-age-seed">
+      <circle cx="691.9" cy="139.1" r="1.10" class="new-age-seed-core">
+        <animateTransform attributeName="transform" type="translate" values="0 0;52.3 10.0" begin="1.75s" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.85 1"/>
+        <animate attributeName="r" values="1.10;1.65;1.10" keyTimes="0;0.45;1" begin="1.75s" dur="3.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="744.2" cy="149.1" r="1.5" class="new-age-bloom">
+        <animate attributeName="r" values="1.5;6.5;2.0" keyTimes="0;0.45;1" begin="4.95s" dur="1.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.55;0;0" keyTimes="0;0.7;1" begin="4.95s" dur="1.4s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    <g class="new-age-seed">
+      <circle cx="691.9" cy="164.5" r="1.04" class="new-age-seed-core">
+        <animateTransform attributeName="transform" type="translate" values="0 0;52.3 66.4" begin="2.10s" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.85 1"/>
+        <animate attributeName="r" values="1.04;1.56;1.04" keyTimes="0;0.45;1" begin="2.10s" dur="3.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="744.2" cy="230.9" r="1.5" class="new-age-bloom">
+        <animate attributeName="r" values="1.5;6.5;2.0" keyTimes="0;0.45;1" begin="5.30s" dur="1.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.55;0;0" keyTimes="0;0.7;1" begin="5.30s" dur="1.4s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    <g class="new-age-seed">
+      <circle cx="691.9" cy="190.0" r="0.98" class="new-age-seed-core">
+        <animateTransform attributeName="transform" type="translate" values="0 0;25.5 -39.3" begin="2.45s" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.85 1"/>
+        <animate attributeName="r" values="0.98;1.47;0.98" keyTimes="0;0.45;1" begin="2.45s" dur="3.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="717.4" cy="150.7" r="1.5" class="new-age-bloom">
+        <animate attributeName="r" values="1.5;6.5;2.0" keyTimes="0;0.45;1" begin="5.65s" dur="1.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.55;0;0" keyTimes="0;0.7;1" begin="5.65s" dur="1.4s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    <g class="new-age-seed">
+      <circle cx="691.9" cy="215.5" r="0.92" class="new-age-seed-core">
+        <animateTransform attributeName="transform" type="translate" values="0 0;25.5 13.8" begin="2.80s" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.85 1"/>
+        <animate attributeName="r" values="0.92;1.38;0.92" keyTimes="0;0.45;1" begin="2.80s" dur="3.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="717.4" cy="229.3" r="1.5" class="new-age-bloom">
+        <animate attributeName="r" values="1.5;6.5;2.0" keyTimes="0;0.45;1" begin="6.00s" dur="1.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.55;0;0" keyTimes="0;0.7;1" begin="6.00s" dur="1.4s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    <g class="new-age-seed">
+      <circle cx="691.9" cy="240.9" r="0.86" class="new-age-seed-core">
+        <animateTransform attributeName="transform" type="translate" values="0 0;5.8 -79.9" begin="3.15s" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.85 1"/>
+        <animate attributeName="r" values="0.86;1.29;0.86" keyTimes="0;0.45;1" begin="3.15s" dur="3.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="697.6" cy="161.0" r="1.5" class="new-age-bloom">
+        <animate attributeName="r" values="1.5;6.5;2.0" keyTimes="0;0.45;1" begin="6.35s" dur="1.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.55;0;0" keyTimes="0;0.7;1" begin="6.35s" dur="1.4s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    <g class="new-age-seed">
+      <circle cx="691.9" cy="139.1" r="0.80" class="new-age-seed-core">
+        <animateTransform attributeName="transform" type="translate" values="0 0;101.0 50.9" begin="3.50s" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.85 1"/>
+        <animate attributeName="r" values="0.80;1.20;0.80" keyTimes="0;0.45;1" begin="3.50s" dur="3.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="792.9" cy="190.0" r="1.5" class="new-age-bloom">
+        <animate attributeName="r" values="1.5;6.5;2.0" keyTimes="0;0.45;1" begin="6.70s" dur="1.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.55;0;0" keyTimes="0;0.7;1" begin="6.70s" dur="1.4s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    <g class="new-age-seed">
+      <circle cx="691.9" cy="164.5" r="0.74" class="new-age-seed-core">
+        <animateTransform attributeName="transform" type="translate" values="0 0;93.1 38.9" begin="3.85s" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.85 1"/>
+        <animate attributeName="r" values="0.74;1.11;0.74" keyTimes="0;0.45;1" begin="3.85s" dur="3.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="784.9" cy="203.4" r="1.5" class="new-age-bloom">
+        <animate attributeName="r" values="1.5;6.5;2.0" keyTimes="0;0.45;1" begin="7.05s" dur="1.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.55;0;0" keyTimes="0;0.7;1" begin="7.05s" dur="1.4s" repeatCount="indefinite"/>
+      </circle>
+    </g>
   </g>
-  <g class="new-age-label" opacity="0.52">
+  <g class="new-age-label" opacity="0.65">
     <text x="790.0" y="112.0" text-anchor="end" class="new-age-text">the new age</text>
   </g>
   <path d="M 76.6 252.9 C 122.3 251.9 168.0 251.8 213.7 249.8 C 248.8 248.4 283.8 235.9 318.9 227.9 C 353.9 219.9 389.0 212.1 424.0 201.3 C 469.7 187.3 515.4 164.4 561.1 146.0 L 561.1 260 L 76.6 260 Z" class="cum-area">

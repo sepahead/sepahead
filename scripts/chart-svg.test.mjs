@@ -236,9 +236,14 @@ test("the new age 20-rays fan survives every branch", () => {
       `expected 20 ray polygons (${label})`
     );
     assert.equal(
-      (svg.match(/class="[^"]*\bnew-age-spark\b[^"]*"/g) || []).length,
-      10,
-      `expected 10 spark motes (${label})`
+      (svg.match(/class="[^"]*\bnew-age-seed-core\b[^"]*"/g) || []).length,
+      12,
+      `expected 12 terraforming seed cores (${label})`
+    );
+    assert.equal(
+      (svg.match(/class="[^"]*\bnew-age-bloom\b[^"]*"/g) || []).length,
+      12,
+      `expected 12 bloom rings (${label})`
     );
     const rays = svg.match(/<polygon[^>]*class="[^"]*\bnew-age-ray\b[^"]*"[^>]*>/g) || [];
     for (const ray of rays) {
@@ -261,9 +266,9 @@ test("written dark/light assets preserve 20-rays and ray gradient opacities", ()
       `${theme}: written asset must contain 20 ray polygons`
     );
     assert.equal(
-      (asset.match(/class="[^"]*\bnew-age-spark\b[^"]*"/g) || []).length,
-      10,
-      `${theme}: written asset must contain 10 spark motes`
+      (asset.match(/class="[^"]*\bnew-age-seed-core\b[^"]*"/g) || []).length,
+      12,
+      `${theme}: written asset must contain 12 seed cores`
     );
     const activeGradientIds =
       theme === "dark"
@@ -277,7 +282,7 @@ test("written dark/light assets preserve 20-rays and ray gradient opacities", ()
         `${theme}: ${id} stop opacities must remain unchanged`
       );
     }
-    assert.match(asset, /\.narrative-enlightenment\s*\{[^}]*opacity:\s*0\.52/);
+    assert.match(asset, /\.narrative-enlightenment\s*\{[^}]*opacity:\s*0\.65/);
   }
 });
 

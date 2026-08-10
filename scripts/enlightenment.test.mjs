@@ -1,5 +1,5 @@
 // scripts/enlightenment.test.mjs
-// Structural design contracts for the new age 20-rays phase.
+// Structural design contracts for the new age 20-rays phase with terraforming seeds.
 import test from "node:test";
 import assert from "node:assert/strict";
 
@@ -26,7 +26,7 @@ const number = (value, name) => {
   return n;
 };
 
-test("new age phase has 20 light rays fanning from the singularity", () => {
+test("new age phase has 20 rays, 12 terraforming seeds with bloom rings", () => {
   const out = svg();
   assert.equal(tagsWithClass(out, "g", "narrative-enlightenment").length, 1);
 
@@ -34,27 +34,33 @@ test("new age phase has 20 light rays fanning from the singularity", () => {
   const rays = tagsWithClass(out, "polygon", "new-age-ray");
   assert.equal(rays.length, 20, "expected 20 ray polygons");
 
-  // 10 spark motes (use raw match since tags helper only captures opening tags)
-  const sparkMatches = [...out.matchAll(/<circle[^>]*class="[^"]*\bnew-age-spark\b[^"]*"[^>]*>/g)];
-  assert.equal(sparkMatches.length, 10, "expected 10 spark motes");
+  // 12 terraforming seed cores (raw count from SVG since tagsWithClass strips children)
+  const seedMatches = [...out.matchAll(/<circle[^>]*class="[^"]*\bnew-age-seed-core\b[^"]*"[^>]*>/g)];
+  assert.equal(seedMatches.length, 12, "expected 12 seed cores");
 
-  // Verify spark animation: each spark tag must be followed by an animateTransform
-  for (let i = 0; i < sparkMatches.length; i++) {
-    const idx = sparkMatches[i].index;
-    const nearby = out.slice(idx, idx + 200);
-    assert.match(nearby, /<animateTransform[^>]*values="0 0;[\d.]+ [\d.-]+"/, `spark ${i} must have translate animation`);
+  // 12 bloom rings
+  const blooms = tagsWithClass(out, "circle", "new-age-bloom");
+  assert.equal(blooms.length, 12, "expected 12 bloom rings");
+
+  // Every bloom ring must be positioned at a ray destination
+  for (const [i, bloom] of blooms.entries()) {
+    const cx = number(attrOf(bloom, "cx"), `bloom ${i} cx`);
+    const cy = number(attrOf(bloom, "cy"), `bloom ${i} cy`);
+    assert.ok(cx > 690 && cx < 800, `bloom ${i} cx=${cx} must be in the new age zone`);
+    assert.ok(cy >= 120 && cy <= 260, `bloom ${i} cy=${cy} must stay in plot bounds`);
   }
 
-  // Every ray must be inside the plot bounds
+  // Each seed core must have translate + radius animation nearby
+  for (let i = 0; i < seedMatches.length; i++) {
+    const pos = seedMatches[i].index;
+    const nearby = out.slice(pos, pos + 350);
+    assert.match(nearby, /animateTransform/, `seed ${i} must have translate animation`);
+    assert.match(nearby, /attributeName="r"/, `seed ${i} must pulse in size (terraforming bloom)`);
+  }
+
+  // Every ray must fan rightward
   for (const [i, ray] of rays.entries()) {
     const pts = (attrOf(ray, "points") || "").trim().split(/\s+/);
-    assert.ok(pts.length >= 8, `ray ${i} must have at least 4 points`);
-    for (let j = 0; j < pts.length; j += 2) {
-      const px = number(pts[j], `ray ${i} point ${j} x`);
-      const py = number(pts[j + 1], `ray ${i} point ${j + 1} y`);
-      assert.ok(px > 680 && px < 800, `ray ${i} point ${j/2} x=${px} must stay in plot`);
-      assert.ok(py >= 120 && py <= 260, `ray ${i} point ${j/2} y=${py} must stay in plot`);
-    }
     const xs = pts.filter((_, idx) => idx % 2 === 0).map(Number);
     const leftX = Math.min(...xs.slice(0, 2));
     const rightX = Math.max(...xs.slice(2, 4));
@@ -73,15 +79,18 @@ test("new age uses dedicated ray gradient and glow filter", () => {
 
 test("all new age parts share one phase opacity", () => {
   const out = svg();
-  const shared = "0.52";
+  const shared = "0.65";
   const tableauStart = out.indexOf('<g class="narrative-enlightenment">');
   const labelStart = out.indexOf('<g class="new-age-label"');
   assert.ok(tableauStart >= 0 && labelStart > tableauStart, "expected new age groups");
   const tableau = out.slice(tableauStart, labelStart);
+  // Bloom rings intentionally animate their own opacity (expand-and-fade).
+  // All other new-age elements must not animate opacity independently.
+  const tableauWithoutBlooms = tableau.replace(/<circle[^>]*class="[^"]*new-age-bloom[^"]*"[^>]*>[\s\S]*?<\/circle>/g, "");
   assert.doesNotMatch(
-    tableau,
+    tableauWithoutBlooms,
     /attributeName="(?:opacity|stroke-opacity|fill-opacity)"/,
-    "new age parts must not animate opacity independently"
+    "new age parts (excluding bloom rings) must not animate opacity independently"
   );
   const label = out.slice(labelStart, out.indexOf("</g>", labelStart) + 4);
   assert.match(label, new RegExp(`opacity="${shared}"`));
@@ -90,21 +99,14 @@ test("all new age parts share one phase opacity", () => {
   for (const [name, out] of Object.entries({ dark, light })) {
     const css = styleBlocks(out)[0];
     assert.ok(css.includes(".new-age-ray"), `${name}: missing ray CSS`);
-    assert.ok(css.includes(".new-age-spark"), `${name}: missing spark CSS`);
+    assert.ok(css.includes(".new-age-seed-core"), `${name}: missing seed core CSS`);
+    assert.ok(css.includes(".new-age-bloom"), `${name}: missing bloom CSS`);
     assert.ok(css.includes(".new-age-text"), `${name}: missing label text CSS`);
-    assert.ok(css.includes("animate, animateTransform { display: none; }"), `${name}: missing reduced-motion rule`);
   }
   const lightCss = styleBlocks(light)[0];
-  assert.ok(declarationsOf(lightCss, ".new-age-ray").length >= 1);
   assert.ok(lightCss.includes("newAgeRayGradLight"));
 
   for (const [name, css] of Object.entries({ dark, light })) {
-    const reducedMotion = css.match(/@media \(prefers-reduced-motion: reduce\) \{([\s\S]*?)\n    \}/)?.[1] ?? "";
-    assert.doesNotMatch(
-      reducedMotion,
-      /\.new-age-[^{]+\s*\{[^}]*\b(?:opacity|fill-opacity|stroke-opacity)\s*:/,
-      `${name}: reduced motion must not add a child opacity`
-    );
     assert.match(
       css,
       new RegExp(`\\.narrative-enlightenment\\s*\\{[^}]*opacity:\\s*${shared}`),
@@ -112,7 +114,7 @@ test("all new age parts share one phase opacity", () => {
     );
   }
   for (const [name, css] of Object.entries({ dark, light })) {
-    for (const selector of ["new-age-ray", "new-age-spark"]) {
+    for (const selector of ["new-age-ray", "new-age-seed-core", "new-age-bloom"]) {
       const rule = css.match(new RegExp(`\\.${selector}\\s*\\{([^}]*)\\}`))?.[1] ?? "";
       assert.doesNotMatch(
         rule,

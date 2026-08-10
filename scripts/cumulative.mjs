@@ -575,38 +575,38 @@ const WAVE_RY_INNER = artRy(31 / 24); // 31
 // central rays are longest and brightest, edge rays are shorter and dimmer,
 // together creating a dramatic dawn-illumination effect. One shared phase
 // opacity applied to the complete tableau.
-const NEW_AGE_OPACITY = 0.52;
+const NEW_AGE_OPACITY = 0.65;
 // 20 rays: each defined by {angle} in degrees from horizontal (0=right,
 // negative=up), {len} in pixels, {w} width at destination, {o} opacity factor.
 const NEW_AGE_RAYS = [
   // Central core — straight ahead, longest and brightest
-  { angle: -8, len: 96, w: 3.8, o: 1.00 },
-  { angle: -4, len: 100, w: 4.2, o: 1.00 },
-  { angle: 0, len: 103, w: 4.5, o: 1.00 },
-  { angle: 4, len: 100, w: 4.2, o: 1.00 },
-  { angle: 8, len: 96, w: 3.8, o: 1.00 },
+  { angle: -8, len: 96, w: 5.0, o: 1.00 },
+  { angle: -4, len: 100, w: 5.5, o: 1.00 },
+  { angle: 0, len: 103, w: 6.0, o: 1.00 },
+  { angle: 4, len: 100, w: 5.5, o: 1.00 },
+  { angle: 8, len: 96, w: 5.0, o: 1.00 },
   // Inner upper fan
-  { angle: -14, len: 92, w: 3.4, o: 0.92 },
-  { angle: -21, len: 86, w: 3.0, o: 0.85 },
-  { angle: -29, len: 78, w: 2.7, o: 0.78 },
+  { angle: -14, len: 92, w: 4.4, o: 0.92 },
+  { angle: -21, len: 86, w: 4.0, o: 0.85 },
+  { angle: -29, len: 78, w: 3.5, o: 0.78 },
   // Inner lower fan
-  { angle: 14, len: 92, w: 3.4, o: 0.92 },
-  { angle: 21, len: 86, w: 3.0, o: 0.85 },
-  { angle: 29, len: 78, w: 2.7, o: 0.78 },
+  { angle: 14, len: 92, w: 4.4, o: 0.92 },
+  { angle: 21, len: 86, w: 4.0, o: 0.85 },
+  { angle: 29, len: 78, w: 3.5, o: 0.78 },
   // Mid upper fan
-  { angle: -37, len: 68, w: 2.4, o: 0.68 },
-  { angle: -46, len: 58, w: 2.1, o: 0.58 },
+  { angle: -37, len: 68, w: 3.0, o: 0.68 },
+  { angle: -46, len: 58, w: 2.6, o: 0.58 },
   // Mid lower fan
-  { angle: 37, len: 68, w: 2.4, o: 0.68 },
-  { angle: 46, len: 58, w: 2.1, o: 0.58 },
+  { angle: 37, len: 68, w: 3.0, o: 0.68 },
+  { angle: 46, len: 58, w: 2.6, o: 0.58 },
   // Outer upper fan — shorter, dimmer
-  { angle: -55, len: 48, w: 1.8, o: 0.48 },
-  { angle: -65, len: 38, w: 1.5, o: 0.38 },
+  { angle: -55, len: 48, w: 2.2, o: 0.48 },
+  { angle: -65, len: 38, w: 1.8, o: 0.38 },
   // Outer lower fan
-  { angle: 55, len: 48, w: 1.8, o: 0.48 },
-  { angle: 65, len: 38, w: 1.5, o: 0.38 },
+  { angle: 55, len: 48, w: 2.2, o: 0.48 },
+  { angle: 65, len: 38, w: 1.8, o: 0.38 },
   // Steep accent — farthest reach
-  { angle: -75, len: 30, w: 1.2, o: 0.28 },
+  { angle: -75, len: 30, w: 1.5, o: 0.28 },
 ];
 
 // ---------------------------------------------------------------------------
@@ -813,25 +813,38 @@ function enlightenmentMarkup(portalX) {
     const opacity = (ray.o * NEW_AGE_OPACITY).toFixed(2);
     return `<polygon points="${points.join(" ")}" class="new-age-ray" opacity="${opacity}"/>`;
   };
-  // Spark motes: tiny bright specks traveling along the central rays.
-  const spark = (i) => {
+  // Terraforming seeds: particles that emerge from the singularity boundary
+  // at the same y-positions as portal motes, travel along the light rays,
+  // and bloom at their destination — seed landing, sprouting, transforming.
+  // Continuation of the singularity's portal-mote particles, now golden.
+  const seedYPositions = LANES; // same lanes as portal motes, creating continuity
+  const terraformSeed = (i) => {
     const ray = NEW_AGE_RAYS[Math.floor(i * 2.2) % 20];
     const rad = (ray.angle * Math.PI) / 180;
     const ex = srcX + ray.len * Math.cos(rad);
     const ey = srcY + ray.len * Math.sin(rad);
-    const sx = srcX + 6;
-    const sy = srcY + (i - 5) * 12;
+    const sy = seedYPositions[i % seedYPositions.length];
+    const sx = srcX + 2;
     const begin = (i * 0.35).toFixed(2);
-    const r = (1.6 - i * 0.12).toFixed(2);
-    return `<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${r}" class="new-age-spark">
-      <animateTransform attributeName="transform" type="translate" values="0 0;${(ex - sx).toFixed(1)} ${(ey - sy).toFixed(1)}" begin="${begin}s" dur="3.8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.88 1"/>
-    </circle>`;
+    const r = (1.4 - i * 0.06).toFixed(2);
+    // Bloom ring at destination: expands and fades as seed arrives
+    const bloomBegin = (parseFloat(begin) + 3.2).toFixed(2);
+    return `<g class="new-age-seed">
+      <circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${r}" class="new-age-seed-core">
+        <animateTransform attributeName="transform" type="translate" values="0 0;${(ex - sx).toFixed(1)} ${(ey - sy).toFixed(1)}" begin="${begin}s" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.85 1"/>
+        <animate attributeName="r" values="${r};${(r * 1.5).toFixed(2)};${r}" keyTimes="0;0.45;1" begin="${begin}s" dur="3.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="${ex.toFixed(1)}" cy="${ey.toFixed(1)}" r="1.5" class="new-age-bloom">
+        <animate attributeName="r" values="1.5;6.5;2.0" keyTimes="0;0.45;1" begin="${bloomBegin}s" dur="1.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.55;0;0" keyTimes="0;0.7;1" begin="${bloomBegin}s" dur="1.4s" repeatCount="indefinite"/>
+      </circle>
+    </g>`;
   };
   return `
   <g class="narrative-enlightenment">
-    <title>the new age: 20 rays of light fanning from the singularity into the future</title>
+    <title>the new age: 20 rays of light fanning from the singularity, terraforming seeds bloom at their destination</title>
     ${NEW_AGE_RAYS.map(rayPolygon).join("\n    ")}
-    ${Array.from({length: 10}, (_, i) => spark(i)).join("\n    ")}
+    ${Array.from({length: 12}, (_, i) => terraformSeed(i)).join("\n    ")}
   </g>
   <g class="new-age-label" opacity="${NEW_AGE_OPACITY}">
     <text x="${(PLOT_RIGHT - 2).toFixed(1)}" y="${(PLOT_TOP - 8).toFixed(1)}" text-anchor="end" class="new-age-text">the new age</text>
@@ -1888,7 +1901,8 @@ function renderSVG(model) {
        stop opacities below remain colour falloff, not per-part intensity. */
     .narrative-enlightenment { pointer-events: none; opacity: ${NEW_AGE_OPACITY}; }
     .new-age-ray { fill: url(#newAgeRayGrad); stroke: none; filter: url(#newAgeGlow); mix-blend-mode: screen; }
-    .new-age-spark { fill: #ffffff; filter: url(#newAgeGlow); }
+    .new-age-seed-core { fill: #ffffff; filter: url(#newAgeGlow); }
+    .new-age-bloom { fill: none; stroke: #fff7cc; stroke-width: 0.8; }
     .new-age-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fde68a; letter-spacing: 2px; }
     .grid { stroke: #21262d; stroke-width: 1; }
     .baseline { stroke: #30363d; stroke-width: 1; }
@@ -2049,7 +2063,8 @@ function renderSVG(model) {
       .intake-head-lime { fill: #4d7c0f; }
       .portal-boom { stroke: #4d7c0f; }
       .new-age-ray { fill: url(#newAgeRayGradLight); stroke: none; }
-      .new-age-spark { fill: #ffffff; }
+      .new-age-seed-core { fill: #ffffff; }
+      .new-age-bloom { stroke: #fbbf24; }
       .new-age-text { fill: #92400e; }
       .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text, .new-age-text { stroke: #ffffff; }
     }
