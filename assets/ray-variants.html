@@ -163,8 +163,8 @@ const variants = [
             <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" begin="${(i*0.18+1.6).toFixed(2)}s" dur="3.2s" repeatCount="indefinite"/>
           </polygon>`;
       }).join('\n');
-      // Diffraction bands on side rays only (skip center ray angle 90)
-      const bands = RAYS.filter(r => r.angle !== 90).map((ray, i) => {
+      // Diffraction bands on side rays only (skip 3 central rays angles 89-91)
+      const bands = RAYS.filter(r => r.angle < 89 || r.angle > 91).map((ray, i) => {
         const rad = ray.angle * Math.PI / 180;
         const ex = srcX + ray.len * Math.cos(rad), ey = srcY + ray.len * Math.sin(rad);
         return `<line x1="${srcX.toFixed(1)}" y1="${srcY.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#ffffff" stroke-width="${(ray.w*0.85).toFixed(1)}" stroke-opacity="0.35" stroke-dasharray="5 4">

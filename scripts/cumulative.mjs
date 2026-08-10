@@ -838,17 +838,17 @@ function enlightenmentMarkup(portalX) {
     ].join(" ");
     const begin = (i * 0.18).toFixed(2);
     return `<polygon points="${points(px * shift, py * shift)}" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="${begin}s" dur="3.2s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="${begin}s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="${points(-px * shift, -py * shift)}" fill="none" stroke="#fb923c" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="${(parseFloat(begin)+1.6).toFixed(2)}s" dur="3.2s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="${(parseFloat(begin)+1.0).toFixed(2)}s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>`;
   };
   // Diffraction interference: alternating bright/dim bands that march
-  // down the side rays. The center ray (straight down, angle 90°) stays
-  // pure — no bands, only spectral fringing.
+  // down the side rays. The three central rays (angles 89-91) stay pure —
+  // they converge within 2px and bands would visually overlap the center.
   const interferenceLine = (ray, i) => {
-    if (ray.angle === 90) return "";
+    if (ray.angle >= 89 && ray.angle <= 91) return "";
     const rad = (ray.angle * Math.PI) / 180;
     const cosA = Math.cos(rad);
     const sinA = Math.sin(rad);
