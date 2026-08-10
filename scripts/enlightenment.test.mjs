@@ -1,5 +1,5 @@
 // scripts/enlightenment.test.mjs
-// Structural design contracts for the final authored enlightenment phase.
+// Structural design contracts for the new age 20-lens phase.
 // These tests deliberately assert geometry and semantics, not a particular
 // screenshot: the phase must remain bounded, directional, theme-safe, and
 // subordinate to the measured chart.
@@ -29,124 +29,89 @@ const number = (value, name) => {
   return n;
 };
 
-test("enlightenment phase has a bounded cloud, diagonal rays, and singularity traces", () => {
+test("new age phase has 20 lenses (40 ellipses), 8 singularity traces, and 8 sparks", () => {
   const out = svg();
   assert.equal(tagsWithClass(out, "g", "narrative-enlightenment").length, 1);
-  assert.equal(tagsWithClass(out, "ellipse", "enlightenment-cloud").length, 1);
-  assert.equal(tagsWithClass(out, "ellipse", "enlightenment-cloud-core").length, 1);
-  assert.equal(tagsWithClass(out, "ellipse", "enlightenment-cloud-hole").length, 1);
-  const liquidRays = tagsWithClass(out, "path", "enlightenment-liquid-ray");
-  assert.equal(liquidRays.length, 5);
-  assert.equal(tagsWithClass(out, "path", "enlightenment-ray-highlight").length, 5);
-  assert.equal(tagsWithClass(out, "path", "enlightenment-trace-line").length, 3);
-  assert.equal(tagsWithClass(out, "path", "enlightenment-fragment").length, 3);
-  assert.equal(tagsWithClass(out, "circle", "enlightenment-spark").length, 3);
 
-  const cloud = tagsWithClass(out, "ellipse", "enlightenment-cloud")[0];
-  const cloudX = number(attrOf(cloud, "cx"), "cloud cx");
-  const cloudY = number(attrOf(cloud, "cy"), "cloud cy");
-  const cloudRx = number(attrOf(cloud, "rx"), "cloud rx");
-  const cloudRy = number(attrOf(cloud, "ry"), "cloud ry");
-  assert.ok(cloudX > 760 && cloudX < 800, `cloud must live in the upper-right, got ${cloudX}`);
-  assert.ok(cloudY >= 120 && cloudY <= 160, `cloud must stay in the upper plot, got ${cloudY}`);
-  assert.ok(cloudRx > 0 && cloudRy > 0);
-  const hole = tagsWithClass(out, "ellipse", "enlightenment-cloud-hole")[0];
-  assert.ok(number(attrOf(hole, "rx"), "hole rx") < cloudRx);
-  assert.ok(number(attrOf(hole, "ry"), "hole ry") < cloudRy);
+  // 20 lens-back + 20 lens-front = 40 ellipses total
+  const lensBacks = tagsWithClass(out, "ellipse", "new-age-lens-back");
+  const lensFronts = tagsWithClass(out, "ellipse", "new-age-lens-front");
+  assert.equal(lensBacks.length, 20, "expected 20 lens-back ellipses");
+  assert.equal(lensFronts.length, 20, "expected 20 lens-front ellipses");
 
-  for (const [i, ray] of liquidRays.entries()) {
-    const d = attrOf(ray, "d");
-    assert.match(d, /^M /, `liquid ray ${i} must have a path`);
-    assert.match(d, / Z$/, `liquid ray ${i} must close into a tapered ribbon`);
-    const nums = [...d.matchAll(/-?[\d.]+/g)].map((m) => Number(m[0]));
-    const xs = nums.filter((_, index) => index % 2 === 0);
-    const ys = nums.filter((_, index) => index % 2 === 1);
-    assert.ok(xs[0] > Math.min(...xs), `ray ${i} must travel down-left from its aperture`);
-    assert.ok(ys[0] < Math.max(...ys), `ray ${i} must descend from its aperture`);
-    assert.ok(Math.min(...xs) > 56 && Math.max(...xs) < 792, `ray ${i} must stay inside horizontal plot bounds`);
-    assert.ok(Math.min(...ys) >= 120 && Math.max(...ys) < 260, `ray ${i} must stay inside vertical plot bounds`);
-    assert.ok(
-      Math.abs(xs[0] - (cloudX - cloudRx + 4)) <= 6,
-      `ray ${i} must launch within the cloud-edge ribbon width`
-    );
-    assert.ok(
-      Math.min(...xs) < xs[0] - 1,
-      `ray ${i} must taper toward a lower-left tip`
-    );
+  // 8 traces from the singularity boundary to trail/ring lenses
+  const traceLines = tagsWithClass(out, "path", "new-age-trace-line");
+  assert.equal(traceLines.length, 8, "expected 8 trace paths");
+  const sparks = tagsWithClass(out, "circle", "new-age-spark");
+  assert.equal(sparks.length, 8, "expected 8 spark particles");
+
+  // Every lens-front must be inside the plot bounds
+  for (const [i, lens] of lensFronts.entries()) {
+    const cx = number(attrOf(lens, "cx"), `lens ${i} cx`);
+    const cy = number(attrOf(lens, "cy"), `lens ${i} cy`);
+    const rx = number(attrOf(lens, "rx"), `lens ${i} rx`);
+    const ry = number(attrOf(lens, "ry"), `lens ${i} ry`);
+    assert.ok(cx > 680 && cx < 800, `lens ${i} cx ${cx} must live in the upper-right`);
+    assert.ok(cy >= 120 && cy <= 260, `lens ${i} cy ${cy} must stay in the plot vertical bounds`);
+    assert.ok(rx >= 1.5 && rx <= 8, `lens ${i} rx ${rx} must be a reasonable lens size`);
+    assert.ok(ry >= 1 && ry <= 6.5, `lens ${i} ry ${ry} must be a reasonable lens size`);
   }
 
-  const highlights = [
-    ...out.matchAll(
-      /<path[^>]*class="[^"]*\benlightenment-ray-highlight\b[^"]*"[^>]*>[\s\S]*?<\/path>/g
-    ),
-  ].map((match) => match[0]);
-  assert.equal(highlights.length, 5, "expected one highlight per liquid ribbon");
-  for (const [i, highlight] of highlights.entries()) {
-    const d = attrOf(highlight, "d");
-    const nums = [...d.matchAll(/-?[\d.]+/g)].map((m) => Number(m[0]));
-    assert.ok(nums[0] < nums[nums.length - 2], `highlight ${i} must travel toward the cloud`);
-    assert.ok(nums[1] > nums[nums.length - 1], `highlight ${i} must climb toward the cloud`);
-    const highlightBlock = highlight;
-    assert.match(
-      highlightBlock,
-      /attributeName="stroke-dashoffset" values="1;0"/,
-      `highlight ${i} must use a monotonic one-way dash travel`
-    );
-    assert.doesNotMatch(
-      highlightBlock,
-      /values="0;0\.26;0"/,
-      `highlight ${i} must not oscillate back toward the singularity`
-    );
+  // Every back lens must be offset from its front lens
+  for (let i = 0; i < 20; i++) {
+    const bx = number(attrOf(lensBacks[i], "cx"), `back lens ${i} cx`);
+    const by = number(attrOf(lensBacks[i], "cy"), `back lens ${i} cy`);
+    const fx = number(attrOf(lensFronts[i], "cx"), `front lens ${i} cx`);
+    const fy = number(attrOf(lensFronts[i], "cy"), `front lens ${i} cy`);
+    assert.ok(bx !== fx || by !== fy, `lens ${i} back must be offset from front for refractive depth`);
   }
 
+  // Trace paths must move right/up from the singularity boundary
   const futureGhosts = tagsWithClass(out, "rect", "future-ghost");
-  assert.equal(futureGhosts.length, 2, "enlightenment fixture must expose both future slots");
+  assert.equal(futureGhosts.length, 2, "fixture must expose both future slots");
   const ghostCenters = futureGhosts.map(
     (ghost) =>
       number(attrOf(ghost, "x"), "future slot x") +
       number(attrOf(ghost, "width"), "future slot width") / 2
   );
   const slot = ghostCenters[1] - ghostCenters[0];
-  assert.ok(slot > 0, `future slots must advance left-to-right, got ${slot}`);
+  assert.ok(slot > 0, "future slots must advance left-to-right");
   const boundary = ghostCenters[1] - slot / 2;
 
-  const tracePaths = tagsWithClass(out, "path", "enlightenment-trace-line");
-  for (const [i, path] of tracePaths.entries()) {
+  for (const [i, path] of traceLines.entries()) {
     const d = attrOf(path, "d");
     assert.match(d, /^M /, `trace ${i} must have a path`);
     const nums = [...d.matchAll(/-?[\d.]+/g)].map((m) => Number(m[0]));
-    assert.ok(nums[0] < nums[nums.length - 2], `trace ${i} must move right toward the aperture`);
-    assert.ok(nums[1] !== nums[nums.length - 1], `trace ${i} must curve vertically into the aperture`);
+    assert.ok(nums[0] < nums[nums.length - 2], `trace ${i} must move right toward the lens aperture`);
+    // Launch from near the singularity boundary
     assert.ok(
-      Math.abs(nums[0] - (boundary + 5)) < 0.11,
-      `trace ${i} must launch after the 2027–2028 boundary, not at the measured singularity`
+      Math.abs(nums[0] - (boundary + 4)) < 0.15,
+      `trace ${i} must launch from the future-slot boundary`
     );
   }
 
   const aria = out.match(/aria-label="([^"]*)"/)?.[1] ?? "";
-  assert.match(aria, /bounded the new age cloud with diagonal rays/);
+  assert.match(aria, /20-lens compound-eye aperture with singularity traces/);
 });
 
-test("enlightenment gradient transitions green to lime to gold to ivory", () => {
+test("new age uses dedicated lens and trace gradients", () => {
   const out = svg();
-  const block = out.match(/<linearGradient id="seamFieldGrad"[^>]*>([\s\S]*?)<\/linearGradient>/)?.[1] ?? "";
-  const colors = [...block.matchAll(/stop-color="([^"]+)"/g)].map((m) => m[1]);
-  assert.deepEqual(colors.slice(-4), ["#a3e635", "#fbbf24", "#fde68a", "#fff7cc"]);
-  assert.match(out, /id="enlightenmentCloud"/);
-  assert.match(out, /id="enlightenmentRayGrad"/);
+  assert.match(out, /id="newAgeLensGrad"/);
+  assert.match(out, /id="newAgeTraceGrad"/);
+  assert.match(out, /id="newAgeGlow"/);
 });
 
-test("all enlightenment parts share one phase opacity", () => {
+test("all new age parts share one phase opacity", () => {
   const out = svg();
   const shared = "0.52";
   const tableauStart = out.indexOf('<g class="narrative-enlightenment">');
   const labelStart = out.indexOf('<g class="enlightenment-label"');
-  assert.ok(tableauStart >= 0 && labelStart > tableauStart, "expected enlightenment groups");
+  assert.ok(tableauStart >= 0 && labelStart > tableauStart, "expected new age groups");
   const tableau = out.slice(tableauStart, labelStart);
   assert.doesNotMatch(
     tableau,
     /(?:opacity|fill-opacity|stroke-opacity)=|attributeName="(?:opacity|stroke-opacity|fill-opacity)"/,
-    "enlightenment parts must inherit one shared opacity rather than pulsing independently"
+    "new age parts must inherit one shared opacity rather than pulsing independently"
   );
   const label = out.slice(labelStart, out.indexOf("</g>", labelStart) + 4);
   assert.match(label, new RegExp(`opacity="${shared}"`));
@@ -154,45 +119,42 @@ test("all enlightenment parts share one phase opacity", () => {
   const { dark, light } = splitThemes(out);
   for (const [name, out] of Object.entries({ dark, light })) {
     const css = styleBlocks(out)[0];
-      assert.ok(css.includes(".enlightenment-ray"), `${name}: missing liquid-ray CSS`);
-    assert.ok(css.includes(".enlightenment-ray-highlight"), `${name}: missing ray highlight CSS`);
+    assert.ok(css.includes(".new-age-lens-front"), `${name}: missing lens-front CSS`);
+    assert.ok(css.includes(".new-age-lens-back"), `${name}: missing lens-back CSS`);
+    assert.ok(css.includes(".new-age-trace-line"), `${name}: missing trace-line CSS`);
+    assert.ok(css.includes(".new-age-spark"), `${name}: missing spark CSS`);
     assert.ok(css.includes(".enlightenment-text"), `${name}: missing label CSS`);
     assert.ok(css.includes("animate, animateTransform { display: none; }"), `${name}: missing reduced-motion rule`);
   }
   const lightCss = styleBlocks(light)[0];
-  assert.ok(declarationsOf(lightCss, ".enlightenment-ray").length >= 1);
-  assert.ok(lightCss.includes("enlightenmentRayGradLight"));
+  assert.ok(declarationsOf(lightCss, ".new-age-lens-front").length >= 1);
+  assert.ok(lightCss.includes("newAgeLensGradLight"));
 
   for (const [name, css] of Object.entries({ dark, light })) {
     const reducedMotion = css.match(/@media \(prefers-reduced-motion: reduce\) \{([\s\S]*?)\n    \}/)?.[1] ?? "";
     assert.doesNotMatch(
       reducedMotion,
-      /\.enlightenment-[^{]+\s*\{[^}]*\b(?:opacity|fill-opacity|stroke-opacity)\s*:/,
+      /\.new-age-[^{]+\s*\{[^}]*\b(?:opacity|fill-opacity|stroke-opacity)\s*:/,
       `${name}: reduced motion must not add a child opacity that compounds the shared parent opacity`
     );
     assert.match(
       css,
       new RegExp(`\\.narrative-enlightenment\\s*\\{[^}]*opacity:\\s*${shared}`),
-      `${name}: missing shared enlightenment opacity`
+      `${name}: missing shared new age opacity`
     );
   }
   for (const [name, css] of Object.entries({ dark, light })) {
     for (const selector of [
-      "enlightenment-cloud-glow",
-      "enlightenment-cloud",
-      "enlightenment-cloud-core",
-      "enlightenment-cloud-hole",
-      "enlightenment-ray",
-      "enlightenment-ray-highlight",
-      "enlightenment-trace-line",
-      "enlightenment-fragment",
-      "enlightenment-spark",
+      "new-age-lens-back",
+      "new-age-lens-front",
+      "new-age-trace-line",
+      "new-age-spark",
     ]) {
       const rule = css.match(new RegExp(`\\.${selector}\\s*\\{([^}]*)\\}`))?.[1] ?? "";
       assert.doesNotMatch(
         rule,
-        /(?:^|;)\\s*(?:opacity|fill-opacity|stroke-opacity)\\s*:/,
-        `${name}: ${selector} must inherit the shared enlightenment opacity`
+        /(?:^|;)\s*(?:opacity|fill-opacity|stroke-opacity)\s*:/,
+        `${name}: ${selector} must inherit the shared new age opacity`
       );
     }
   }

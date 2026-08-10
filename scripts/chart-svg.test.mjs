@@ -227,54 +227,56 @@ for (const [label, currentTotal] of CASES) {
   });
 }
 
-test("the liquid enlightenment ribbons survive every branch", () => {
+test("the new age 20-lens array survives every branch", () => {
   for (const [label, currentTotal] of CASES) {
     const svg = render(currentTotal);
+    // 20 lens-back + 20 lens-front ellipses
     assert.equal(
-      (svg.match(/class="[^"]*\benlightenment-liquid-ray\b[^"]*"/g) || []).length,
-      5,
-      `expected five closed liquid ribbons (${label})`
+      (svg.match(/class="[^"]*\bnew-age-lens-back\b[^"]*"/g) || []).length,
+      20,
+      `expected 20 lens-back ellipses (${label})`
     );
     assert.equal(
-      (svg.match(/class="[^"]*\benlightenment-ray-highlight\b[^"]*"/g) || []).length,
-      5,
-      `expected five moving ribbon highlights (${label})`
+      (svg.match(/class="[^"]*\bnew-age-lens-front\b[^"]*"/g) || []).length,
+      20,
+      `expected 20 lens-front ellipses (${label})`
     );
-    for (const path of svg.match(/<path[^>]*class="[^"]*\benlightenment-liquid-ray\b[^"]*"[^>]*>/g) || []) {
-      assert.match(path, /d="M [^\"]+ Z"/, `liquid ribbon must be a closed silhouette (${label})`);
-      assert.doesNotMatch(path, /stroke-dasharray/, `liquid ribbon must not regress to a dashed line (${label})`);
-      const nums = [...path.matchAll(/-?[\d.]+/g)].map((m) => Number(m[0]));
-      // M left-edge, C left controls + pointed tip, C right controls + right edge.
-      // These bounds force a narrow downward ribbon rather than a broad loop.
-      assert.ok(nums[6] < nums[0] - 20, `ribbon tip must be materially down-left (${label})`);
-      assert.ok(nums[7] > nums[1] + 35, `ribbon tip must descend from the cloud (${label})`);
-      assert.ok(nums[12] - nums[0] < 16, `ribbon launch width must stay narrow (${label})`);
-    }
+    // 8 traces and 8 sparks
+    assert.equal(
+      (svg.match(/class="[^"]*\bnew-age-trace-line\b[^"]*"/g) || []).length,
+      8,
+      `expected 8 trace lines (${label})`
+    );
+    assert.equal(
+      (svg.match(/class="[^"]*\bnew-age-spark\b[^"]*"/g) || []).length,
+      8,
+      `expected 8 spark particles (${label})`
+    );
   }
 });
 
-test("written dark/light assets preserve liquid ribbons and legacy gradient opacity", () => {
+test("written dark/light assets preserve 20-lens array and new gradient opacities", () => {
   const expectedStops = {
-    enlightenmentCloud: ["0.92", "0.46", "0"],
-    enlightenmentCloudLight: ["0.98", "0.44", "0"],
-    enlightenmentRayGrad: ["0.98", "0.82", "0.32"],
-    enlightenmentRayGradLight: ["0.98", "0.78", "0.42"],
+    newAgeLensGrad: ["0.94", "0.55", "0"],
+    newAgeLensGradLight: ["0.98", "0.52", "0"],
+    newAgeTraceGrad: ["0.32", "0.64", "0.88"],
+    newAgeTraceGradLight: ["0.38", "0.58", "0.92"],
   };
   for (const theme of ["dark", "light"]) {
     const asset = readFileSync(resolve(REPO_ROOT, `assets/cumulative-${theme}.svg`), "utf8");
     assert.equal(
-      (asset.match(/class="[^"]*\benlightenment-liquid-ray\b[^"]*"/g) || []).length,
-      5,
-      `${theme}: written asset must contain five liquid ribbons`
+      (asset.match(/class="[^"]*\bnew-age-lens-front\b[^"]*"/g) || []).length,
+      20,
+      `${theme}: written asset must contain 20 lens-front ellipses`
     );
     assert.equal(
-      (asset.match(/class="[^"]*\benlightenment-ray-highlight\b[^"]*"/g) || []).length,
-      5,
-      `${theme}: written asset must contain five ribbon highlights`
+      (asset.match(/class="[^"]*\bnew-age-lens-back\b[^"]*"/g) || []).length,
+      20,
+      `${theme}: written asset must contain 20 lens-back ellipses`
     );
     const activeGradientIds =
       theme === "dark"
-        ? ["enlightenmentCloud", "enlightenmentRayGrad"]
+        ? ["newAgeLensGrad", "newAgeTraceGrad"]
         : Object.keys(expectedStops);
     for (const id of activeGradientIds) {
       const block = asset.match(new RegExp(`<(?:linear|radial)Gradient id="${id}"[^>]*>([\\s\\S]*?)</(?:linear|radial)Gradient>`))?.[1] ?? "";
@@ -288,26 +290,22 @@ test("written dark/light assets preserve liquid ribbons and legacy gradient opac
   }
 });
 
-test("written assets retain bounded liquid-ray geometry", () => {
+test("written assets retain bounded lens geometry", () => {
   for (const theme of ["dark", "light"]) {
     const asset = readFileSync(resolve(REPO_ROOT, `assets/cumulative-${theme}.svg`), "utf8");
-    const ribbons = asset.match(/<path[^>]*class="[^\"]*\benlightenment-liquid-ray\b[^\"]*"[^>]*>/g) || [];
-    assert.equal(ribbons.length, 5, `${theme}: expected five written liquid ribbons`);
-    const tips = [];
-    for (const ribbon of ribbons) {
-      const d = ribbon.match(/d="([^\"]+)"/)?.[1] || "";
-      assert.match(d, /^M [^\"]+ Z$/, `${theme}: ribbon must be a closed path`);
-      const nums = [...d.matchAll(/-?[\d.]+/g)].map((m) => Number(m[0]));
-      assert.ok(nums[6] < nums[0] - 20, `${theme}: ribbon tip must be down-left`);
-      assert.ok(nums[7] > nums[1] + 35, `${theme}: ribbon tip must descend`);
-      tips.push([nums[6], nums[7]]);
+    const lenses = asset.match(/<ellipse[^>]*class="[^\"]*\bnew-age-lens-front\b[^\"]*"[^>]*>/g) || [];
+    assert.equal(lenses.length, 20, `${theme}: expected 20 written lens-front ellipses`);
+    const centers = [];
+    for (const lens of lenses) {
+      const cx = Number(lens.match(/cx="([\d.]+)"/)?.[1] || "0");
+      const cy = Number(lens.match(/cy="([\d.]+)"/)?.[1] || "0");
+      assert.ok(cx > 680 && cx < 800, `${theme}: lens cx ${cx} must live in the upper-right`);
+      assert.ok(cy >= 120, `${theme}: lens cy ${cy} must stay inside the plot`);
+      centers.push([cx, cy]);
     }
-    for (let i = 1; i < tips.length; i += 1) {
-      assert.ok(
-        tips[i][0] > tips[i - 1][0],
-        `${theme}: liquid-ray tips must remain ordered left-to-right`
-      );
-    }
+    // At least one lens must be in the trail (left of the main cluster)
+    const leftmost = Math.min(...centers.map((c) => c[0]));
+    assert.ok(leftmost < 740, `${theme}: trail must extend left of the core cluster, got leftmost=${leftmost}`);
   }
 });
 

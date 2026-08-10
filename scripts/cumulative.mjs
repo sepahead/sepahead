@@ -568,33 +568,48 @@ const WAVE_RY_OUTER = artRy(23 / 12); // 46
 const WAVE_RY_MID = artRy(19 / 12); // 38
 const WAVE_RY_INNER = artRy(31 / 24); // 31
 
-// Enlightenment aperture: a bounded upper-right destination, not a fourth data
-// series. Liquid ribbons begin in this cloud-hole and travel diagonally down-left,
-// stopping inside the plot so they read as direction and release rather than a
-// new axis. Their silhouette borrows the narrow, rounded, vertical liquid spine
-// language of the Prisoma mark without importing its purple palette into this
-// chart's existing green-to-gold transition.
-// One shared phase opacity. It is applied to the complete enlightenment tableau
-// (including its separate label group) rather than tuning each cloud, ribbon,
-// trace, and spark independently. The gradients retain their authored stop
-// opacities because those describe colour falloff, not different part opacity.
-const ENLIGHTENMENT_OPACITY = 0.52;
-const ENLIGHTENMENT_CLOUD_CX = PLOT_RIGHT - 22;
-const ENLIGHTENMENT_CLOUD_CY = PLOT_TOP + 20;
-const ENLIGHTENMENT_CLOUD_RX = 19;
-const ENLIGHTENMENT_CLOUD_RY = 14;
-const ENLIGHTENMENT_RAY_ENDS = [
-  { x: PLOT_LEFT + PLOT_WIDTH * 0.777, y: PLOT_TOP + PLOT_HEIGHT * 0.786 },
-  { x: PLOT_LEFT + PLOT_WIDTH * 0.803, y: PLOT_TOP + PLOT_HEIGHT * 0.879 },
-  { x: PLOT_LEFT + PLOT_WIDTH * 0.829, y: PLOT_TOP + PLOT_HEIGHT * 0.964 },
-  { x: PLOT_LEFT + PLOT_WIDTH * 0.859, y: PLOT_TOP + PLOT_HEIGHT * 0.693 },
-  { x: PLOT_LEFT + PLOT_WIDTH * 0.887, y: PLOT_TOP + PLOT_HEIGHT * 0.600 },
+// The new age: a 20-lens compound-eye array in the upper-right. Each lens is a
+// pair of offset ellipses creating refractive depth — the singularity's energy
+// is gathered, focused, and dispersed through this crystalline aperture.
+// The lenses are arranged as a core cluster (7), a surrounding ring (7), and a
+// trail (6) arcing down-left toward the singularity boundary. Traces from the
+// singularity flow directly into specific lenses, making the integration
+// structural rather than decorative.
+// One shared phase opacity applied to the complete tableau.
+const NEW_AGE_OPACITY = 0.52;
+const NEW_AGE_CENTER_X = PLOT_RIGHT - 28;
+const NEW_AGE_CENTER_Y = PLOT_TOP + 22;
+// 20 lenses: each defined by {dx, dy} offset from center, plus {rx, ry} radii.
+// Core (7): tight central cluster — the focal point.
+// Ring (7): surrounding halo — gathers incoming energy.
+// Trail (6): descending arc toward the singularity — the conduit.
+const NEW_AGE_LENSES = [
+  // Core cluster — tight, overlapping, highest density
+  { dx: 0, dy: 0, rx: 7.0, ry: 5.5 },
+  { dx: 5, dy: -3, rx: 6.0, ry: 4.5 },
+  { dx: -4, dy: 2, rx: 5.5, ry: 4.2 },
+  { dx: 3, dy: 5, rx: 4.8, ry: 3.6 },
+  { dx: -5, dy: -4, rx: 5.2, ry: 3.8 },
+  { dx: 7, dy: 1, rx: 4.2, ry: 3.2 },
+  { dx: -3, dy: -6, rx: 4.5, ry: 3.4 },
+  // Ring — surrounding halo, larger orbit
+  { dx: -11, dy: -2, rx: 5.0, ry: 3.8 },
+  { dx: 13, dy: -5, rx: 4.5, ry: 3.4 },
+  { dx: -8, dy: 9, rx: 4.0, ry: 3.0 },
+  { dx: 11, dy: 7, rx: 3.8, ry: 2.8 },
+  { dx: 0, dy: 11, rx: 3.4, ry: 2.6 },
+  { dx: -13, dy: -8, rx: 3.2, ry: 2.4 },
+  { dx: 15, dy: -1, rx: 3.0, ry: 2.2 },
+  // Trail — arcing down-left toward the singularity boundary
+  { dx: -20, dy: 4, rx: 3.6, ry: 2.8 },
+  { dx: -27, dy: 12, rx: 3.2, ry: 2.4 },
+  { dx: -34, dy: 21, rx: 2.8, ry: 2.1 },
+  { dx: -41, dy: 31, rx: 2.5, ry: 1.9 },
+  { dx: -48, dy: 42, rx: 2.2, ry: 1.7 },
+  { dx: -55, dy: 53, rx: 2.0, ry: 1.5 },
 ];
-const ENLIGHTENMENT_PARTICLE_TARGETS = [
-  { x: ENLIGHTENMENT_CLOUD_CX - 10, y: ENLIGHTENMENT_CLOUD_CY - 5 },
-  { x: ENLIGHTENMENT_CLOUD_CX - 5, y: ENLIGHTENMENT_CLOUD_CY + 2 },
-  { x: ENLIGHTENMENT_CLOUD_CX - 1, y: ENLIGHTENMENT_CLOUD_CY + 7 },
-];
+// Each trace targets a specific lens index in the array.
+const NEW_AGE_TRACE_LENS_INDICES = [8, 9, 10, 14, 15, 16, 17, 18];
 
 // ---------------------------------------------------------------------------
 // Singularity portal: a gold event-horizon seam in the gap between the last
@@ -753,131 +768,80 @@ function portalFieldMarkup(px) {
 // stop before the plot edges; the destination is atmospheric context, never a
 // measured bar or a claim about contributions beyond the future placeholder.
 function enlightenmentDefs() {
-  return `<radialGradient id="enlightenmentCloud" cx="0.5" cy="0.46" r="0.58">
-      <stop offset="0%" stop-color="#fff7cc" stop-opacity="0.92"/>
-      <stop offset="48%" stop-color="#fde68a" stop-opacity="0.46"/>
+  return `<radialGradient id="newAgeLensGrad" cx="0.45" cy="0.4" r="0.55">
+      <stop offset="0%" stop-color="#fff7cc" stop-opacity="0.94"/>
+      <stop offset="52%" stop-color="#fde68a" stop-opacity="0.55"/>
       <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="enlightenmentCloudLight" cx="0.5" cy="0.46" r="0.58">
+    <radialGradient id="newAgeLensGradLight" cx="0.45" cy="0.4" r="0.55">
       <stop offset="0%" stop-color="#fff7cc" stop-opacity="0.98"/>
-      <stop offset="48%" stop-color="#fbbf24" stop-opacity="0.44"/>
+      <stop offset="52%" stop-color="#fbbf24" stop-opacity="0.52"/>
       <stop offset="100%" stop-color="#b45309" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="enlightenmentRayGrad" gradientUnits="userSpaceOnUse" x1="${ENLIGHTENMENT_CLOUD_CX}" y1="${ENLIGHTENMENT_CLOUD_CY}" x2="${PLOT_RIGHT - 120}" y2="${PLOT_BOTTOM}">
-      <stop offset="0%" stop-color="#fff7cc" stop-opacity="0.98"/>
-      <stop offset="42%" stop-color="#fde68a" stop-opacity="0.82"/>
-      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.32"/>
+    <linearGradient id="newAgeTraceGrad" gradientUnits="userSpaceOnUse" x1="${NEW_AGE_CENTER_X - 55}" y1="${NEW_AGE_CENTER_Y + 53}" x2="${NEW_AGE_CENTER_X + 15}" y2="${NEW_AGE_CENTER_Y - 8}">
+      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.32"/>
+      <stop offset="45%" stop-color="#fbbf24" stop-opacity="0.64"/>
+      <stop offset="100%" stop-color="#fff7cc" stop-opacity="0.88"/>
     </linearGradient>
-    <linearGradient id="enlightenmentRayGradLight" gradientUnits="userSpaceOnUse" x1="${ENLIGHTENMENT_CLOUD_CX}" y1="${ENLIGHTENMENT_CLOUD_CY}" x2="${PLOT_RIGHT - 120}" y2="${PLOT_BOTTOM}">
-      <stop offset="0%" stop-color="#fff7cc" stop-opacity="0.98"/>
-      <stop offset="42%" stop-color="#fbbf24" stop-opacity="0.78"/>
-      <stop offset="100%" stop-color="#b45309" stop-opacity="0.42"/>
+    <linearGradient id="newAgeTraceGradLight" gradientUnits="userSpaceOnUse" x1="${NEW_AGE_CENTER_X - 55}" y1="${NEW_AGE_CENTER_Y + 53}" x2="${NEW_AGE_CENTER_X + 15}" y2="${NEW_AGE_CENTER_Y - 8}">
+      <stop offset="0%" stop-color="#d97706" stop-opacity="0.38"/>
+      <stop offset="45%" stop-color="#b45309" stop-opacity="0.58"/>
+      <stop offset="100%" stop-color="#fff7cc" stop-opacity="0.92"/>
     </linearGradient>
-    <filter id="enlightenmentGlow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="1.6" result="b"/>
+    <filter id="newAgeGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="1.2" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>`;
 }
 
 function enlightenmentMarkup(portalX) {
-  const cloudX = ENLIGHTENMENT_CLOUD_CX;
-  const cloudY = ENLIGHTENMENT_CLOUD_CY;
-  const cloudEdgeX = cloudX - ENLIGHTENMENT_CLOUD_RX + 4;
-  // Prisoma-inspired liquid rays: each one is a closed, tapered ribbon rather
-  // than a straight stroke. The neck is broad where it leaves the aperture,
-  // the body bends in two gentle S-curves, and the lower-left tip dissolves to
-  // a point before it can touch a bar or the plot edge. The phase parameter
-  // gives SMIL a nearby alternate silhouette, so the motion is a slow liquid
-  // sway rather than a line-dash gimmick.
-  const liquidRayPath = (end, i, phase = 0) => {
-    const startY = cloudY - 8 + i * 4;
-    const width = [7.2, 9.4, 11.8, 8.8, 6.8][i];
-    const sway = (i % 2 === 0 ? 1 : -1) * phase;
-    const sx = cloudEdgeX;
-    const ex = end.x;
-    const ey = end.y;
-    const length = Math.hypot(ex - sx, ey - startY);
-    const nx = -(ey - startY) / length;
-    const ny = (ex - sx) / length;
-    const offset = (point, amount) => ({
-      x: point.x + nx * amount,
-      y: point.y + ny * amount,
-    });
-    const start = { x: sx, y: startY };
-    const c1 = { x: sx - 10 + sway, y: startY + 30 };
-    const c2 = { x: ex + 24 + sway, y: ey - 42 };
-    const left = offset(start, width / 2);
-    const leftC1 = offset(c1, width * 0.44);
-    const leftC2 = offset(c2, width * 0.12);
-    const right = offset(start, -width / 2);
-    const rightC1 = offset(c1, -width * 0.44);
-    const rightC2 = offset(c2, -width * 0.12);
-    const p = (point) => `${point.x.toFixed(1)} ${point.y.toFixed(1)}`;
-    return [
-      `M ${p(left)}`,
-      `C ${p(leftC1)} ${p(leftC2)} ${p(end)}`,
-      `C ${p(rightC2)} ${p(rightC1)} ${p(right)}`,
-      "Z",
-    ].join(" ");
+  const cx = NEW_AGE_CENTER_X;
+  const cy = NEW_AGE_CENTER_Y;
+  // Each lens is two offset ellipses: a back ellipse (darker, larger, shifted
+  // for depth) and a front ellipse (brighter, the lens surface). Together they
+  // create a crystalline refractive look.
+  const lensElement = (lens, i) => {
+    const x = (cx + lens.dx).toFixed(1);
+    const y = (cy + lens.dy).toFixed(1);
+    const backRx = (lens.rx + 0.8).toFixed(1);
+    const backRy = (lens.ry + 0.6).toFixed(1);
+    const frontRx = lens.rx.toFixed(1);
+    const frontRy = lens.ry.toFixed(1);
+    const bx = (cx + lens.dx + 0.8).toFixed(1);
+    const by = (cy + lens.dy + 0.5).toFixed(1);
+    return `<ellipse cx="${bx}" cy="${by}" rx="${backRx}" ry="${backRy}" class="new-age-lens-back"/>
+    <ellipse cx="${x}" cy="${y}" rx="${frontRx}" ry="${frontRy}" class="new-age-lens-front"/>`;
   };
-  // The highlight is authored tip → aperture, deliberately opposite the
-  // geometric reading of the ribbon. That makes its only visible traveling
-  // accent unambiguous: light is released from the singularity-side tip and
-  // climbs into the cloud; nothing animates back toward the singularity.
-  const liquidRayHighlight = (end, i, phase = 0) => {
-    const startY = cloudY - 8 + i * 4;
-    const sx = cloudEdgeX;
-    const ex = end.x;
-    const ey = end.y;
-    const sway = (i % 2 === 0 ? 1 : -1) * phase;
-    return `M ${(ex + 3).toFixed(1)} ${(ey - 4).toFixed(1)} C ${(ex + 54 - sway).toFixed(1)} ${(ey - 40).toFixed(1)} ${(sx - 7 + sway).toFixed(1)} ${(startY + 26).toFixed(1)} ${sx.toFixed(1)} ${(startY + 1.4).toFixed(1)}`;
-  };
-  const ray = (end, i) => {
-    const begin = (i * 0.34).toFixed(2);
-    const d0 = liquidRayPath(end, i);
-    const d1 = liquidRayPath(end, i, 7);
-    const h0 = liquidRayHighlight(end, i);
-    const h1 = liquidRayHighlight(end, i, 7);
-    return `<path d="${d0}" class="enlightenment-ray enlightenment-liquid-ray">
-      <animate attributeName="d" values="${d0};${d1};${d0}" keyTimes="0;0.5;1" begin="${begin}s" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
-    </path>
-    <path d="${h0}" class="enlightenment-ray-highlight" pathLength="1" stroke-dasharray="0.08 0.18" stroke-dashoffset="0">
-      <animate attributeName="d" values="${h0};${h1};${h0}" keyTimes="0;0.5;1" begin="${begin}s" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
-      <animate attributeName="stroke-dashoffset" values="1;0" begin="${begin}s" dur="3.2s" repeatCount="indefinite"/>
-    </path>`;
-  };
-  const trace = (startY, target, i) => {
-    const sx = portalX + 5;
-    const sy = startY;
-    const c1x = sx + 48;
-    const c1y = sy - 6 - i * 3;
-    const c2x = target.x - 72;
-    const c2y = target.y + 22;
-    const d = `M ${sx.toFixed(1)} ${sy.toFixed(1)} C ${c1x.toFixed(1)} ${c1y.toFixed(1)} ${c2x.toFixed(1)} ${c2y.toFixed(1)} ${target.x.toFixed(1)} ${target.y.toFixed(1)}`;
-    const fragmentD = `M ${(sx + 2).toFixed(1)} ${(sy + i * 2).toFixed(1)} L ${(sx + 28).toFixed(1)} ${(sy - 9 - i * 5).toFixed(1)} L ${(target.x - 26).toFixed(1)} ${(target.y + 9 - i * 4).toFixed(1)}`;
-    return `<g class="enlightenment-trace">
-      <path d="${fragmentD}" pathLength="1" stroke-dasharray="0.035 0.085" class="enlightenment-fragment">
-        <animate attributeName="stroke-dashoffset" values="0;1" begin="${(i * 0.42).toFixed(2)}s" dur="3.4s" repeatCount="indefinite"/>
+  // Trace from the singularity boundary to a lens in the trail/ring.
+  // Each trace carries a spark particle that travels along it.
+  const trace = (lensIdx, i) => {
+    const lens = NEW_AGE_LENSES[lensIdx];
+    const tx = cx + lens.dx;
+    const ty = cy + lens.dy;
+    const sx = portalX + 4;
+    const sy = LANES[i % 4];
+    const c1x = sx + (tx - sx) * 0.35;
+    const c1y = sy + (ty - sy) * 0.12 - (i % 3) * 4;
+    const c2x = tx - (tx - sx) * 0.25;
+    const c2y = ty - (ty - sy) * 0.2 - (i % 3) * 3;
+    const d = `M ${sx.toFixed(1)} ${sy.toFixed(1)} C ${c1x.toFixed(1)} ${c1y.toFixed(1)} ${c2x.toFixed(1)} ${c2y.toFixed(1)} ${tx.toFixed(1)} ${ty.toFixed(1)}`;
+    const begin = (i * 0.38).toFixed(2);
+    return `<g class="new-age-trace">
+      <path d="${d}" pathLength="1" stroke-dasharray="0.06 0.14" class="new-age-trace-line">
+        <animate attributeName="stroke-dashoffset" values="0;1" begin="${begin}s" dur="3.6s" repeatCount="indefinite"/>
       </path>
-      <path d="${d}" pathLength="1" stroke-dasharray="0.07 0.11" class="enlightenment-trace-line">
-        <animate attributeName="stroke-dashoffset" values="0;1" begin="${(i * 0.42).toFixed(2)}s" dur="3.4s" repeatCount="indefinite"/>
-      </path>
-      <circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${(1.1 - i * 0.12).toFixed(2)}" class="enlightenment-spark">
-        <animateTransform attributeName="transform" type="translate" values="0 0;${(target.x - sx).toFixed(1)} ${(target.y - sy).toFixed(1)}" begin="${(i * 0.42).toFixed(2)}s" dur="3.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.35 0 0.8 1"/>
+      <circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${(1.2 - i * 0.08).toFixed(2)}" class="new-age-spark">
+        <animateTransform attributeName="transform" type="translate" values="0 0;${(tx - sx).toFixed(1)} ${(ty - sy).toFixed(1)}" begin="${begin}s" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.38 0 0.82 1"/>
       </circle>
     </g>`;
   };
   return `
   <g class="narrative-enlightenment">
-    <title>the new age: bounded golden cloud aperture and diagonal rays</title>
-    <ellipse cx="${cloudX}" cy="${cloudY}" rx="${ENLIGHTENMENT_CLOUD_RX + 12}" ry="${ENLIGHTENMENT_CLOUD_RY + 9}" class="enlightenment-cloud-glow"/>
-    <ellipse cx="${cloudX}" cy="${cloudY}" rx="${ENLIGHTENMENT_CLOUD_RX}" ry="${ENLIGHTENMENT_CLOUD_RY}" class="enlightenment-cloud"/>
-    <ellipse cx="${cloudX - 3}" cy="${cloudY + 1}" rx="${ENLIGHTENMENT_CLOUD_RX - 7}" ry="${ENLIGHTENMENT_CLOUD_RY - 6}" class="enlightenment-cloud-core"/>
-    <ellipse cx="${cloudX - 3}" cy="${cloudY + 1}" rx="${ENLIGHTENMENT_CLOUD_RX - 10}" ry="${ENLIGHTENMENT_CLOUD_RY - 8}" class="enlightenment-cloud-hole"/>
-    ${ENLIGHTENMENT_RAY_ENDS.map(ray).join("\n    ")}
-    ${ENLIGHTENMENT_PARTICLE_TARGETS.map((target, i) => trace(LANES[i * 2], target, i)).join("\n    ")}
+    <title>the new age: 20-lens compound-eye aperture refracting singularity energy</title>
+    ${NEW_AGE_LENSES.map(lensElement).join("\n    ")}
+    ${NEW_AGE_TRACE_LENS_INDICES.map(trace).join("\n    ")}
   </g>
-  <g class="enlightenment-label" opacity="${ENLIGHTENMENT_OPACITY}">
+  <g class="enlightenment-label" opacity="${NEW_AGE_OPACITY}">
     <text x="${(PLOT_RIGHT - 2).toFixed(1)}" y="${(PLOT_TOP - 8).toFixed(1)}" text-anchor="end" class="enlightenment-text">the new age</text>
   </g>`;
 }
@@ -1798,7 +1762,7 @@ function renderSVG(model) {
     futureRows.length > 1
       ? `${futureRows[0].label} to ${futureRows[1].label} are an unstarted future runway; the enlightenment phase sits between them`
       : "",
-    "the visual phase motif continues into a bounded the new age cloud with diagonal rays",
+    "the visual phase motif continues into a 20-lens compound-eye aperture with singularity traces",
   ].filter(Boolean);
   // Hedge the superlative while the record-holder is the year still running.
   // "peak 6,240 in 2026" alongside "2026 is still in progress" in the same
@@ -1930,16 +1894,11 @@ function renderSVG(model) {
        the plot; they never become a new data encoding. */
     /* Every authored enlightenment part shares one phase opacity. The gradient
        stop opacities below remain colour falloff, not per-part intensity. */
-    .narrative-enlightenment { pointer-events: none; opacity: ${ENLIGHTENMENT_OPACITY}; }
-    .enlightenment-cloud-glow { fill: url(#enlightenmentCloud); filter: url(#enlightenmentGlow); }
-    .enlightenment-cloud { fill: url(#enlightenmentCloud); stroke: #fde68a; stroke-width: 0.8; }
-    .enlightenment-cloud-core { fill: #fff7cc; filter: url(#enlightenmentGlow); }
-    .enlightenment-cloud-hole { fill: #0d1117; stroke: #fff7cc; stroke-width: 0.7; }
-    .enlightenment-ray { fill: url(#enlightenmentRayGrad); stroke: none; filter: url(#enlightenmentGlow); }
-    .enlightenment-ray-highlight { fill: none; stroke: #fff7cc; stroke-width: 0.65; stroke-linecap: round; }
-    .enlightenment-trace-line { fill: none; stroke: #fff7cc; stroke-width: 0.9; stroke-linecap: round; }
-    .enlightenment-fragment { fill: none; stroke: #fde68a; stroke-width: 1.1; stroke-linecap: round; }
-    .enlightenment-spark { fill: #fff7cc; filter: url(#enlightenmentGlow); }
+    .narrative-enlightenment { pointer-events: none; opacity: ${NEW_AGE_OPACITY}; }
+    .new-age-lens-back { fill: #78350f; stroke: #92400e; stroke-width: 0.4; }
+    .new-age-lens-front { fill: url(#newAgeLensGrad); stroke: #fde68a; stroke-width: 0.6; filter: url(#newAgeGlow); }
+    .new-age-trace-line { fill: none; stroke: url(#newAgeTraceGrad); stroke-width: 0.7; stroke-linecap: round; }
+    .new-age-spark { fill: #fff7cc; filter: url(#newAgeGlow); }
     .enlightenment-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fde68a; letter-spacing: 2px; }
     .grid { stroke: #21262d; stroke-width: 1; }
     .baseline { stroke: #30363d; stroke-width: 1; }
@@ -2099,15 +2058,10 @@ function renderSVG(model) {
       .intake-head { fill: #a16207; }
       .intake-head-lime { fill: #4d7c0f; }
       .portal-boom { stroke: #4d7c0f; }
-      .enlightenment-cloud-glow { fill: url(#enlightenmentCloudLight); }
-      .enlightenment-cloud { fill: url(#enlightenmentCloudLight); stroke: #b45309; }
-      .enlightenment-cloud-core { fill: #fff7cc; }
-      .enlightenment-cloud-hole { fill: #ffffff; fill-opacity: 0.88; stroke: #b45309; }
-      .enlightenment-ray { fill: url(#enlightenmentRayGradLight); stroke: none; }
-      .enlightenment-ray-highlight { stroke: #fff7cc; }
-      .enlightenment-trace-line { stroke: #a16207; }
-      .enlightenment-fragment { stroke: #d97706; }
-      .enlightenment-spark { fill: #b45309; }
+      .new-age-lens-back { fill: #451a03; stroke: #78350f; }
+      .new-age-lens-front { fill: url(#newAgeLensGradLight); stroke: #d97706; }
+      .new-age-trace-line { stroke: url(#newAgeTraceGradLight); }
+      .new-age-spark { fill: #d97706; }
       .enlightenment-text { fill: #92400e; }
       .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text, .enlightenment-text { stroke: #ffffff; }
     }
