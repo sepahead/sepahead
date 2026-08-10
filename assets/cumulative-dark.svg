@@ -540,21 +540,21 @@
     <polygon points="738.5 126.0 736.4 246.0 742.4 246.0 740.3 126.0" class="new-age-ray" opacity="0.85"/>
     <polygon points="738.6 126.0 734.6 243.9 740.1 244.0 740.3 126.0" class="new-age-ray" opacity="0.85"/>
     <polygon points="738.5 126.0 732.4 240.8 738.4 241.0 740.3 126.0" class="new-age-ray" opacity="0.85"/>
-    <polygon points="738.7 126.1 748.7 235.6 753.1 235.2 740.2 125.9" class="new-age-ray" opacity="0.78"/>
-    <polygon points="738.7 126.1 755.5 228.8 759.5 228.1 740.1 125.9" class="new-age-ray" opacity="0.72"/>
-    <polygon points="738.8 126.2 761.0 219.6 764.4 218.7 740.1 125.8" class="new-age-ray" opacity="0.66"/>
+    <polygon points="738.7 126.1 748.7 235.6 753.1 235.2 740.2 125.9" class="new-age-ray" opacity="0.85"/>
+    <polygon points="738.7 126.1 755.5 228.8 759.5 228.1 740.1 125.9" class="new-age-ray" opacity="0.82"/>
+    <polygon points="738.8 126.2 761.0 219.6 764.4 218.7 740.1 125.8" class="new-age-ray" opacity="0.77"/>
     <polygon points="738.7 125.9 725.7 235.2 730.1 235.6 740.2 126.1" class="new-age-ray" opacity="0.78"/>
     <polygon points="738.7 125.9 719.4 228.1 723.3 228.8 740.1 126.1" class="new-age-ray" opacity="0.72"/>
     <polygon points="738.8 125.8 714.5 218.7 717.9 219.6 740.1 126.2" class="new-age-ray" opacity="0.66"/>
-    <polygon points="738.8 126.2 764.0 206.4 766.8 205.4 740.0 125.8" class="new-age-ray" opacity="0.58"/>
-    <polygon points="738.9 126.2 765.2 193.2 767.6 192.3 740.0 125.8" class="new-age-ray" opacity="0.49"/>
+    <polygon points="738.8 126.2 764.0 206.4 766.8 205.4 740.0 125.8" class="new-age-ray" opacity="0.70"/>
+    <polygon points="738.9 126.2 765.2 193.2 767.6 192.3 740.0 125.8" class="new-age-ray" opacity="0.61"/>
     <polygon points="738.8 125.8 712.0 205.4 714.9 206.4 740.0 126.2" class="new-age-ray" opacity="0.58"/>
     <polygon points="738.9 125.8 711.3 192.3 713.7 193.2 740.0 126.2" class="new-age-ray" opacity="0.49"/>
-    <polygon points="738.9 126.3 763.9 178.6 765.8 177.6 739.9 125.7" class="new-age-ray" opacity="0.41"/>
-    <polygon points="739.0 126.3 761.6 166.3 763.2 165.4 739.9 125.7" class="new-age-ray" opacity="0.32"/>
+    <polygon points="738.9 126.3 763.9 178.6 765.8 177.6 739.9 125.7" class="new-age-ray" opacity="0.53"/>
+    <polygon points="739.0 126.3 761.6 166.3 763.2 165.4 739.9 125.7" class="new-age-ray" opacity="0.44"/>
     <polygon points="738.9 125.7 713.0 177.6 715.0 178.6 739.9 126.3" class="new-age-ray" opacity="0.41"/>
     <polygon points="739.0 125.7 715.6 165.4 717.2 166.3 739.9 126.3" class="new-age-ray" opacity="0.32"/>
-    <polygon points="739.0 126.3 758.9 156.3 760.2 155.4 739.9 125.7" class="new-age-ray" opacity="0.24"/>
+    <polygon points="739.0 126.3 758.9 156.3 760.2 155.4 739.9 125.7" class="new-age-ray" opacity="0.36"/>
     <polygon points="737.1 126.1 738.9 241.1 744.9 240.9 738.8 126.0" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
         <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="0.00s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>

@@ -587,28 +587,28 @@ const NEW_AGE_RAYS = [
   { angle: 90, len: 120, w: 6.0, o: 1.00 },
   { angle: 91, len: 118, w: 5.5, o: 1.00 },
   { angle: 92, len: 115, w: 6.0, o: 1.00 },
-  // Inner right fan
-  { angle: 84, len: 110, w: 4.4, o: 0.92 },
-  { angle: 80, len: 104, w: 4.0, o: 0.85 },
-  { angle: 76, len: 96, w: 3.5, o: 0.78 },
+  // Inner right fan — boosted for recent-direction emphasis
+  { angle: 84, len: 110, w: 4.4, o: 1.00 },
+  { angle: 80, len: 104, w: 4.0, o: 0.96 },
+  { angle: 76, len: 96, w: 3.5, o: 0.90 },
   // Inner left fan
   { angle: 96, len: 110, w: 4.4, o: 0.92 },
   { angle: 100, len: 104, w: 4.0, o: 0.85 },
   { angle: 104, len: 96, w: 3.5, o: 0.78 },
-  // Mid right fan
-  { angle: 72, len: 84, w: 3.0, o: 0.68 },
-  { angle: 68, len: 72, w: 2.6, o: 0.58 },
+  // Mid right fan — boosted
+  { angle: 72, len: 84, w: 3.0, o: 0.82 },
+  { angle: 68, len: 72, w: 2.6, o: 0.72 },
   // Mid left fan
   { angle: 108, len: 84, w: 3.0, o: 0.68 },
   { angle: 112, len: 72, w: 2.6, o: 0.58 },
-  // Outer right — shorter, dimmer
-  { angle: 64, len: 58, w: 2.2, o: 0.48 },
-  { angle: 60, len: 46, w: 1.8, o: 0.38 },
+  // Outer right — boosted
+  { angle: 64, len: 58, w: 2.2, o: 0.62 },
+  { angle: 60, len: 46, w: 1.8, o: 0.52 },
   // Outer left
   { angle: 116, len: 58, w: 2.2, o: 0.48 },
   { angle: 120, len: 46, w: 1.8, o: 0.38 },
-  // Steep accent
-  { angle: 56, len: 36, w: 1.5, o: 0.28 },
+  // Steep accent — boosted
+  { angle: 56, len: 36, w: 1.5, o: 0.42 },
 ];
 
 // ---------------------------------------------------------------------------
