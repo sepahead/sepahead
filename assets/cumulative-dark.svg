@@ -67,15 +67,15 @@
       <stop offset="100%" stop-color="#fde68a" stop-opacity="0.08"/>
     </linearGradient>
     <linearGradient id="seamFieldGrad" gradientUnits="userSpaceOnUse" x1="266.3" y1="0" x2="792.0" y2="0">
-      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.11"/>
-      <stop offset="22%" stop-color="#eab308" stop-opacity="0.12"/>
-      <stop offset="45%" stop-color="#bef264" stop-opacity="0.16"/>
-      <stop offset="62%" stop-color="#a3e635" stop-opacity="0.18"/>
-      <stop offset="67%" stop-color="#84cc16" stop-opacity="0.17"/>
-      <stop offset="78%" stop-color="#a3e635" stop-opacity="0.16"/>
-      <stop offset="88%" stop-color="#fbbf24" stop-opacity="0.14"/>
-      <stop offset="96%" stop-color="#fde68a" stop-opacity="0.11"/>
-      <stop offset="100%" stop-color="#fff7cc" stop-opacity="0.07"/>
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.20"/>
+      <stop offset="22%" stop-color="#eab308" stop-opacity="0.22"/>
+      <stop offset="45%" stop-color="#bef264" stop-opacity="0.30"/>
+      <stop offset="62%" stop-color="#a3e635" stop-opacity="0.34"/>
+      <stop offset="67%" stop-color="#84cc16" stop-opacity="0.32"/>
+      <stop offset="78%" stop-color="#a3e635" stop-opacity="0.30"/>
+      <stop offset="88%" stop-color="#fbbf24" stop-opacity="0.26"/>
+      <stop offset="96%" stop-color="#fde68a" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#fff7cc" stop-opacity="0.13"/>
     </linearGradient>
     <linearGradient id="intakeTailGrad" gradientUnits="userSpaceOnUse" x1="269.1" y1="0" x2="285.1" y2="0">
       <stop offset="0%" stop-color="#fbbf24" stop-opacity="0"/>
@@ -102,10 +102,10 @@
       <stop offset="100%" stop-color="#fda4af" stop-opacity="0.08"/>
     </linearGradient>
     <linearGradient id="originBand" gradientUnits="userSpaceOnUse" x1="56.0" y1="0" x2="266.3" y2="0">
-      <stop offset="0%" stop-color="#fb7185" stop-opacity="0.09"/>
-      <stop offset="40%" stop-color="#f43f5e" stop-opacity="0.07"/>
-      <stop offset="72%" stop-color="#fb923c" stop-opacity="0.09"/>
-      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.11"/>
+      <stop offset="0%" stop-color="#fb7185" stop-opacity="0.18"/>
+      <stop offset="40%" stop-color="#f43f5e" stop-opacity="0.14"/>
+      <stop offset="72%" stop-color="#fb923c" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.22"/>
     </linearGradient>
     <filter id="originGlowSoft" filterUnits="userSpaceOnUse" x="15.0" y="86" width="92" height="208">
       <feGaussianBlur stdDeviation="1.5" result="b"/>
@@ -189,7 +189,7 @@
        the plot; they never become a new data encoding. */
     /* Every authored enlightenment part shares one phase opacity. The gradient
        stop opacities below remain colour falloff, not per-part intensity. */
-    .narrative-enlightenment { pointer-events: none; opacity: 0.65; }
+    .narrative-enlightenment { pointer-events: none; opacity: 0.78; }
     .new-age-ray { fill: url(#newAgeRayGrad); stroke: none; filter: url(#newAgeGlow); mix-blend-mode: screen; }
     .new-age-seed-core { fill: #ffffff; filter: url(#newAgeGlow); }
     .new-age-bloom { fill: none; stroke: #fff7cc; stroke-width: 0.8; }
@@ -536,26 +536,26 @@
 
   <g class="narrative-enlightenment">
     <title>the new age: 20 rays of light streaming from above, terraforming seeds bloom at their destination</title>
-    <polygon points="738.5 126.0 740.4 241.0 746.4 240.8 740.3 126.0" class="new-age-ray" opacity="0.65"/>
-    <polygon points="738.6 126.0 738.7 244.0 744.2 243.9 740.3 126.0" class="new-age-ray" opacity="0.65"/>
-    <polygon points="738.5 126.0 736.4 246.0 742.4 246.0 740.3 126.0" class="new-age-ray" opacity="0.65"/>
-    <polygon points="738.6 126.0 734.6 243.9 740.1 244.0 740.3 126.0" class="new-age-ray" opacity="0.65"/>
-    <polygon points="738.5 126.0 732.4 240.8 738.4 241.0 740.3 126.0" class="new-age-ray" opacity="0.65"/>
-    <polygon points="738.7 126.1 748.7 235.6 753.1 235.2 740.2 125.9" class="new-age-ray" opacity="0.60"/>
-    <polygon points="738.7 126.1 755.5 228.8 759.5 228.1 740.1 125.9" class="new-age-ray" opacity="0.55"/>
-    <polygon points="738.8 126.2 761.0 219.6 764.4 218.7 740.1 125.8" class="new-age-ray" opacity="0.51"/>
-    <polygon points="738.7 125.9 725.7 235.2 730.1 235.6 740.2 126.1" class="new-age-ray" opacity="0.60"/>
-    <polygon points="738.7 125.9 719.4 228.1 723.3 228.8 740.1 126.1" class="new-age-ray" opacity="0.55"/>
-    <polygon points="738.8 125.8 714.5 218.7 717.9 219.6 740.1 126.2" class="new-age-ray" opacity="0.51"/>
-    <polygon points="738.8 126.2 764.0 206.4 766.8 205.4 740.0 125.8" class="new-age-ray" opacity="0.44"/>
-    <polygon points="738.9 126.2 765.2 193.2 767.6 192.3 740.0 125.8" class="new-age-ray" opacity="0.38"/>
-    <polygon points="738.8 125.8 712.0 205.4 714.9 206.4 740.0 126.2" class="new-age-ray" opacity="0.44"/>
-    <polygon points="738.9 125.8 711.3 192.3 713.7 193.2 740.0 126.2" class="new-age-ray" opacity="0.38"/>
-    <polygon points="738.9 126.3 763.9 178.6 765.8 177.6 739.9 125.7" class="new-age-ray" opacity="0.31"/>
-    <polygon points="739.0 126.3 761.6 166.3 763.2 165.4 739.9 125.7" class="new-age-ray" opacity="0.25"/>
-    <polygon points="738.9 125.7 713.0 177.6 715.0 178.6 739.9 126.3" class="new-age-ray" opacity="0.31"/>
-    <polygon points="739.0 125.7 715.6 165.4 717.2 166.3 739.9 126.3" class="new-age-ray" opacity="0.25"/>
-    <polygon points="739.0 126.3 758.9 156.3 760.2 155.4 739.9 125.7" class="new-age-ray" opacity="0.18"/>
+    <polygon points="738.5 126.0 740.4 241.0 746.4 240.8 740.3 126.0" class="new-age-ray" opacity="0.78"/>
+    <polygon points="738.6 126.0 738.7 244.0 744.2 243.9 740.3 126.0" class="new-age-ray" opacity="0.78"/>
+    <polygon points="738.5 126.0 736.4 246.0 742.4 246.0 740.3 126.0" class="new-age-ray" opacity="0.78"/>
+    <polygon points="738.6 126.0 734.6 243.9 740.1 244.0 740.3 126.0" class="new-age-ray" opacity="0.78"/>
+    <polygon points="738.5 126.0 732.4 240.8 738.4 241.0 740.3 126.0" class="new-age-ray" opacity="0.78"/>
+    <polygon points="738.7 126.1 748.7 235.6 753.1 235.2 740.2 125.9" class="new-age-ray" opacity="0.72"/>
+    <polygon points="738.7 126.1 755.5 228.8 759.5 228.1 740.1 125.9" class="new-age-ray" opacity="0.66"/>
+    <polygon points="738.8 126.2 761.0 219.6 764.4 218.7 740.1 125.8" class="new-age-ray" opacity="0.61"/>
+    <polygon points="738.7 125.9 725.7 235.2 730.1 235.6 740.2 126.1" class="new-age-ray" opacity="0.72"/>
+    <polygon points="738.7 125.9 719.4 228.1 723.3 228.8 740.1 126.1" class="new-age-ray" opacity="0.66"/>
+    <polygon points="738.8 125.8 714.5 218.7 717.9 219.6 740.1 126.2" class="new-age-ray" opacity="0.61"/>
+    <polygon points="738.8 126.2 764.0 206.4 766.8 205.4 740.0 125.8" class="new-age-ray" opacity="0.53"/>
+    <polygon points="738.9 126.2 765.2 193.2 767.6 192.3 740.0 125.8" class="new-age-ray" opacity="0.45"/>
+    <polygon points="738.8 125.8 712.0 205.4 714.9 206.4 740.0 126.2" class="new-age-ray" opacity="0.53"/>
+    <polygon points="738.9 125.8 711.3 192.3 713.7 193.2 740.0 126.2" class="new-age-ray" opacity="0.45"/>
+    <polygon points="738.9 126.3 763.9 178.6 765.8 177.6 739.9 125.7" class="new-age-ray" opacity="0.37"/>
+    <polygon points="739.0 126.3 761.6 166.3 763.2 165.4 739.9 125.7" class="new-age-ray" opacity="0.30"/>
+    <polygon points="738.9 125.7 713.0 177.6 715.0 178.6 739.9 126.3" class="new-age-ray" opacity="0.37"/>
+    <polygon points="739.0 125.7 715.6 165.4 717.2 166.3 739.9 126.3" class="new-age-ray" opacity="0.30"/>
+    <polygon points="739.0 126.3 758.9 156.3 760.2 155.4 739.9 125.7" class="new-age-ray" opacity="0.22"/>
     <g class="new-age-seed">
       <circle cx="735.4" cy="126.0" r="1.40" class="new-age-seed-core">
         <animateTransform attributeName="transform" type="translate" values="0 0;8.0 114.9" begin="0.00s" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.85 1"/>
@@ -677,7 +677,7 @@
       </circle>
     </g>
   </g>
-  <g class="new-age-label" opacity="0.65">
+  <g class="new-age-label" opacity="0.78">
     <text x="790.0" y="112.0" text-anchor="end" class="new-age-text">the new age</text>
   </g>
   <path d="M 76.6 252.9 C 122.3 251.9 168.0 251.8 213.7 249.8 C 248.8 248.4 283.8 235.9 318.9 227.9 C 353.9 219.9 389.0 212.1 424.0 201.3 C 469.7 187.3 515.4 164.4 561.1 146.0 L 561.1 260 L 76.6 260 Z" class="cum-area">

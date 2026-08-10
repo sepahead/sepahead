@@ -282,7 +282,7 @@ test("written dark/light assets preserve 20-rays and ray gradient opacities", ()
         `${theme}: ${id} stop opacities must remain unchanged`
       );
     }
-    assert.match(asset, /\.narrative-enlightenment\s*\{[^}]*opacity:\s*0\.65/);
+    assert.match(asset, /\.narrative-enlightenment\s*\{[^}]*opacity:\s*0\.78/);
   }
 });
 
@@ -306,10 +306,10 @@ test("written assets retain bounded ray geometry", () => {
 
 test("legacy phase gradients retain their authored opacity snapshots", () => {
   const expected = {
-    seamFieldGrad: ["0.11", "0.12", "0.16", "0.18", "0.17", "0.16", "0.14", "0.11", "0.07"],
-    seamFieldGradLight: ["0.16", "0.14", "0.14", "0.15", "0.15", "0.14", "0.12", "0.10", "0.07"],
-    originBand: ["0.09", "0.07", "0.09", "0.11"],
-    originBandLight: ["0.11", "0.09", "0.12", "0.16"],
+    seamFieldGrad: ["0.20", "0.22", "0.30", "0.34", "0.32", "0.30", "0.26", "0.20", "0.13"],
+    seamFieldGradLight: ["0.26", "0.24", "0.24", "0.25", "0.25", "0.24", "0.20", "0.18", "0.13"],
+    originBand: ["0.18", "0.14", "0.18", "0.22"],
+    originBandLight: ["0.20", "0.16", "0.20", "0.24"],
     cumGrad: ["0.16", "0.06", "0"],
     cumGradLight: ["0.13", "0.05", "0"],
   };

@@ -79,7 +79,7 @@ test("new age uses dedicated ray gradient and glow filter", () => {
 
 test("all new age parts share one phase opacity", () => {
   const out = svg();
-  const shared = "0.65";
+  const shared = "0.78";
   const tableauStart = out.indexOf('<g class="narrative-enlightenment">');
   const labelStart = out.indexOf('<g class="new-age-label"');
   assert.ok(tableauStart >= 0 && labelStart > tableauStart, "expected new age groups");

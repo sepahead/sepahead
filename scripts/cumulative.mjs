@@ -576,7 +576,7 @@ const WAVE_RY_INNER = artRy(31 / 24); // 31
 // from nearly-vertical: central rays are longest and brightest, edge rays are
 // shorter and dimmer, together creating a dramatic top-down illumination.
 // One shared phase opacity applied to the complete tableau.
-const NEW_AGE_OPACITY = 0.65;
+const NEW_AGE_OPACITY = 0.78;
 // 20 rays fanning downward from the top-centre of the new age area.
 // 0° = horizontal right, 90° = straight down. Central rays go nearly straight
 // down; edge rays fan outward to the sides.
@@ -935,26 +935,26 @@ function seamDefs(sx, endX) {
       <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.06"/>
     </linearGradient>
     <linearGradient id="seamFieldGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${E}" y2="0">
-      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.11"/>
-      <stop offset="22%" stop-color="#eab308" stop-opacity="0.12"/>
-      <stop offset="45%" stop-color="#bef264" stop-opacity="0.16"/>
-      <stop offset="62%" stop-color="#a3e635" stop-opacity="0.18"/>
-      <stop offset="67%" stop-color="#84cc16" stop-opacity="0.17"/>
-      <stop offset="78%" stop-color="#a3e635" stop-opacity="0.16"/>
-      <stop offset="88%" stop-color="#fbbf24" stop-opacity="0.14"/>
-      <stop offset="96%" stop-color="#fde68a" stop-opacity="0.11"/>
-      <stop offset="100%" stop-color="#fff7cc" stop-opacity="0.07"/>
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.20"/>
+      <stop offset="22%" stop-color="#eab308" stop-opacity="0.22"/>
+      <stop offset="45%" stop-color="#bef264" stop-opacity="0.30"/>
+      <stop offset="62%" stop-color="#a3e635" stop-opacity="0.34"/>
+      <stop offset="67%" stop-color="#84cc16" stop-opacity="0.32"/>
+      <stop offset="78%" stop-color="#a3e635" stop-opacity="0.30"/>
+      <stop offset="88%" stop-color="#fbbf24" stop-opacity="0.26"/>
+      <stop offset="96%" stop-color="#fde68a" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#fff7cc" stop-opacity="0.13"/>
     </linearGradient>
     <linearGradient id="seamFieldGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${E}" y2="0">
-      <stop offset="0%" stop-color="#d97706" stop-opacity="0.16"/>
-      <stop offset="22%" stop-color="#eab308" stop-opacity="0.14"/>
-      <stop offset="35%" stop-color="#a3a80c" stop-opacity="0.14"/>
-      <stop offset="58%" stop-color="#84cc16" stop-opacity="0.15"/>
-      <stop offset="67%" stop-color="#4d7c0f" stop-opacity="0.15"/>
-      <stop offset="78%" stop-color="#65a30d" stop-opacity="0.14"/>
-      <stop offset="88%" stop-color="#a16207" stop-opacity="0.12"/>
-      <stop offset="96%" stop-color="#d97706" stop-opacity="0.10"/>
-      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.07"/>
+      <stop offset="0%" stop-color="#d97706" stop-opacity="0.26"/>
+      <stop offset="22%" stop-color="#eab308" stop-opacity="0.24"/>
+      <stop offset="35%" stop-color="#a3a80c" stop-opacity="0.24"/>
+      <stop offset="58%" stop-color="#84cc16" stop-opacity="0.25"/>
+      <stop offset="67%" stop-color="#4d7c0f" stop-opacity="0.25"/>
+      <stop offset="78%" stop-color="#65a30d" stop-opacity="0.24"/>
+      <stop offset="88%" stop-color="#a16207" stop-opacity="0.20"/>
+      <stop offset="96%" stop-color="#d97706" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.13"/>
     </linearGradient>
     <linearGradient id="intakeTailGrad" gradientUnits="userSpaceOnUse" x1="${(sx + 2.8).toFixed(1)}" y1="0" x2="${(sx + 18.8).toFixed(1)}" y2="0">
       <stop offset="0%" stop-color="#fbbf24" stop-opacity="0"/>
@@ -1011,16 +1011,16 @@ function originDefs(mx, ox, sx) {
       <stop offset="100%" stop-color="#e11d48" stop-opacity="0.06"/>
     </linearGradient>
     <linearGradient id="originBand" gradientUnits="userSpaceOnUse" x1="${B}" y1="0" x2="${sx.toFixed(1)}" y2="0">
-      <stop offset="0%" stop-color="#fb7185" stop-opacity="0.09"/>
-      <stop offset="40%" stop-color="#f43f5e" stop-opacity="0.07"/>
-      <stop offset="72%" stop-color="#fb923c" stop-opacity="0.09"/>
-      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.11"/>
+      <stop offset="0%" stop-color="#fb7185" stop-opacity="0.18"/>
+      <stop offset="40%" stop-color="#f43f5e" stop-opacity="0.14"/>
+      <stop offset="72%" stop-color="#fb923c" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.22"/>
     </linearGradient>
     <linearGradient id="originBandLight" gradientUnits="userSpaceOnUse" x1="${B}" y1="0" x2="${sx.toFixed(1)}" y2="0">
-      <stop offset="0%" stop-color="#9f1239" stop-opacity="0.11"/>
-      <stop offset="40%" stop-color="#be123c" stop-opacity="0.09"/>
-      <stop offset="72%" stop-color="#c2410c" stop-opacity="0.12"/>
-      <stop offset="100%" stop-color="#d97706" stop-opacity="0.16"/>
+      <stop offset="0%" stop-color="#9f1239" stop-opacity="0.20"/>
+      <stop offset="40%" stop-color="#be123c" stop-opacity="0.16"/>
+      <stop offset="72%" stop-color="#c2410c" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#d97706" stop-opacity="0.24"/>
     </linearGradient>
     <filter id="originGlowSoft" filterUnits="userSpaceOnUse" x="${(mx - 46).toFixed(1)}" y="${PLOT_TOP - 34}" width="92" height="${PLOT_HEIGHT + 68}">
       <feGaussianBlur stdDeviation="1.5" result="b"/>
