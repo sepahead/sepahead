@@ -124,7 +124,7 @@ test("enlightenment phase has a bounded cloud, diagonal rays, and singularity tr
   }
 
   const aria = out.match(/aria-label="([^"]*)"/)?.[1] ?? "";
-  assert.match(aria, /bounded age of enlightenment cloud with diagonal rays/);
+  assert.match(aria, /bounded the new age cloud with diagonal rays/);
 });
 
 test("enlightenment gradient transitions green to lime to gold to ivory", () => {

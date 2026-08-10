@@ -869,7 +869,7 @@ function enlightenmentMarkup(portalX) {
   };
   return `
   <g class="narrative-enlightenment">
-    <title>age of enlightenment: bounded golden cloud aperture and diagonal rays</title>
+    <title>the new age: bounded golden cloud aperture and diagonal rays</title>
     <ellipse cx="${cloudX}" cy="${cloudY}" rx="${ENLIGHTENMENT_CLOUD_RX + 12}" ry="${ENLIGHTENMENT_CLOUD_RY + 9}" class="enlightenment-cloud-glow"/>
     <ellipse cx="${cloudX}" cy="${cloudY}" rx="${ENLIGHTENMENT_CLOUD_RX}" ry="${ENLIGHTENMENT_CLOUD_RY}" class="enlightenment-cloud"/>
     <ellipse cx="${cloudX - 3}" cy="${cloudY + 1}" rx="${ENLIGHTENMENT_CLOUD_RX - 7}" ry="${ENLIGHTENMENT_CLOUD_RY - 6}" class="enlightenment-cloud-core"/>
@@ -878,7 +878,7 @@ function enlightenmentMarkup(portalX) {
     ${ENLIGHTENMENT_PARTICLE_TARGETS.map((target, i) => trace(LANES[i * 2], target, i)).join("\n    ")}
   </g>
   <g class="enlightenment-label" opacity="${ENLIGHTENMENT_OPACITY}">
-    <text x="${(PLOT_RIGHT - 2).toFixed(1)}" y="${(PLOT_TOP - 8).toFixed(1)}" text-anchor="end" class="enlightenment-text">age of enlightenment</text>
+    <text x="${(PLOT_RIGHT - 2).toFixed(1)}" y="${(PLOT_TOP - 8).toFixed(1)}" text-anchor="end" class="enlightenment-text">the new age</text>
   </g>`;
 }
 
@@ -1798,7 +1798,7 @@ function renderSVG(model) {
     futureRows.length > 1
       ? `${futureRows[0].label} to ${futureRows[1].label} are an unstarted future runway; the enlightenment phase sits between them`
       : "",
-    "the visual phase motif continues into a bounded age of enlightenment cloud with diagonal rays",
+    "the visual phase motif continues into a bounded the new age cloud with diagonal rays",
   ].filter(Boolean);
   // Hedge the superlative while the record-holder is the year still running.
   // "peak 6,240 in 2026" alongside "2026 is still in progress" in the same
