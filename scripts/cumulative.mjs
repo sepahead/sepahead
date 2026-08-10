@@ -300,8 +300,12 @@ const H = 300;
 const PAD_LEFT = 56;
 const PAD_RIGHT = 28;
 const HEAD_TOP = 26; // headline number
-const PLOT_TOP = 104;
-const PLOT_BOTTOM = 244; // baseline; year labels sit below
+// Keep the full plot tableau comfortably below the headline subtitle. All bars,
+// labels, gridlines, cumulative curve, era captions, seam and portal geometry
+// derive from this box, so moving both edges together preserves their alignment
+// while opening a clear gap after "total contributions since <year>".
+const PLOT_TOP = 120;
+const PLOT_BOTTOM = 260; // baseline; year labels sit below
 const PLOT_HEIGHT = PLOT_BOTTOM - PLOT_TOP;
 const PLOT_LEFT = PAD_LEFT;
 const PLOT_RIGHT = W - PAD_RIGHT;
@@ -558,6 +562,26 @@ const WAVE_RY_OUTER = artRy(23 / 12); // 46
 const WAVE_RY_MID = artRy(19 / 12); // 38
 const WAVE_RY_INNER = artRy(31 / 24); // 31
 
+// Enlightenment aperture: a bounded upper-right destination, not a fourth data
+// series. Rays begin in this cloud-hole and travel diagonally down-left, stopping
+// inside the plot so they read as direction and release rather than a new axis.
+const ENLIGHTENMENT_CLOUD_CX = PLOT_RIGHT - 22;
+const ENLIGHTENMENT_CLOUD_CY = PLOT_TOP + 20;
+const ENLIGHTENMENT_CLOUD_RX = 19;
+const ENLIGHTENMENT_CLOUD_RY = 14;
+const ENLIGHTENMENT_RAY_ENDS = [
+  { x: PLOT_LEFT + PLOT_WIDTH * 0.777, y: PLOT_TOP + PLOT_HEIGHT * 0.786 },
+  { x: PLOT_LEFT + PLOT_WIDTH * 0.803, y: PLOT_TOP + PLOT_HEIGHT * 0.879 },
+  { x: PLOT_LEFT + PLOT_WIDTH * 0.829, y: PLOT_TOP + PLOT_HEIGHT * 0.964 },
+  { x: PLOT_LEFT + PLOT_WIDTH * 0.859, y: PLOT_TOP + PLOT_HEIGHT * 0.693 },
+  { x: PLOT_LEFT + PLOT_WIDTH * 0.887, y: PLOT_TOP + PLOT_HEIGHT * 0.600 },
+];
+const ENLIGHTENMENT_PARTICLE_TARGETS = [
+  { x: ENLIGHTENMENT_CLOUD_CX - 10, y: ENLIGHTENMENT_CLOUD_CY - 5 },
+  { x: ENLIGHTENMENT_CLOUD_CX - 5, y: ENLIGHTENMENT_CLOUD_CY + 2 },
+  { x: ENLIGHTENMENT_CLOUD_CX - 1, y: ENLIGHTENMENT_CLOUD_CY + 7 },
+];
+
 // ---------------------------------------------------------------------------
 // Singularity portal: a gold event-horizon seam in the gap between the last
 // complete year and the in-progress year, with a hyperdrive warp field
@@ -683,7 +707,7 @@ function portalFieldMarkup(px) {
     </path>`;
   };
   return `
-  <g>
+  <g class="narrative-context narrative-field">
     <rect x="${(px - 30).toFixed(1)}" y="${PLOT_TOP}" width="40" height="${PLOT_HEIGHT}" fill="url(#portalAura)" class="portal-aura" opacity="0.7">
       <animate attributeName="opacity" values="0;0;0.7" keyTimes="0;0.5;1" begin="0s" dur="2.2s" fill="freeze"/>
       <animate attributeName="opacity" values="0.7;0.45;0.7" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
@@ -710,6 +734,91 @@ function portalFieldMarkup(px) {
 
 // Seam-side markup (drawn ABOVE the bars): the intake streaks absorbed at
 // the horizon, the aura, the seam itself and its label.
+// Enlightenment phase: the singularity's particles resolve into a bounded
+// upper-right cloud aperture. The rays point from that aperture down-left and
+// stop before the plot edges; the destination is atmospheric context, never a
+// measured bar or a claim about contributions beyond the future placeholder.
+function enlightenmentDefs() {
+  return `<radialGradient id="enlightenmentCloud" cx="0.5" cy="0.46" r="0.58">
+      <stop offset="0%" stop-color="#fff7cc" stop-opacity="0.92"/>
+      <stop offset="48%" stop-color="#fde68a" stop-opacity="0.46"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="enlightenmentCloudLight" cx="0.5" cy="0.46" r="0.58">
+      <stop offset="0%" stop-color="#fff7cc" stop-opacity="0.98"/>
+      <stop offset="48%" stop-color="#fbbf24" stop-opacity="0.44"/>
+      <stop offset="100%" stop-color="#b45309" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="enlightenmentRayGrad" gradientUnits="userSpaceOnUse" x1="${ENLIGHTENMENT_CLOUD_CX}" y1="${ENLIGHTENMENT_CLOUD_CY}" x2="${PLOT_RIGHT - 120}" y2="${PLOT_BOTTOM}">
+      <stop offset="0%" stop-color="#fff7cc" stop-opacity="0.98"/>
+      <stop offset="42%" stop-color="#fde68a" stop-opacity="0.82"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.32"/>
+    </linearGradient>
+    <linearGradient id="enlightenmentRayGradLight" gradientUnits="userSpaceOnUse" x1="${ENLIGHTENMENT_CLOUD_CX}" y1="${ENLIGHTENMENT_CLOUD_CY}" x2="${PLOT_RIGHT - 120}" y2="${PLOT_BOTTOM}">
+      <stop offset="0%" stop-color="#fff7cc" stop-opacity="0.98"/>
+      <stop offset="42%" stop-color="#fbbf24" stop-opacity="0.78"/>
+      <stop offset="100%" stop-color="#b45309" stop-opacity="0.42"/>
+    </linearGradient>
+    <filter id="enlightenmentGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>`;
+}
+
+function enlightenmentMarkup(portalX) {
+  const cloudX = ENLIGHTENMENT_CLOUD_CX;
+  const cloudY = ENLIGHTENMENT_CLOUD_CY;
+  const cloudEdgeX = cloudX - ENLIGHTENMENT_CLOUD_RX + 4;
+  const ray = (end, i) => {
+    const startY = cloudY - 8 + i * 4;
+    return `<line x1="${cloudEdgeX.toFixed(1)}" y1="${startY.toFixed(1)}" x2="${end.x.toFixed(1)}" y2="${end.y.toFixed(1)}" class="enlightenment-ray" pathLength="1" stroke-dasharray="0.16 0.08" opacity="0.78">
+      <animate attributeName="stroke-dashoffset" values="0;0.24;0" begin="${(i * 0.34).toFixed(2)}s" dur="4.8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0.88;0.5" begin="${(i * 0.34).toFixed(2)}s" dur="4.8s" repeatCount="indefinite"/>
+    </line>`;
+  };
+  const trace = (startY, target, i) => {
+    const sx = portalX + 5;
+    const sy = startY;
+    const c1x = sx + 48;
+    const c1y = sy - 6 - i * 3;
+    const c2x = target.x - 72;
+    const c2y = target.y + 22;
+    const d = `M ${sx.toFixed(1)} ${sy.toFixed(1)} C ${c1x.toFixed(1)} ${c1y.toFixed(1)} ${c2x.toFixed(1)} ${c2y.toFixed(1)} ${target.x.toFixed(1)} ${target.y.toFixed(1)}`;
+    const fragmentD = `M ${(sx + 2).toFixed(1)} ${(sy + i * 2).toFixed(1)} L ${(sx + 28).toFixed(1)} ${(sy - 9 - i * 5).toFixed(1)} L ${(target.x - 26).toFixed(1)} ${(target.y + 9 - i * 4).toFixed(1)}`;
+    return `<g class="enlightenment-trace" opacity="0.72">
+      <path d="${fragmentD}" pathLength="1" stroke-dasharray="0.035 0.085" class="enlightenment-fragment">
+        <animate attributeName="stroke-dashoffset" values="0;1" begin="${(i * 0.42).toFixed(2)}s" dur="3.4s" repeatCount="indefinite"/>
+        <animate attributeName="stroke-opacity" values="0.8;0.2;0" keyTimes="0;0.62;1" begin="${(i * 0.42).toFixed(2)}s" dur="3.4s" repeatCount="indefinite"/>
+      </path>
+      <path d="${d}" pathLength="1" stroke-dasharray="0.07 0.11" class="enlightenment-trace-line">
+        <animate attributeName="stroke-dashoffset" values="0;1" begin="${(i * 0.42).toFixed(2)}s" dur="3.4s" repeatCount="indefinite"/>
+        <animate attributeName="stroke-opacity" values="0.25;0.9;0.25" begin="${(i * 0.42).toFixed(2)}s" dur="3.4s" repeatCount="indefinite"/>
+      </path>
+      <circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${(1.1 - i * 0.12).toFixed(2)}" class="enlightenment-spark">
+        <animateTransform attributeName="transform" type="translate" values="0 0;${(target.x - sx).toFixed(1)} ${(target.y - sy).toFixed(1)}" begin="${(i * 0.42).toFixed(2)}s" dur="3.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.35 0 0.8 1"/>
+        <animate attributeName="opacity" values="0;0.95;0.55;0" keyTimes="0;0.16;0.72;1" begin="${(i * 0.42).toFixed(2)}s" dur="3.4s" repeatCount="indefinite"/>
+      </circle>
+    </g>`;
+  };
+  return `
+  <g class="narrative-enlightenment">
+    <title>age of enlightenment: bounded golden cloud aperture and diagonal rays</title>
+    <ellipse cx="${cloudX}" cy="${cloudY}" rx="${ENLIGHTENMENT_CLOUD_RX + 12}" ry="${ENLIGHTENMENT_CLOUD_RY + 9}" class="enlightenment-cloud-glow">
+      <animate attributeName="opacity" values="0.55;0.82;0.55" begin="0.8s" dur="5.6s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="${cloudX}" cy="${cloudY}" rx="${ENLIGHTENMENT_CLOUD_RX}" ry="${ENLIGHTENMENT_CLOUD_RY}" class="enlightenment-cloud"/>
+    <ellipse cx="${cloudX - 3}" cy="${cloudY + 1}" rx="${ENLIGHTENMENT_CLOUD_RX - 7}" ry="${ENLIGHTENMENT_CLOUD_RY - 6}" class="enlightenment-cloud-core">
+      <animate attributeName="rx" values="${ENLIGHTENMENT_CLOUD_RX - 7};${ENLIGHTENMENT_CLOUD_RX - 5};${ENLIGHTENMENT_CLOUD_RX - 7}" begin="0.8s" dur="5.6s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="${cloudX - 3}" cy="${cloudY + 1}" rx="${ENLIGHTENMENT_CLOUD_RX - 10}" ry="${ENLIGHTENMENT_CLOUD_RY - 8}" class="enlightenment-cloud-hole"/>
+    ${ENLIGHTENMENT_RAY_ENDS.map(ray).join("\n    ")}
+    ${ENLIGHTENMENT_PARTICLE_TARGETS.map((target, i) => trace(LANES[i * 2], target, i)).join("\n    ")}
+  </g>
+  <g class="enlightenment-label">
+    <text x="${(PLOT_RIGHT - 2).toFixed(1)}" y="${(PLOT_TOP - 8).toFixed(1)}" text-anchor="end" class="enlightenment-text">age of enlightenment</text>
+  </g>`;
+}
+
 function portalMarkup(px, fromLabel, toLabel) {
   const X = px.toFixed(1);
   const CX = (px - 4).toFixed(1);
@@ -719,7 +828,7 @@ function portalMarkup(px, fromLabel, toLabel) {
   const title = escapeXML(`${fromLabel} → ${toLabel}: singularity`);
 
   return `
-  <g>
+  <g class="narrative-context narrative-portal">
     <title>${title}</title>
     <g filter="url(#portalWobble)" clip-path="url(#portalGap)">
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
@@ -742,6 +851,8 @@ function portalMarkup(px, fromLabel, toLabel) {
         <animate attributeName="stroke-dashoffset" values="0;1" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
       </path>
     </g>
+  </g>
+  <g class="narrative-label">
     <text x="${X}" y="${top - 8}" text-anchor="middle" class="portal-text">singularity
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.7;1" begin="0s" dur="2.6s" fill="freeze"/>
       <animate attributeName="opacity" values="1;0.75;1" begin="2.6s" dur="3.6s" repeatCount="indefinite"/>
@@ -794,8 +905,10 @@ function seamDefs(sx, endX) {
       <stop offset="45%" stop-color="#bef264" stop-opacity="0.16"/>
       <stop offset="62%" stop-color="#a3e635" stop-opacity="0.18"/>
       <stop offset="67%" stop-color="#84cc16" stop-opacity="0.17"/>
-      <stop offset="84%" stop-color="#84cc16" stop-opacity="0.10"/>
-      <stop offset="100%" stop-color="#84cc16" stop-opacity="0"/>
+      <stop offset="78%" stop-color="#a3e635" stop-opacity="0.16"/>
+      <stop offset="88%" stop-color="#fbbf24" stop-opacity="0.14"/>
+      <stop offset="96%" stop-color="#fde68a" stop-opacity="0.11"/>
+      <stop offset="100%" stop-color="#fff7cc" stop-opacity="0.07"/>
     </linearGradient>
     <linearGradient id="seamFieldGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${E}" y2="0">
       <stop offset="0%" stop-color="#d97706" stop-opacity="0.16"/>
@@ -803,8 +916,10 @@ function seamDefs(sx, endX) {
       <stop offset="35%" stop-color="#a3a80c" stop-opacity="0.14"/>
       <stop offset="58%" stop-color="#84cc16" stop-opacity="0.15"/>
       <stop offset="67%" stop-color="#4d7c0f" stop-opacity="0.15"/>
-      <stop offset="84%" stop-color="#4d7c0f" stop-opacity="0.09"/>
-      <stop offset="100%" stop-color="#4d7c0f" stop-opacity="0"/>
+      <stop offset="78%" stop-color="#65a30d" stop-opacity="0.14"/>
+      <stop offset="88%" stop-color="#a16207" stop-opacity="0.12"/>
+      <stop offset="96%" stop-color="#d97706" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.07"/>
     </linearGradient>
     <linearGradient id="intakeTailGrad" gradientUnits="userSpaceOnUse" x1="${(sx + 2.8).toFixed(1)}" y1="0" x2="${(sx + 18.8).toFixed(1)}" y2="0">
       <stop offset="0%" stop-color="#fbbf24" stop-opacity="0"/>
@@ -967,6 +1082,7 @@ function seamFieldMarkup(sx, endX) {
   const bandPath = `M ${sx.toFixed(1)} ${PLOT_TOP} C ${inC1} ${PLOT_TOP} ${inC2} ${mTop} ${E} ${mTop} L ${E} ${mBot} C ${inC2} ${mBot} ${inC1} ${PLOT_BOTTOM} ${sx.toFixed(1)} ${PLOT_BOTTOM} Z`;
   const washPath = `M ${E} ${mTop} C ${outC1} ${mTop} ${outC2} ${PLOT_TOP} ${PLOT_RIGHT} ${PLOT_TOP} L ${PLOT_RIGHT} ${PLOT_BOTTOM} C ${outC2} ${PLOT_BOTTOM} ${outC1} ${mBot} ${E} ${mBot} Z`;
   return `
+  <g class="narrative-context narrative-field">
   <path d="${bandPath}" class="seam-field">
     <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.3;1" begin="0s" dur="2.2s" fill="freeze"/>
     <animate attributeName="opacity" values="1;0.8;1" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
@@ -987,7 +1103,8 @@ function seamFieldMarkup(sx, endX) {
   ${goldMote(158, LANES[4], 0.9, "6.4s")}
   ${intake(LANES[0], "2.6s")}
   ${intake(LANES[2], "3.4s")}
-  ${intake(LANES[4], "4.2s")}`;
+  ${intake(LANES[4], "4.2s")}
+  </g>`;
 }
 
 // Mirror seam above the bars: the Deco Turbine Gate. Sci-fi cyberpunk
@@ -1054,7 +1171,7 @@ function seamMarkup(sx, fromLabel) {
   const fire = (begin) =>
     `<animate attributeName="stroke-opacity" values="1;0.5;1;1" keyTimes="0;0.08;0.5;1" begin="${begin}" dur="2.4s" repeatCount="indefinite"/>`;
   return `
-  <g>
+  <g class="narrative-context narrative-seam">
     <title>${title}</title>
     <rect x="${(sx - 22).toFixed(1)}" y="${top}" width="44" height="${bot - top}" fill="url(#seamAuraGrad)" class="seam-aura">
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.2s" fill="freeze"/>
@@ -1094,6 +1211,8 @@ function seamMarkup(sx, fromLabel) {
         <animate attributeName="opacity" values="1;0.6;1;1" keyTimes="0;0.08;0.5;1" begin="3.4s" dur="2.4s" repeatCount="indefinite"/>
       </rect>
     </g>
+  </g>
+  <g class="narrative-label">
     <text x="${X}" y="${top - 8}" text-anchor="middle" class="seam-text">agentic engineering
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.55;1" begin="0s" dur="2.6s" fill="freeze"/>
       <animate attributeName="opacity" values="1;0.75;1" begin="2.6s" dur="3.6s" repeatCount="indefinite"/>
@@ -1156,7 +1275,7 @@ function membraneMarkup(ox) {
     )
     .join("\n      ");
   return `
-  <g>
+  <g class="narrative-context narrative-origin">
     <title>${title}</title>
     <rect x="${(ox - 22).toFixed(1)}" y="${top}" width="44" height="${bot - top}" fill="url(#originAuraGrad)" class="origin-aura">
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.25;1" begin="0s" dur="2.2s" fill="freeze"/>
@@ -1183,6 +1302,8 @@ function membraneMarkup(ox) {
       </circle>
       ${pores}
     </g>
+  </g>
+  <g class="narrative-label">
     <text transform="rotate(-90 46 ${MID_Y})" x="46" y="${MID_Y}" text-anchor="middle" class="origin-text">human engineering
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.55;1" begin="0s" dur="2.6s" fill="freeze"/>
       <animate attributeName="opacity" values="1;0.75;1" begin="2.6s" dur="3.6s" repeatCount="indefinite"/>
@@ -1532,6 +1653,7 @@ function renderSVG(model) {
   const mx = PLOT_LEFT + 5;
   const originDefsStr = seamX != null ? originDefs(mx, ox, seamX) : "";
   const origin = seamX != null ? membraneMarkup(mx) : "";
+  const enlightenment = portalX != null ? enlightenmentMarkup(portalX) : "";
   const originBandRect = seamX != null
     ? `<rect x="${ox}" y="${PLOT_TOP}" width="${(seamX - ox).toFixed(1)}" height="${PLOT_HEIGHT}" class="origin-band">
     <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.3;1" begin="0s" dur="2.2s" fill="freeze"/>
@@ -1598,6 +1720,7 @@ function renderSVG(model) {
     growthRate ? `average growth ${growthRate}` : "",
     currentRow ? `${currentRow.label} is still in progress` : "",
     futureRow ? `${futureRow.label} is an empty placeholder for the year ahead` : "",
+    "the visual phase motif continues into a bounded age of enlightenment cloud with diagonal rays",
   ].filter(Boolean);
   // Hedge the superlative while the record-holder is the year still running.
   // "peak 6,240 in 2026" alongside "2026 is still in progress" in the same
@@ -1663,6 +1786,7 @@ function renderSVG(model) {
     ${portalDefsStr}
     ${seamDefsStr}
     ${originDefsStr}
+    ${portalX != null ? enlightenmentDefs() : ""}
   </defs>
   <style>
     :root { color-scheme: light dark; }
@@ -1706,6 +1830,36 @@ function renderSVG(model) {
     .future-ghost { fill: none; stroke: #6e7681; stroke-width: ${GHOST_STROKE}; stroke-dasharray: ${GHOST_DASH} ${GHOST_DASH}; }
     .axis { font: 400 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6e7681; }
     .warning { font: 500 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; }
+    /* Narrative context is a signature accent, not a second data layer. Keep
+       the measured bars, cumulative curve, and status cues visually dominant at
+       README scale. Dim only graphical context; labels remain independently
+       legible so the annotation still explains the motif in both themes. */
+    .narrative-context.narrative-field,
+    .narrative-context.narrative-portal,
+    .narrative-context.narrative-seam,
+    .narrative-context.narrative-origin { opacity: 0.28; }
+    .narrative-label { opacity: 0.82; }
+    /* Keep the context layer a calm, deterministic backdrop. Its authored base
+       geometry is already the complete tableau, so hiding animation children
+       leaves the shapes visible in SVG renderers that do not run SMIL while
+       removing the perpetual motion that overwhelms the data at README scale.
+       Labels are intentionally outside narrative-context and keep their own
+       static opacity/contrast. */
+    .narrative-context animate,
+    .narrative-context animateTransform { display: none; }
+    /* Enlightenment is the final authored atmosphere: a quiet gold/ivory
+       threshold in the upper-right. Rays travel down-left and terminate inside
+       the plot; they never become a new data encoding. */
+    .narrative-enlightenment { pointer-events: none; opacity: 0.52; }
+    .enlightenment-cloud-glow { fill: url(#enlightenmentCloud); filter: url(#enlightenmentGlow); opacity: 0.62; }
+    .enlightenment-cloud { fill: url(#enlightenmentCloud); stroke: #fde68a; stroke-width: 0.8; stroke-opacity: 0.56; }
+    .enlightenment-cloud-core { fill: #fff7cc; fill-opacity: 0.7; filter: url(#enlightenmentGlow); }
+    .enlightenment-cloud-hole { fill: #0d1117; fill-opacity: 0.76; stroke: #fff7cc; stroke-opacity: 0.32; stroke-width: 0.7; }
+    .enlightenment-ray { fill: none; stroke: url(#enlightenmentRayGrad); stroke-width: 1.15; stroke-linecap: round; filter: url(#enlightenmentGlow); }
+    .enlightenment-trace-line { fill: none; stroke: #fff7cc; stroke-width: 0.9; stroke-linecap: round; }
+    .enlightenment-fragment { fill: none; stroke: #fde68a; stroke-width: 1.1; stroke-linecap: round; }
+    .enlightenment-spark { fill: #fff7cc; filter: url(#enlightenmentGlow); }
+    .enlightenment-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fde68a; letter-spacing: 2px; }
     .grid { stroke: #21262d; stroke-width: 1; }
     .baseline { stroke: #30363d; stroke-width: 1; }
     .bar { fill: url(#barGrad); }
@@ -1811,7 +1965,7 @@ function renderSVG(model) {
        paint-order stroke in the page-background colour is invisible in the matching
        case and only appears to outline the text when the scheme mismatches, so the
        numbers stay legible on either background. */
-    .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text { paint-order: stroke; stroke: #0d1117; stroke-width: 2; stroke-linejoin: round; }
+    .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text, .enlightenment-text { paint-order: stroke; stroke: #0d1117; stroke-width: 2; stroke-linejoin: round; }
     @media (prefers-color-scheme: light) {
       .headline { fill: #0891b2; }
       .value-peak { fill: #0e7490; }
@@ -1864,10 +2018,21 @@ function renderSVG(model) {
       .intake-head { fill: #a16207; }
       .intake-head-lime { fill: #4d7c0f; }
       .portal-boom { stroke: #4d7c0f; }
-      .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text { stroke: #ffffff; }
+      .enlightenment-cloud-glow { fill: url(#enlightenmentCloudLight); }
+      .enlightenment-cloud { fill: url(#enlightenmentCloudLight); stroke: #b45309; }
+      .enlightenment-cloud-core { fill: #fff7cc; }
+      .enlightenment-cloud-hole { fill: #ffffff; fill-opacity: 0.88; stroke: #b45309; }
+      .enlightenment-ray { stroke: url(#enlightenmentRayGradLight); }
+      .enlightenment-trace-line { stroke: #a16207; }
+      .enlightenment-fragment { stroke: #d97706; }
+      .enlightenment-spark { fill: #b45309; }
+      .enlightenment-text { fill: #92400e; }
+      .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text, .enlightenment-text { stroke: #ffffff; }
     }
     @media (prefers-reduced-motion: reduce) {
       animate, animateTransform { display: none; }
+      .enlightenment-cloud-glow, .enlightenment-cloud-core { opacity: 1; }
+      .narrative-enlightenment { opacity: 0.52; }
       /* With the draw-in animation disabled, force the curve fully drawn and
          the end dot visible instead of stuck at their hidden start states. */
       .cum-line { stroke-dasharray: none; }
@@ -1885,6 +2050,7 @@ function renderSVG(model) {
   ${originBandRect}
   ${seamField}
   ${portalField}
+  ${enlightenment}
   ${cumArea}
   ${bars}
   ${origin}
