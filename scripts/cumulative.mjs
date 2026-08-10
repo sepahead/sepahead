@@ -780,20 +780,6 @@ function enlightenmentDefs() {
       <stop offset="62%" stop-color="#fbbf24" stop-opacity="0.28"/>
       <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="newAgeLiquidGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#fde68a" stop-opacity="0"/>
-      <stop offset="35%" stop-color="#fff7cc" stop-opacity="0.72"/>
-      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.85"/>
-      <stop offset="65%" stop-color="#fff7cc" stop-opacity="0.72"/>
-      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
-    </linearGradient>
-    <linearGradient id="newAgeLiquidGradLight" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#d97706" stop-opacity="0"/>
-      <stop offset="35%" stop-color="#fbbf24" stop-opacity="0.55"/>
-      <stop offset="50%" stop-color="#fff7cc" stop-opacity="0.72"/>
-      <stop offset="65%" stop-color="#fbbf24" stop-opacity="0.55"/>
-      <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
-    </linearGradient>
     <filter id="newAgeGlow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="1.8" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
@@ -830,40 +816,28 @@ function enlightenmentMarkup(portalX) {
     const opacity = (ray.o * NEW_AGE_OPACITY).toFixed(2);
     return `<polygon points="${points.join(" ")}" class="new-age-ray" opacity="${opacity}"/>`;
   };
-  // Liquid droplets: organic rounded blobs that ride on top of each ray,
-  // vibrating (pulsing opacity), breathing (pulsing size), and propagating
-  // (sliding along the beam). Inspired by Prisoma's liquid UI shapes —
-  // soft, rounded, organically animated.
-  const liquidDroplet = (ray, i) => {
+  // Diffraction interference: alternating bright/dim bands that march
+  // down each ray like a laser diffraction pattern. A center line with
+  // animated stroke-dasharray sweeps bright fringes along the beam.
+  const interferenceLine = (ray, i) => {
     const rad = (ray.angle * Math.PI) / 180;
     const cosA = Math.cos(rad);
     const sinA = Math.sin(rad);
-    // Droplet sits 40% down the ray from source
-    const frac = 0.4;
-    const mx = srcX + ray.len * cosA * frac;
-    const my = srcY + ray.len * sinA * frac;
-    // Ellipse aligned with ray: rx ~25% of ray length, ry ~35% of ray width
-    const rx = (ray.len * 0.25).toFixed(1);
-    const ry = (ray.w * 0.35).toFixed(1);
-    const angleDeg = ray.angle.toFixed(1);
-    // Staggered animation timing
-    const begin = (i * 0.28).toFixed(2);
-    // Translate: slide the droplet down the ray and back (propagating)
-    const travelX = (ray.len * cosA * 0.35).toFixed(1);
-    const travelY = (ray.len * sinA * 0.35).toFixed(1);
-    return `<g class="new-age-liquid">
-      <ellipse cx="${mx.toFixed(1)}" cy="${my.toFixed(1)}" rx="${rx}" ry="${ry}" transform="rotate(${angleDeg} ${mx.toFixed(1)} ${my.toFixed(1)})" class="new-age-droplet">
-        <animate attributeName="opacity" values="0.35;0.68;0.35" keyTimes="0;0.48;1" begin="${begin}s" dur="2.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1"/>
-        <animate attributeName="ry" values="${ry};${(parseFloat(ry) * 1.45).toFixed(1)};${ry}" keyTimes="0;0.52;1" begin="${begin}s" dur="2.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1"/>
-      </ellipse>
-      <animateTransform attributeName="transform" type="translate" values="0 0;${travelX} ${travelY};0 0" keyTimes="0;0.5;1" begin="${begin}s" dur="3.4s" repeatCount="indefinite" calcMode="spline" keySplines="0.38 0 0.82 1;0.38 0 0.82 1"/>
-    </g>`;
+    const ex = srcX + ray.len * cosA;
+    const ey = srcY + ray.len * sinA;
+    const sw = ray.w * 0.85; // slightly narrower than the beam
+    const begin = (i * 0.22).toFixed(2);
+    // Dash pattern: 5px bright band, 4px dark gap — 9px period
+    const period = 9;
+    return `<line x1="${srcX.toFixed(1)}" y1="${srcY.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#ffffff" stroke-width="${sw.toFixed(1)}" stroke-opacity="0.38" stroke-dasharray="5 4" class="new-age-interference">
+        <animate attributeName="stroke-dashoffset" values="0;${-period}" begin="${begin}s" dur="1.6s" repeatCount="indefinite"/>
+      </line>`;
   };
   return `
   <g class="narrative-enlightenment">
-    <title>the new age: 20 rays of light streaming from above, each carrying a liquid droplet that pulsates and propagates</title>
+    <title>the new age: 20 rays of light streaming from above with diffraction interference bands</title>
     ${NEW_AGE_RAYS.map(rayPolygon).join("\n    ")}
-    ${NEW_AGE_RAYS.map((r, i) => liquidDroplet(r, i)).join("\n    ")}
+    ${NEW_AGE_RAYS.map((r, i) => interferenceLine(r, i)).join("\n    ")}
   </g>
   <g class="new-age-label" opacity="${NEW_AGE_OPACITY}">
     <text x="${(PLOT_RIGHT - 2).toFixed(1)}" y="${(PLOT_TOP - 8).toFixed(1)}" text-anchor="end" class="new-age-text">the new age</text>
@@ -1786,7 +1760,7 @@ function renderSVG(model) {
     futureRows.length > 1
       ? `${futureRows[0].label} to ${futureRows[1].label} are an unstarted future runway; the enlightenment phase sits between them`
       : "",
-    "the visual phase motif continues into 20 rays of light streaming from above with liquid droplets propagating along the beams",
+    "the visual phase motif continues into 20 rays of light streaming from above with diffraction interference bands",
   ].filter(Boolean);
   // Hedge the superlative while the record-holder is the year still running.
   // "peak 6,240 in 2026" alongside "2026 is still in progress" in the same
@@ -1920,8 +1894,7 @@ function renderSVG(model) {
        stop opacities below remain colour falloff, not per-part intensity. */
     .narrative-enlightenment { pointer-events: none; opacity: ${NEW_AGE_OPACITY}; }
     .new-age-ray { fill: url(#newAgeRayGrad); stroke: none; filter: url(#newAgeGlow); mix-blend-mode: screen; }
-    .new-age-liquid { pointer-events: none; }
-    .new-age-droplet { fill: url(#newAgeLiquidGrad); filter: url(#newAgeGlow); mix-blend-mode: screen; }
+    .new-age-interference { pointer-events: none; stroke-linecap: butt; }
     .new-age-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fde68a; letter-spacing: 2px; }
     .grid { stroke: #21262d; stroke-width: 1; }
     .baseline { stroke: #30363d; stroke-width: 1; }
@@ -2082,7 +2055,7 @@ function renderSVG(model) {
       .intake-head-lime { fill: #4d7c0f; }
       .portal-boom { stroke: #4d7c0f; }
       .new-age-ray { fill: url(#newAgeRayGradLight); stroke: none; }
-      .new-age-droplet { fill: url(#newAgeLiquidGradLight); }
+      .new-age-interference { stroke: #fef3c7; }
       .new-age-text { fill: #92400e; }
       .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text, .new-age-text { stroke: #ffffff; }
     }

@@ -236,14 +236,9 @@ test("the new age 20-rays fan survives every branch", () => {
       `expected 20 ray polygons (${label})`
     );
     assert.equal(
-      (svg.match(/class="[^"]*\bnew-age-droplet\b[^"]*"/g) || []).length,
+      (svg.match(/class="[^"]*\bnew-age-interference\b[^"]*"/g) || []).length,
       20,
-      `expected 20 liquid droplets (${label})`
-    );
-    assert.equal(
-      (svg.match(/class="[^"]*\bnew-age-liquid\b[^"]*"/g) || []).length,
-      20,
-      `expected 20 liquid droplet groups (${label})`
+      `expected 20 interference lines (${label})`
     );
     const rays = svg.match(/<polygon[^>]*class="[^"]*\bnew-age-ray\b[^"]*"[^>]*>/g) || [];
     for (const ray of rays) {
@@ -266,9 +261,9 @@ test("written dark/light assets preserve 20-rays and ray gradient opacities", ()
       `${theme}: written asset must contain 20 ray polygons`
     );
     assert.equal(
-      (asset.match(/class="[^"]*\bnew-age-droplet\b[^"]*"/g) || []).length,
+      (asset.match(/class="[^"]*\bnew-age-interference\b[^"]*"/g) || []).length,
       20,
-      `${theme}: written asset must contain 20 liquid droplets`
+      `${theme}: written asset must contain 20 interference lines`
     );
     const activeGradientIds =
       theme === "dark"

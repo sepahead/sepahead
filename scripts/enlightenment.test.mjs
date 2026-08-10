@@ -1,5 +1,5 @@
 // scripts/enlightenment.test.mjs
-// Structural design contracts for the new age 20-rays phase with liquid droplets.
+// Structural design contracts for the new age 20-rays phase with diffraction interference bands.
 import test from "node:test";
 import assert from "node:assert/strict";
 
@@ -21,7 +21,7 @@ function fixture(currentTotal = 4214) {
 
 const svg = () => renderSVG(buildModel(fixture()));
 
-test("new age phase has 20 rays, 20 liquid droplets with pulsating animations", () => {
+test("new age phase has 20 rays, 20 diffraction interference lines", () => {
   const out = svg();
   assert.equal(tagsWithClass(out, "g", "narrative-enlightenment").length, 1);
 
@@ -29,37 +29,26 @@ test("new age phase has 20 rays, 20 liquid droplets with pulsating animations", 
   const rays = tagsWithClass(out, "polygon", "new-age-ray");
   assert.equal(rays.length, 20, "expected 20 ray polygons");
 
-  // 20 liquid droplet ellipses (one per ray)
-  const droplets = tagsWithClass(out, "ellipse", "new-age-droplet");
-  assert.equal(droplets.length, 20, "expected 20 liquid droplets");
+  // 20 interference lines
+  const lines = tagsWithClass(out, "line", "new-age-interference");
+  assert.equal(lines.length, 20, "expected 20 interference lines");
 
-  // 20 liquid droplet groups with propagation animation
-  const liquidGroups = tagsWithClass(out, "g", "new-age-liquid");
-  assert.equal(liquidGroups.length, 20, "expected 20 liquid droplet groups");
-
-  // Each droplet must pulsate (opacity + ry animations within the ellipse)
+  // Each interference line must have dasharray + animated dashoffset
   // tagsWithClass only returns opening tags, so use raw SVG matching
-  const dropletBlocks = [...out.matchAll(/<ellipse[^>]*class="[^"]*\bnew-age-droplet\b[^"]*"[\s\S]*?<\/ellipse>/g)];
-  assert.equal(dropletBlocks.length, 20, "expected 20 complete droplet ellipse elements");
-  for (let i = 0; i < dropletBlocks.length; i++) {
-    const d = dropletBlocks[i][0];
-    assert.match(d, /attributeName="opacity"/, `droplet ${i} must pulse opacity`);
-    assert.match(d, /attributeName="ry"/, `droplet ${i} must breathe in size`);
-  }
-
-  // Each liquid group must have a translate animation (propagation)
-  const liquidBlocks = [...out.matchAll(/<g class="new-age-liquid">[\s\S]*?<\/g>/g)];
-  assert.equal(liquidBlocks.length, 20, "expected 20 complete liquid group elements");
-  for (let i = 0; i < liquidBlocks.length; i++) {
-    assert.match(liquidBlocks[i][0], /animateTransform/, `liquid group ${i} must have translate animation`);
+  const lineBlocks = [...out.matchAll(/<line[^>]*class="[^"]*\bnew-age-interference\b[^"]*"[\s\S]*?<\/line>/g)];
+  assert.equal(lineBlocks.length, 20, "expected 20 complete interference line elements");
+  for (let i = 0; i < lineBlocks.length; i++) {
+    const l = lineBlocks[i][0];
+    assert.match(l, /stroke-dasharray="5 4"/, `line ${i} must have 5-4 dash pattern`);
+    assert.match(l, /attributeName="stroke-dashoffset"/, `line ${i} must animate dashoffset`);
   }
 
   // Every ray must fan downward (from top source toward bottom)
   for (const [i, ray] of rays.entries()) {
     const pts = (attrOf(ray, "points") || "").trim().split(/\s+/);
     const ys = pts.filter((_, idx) => idx % 2 === 1).map(Number);
-    const topY = Math.min(...ys.slice(0, 2));   // source edge (top)
-    const botY = Math.max(...ys.slice(2, 4));   // destination edge (bottom)
+    const topY = Math.min(...ys.slice(0, 2));
+    const botY = Math.max(...ys.slice(2, 4));
     assert.ok(topY < botY, `ray ${i} must fan downward (top=${topY}, bottom=${botY})`);
   }
 
@@ -67,10 +56,9 @@ test("new age phase has 20 rays, 20 liquid droplets with pulsating animations", 
   assert.match(aria, /20 rays of light streaming from above/);
 });
 
-test("new age uses dedicated ray, liquid, and glow definitions", () => {
+test("new age uses dedicated ray gradient and glow filter", () => {
   const out = svg();
   assert.match(out, /id="newAgeRayGrad"/);
-  assert.match(out, /id="newAgeLiquidGrad"/);
   assert.match(out, /id="newAgeGlow"/);
 });
 
@@ -87,13 +75,11 @@ test("all new age parts share one phase opacity", () => {
   for (const [name, out] of Object.entries({ dark, light })) {
     const css = styleBlocks(out)[0];
     assert.ok(css.includes(".new-age-ray"), `${name}: missing ray CSS`);
-    assert.ok(css.includes(".new-age-droplet"), `${name}: missing droplet CSS`);
-    assert.ok(css.includes(".new-age-liquid"), `${name}: missing liquid group CSS`);
+    assert.ok(css.includes(".new-age-interference"), `${name}: missing interference CSS`);
     assert.ok(css.includes(".new-age-text"), `${name}: missing label text CSS`);
   }
   const lightCss = styleBlocks(light)[0];
   assert.ok(lightCss.includes("newAgeRayGradLight"));
-  assert.ok(lightCss.includes("newAgeLiquidGradLight"));
 
   for (const [name, css] of Object.entries({ dark, light })) {
     assert.match(
@@ -102,16 +88,14 @@ test("all new age parts share one phase opacity", () => {
       `${name}: missing shared new age opacity`
     );
   }
-  // Liquid droplets intentionally animate their own opacity (vibrating effect).
+  // Interference lines set their own stroke-opacity (brightness of bands).
   // Rays must not animate opacity independently — they inherit the phase opacity.
   for (const [name, css] of Object.entries({ dark, light })) {
-    for (const selector of ["new-age-ray"]) {
-      const rule = css.match(new RegExp(`\\.${selector}\\s*\\{([^}]*)\\}`))?.[1] ?? "";
-      assert.doesNotMatch(
-        rule,
-        /(?:^|;)\s*(?:opacity|fill-opacity|stroke-opacity)\s*:/,
-        `${name}: ${selector} must inherit the shared new age opacity`
-      );
-    }
+    const rule = css.match(/\.new-age-ray\s*\{([^}]*)\}/)?.[1] ?? "";
+    assert.doesNotMatch(
+      rule,
+      /(?:^|;)\s*opacity\s*:/,
+      `${name}: new-age-ray must not set its own opacity`
+    );
   }
 });
