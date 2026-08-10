@@ -1,5 +1,5 @@
 // scripts/enlightenment.test.mjs
-// Structural design contracts for combined spectral fringing + diffraction interference.
+// Structural design contracts for the new age 20-rays phase with spectral color fringing.
 import test from "node:test";
 import assert from "node:assert/strict";
 
@@ -21,7 +21,7 @@ function fixture(currentTotal = 4214) {
 
 const svg = () => renderSVG(buildModel(fixture()));
 
-test("combined design: 20 rays, 40 fringe edges, 17 interference lines (3 central rays pure)", () => {
+test("spectral fringing only: 20 rays, 40 fringe edges, no interference bands", () => {
   const out = svg();
   assert.equal(tagsWithClass(out, "g", "narrative-enlightenment").length, 1);
 
@@ -31,21 +31,14 @@ test("combined design: 20 rays, 40 fringe edges, 17 interference lines (3 centra
   const fringes = tagsWithClass(out, "polygon", "new-age-fringe");
   assert.equal(fringes.length, 40, "expected 40 fringe edge polygons (2 per ray)");
 
-  // 17 interference lines (angles 89-91 excluded: 3 central rays converge)
-  const lineBlocks = [...out.matchAll(/<line[^>]*class="[^"]*\bnew-age-interference\b[^"]*"[^>]*>/g)];
-  assert.equal(lineBlocks.length, 17, "expected 17 interference lines");
+  // No interference lines
+  assert.ok(!out.includes("new-age-interference"), "must not contain interference bands");
 
   // Fringes must repeat indefinitely
   const fringeBlocks = [...out.matchAll(/<polygon[^>]*class="[^"]*\bnew-age-fringe\b[^"]*"[^]*?<\/polygon>/g)];
+  assert.equal(fringeBlocks.length, 40);
   for (let i = 0; i < fringeBlocks.length; i++) {
     assert.match(fringeBlocks[i][0], /repeatCount="indefinite"/, "fringe must repeat indefinitely");
-  }
-
-  // Interference lines must animate dashoffset
-  const interferenceBlocks = [...out.matchAll(/<line[^>]*class="[^"]*\bnew-age-interference\b[^"]*"[^]*?<\/line>/g)];
-  assert.equal(interferenceBlocks.length, 17);
-  for (let i = 0; i < interferenceBlocks.length; i++) {
-    assert.match(interferenceBlocks[i][0], /stroke-dashoffset/, "interference must animate");
   }
 
   // Every ray must fan downward
@@ -76,7 +69,6 @@ test("all new age parts share one phase opacity", () => {
   for (const [name, out] of Object.entries({ dark, light })) {
     const css = styleBlocks(out)[0];
     assert.ok(css.includes(".new-age-ray"), `${name}: missing ray CSS`);
-    assert.ok(css.includes(".new-age-interference"), `${name}: missing interference CSS`);
     assert.ok(css.includes(".new-age-fringe"), `${name}: missing fringe CSS`);
     assert.ok(css.includes(".new-age-text"), `${name}: missing label text CSS`);
   }

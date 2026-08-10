@@ -235,10 +235,9 @@ test("the new age 20-rays fan survives every branch", () => {
       20,
       `expected 20 ray polygons (${label})`
     );
-    assert.equal(
-      (svg.match(/class="[^"]*\bnew-age-interference\b[^"]*"/g) || []).length,
-      17,
-      `expected 17 interference lines (3 central rays excluded) (${label})`
+    assert.ok(
+      !svg.includes("new-age-interference"),
+      `must not contain interference bands (${label})`
     );
     assert.equal(
       (svg.match(/class="[^"]*\bnew-age-fringe\b[^"]*"/g) || []).length,
@@ -265,10 +264,9 @@ test("written dark/light assets preserve 20-rays and ray gradient opacities", ()
       20,
       `${theme}: written asset must contain 20 ray polygons`
     );
-    assert.equal(
-      (asset.match(/class="[^"]*\bnew-age-interference\b[^"]*"/g) || []).length,
-      17,
-      `${theme}: written asset must contain 17 interference lines`
+    assert.ok(
+      !asset.includes("new-age-interference"),
+      `${theme}: written asset must not contain interference bands`
     );
     assert.equal(
       (asset.match(/class="[^"]*\bnew-age-fringe\b[^"]*"/g) || []).length,
