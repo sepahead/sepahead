@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // scripts/cumulative.mjs
 // Generates assets/cumulative.svg, an annual contribution bar chart
-// (grouped 2014–22, then one bar per year through the current year, plus a
-// zero placeholder for next year) with a headline cumulative total.
+// (grouped 2014–22, then one bar per year through the current year, plus two
+// non-measured future runway slots) with a headline cumulative total.
 // Zero npm dependencies; uses the global `fetch` (Node 20+).
 //
 // DESIGN COUSIN of weekdays.svg: same design language (brand cyan, monospace,
@@ -18,8 +18,8 @@
 //     <h2 ...>1,676\n contributions\n in 2024</h2>
 // We loop from=<START_YEAR>-01-01 .. from=<currentYear>-01-01 and parse that
 // total (one regex per year, robust to whitespace/newlines between tokens).
-// The trailing next-year placeholder bar is NEVER fetched: a year that hasn't
-// started has no fragment, so requesting one would 404 or return junk.
+// The trailing future runway slots are NEVER fetched: years that have not
+// started have no fragment, so requesting them would 404 or return junk.
 // This host is NOT api.github.com, so it is not subject to the 60/hr
 // unauthenticated rate limit that is permanently exhausted on Actions runners.
 //
@@ -181,7 +181,7 @@ async function fetchYearTotals(
 //   stack   - the grouped early-years bar
 //   year    - a complete, measured year
 //   current - the in-progress year (measured, but partial)
-//   future  - next year: synthesized, zero, never fetched
+//   future  - synthesized, zero, never-fetched runway slot
 function buildModel(years) {
   // One read, so a build that straddles midnight in the reference timezone
   // can't disagree with itself about which year is "current".
@@ -232,20 +232,26 @@ function buildModel(years) {
     });
   }
 
-  // Trailing runway: next year, not started. SYNTHESIZED, never fetched — a
-  // year that hasn't begun has no contributions fragment to parse. It carries
-  // the running cumulative forward unchanged so its tooltip still reads
-  // sensibly, but it contributes nothing to any aggregate.
-  rows.push({
-    kind: "future",
-    isStack: false,
-    isCurrent: false,
-    isFuture: true,
-    year: thisYear + 1,
-    total: 0,
-    cumulative,
-    label: String(thisYear + 1),
-  });
+  // Post-current runway: two synthesized, non-measured slots. The first is
+  // next year's explicit empty placeholder; the second gives the final phase
+  // a real temporal boundary, exactly like the existing seams between bars.
+  // Neither year is fetched, counted, plotted on the cumulative curve, or
+  // allowed into peak/growth aggregates. The enlightenment phase lives in the
+  // gap BETWEEN these two slots: after 2027, before 2028.
+  for (const [futureIndex, year] of [thisYear + 1, thisYear + 2].entries()) {
+    rows.push({
+      kind: "future",
+      isStack: false,
+      isCurrent: false,
+      isFuture: true,
+      isRunway: futureIndex === 1,
+      futureIndex,
+      year,
+      total: 0,
+      cumulative,
+      label: String(year),
+    });
+  }
 
   // Average year-over-year PERCENT growth (CAGR, geometric mean of the YoY
   // ratios, robust to wild single-year swings). Measured over the post-stack
@@ -392,11 +398,11 @@ const BAR_CAP_WIDTH = 2;
 // The year label and the tooltip still say "in progress" when it is suppressed.
 const BAR_CAP_MIN_H = BAR_CAP_WIDTH * 2;
 
-// NEXT-YEAR RUNWAY. The trailing placeholder is drawn as a short dashed ghost
+// FUTURE RUNWAY. Each trailing placeholder is drawn as a short dashed ghost
 // outline resting on the baseline, NOT as a zero-height bar and not as a tick
 // laid over the baseline (which just read as a rendering artifact of the solid
-// full-width baseline underneath it). An outlined, clearly empty slot reads as
-// deliberate headroom for a year that has not started. Expressed as a fraction
+// full-width baseline underneath it). Outlined, clearly empty slots read as
+// deliberate headroom for years that have not started. Expressed as a fraction
 // of the plot so it stays proportional if PLOT_HEIGHT is retuned.
 // Snapped to 1dp to match the LANE/artRy convention. The snapping is
 // load-bearing rather than cosmetic: this value is interpolated straight into
@@ -1467,7 +1473,7 @@ function renderSVG(model) {
       if (row.isFuture) {
         const futureTitle = escapeXML(`${row.label}: not started yet`);
         return `
-  <g class="future-slot">
+  <g class="future-slot${row.isRunway ? " future-runway" : ""}">
     <title>${futureTitle}</title>
     <rect x="${x.toFixed(1)}" y="${(PLOT_BOTTOM - ghostH).toFixed(1)}" width="${barW.toFixed(1)}" height="${ghostH.toFixed(1)}" rx="${ghostRx.toFixed(1)}" class="future-ghost"/>
     <text x="${cx.toFixed(1)}" y="${PLOT_BOTTOM + 22}" text-anchor="middle" class="year year-future">${escapeXML(row.label)}</text>
@@ -1653,7 +1659,18 @@ function renderSVG(model) {
   const mx = PLOT_LEFT + 5;
   const originDefsStr = seamX != null ? originDefs(mx, ox, seamX) : "";
   const origin = seamX != null ? membraneMarkup(mx) : "";
-  const enlightenment = portalX != null ? enlightenmentMarkup(portalX) : "";
+  // Final authored phase: place its source at the boundary AFTER the first
+  // future slot (2027) and BEFORE the second (2028), never at the measured
+  // current-year singularity boundary.
+  const futureStartIdx = rows.findIndex((r) => r.isFuture);
+  const enlightenmentBoundaryX =
+    futureStartIdx >= 0 && rows[futureStartIdx + 1]?.isFuture
+      ? PLOT_LEFT + slot * (futureStartIdx + 1)
+      : null;
+  const enlightenment =
+    enlightenmentBoundaryX != null
+      ? enlightenmentMarkup(enlightenmentBoundaryX)
+      : "";
   const originBandRect = seamX != null
     ? `<rect x="${ox}" y="${PLOT_TOP}" width="${(seamX - ox).toFixed(1)}" height="${PLOT_HEIGHT}" class="origin-band">
     <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.3;1" begin="0s" dur="2.2s" fill="freeze"/>
@@ -1670,7 +1687,8 @@ function renderSVG(model) {
   // Spell out BOTH caveats a sighted reader gets from the visuals: the newest
   // bar is a partial year, and the trailing slot is an empty placeholder.
   const currentRow = rows.find((r) => r.isCurrent);
-  const futureRow = rows.find((r) => r.isFuture);
+  const futureRows = rows.filter((r) => r.isFuture);
+  const futureRow = futureRows[0];
   // The grouped history bar MUST be announced: without it a screen-reader user
   // is told the range starts in 2014 but never learns the first bar is a
   // multi-year aggregate rather than a single year. The per-segment title
@@ -1720,6 +1738,9 @@ function renderSVG(model) {
     growthRate ? `average growth ${growthRate}` : "",
     currentRow ? `${currentRow.label} is still in progress` : "",
     futureRow ? `${futureRow.label} is an empty placeholder for the year ahead` : "",
+    futureRows.length > 1
+      ? `${futureRows[0].label} to ${futureRows[1].label} are an unstarted future runway; the enlightenment phase sits between them`
+      : "",
     "the visual phase motif continues into a bounded age of enlightenment cloud with diagonal rays",
   ].filter(Boolean);
   // Hedge the superlative while the record-holder is the year still running.

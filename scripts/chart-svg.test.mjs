@@ -227,19 +227,22 @@ for (const [label, currentTotal] of CASES) {
   });
 }
 
-test("next-year ghost slot renders on every branch", () => {
+test("future runway slots render on every branch", () => {
   for (const [label, currentTotal] of CASES) {
     const svg = render(currentTotal);
-    // Matches the ELEMENT, not the CSS rule: the ".future-ghost" selector is
-    // always in the style block, so asserting on that would prove nothing.
-    assert.ok(
-      svg.includes('class="future-ghost"'),
-      `expected a future-ghost element (${label})`
+    // Match the ELEMENTS, not the CSS rule: the ".future-ghost" selector is
+    // always in the style block, so asserting on it alone would prove nothing.
+    assert.equal(
+      (svg.match(/class="future-ghost"/g) || []).length,
+      2,
+      `expected one future-ghost element per future slot (${label})`
     );
-    assert.ok(
-      svg.includes(`class="year year-future">${thisYear + 1}`),
-      `expected a dimmed ${thisYear + 1} label (${label})`
-    );
+    for (const year of [thisYear + 1, thisYear + 2]) {
+      assert.ok(
+        svg.includes(`class="year year-future">${year}`),
+        `expected a dimmed ${year} label (${label})`
+      );
+    }
   }
 });
 
@@ -315,16 +318,26 @@ test("value labels never reach the era captions", () => {
   }
 });
 
-test("the next-year placeholder stays out of every aggregate", () => {
+test("future runway slots stay out of every aggregate", () => {
   const model = buildModel(fixture(6240));
-  const future = model.rows.find((row) => row.isFuture);
+  const future = model.rows.filter((row) => row.isFuture);
 
-  assert.ok(future, "expected a synthesized next-year row");
-  assert.equal(future.year, thisYear + 1);
-  assert.equal(future.total, 0);
-  assert.equal(model.rows.at(-1), future, "the placeholder must be the last row");
+  assert.equal(future.length, 2, "expected two synthesized future rows");
+  assert.deepEqual(
+    future.map((row) => row.year),
+    [thisYear + 1, thisYear + 2],
+    "future slots must be the two years after the current year"
+  );
+  assert.deepEqual(
+    future.map((row) => row.total),
+    [0, 0],
+    "future slots must never carry measured totals"
+  );
+  assert.equal(future[0].isRunway, false, "the first future slot is the placeholder");
+  assert.equal(future[1].isRunway, true, "the second future slot is the runway boundary");
+  assert.equal(model.rows.at(-1), future[1], "the second future slot must be last");
 
-  assert.equal(model.peak, 6240, "a zero row must not be able to tie for peak");
+  assert.equal(model.peak, 6240, "zero rows must not be able to tie for peak");
   assert.equal(
     model.cumulative,
     model.rows.filter((row) => !row.isFuture).at(-1).cumulative,

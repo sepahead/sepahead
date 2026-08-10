@@ -137,18 +137,21 @@ test("the placeholder year label stays legible", () => {
   );
 });
 
-test("the next-year runway outline never exceeds its honesty ceiling", () => {
-  // The runway is an EMPTY slot, so it must never read as data. GHOST_MAX_H is
-  // the hard ceiling; ghostHeightFor additionally caps it at the shortest
-  // measured bar. The regression this replaced sized the outline as a fraction
-  // of the plot (12.6px) while a real year of 236 contributions rendered 3.4px.
+test("the future runway outlines never exceed their honesty ceiling", () => {
+  // Both slots are EMPTY and must never read as measured data. GHOST_MAX_H is
+  // the hard ceiling; ghostHeightFor additionally caps each outline at the
+  // shortest measured bar. The regression this replaced sized the outline as a
+  // fraction of the plot (12.6px) while a real year of 236 contributions
+  // rendered 3.4px.
   const ghosts = tagsWithClass(render(), "rect", "future-ghost");
-  assert.equal(ghosts.length, 1, "expected exactly one future-ghost rect");
+  assert.equal(ghosts.length, 2, "expected one future-ghost rect per future slot");
 
-  const h = numAttr(ghosts[0], "height");
-  assert.ok(Number.isFinite(h) && h > 0, `ghost height must be positive, got ${h}`);
-  assert.ok(
-    h <= GHOST_MAX_H,
-    `runway outline ${h} must not exceed GHOST_MAX_H ${GHOST_MAX_H}`
-  );
+  for (const [index, ghost] of ghosts.entries()) {
+    const h = numAttr(ghost, "height");
+    assert.ok(Number.isFinite(h) && h > 0, `ghost ${index} height must be positive, got ${h}`);
+    assert.ok(
+      h <= GHOST_MAX_H,
+      `runway outline ${index} ${h} must not exceed GHOST_MAX_H ${GHOST_MAX_H}`
+    );
+  }
 });

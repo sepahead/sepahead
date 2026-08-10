@@ -218,8 +218,8 @@ test("the runway outline stays legible on both page backgrounds", () => {
 
     assert.equal(
       tagsWithClass(svg, "rect", "future-ghost").length,
-      1,
-      `${name}: expected exactly one future-ghost element`
+      2,
+      `${name}: expected one future-ghost element per future slot`
     );
 
     const strokes = declValues(declarationsOf(css, ".future-ghost"), "stroke");

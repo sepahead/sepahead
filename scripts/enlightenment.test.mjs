@@ -64,6 +64,17 @@ test("enlightenment phase has a bounded cloud, diagonal rays, and singularity tr
     assert.ok(Math.abs(x1 - cloudX) < cloudRx + 8, `ray ${i} must launch from the cloud aperture`);
   }
 
+  const futureGhosts = tagsWithClass(out, "rect", "future-ghost");
+  assert.equal(futureGhosts.length, 2, "enlightenment fixture must expose both future slots");
+  const ghostCenters = futureGhosts.map(
+    (ghost) =>
+      number(attrOf(ghost, "x"), "future slot x") +
+      number(attrOf(ghost, "width"), "future slot width") / 2
+  );
+  const slot = ghostCenters[1] - ghostCenters[0];
+  assert.ok(slot > 0, `future slots must advance left-to-right, got ${slot}`);
+  const boundary = ghostCenters[1] - slot / 2;
+
   const tracePaths = tagsWithClass(out, "path", "enlightenment-trace-line");
   for (const [i, path] of tracePaths.entries()) {
     const d = attrOf(path, "d");
@@ -71,6 +82,10 @@ test("enlightenment phase has a bounded cloud, diagonal rays, and singularity tr
     const nums = [...d.matchAll(/-?[\d.]+/g)].map((m) => Number(m[0]));
     assert.ok(nums[0] < nums[nums.length - 2], `trace ${i} must move right toward the aperture`);
     assert.ok(nums[1] !== nums[nums.length - 1], `trace ${i} must curve vertically into the aperture`);
+    assert.ok(
+      Math.abs(nums[0] - (boundary + 5)) < 0.11,
+      `trace ${i} must launch after the 2027–2028 boundary, not at the measured singularity`
+    );
   }
 
   const aria = out.match(/aria-label="([^"]*)"/)?.[1] ?? "";

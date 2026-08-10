@@ -129,26 +129,28 @@ function assertMeasured(values, what) {
   );
 }
 
-test("the empty next-year slot never out-towers a measured bar", () => {
-  // The regression this guards: the runway outline was sized as a fraction of
-  // the plot (12.6px) while a real year of 236 contributions rendered 3.4px, so
-  // a year with NO data was drawn roughly four times taller than a year with
-  // data. Because the bar scale moves with yMax, the placeholder has to be
+test("the future runway slots never out-tower a measured bar", () => {
+  // The regression this guards: a runway outline was sized as a fraction of
+  // the plot (12.6px) while a real year of 236 contributions rendered 3.4px,
+  // so an EMPTY year was drawn roughly four times taller than measured data.
+  // Because the bar scale moves with yMax, every future outline has to be
   // bounded by the actual bars rather than by the canvas.
   for (const current of [4206, 6000, 6240, 9999]) {
     const svg = render(current);
     const bars = heightsOfClass(svg, "bar");
-    const ghost = heightsOfClass(svg, "future-ghost");
+    const ghosts = heightsOfClass(svg, "future-ghost");
 
-    assert.equal(ghost.length, 1, `expected one runway outline (${current})`);
+    assert.equal(ghosts.length, 2, `expected one runway outline per future slot (${current})`);
     assertMeasured(bars, `measured bars (${current})`);
-    assertMeasured(ghost, `runway outline (${current})`);
-    assert.ok(
-      ghost[0] <= Math.min(...bars),
-      `runway outline ${ghost[0]} must not exceed the shortest measured bar ` +
-        `${Math.min(...bars)} (current year ${current})`
-    );
-    assert.ok(ghost[0] > 0, "runway outline must still be visible");
+    assertMeasured(ghosts, `runway outlines (${current})`);
+    for (const [index, ghost] of ghosts.entries()) {
+      assert.ok(
+        ghost <= Math.min(...bars),
+        `runway outline ${index} ${ghost} must not exceed the shortest measured bar ` +
+          `${Math.min(...bars)} (current year ${current})`
+      );
+      assert.ok(ghost > 0, `runway outline ${index} must still be visible`);
+    }
   }
 });
 
@@ -240,9 +242,10 @@ test("segment tooltips agree with their count in number", () => {
       `only the empty placeholder may omit a count phrase: "${title}"`
     );
   }
-  assert.ok(
-    uncounted.length <= 1,
-    `at most one countless tooltip (the placeholder) expected, got ${uncounted.join(" | ")}`
+  assert.equal(
+    uncounted.length,
+    2,
+    `both unstarted future slots must omit counts, got ${uncounted.join(" | ")}`
   );
 
   // Pin every shape by structure instead of a bare non-empty guard: a bare
