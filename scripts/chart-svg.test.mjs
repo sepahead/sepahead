@@ -285,7 +285,7 @@ test("written dark/light assets preserve 20-rays and ray gradient opacities", ()
         `${theme}: ${id} stop opacities must remain unchanged`
       );
     }
-    assert.match(asset, /\.narrative-enlightenment\s*\{[^}]*opacity:\s*0\.78/);
+    assert.match(asset, /\.narrative-enlightenment\s*\{[^}]*opacity:\s*0\.85/);
   }
 });
 

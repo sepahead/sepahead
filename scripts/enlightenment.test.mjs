@@ -60,7 +60,7 @@ test("new age uses dedicated ray gradient and glow filter", () => {
 
 test("all new age parts share one phase opacity", () => {
   const out = svg();
-  const shared = "0.78";
+  const shared = "0.85";
   const labelStart = out.indexOf('<g class="new-age-label"');
   const label = out.slice(labelStart, out.indexOf("</g>", labelStart) + 4);
   assert.match(label, new RegExp(`opacity="${shared}"`));

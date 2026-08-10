@@ -576,7 +576,7 @@ const WAVE_RY_INNER = artRy(31 / 24); // 31
 // from nearly-vertical: central rays are longest and brightest, edge rays are
 // shorter and dimmer, together creating a dramatic top-down illumination.
 // One shared phase opacity applied to the complete tableau.
-const NEW_AGE_OPACITY = 0.78;
+const NEW_AGE_OPACITY = 0.85;
 // 20 rays fanning downward from the top-centre of the new age area.
 // 0° = horizontal right, 90° = straight down. Central rays go nearly straight
 // down; edge rays fan outward to the sides.
@@ -840,7 +840,7 @@ function enlightenmentMarkup(portalX) {
     return `<polygon points="${points(px * shift, py * shift)}" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
         <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="${begin}s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
-      <polygon points="${points(-px * shift, -py * shift)}" fill="none" stroke="#fb923c" stroke-width="0.7" class="new-age-fringe">
+      <polygon points="${points(-px * shift, -py * shift)}" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
         <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="${(parseFloat(begin)+1.0).toFixed(2)}s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>`;
   };
