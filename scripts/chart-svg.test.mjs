@@ -230,7 +230,6 @@ for (const [label, currentTotal] of CASES) {
 test("the new age 20-lens array survives every branch", () => {
   for (const [label, currentTotal] of CASES) {
     const svg = render(currentTotal);
-    // 20 lens-back + 20 lens-front ellipses
     assert.equal(
       (svg.match(/class="[^"]*\bnew-age-lens-back\b[^"]*"/g) || []).length,
       20,
@@ -241,26 +240,37 @@ test("the new age 20-lens array survives every branch", () => {
       20,
       `expected 20 lens-front ellipses (${label})`
     );
-    // 8 traces and 8 sparks
     assert.equal(
       (svg.match(/class="[^"]*\bnew-age-trace-line\b[^"]*"/g) || []).length,
-      8,
-      `expected 8 trace lines (${label})`
+      12,
+      `expected 12 trace lines (${label})`
     );
     assert.equal(
       (svg.match(/class="[^"]*\bnew-age-spark\b[^"]*"/g) || []).length,
-      8,
-      `expected 8 spark particles (${label})`
+      12,
+      `expected 12 spark particles (${label})`
+    );
+    assert.equal(
+      (svg.match(/class="[^"]*\bnew-age-filament\b[^"]*"/g) || []).length,
+      5,
+      `expected 5 trail filaments (${label})`
+    );
+    assert.equal(
+      (svg.match(/class="[^"]*\bnew-age-ambient\b[^"]*"/g) || []).length,
+      1,
+      `expected 1 ambient glow (${label})`
     );
   }
 });
 
 test("written dark/light assets preserve 20-lens array and new gradient opacities", () => {
   const expectedStops = {
+    newAgeAmbientGrad: ["0.18", "0.06", "0"],
+    newAgeAmbientGradLight: ["0.14", "0.05", "0"],
     newAgeLensGrad: ["0.94", "0.55", "0"],
     newAgeLensGradLight: ["0.98", "0.52", "0"],
-    newAgeTraceGrad: ["0.32", "0.64", "0.88"],
-    newAgeTraceGradLight: ["0.38", "0.58", "0.92"],
+    newAgeTraceGrad: ["0.28", "0.58", "0.92"],
+    newAgeTraceGradLight: ["0.34", "0.54", "0.96"],
   };
   for (const theme of ["dark", "light"]) {
     const asset = readFileSync(resolve(REPO_ROOT, `assets/cumulative-${theme}.svg`), "utf8");
@@ -274,9 +284,14 @@ test("written dark/light assets preserve 20-lens array and new gradient opacitie
       20,
       `${theme}: written asset must contain 20 lens-back ellipses`
     );
+    assert.equal(
+      (asset.match(/class="[^"]*\bnew-age-trace-line\b[^"]*"/g) || []).length,
+      12,
+      `${theme}: written asset must contain 12 trace lines`
+    );
     const activeGradientIds =
       theme === "dark"
-        ? ["newAgeLensGrad", "newAgeTraceGrad"]
+        ? ["newAgeAmbientGrad", "newAgeLensGrad", "newAgeTraceGrad"]
         : Object.keys(expectedStops);
     for (const id of activeGradientIds) {
       const block = asset.match(new RegExp(`<(?:linear|radial)Gradient id="${id}"[^>]*>([\\s\\S]*?)</(?:linear|radial)Gradient>`))?.[1] ?? "";
