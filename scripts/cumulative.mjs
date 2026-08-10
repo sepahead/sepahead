@@ -780,6 +780,20 @@ function enlightenmentDefs() {
       <stop offset="62%" stop-color="#fbbf24" stop-opacity="0.28"/>
       <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
     </radialGradient>
+    <linearGradient id="newAgeLiquidGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fde68a" stop-opacity="0"/>
+      <stop offset="35%" stop-color="#fff7cc" stop-opacity="0.72"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.85"/>
+      <stop offset="65%" stop-color="#fff7cc" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="newAgeLiquidGradLight" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d97706" stop-opacity="0"/>
+      <stop offset="35%" stop-color="#fbbf24" stop-opacity="0.55"/>
+      <stop offset="50%" stop-color="#fff7cc" stop-opacity="0.72"/>
+      <stop offset="65%" stop-color="#fbbf24" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
+    </linearGradient>
     <filter id="newAgeGlow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="1.8" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
@@ -816,38 +830,40 @@ function enlightenmentMarkup(portalX) {
     const opacity = (ray.o * NEW_AGE_OPACITY).toFixed(2);
     return `<polygon points="${points.join(" ")}" class="new-age-ray" opacity="${opacity}"/>`;
   };
-  // Terraforming seeds: particles that emerge from the same top source,
-  // travel along the light rays, and bloom at their destination — seed
-  // landing, sprouting, transforming. Fan across the source's horizontal span.
-  const terraformSeed = (i) => {
-    const ray = NEW_AGE_RAYS[Math.floor(i * 2.2) % 20];
+  // Liquid droplets: organic rounded blobs that ride on top of each ray,
+  // vibrating (pulsing opacity), breathing (pulsing size), and propagating
+  // (sliding along the beam). Inspired by Prisoma's liquid UI shapes —
+  // soft, rounded, organically animated.
+  const liquidDroplet = (ray, i) => {
     const rad = (ray.angle * Math.PI) / 180;
-    const ex = srcX + ray.len * Math.cos(rad);
-    const ey = srcY + ray.len * Math.sin(rad);
-    // Seeds emerge from varied positions across the top source
-    const spread = (i / 11) * 8 - 4; // spread -4..+4 around srcX
-    const sx = srcX + spread;
-    const sy = srcY;
-    const begin = (i * 0.35).toFixed(2);
-    const r = (1.4 - i * 0.06).toFixed(2);
-    // Bloom ring at destination: expands and fades as seed arrives
-    const bloomBegin = (parseFloat(begin) + 3.2).toFixed(2);
-    return `<g class="new-age-seed">
-      <circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${r}" class="new-age-seed-core">
-        <animateTransform attributeName="transform" type="translate" values="0 0;${(ex - sx).toFixed(1)} ${(ey - sy).toFixed(1)}" begin="${begin}s" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.85 1"/>
-        <animate attributeName="r" values="${r};${(r * 1.5).toFixed(2)};${r}" keyTimes="0;0.45;1" begin="${begin}s" dur="3.6s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="${ex.toFixed(1)}" cy="${ey.toFixed(1)}" r="1.5" class="new-age-bloom">
-        <animate attributeName="r" values="1.5;6.5;2.0" keyTimes="0;0.45;1" begin="${bloomBegin}s" dur="1.4s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0.55;0;0" keyTimes="0;0.7;1" begin="${bloomBegin}s" dur="1.4s" repeatCount="indefinite"/>
-      </circle>
+    const cosA = Math.cos(rad);
+    const sinA = Math.sin(rad);
+    // Droplet sits 40% down the ray from source
+    const frac = 0.4;
+    const mx = srcX + ray.len * cosA * frac;
+    const my = srcY + ray.len * sinA * frac;
+    // Ellipse aligned with ray: rx ~25% of ray length, ry ~35% of ray width
+    const rx = (ray.len * 0.25).toFixed(1);
+    const ry = (ray.w * 0.35).toFixed(1);
+    const angleDeg = ray.angle.toFixed(1);
+    // Staggered animation timing
+    const begin = (i * 0.28).toFixed(2);
+    // Translate: slide the droplet down the ray and back (propagating)
+    const travelX = (ray.len * cosA * 0.35).toFixed(1);
+    const travelY = (ray.len * sinA * 0.35).toFixed(1);
+    return `<g class="new-age-liquid">
+      <ellipse cx="${mx.toFixed(1)}" cy="${my.toFixed(1)}" rx="${rx}" ry="${ry}" transform="rotate(${angleDeg} ${mx.toFixed(1)} ${my.toFixed(1)})" class="new-age-droplet">
+        <animate attributeName="opacity" values="0.35;0.68;0.35" keyTimes="0;0.48;1" begin="${begin}s" dur="2.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1"/>
+        <animate attributeName="ry" values="${ry};${(parseFloat(ry) * 1.45).toFixed(1)};${ry}" keyTimes="0;0.52;1" begin="${begin}s" dur="2.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1"/>
+      </ellipse>
+      <animateTransform attributeName="transform" type="translate" values="0 0;${travelX} ${travelY};0 0" keyTimes="0;0.5;1" begin="${begin}s" dur="3.4s" repeatCount="indefinite" calcMode="spline" keySplines="0.38 0 0.82 1;0.38 0 0.82 1"/>
     </g>`;
   };
   return `
   <g class="narrative-enlightenment">
-    <title>the new age: 20 rays of light streaming from above, terraforming seeds bloom at their destination</title>
+    <title>the new age: 20 rays of light streaming from above, each carrying a liquid droplet that pulsates and propagates</title>
     ${NEW_AGE_RAYS.map(rayPolygon).join("\n    ")}
-    ${Array.from({length: 12}, (_, i) => terraformSeed(i)).join("\n    ")}
+    ${NEW_AGE_RAYS.map((r, i) => liquidDroplet(r, i)).join("\n    ")}
   </g>
   <g class="new-age-label" opacity="${NEW_AGE_OPACITY}">
     <text x="${(PLOT_RIGHT - 2).toFixed(1)}" y="${(PLOT_TOP - 8).toFixed(1)}" text-anchor="end" class="new-age-text">the new age</text>
@@ -1770,7 +1786,7 @@ function renderSVG(model) {
     futureRows.length > 1
       ? `${futureRows[0].label} to ${futureRows[1].label} are an unstarted future runway; the enlightenment phase sits between them`
       : "",
-    "the visual phase motif continues into 20 rays of light streaming from above into the future",
+    "the visual phase motif continues into 20 rays of light streaming from above with liquid droplets propagating along the beams",
   ].filter(Boolean);
   // Hedge the superlative while the record-holder is the year still running.
   // "peak 6,240 in 2026" alongside "2026 is still in progress" in the same
@@ -1904,8 +1920,8 @@ function renderSVG(model) {
        stop opacities below remain colour falloff, not per-part intensity. */
     .narrative-enlightenment { pointer-events: none; opacity: ${NEW_AGE_OPACITY}; }
     .new-age-ray { fill: url(#newAgeRayGrad); stroke: none; filter: url(#newAgeGlow); mix-blend-mode: screen; }
-    .new-age-seed-core { fill: #ffffff; filter: url(#newAgeGlow); }
-    .new-age-bloom { fill: none; stroke: #fff7cc; stroke-width: 0.8; }
+    .new-age-liquid { pointer-events: none; }
+    .new-age-droplet { fill: url(#newAgeLiquidGrad); filter: url(#newAgeGlow); mix-blend-mode: screen; }
     .new-age-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fde68a; letter-spacing: 2px; }
     .grid { stroke: #21262d; stroke-width: 1; }
     .baseline { stroke: #30363d; stroke-width: 1; }
@@ -2066,8 +2082,7 @@ function renderSVG(model) {
       .intake-head-lime { fill: #4d7c0f; }
       .portal-boom { stroke: #4d7c0f; }
       .new-age-ray { fill: url(#newAgeRayGradLight); stroke: none; }
-      .new-age-seed-core { fill: #ffffff; }
-      .new-age-bloom { stroke: #fbbf24; }
+      .new-age-droplet { fill: url(#newAgeLiquidGradLight); }
       .new-age-text { fill: #92400e; }
       .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text, .new-age-text { stroke: #ffffff; }
     }

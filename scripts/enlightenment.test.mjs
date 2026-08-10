@@ -1,11 +1,11 @@
 // scripts/enlightenment.test.mjs
-// Structural design contracts for the new age 20-rays phase with terraforming seeds.
+// Structural design contracts for the new age 20-rays phase with liquid droplets.
 import test from "node:test";
 import assert from "node:assert/strict";
 
 import { STACK_THROUGH_YEAR, buildModel, renderSVG } from "./cumulative.mjs";
 import { splitThemes } from "./theme-split.mjs";
-import { attrOf, declarationsOf, styleBlocks, tagsWithClass } from "./chart-test-helpers.mjs";
+import { attrOf, styleBlocks, tagsWithClass } from "./chart-test-helpers.mjs";
 
 function fixture(currentTotal = 4214) {
   const now = new Date().getUTCFullYear();
@@ -20,13 +20,8 @@ function fixture(currentTotal = 4214) {
 }
 
 const svg = () => renderSVG(buildModel(fixture()));
-const number = (value, name) => {
-  const n = Number(value);
-  assert.ok(Number.isFinite(n), `${name} must be numeric, got ${value}`);
-  return n;
-};
 
-test("new age phase has 20 rays, 12 terraforming seeds with bloom rings", () => {
+test("new age phase has 20 rays, 20 liquid droplets with pulsating animations", () => {
   const out = svg();
   assert.equal(tagsWithClass(out, "g", "narrative-enlightenment").length, 1);
 
@@ -34,28 +29,29 @@ test("new age phase has 20 rays, 12 terraforming seeds with bloom rings", () => 
   const rays = tagsWithClass(out, "polygon", "new-age-ray");
   assert.equal(rays.length, 20, "expected 20 ray polygons");
 
-  // 12 terraforming seed cores (raw count from SVG since tagsWithClass strips children)
-  const seedMatches = [...out.matchAll(/<circle[^>]*class="[^"]*\bnew-age-seed-core\b[^"]*"[^>]*>/g)];
-  assert.equal(seedMatches.length, 12, "expected 12 seed cores");
+  // 20 liquid droplet ellipses (one per ray)
+  const droplets = tagsWithClass(out, "ellipse", "new-age-droplet");
+  assert.equal(droplets.length, 20, "expected 20 liquid droplets");
 
-  // 12 bloom rings
-  const blooms = tagsWithClass(out, "circle", "new-age-bloom");
-  assert.equal(blooms.length, 12, "expected 12 bloom rings");
+  // 20 liquid droplet groups with propagation animation
+  const liquidGroups = tagsWithClass(out, "g", "new-age-liquid");
+  assert.equal(liquidGroups.length, 20, "expected 20 liquid droplet groups");
 
-  // Every bloom ring must be positioned at a ray destination
-  for (const [i, bloom] of blooms.entries()) {
-    const cx = number(attrOf(bloom, "cx"), `bloom ${i} cx`);
-    const cy = number(attrOf(bloom, "cy"), `bloom ${i} cy`);
-    assert.ok(cx > 690 && cx < 800, `bloom ${i} cx=${cx} must be in the new age zone`);
-    assert.ok(cy >= 120 && cy <= 260, `bloom ${i} cy=${cy} must stay in plot bounds`);
+  // Each droplet must pulsate (opacity + ry animations within the ellipse)
+  // tagsWithClass only returns opening tags, so use raw SVG matching
+  const dropletBlocks = [...out.matchAll(/<ellipse[^>]*class="[^"]*\bnew-age-droplet\b[^"]*"[\s\S]*?<\/ellipse>/g)];
+  assert.equal(dropletBlocks.length, 20, "expected 20 complete droplet ellipse elements");
+  for (let i = 0; i < dropletBlocks.length; i++) {
+    const d = dropletBlocks[i][0];
+    assert.match(d, /attributeName="opacity"/, `droplet ${i} must pulse opacity`);
+    assert.match(d, /attributeName="ry"/, `droplet ${i} must breathe in size`);
   }
 
-  // Each seed core must have translate + radius animation nearby
-  for (let i = 0; i < seedMatches.length; i++) {
-    const pos = seedMatches[i].index;
-    const nearby = out.slice(pos, pos + 350);
-    assert.match(nearby, /animateTransform/, `seed ${i} must have translate animation`);
-    assert.match(nearby, /attributeName="r"/, `seed ${i} must pulse in size (terraforming bloom)`);
+  // Each liquid group must have a translate animation (propagation)
+  const liquidBlocks = [...out.matchAll(/<g class="new-age-liquid">[\s\S]*?<\/g>/g)];
+  assert.equal(liquidBlocks.length, 20, "expected 20 complete liquid group elements");
+  for (let i = 0; i < liquidBlocks.length; i++) {
+    assert.match(liquidBlocks[i][0], /animateTransform/, `liquid group ${i} must have translate animation`);
   }
 
   // Every ray must fan downward (from top source toward bottom)
@@ -71,9 +67,10 @@ test("new age phase has 20 rays, 12 terraforming seeds with bloom rings", () => 
   assert.match(aria, /20 rays of light streaming from above/);
 });
 
-test("new age uses dedicated ray gradient and glow filter", () => {
+test("new age uses dedicated ray, liquid, and glow definitions", () => {
   const out = svg();
   assert.match(out, /id="newAgeRayGrad"/);
+  assert.match(out, /id="newAgeLiquidGrad"/);
   assert.match(out, /id="newAgeGlow"/);
 });
 
@@ -83,15 +80,6 @@ test("all new age parts share one phase opacity", () => {
   const tableauStart = out.indexOf('<g class="narrative-enlightenment">');
   const labelStart = out.indexOf('<g class="new-age-label"');
   assert.ok(tableauStart >= 0 && labelStart > tableauStart, "expected new age groups");
-  const tableau = out.slice(tableauStart, labelStart);
-  // Bloom rings intentionally animate their own opacity (expand-and-fade).
-  // All other new-age elements must not animate opacity independently.
-  const tableauWithoutBlooms = tableau.replace(/<circle[^>]*class="[^"]*new-age-bloom[^"]*"[^>]*>[\s\S]*?<\/circle>/g, "");
-  assert.doesNotMatch(
-    tableauWithoutBlooms,
-    /attributeName="(?:opacity|stroke-opacity|fill-opacity)"/,
-    "new age parts (excluding bloom rings) must not animate opacity independently"
-  );
   const label = out.slice(labelStart, out.indexOf("</g>", labelStart) + 4);
   assert.match(label, new RegExp(`opacity="${shared}"`));
 
@@ -99,12 +87,13 @@ test("all new age parts share one phase opacity", () => {
   for (const [name, out] of Object.entries({ dark, light })) {
     const css = styleBlocks(out)[0];
     assert.ok(css.includes(".new-age-ray"), `${name}: missing ray CSS`);
-    assert.ok(css.includes(".new-age-seed-core"), `${name}: missing seed core CSS`);
-    assert.ok(css.includes(".new-age-bloom"), `${name}: missing bloom CSS`);
+    assert.ok(css.includes(".new-age-droplet"), `${name}: missing droplet CSS`);
+    assert.ok(css.includes(".new-age-liquid"), `${name}: missing liquid group CSS`);
     assert.ok(css.includes(".new-age-text"), `${name}: missing label text CSS`);
   }
   const lightCss = styleBlocks(light)[0];
   assert.ok(lightCss.includes("newAgeRayGradLight"));
+  assert.ok(lightCss.includes("newAgeLiquidGradLight"));
 
   for (const [name, css] of Object.entries({ dark, light })) {
     assert.match(
@@ -113,8 +102,10 @@ test("all new age parts share one phase opacity", () => {
       `${name}: missing shared new age opacity`
     );
   }
+  // Liquid droplets intentionally animate their own opacity (vibrating effect).
+  // Rays must not animate opacity independently — they inherit the phase opacity.
   for (const [name, css] of Object.entries({ dark, light })) {
-    for (const selector of ["new-age-ray", "new-age-seed-core", "new-age-bloom"]) {
+    for (const selector of ["new-age-ray"]) {
       const rule = css.match(new RegExp(`\\.${selector}\\s*\\{([^}]*)\\}`))?.[1] ?? "";
       assert.doesNotMatch(
         rule,
