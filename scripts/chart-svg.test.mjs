@@ -237,8 +237,13 @@ test("the new age 20-rays fan survives every branch", () => {
     );
     assert.equal(
       (svg.match(/class="[^"]*\bnew-age-interference\b[^"]*"/g) || []).length,
-      20,
-      `expected 20 interference lines (${label})`
+      19,
+      `expected 19 interference lines (center ray excluded) (${label})`
+    );
+    assert.equal(
+      (svg.match(/class="[^"]*\bnew-age-fringe\b[^"]*"/g) || []).length,
+      40,
+      `expected 40 fringe edge polygons (${label})`
     );
     const rays = svg.match(/<polygon[^>]*class="[^"]*\bnew-age-ray\b[^"]*"[^>]*>/g) || [];
     for (const ray of rays) {
@@ -262,8 +267,13 @@ test("written dark/light assets preserve 20-rays and ray gradient opacities", ()
     );
     assert.equal(
       (asset.match(/class="[^"]*\bnew-age-interference\b[^"]*"/g) || []).length,
-      20,
-      `${theme}: written asset must contain 20 interference lines`
+      19,
+      `${theme}: written asset must contain 19 interference lines`
+    );
+    assert.equal(
+      (asset.match(/class="[^"]*\bnew-age-fringe\b[^"]*"/g) || []).length,
+      40,
+      `${theme}: written asset must contain 40 fringe edges`
     );
     const activeGradientIds =
       theme === "dark"

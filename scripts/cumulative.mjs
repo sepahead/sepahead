@@ -816,27 +816,56 @@ function enlightenmentMarkup(portalX) {
     const opacity = (ray.o * NEW_AGE_OPACITY).toFixed(2);
     return `<polygon points="${points.join(" ")}" class="new-age-ray" opacity="${opacity}"/>`;
   };
-  // Diffraction interference: alternating bright/dim bands that march
-  // down each ray like a laser diffraction pattern. A center line with
-  // animated stroke-dasharray sweeps bright fringes along the beam.
-  const interferenceLine = (ray, i) => {
+  // Spectral color fringing: each ray gets two offset edge copies in warm
+  // amber/rose, breathing gently — like chromatic aberration at the beam edges.
+  const spectralFringe = (ray, i) => {
     const rad = (ray.angle * Math.PI) / 180;
     const cosA = Math.cos(rad);
     const sinA = Math.sin(rad);
     const ex = srcX + ray.len * cosA;
     const ey = srcY + ray.len * sinA;
-    const sw = ray.w * 0.85; // slightly narrower than the beam
+    const px = -sinA;
+    const py = cosA;
+    const sw = 0.4 + ray.w * 0.08;
+    const dw = ray.w * 0.5;
+    const p = (x, y) => `${x.toFixed(1)} ${y.toFixed(1)}`;
+    const shift = 1.5;
+    const points = (dx, dy) => [
+      p(srcX + px * sw + dx, srcY + py * sw + dy),
+      p(ex + px * dw + dx, ey + py * dw + dy),
+      p(ex - px * dw + dx, ey - py * dw + dy),
+      p(srcX - px * sw + dx, srcY - py * sw + dy),
+    ].join(" ");
+    const begin = (i * 0.18).toFixed(2);
+    return `<polygon points="${points(px * shift, py * shift)}" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
+        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="${begin}s" dur="3.2s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+      </polygon>
+      <polygon points="${points(-px * shift, -py * shift)}" fill="none" stroke="#fb923c" stroke-width="0.7" class="new-age-fringe">
+        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="${(parseFloat(begin)+1.6).toFixed(2)}s" dur="3.2s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+      </polygon>`;
+  };
+  // Diffraction interference: alternating bright/dim bands that march
+  // down the side rays. The center ray (straight down, angle 90°) stays
+  // pure — no bands, only spectral fringing.
+  const interferenceLine = (ray, i) => {
+    if (ray.angle === 90) return "";
+    const rad = (ray.angle * Math.PI) / 180;
+    const cosA = Math.cos(rad);
+    const sinA = Math.sin(rad);
+    const ex = srcX + ray.len * cosA;
+    const ey = srcY + ray.len * sinA;
+    const sw = ray.w * 0.85;
     const begin = (i * 0.22).toFixed(2);
-    // Dash pattern: 5px bright band, 4px dark gap — 9px period
     const period = 9;
-    return `<line x1="${srcX.toFixed(1)}" y1="${srcY.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#ffffff" stroke-width="${sw.toFixed(1)}" stroke-opacity="0.38" stroke-dasharray="5 4" class="new-age-interference">
+    return `<line x1="${srcX.toFixed(1)}" y1="${srcY.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#ffffff" stroke-width="${sw.toFixed(1)}" stroke-opacity="0.35" stroke-dasharray="5 4" class="new-age-interference">
         <animate attributeName="stroke-dashoffset" values="0;${-period}" begin="${begin}s" dur="1.6s" repeatCount="indefinite"/>
       </line>`;
   };
   return `
   <g class="narrative-enlightenment">
-    <title>the new age: 20 rays of light streaming from above with diffraction interference bands</title>
+    <title>the new age: 20 rays of light streaming from above with spectral fringing and diffraction bands</title>
     ${NEW_AGE_RAYS.map(rayPolygon).join("\n    ")}
+    ${NEW_AGE_RAYS.map((r, i) => spectralFringe(r, i)).join("\n    ")}
     ${NEW_AGE_RAYS.map((r, i) => interferenceLine(r, i)).join("\n    ")}
   </g>
   <g class="new-age-label" opacity="${NEW_AGE_OPACITY}">
@@ -1760,7 +1789,7 @@ function renderSVG(model) {
     futureRows.length > 1
       ? `${futureRows[0].label} to ${futureRows[1].label} are an unstarted future runway; the enlightenment phase sits between them`
       : "",
-    "the visual phase motif continues into 20 rays of light streaming from above with diffraction interference bands",
+    "the visual phase motif continues into 20 rays of light streaming from above with spectral color fringing and diffraction bands",
   ].filter(Boolean);
   // Hedge the superlative while the record-holder is the year still running.
   // "peak 6,240 in 2026" alongside "2026 is still in progress" in the same
@@ -1895,6 +1924,7 @@ function renderSVG(model) {
     .narrative-enlightenment { pointer-events: none; opacity: ${NEW_AGE_OPACITY}; }
     .new-age-ray { fill: url(#newAgeRayGrad); stroke: none; filter: url(#newAgeGlow); mix-blend-mode: screen; }
     .new-age-interference { pointer-events: none; stroke-linecap: butt; }
+    .new-age-fringe { pointer-events: none; stroke-linejoin: round; }
     .new-age-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fde68a; letter-spacing: 2px; }
     .grid { stroke: #21262d; stroke-width: 1; }
     .baseline { stroke: #30363d; stroke-width: 1; }
@@ -2056,6 +2086,7 @@ function renderSVG(model) {
       .portal-boom { stroke: #4d7c0f; }
       .new-age-ray { fill: url(#newAgeRayGradLight); stroke: none; }
       .new-age-interference { stroke: #fef3c7; }
+      .new-age-fringe { }
       .new-age-text { fill: #92400e; }
       .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text, .new-age-text { stroke: #ffffff; }
     }

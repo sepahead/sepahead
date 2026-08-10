@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Age — Ray Variants</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0d1117; color: #c9d1d9; font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; padding: 24px; }
+  h1 { font-size: 18px; font-weight: 600; margin-bottom: 20px; color: #fde68a; letter-spacing: 1px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 1400px; }
+  .card { background: #161b22; border: 1px solid #21262d; border-radius: 8px; overflow: hidden; }
+  .card svg { display: block; width: 100%; height: 200px; background: #0d1117; }
+  .card-label { padding: 10px 14px; font-weight: 600; font-size: 12px; letter-spacing: 0.5px; border-top: 1px solid #21262d; }
+  .card-desc { padding: 0 14px 12px; font-size: 11px; color: #8b949e; line-height: 1.5; }
+  .card.active { border-color: #fde68a; }
+  .card.active .card-label { color: #fde68a; }
+</style>
+</head>
+<body>
+<h1>the new age — 6 ray variants (pick one)</h1>
+<div class="grid" id="grid"></div>
+
+<script>
+// ---- shared ray geometry -------------------------------------------------
+const srcX = 100, srcY = 10;
+const RAYS = [
+  { angle: 88, len: 105, w: 6.0, o: 1.00 },{ angle: 89, len: 108, w: 5.5, o: 1.00 },
+  { angle: 90, len: 110, w: 6.0, o: 1.00 },{ angle: 91, len: 108, w: 5.5, o: 1.00 },
+  { angle: 92, len: 105, w: 6.0, o: 1.00 },{ angle: 84, len: 100, w: 4.4, o: 0.92 },
+  { angle: 80, len: 94, w: 4.0, o: 0.85 },{ angle: 76, len: 86, w: 3.5, o: 0.78 },
+  { angle: 96, len: 100, w: 4.4, o: 0.92 },{ angle: 100, len: 94, w: 4.0, o: 0.85 },
+  { angle: 104, len: 86, w: 3.5, o: 0.78 },{ angle: 72, len: 74, w: 3.0, o: 0.68 },
+  { angle: 68, len: 62, w: 2.6, o: 0.58 },{ angle: 108, len: 74, w: 3.0, o: 0.68 },
+  { angle: 112, len: 62, w: 2.6, o: 0.58 },{ angle: 64, len: 48, w: 2.2, o: 0.48 },
+  { angle: 60, len: 36, w: 1.8, o: 0.38 },{ angle: 116, len: 48, w: 2.2, o: 0.48 },
+  { angle: 120, len: 36, w: 1.8, o: 0.38 },{ angle: 56, len: 26, w: 1.5, o: 0.28 },
+];
+
+function rayPolygon(ray) {
+  const rad = ray.angle * Math.PI / 180;
+  const cosA = Math.cos(rad), sinA = Math.sin(rad);
+  const ex = srcX + ray.len * cosA, ey = srcY + ray.len * sinA;
+  const px = -sinA, py = cosA;
+  const sw = 0.4 + ray.w * 0.08, dw = ray.w * 0.5;
+  return [
+    [srcX + px * sw, srcY + py * sw],
+    [ex + px * dw, ey + py * dw],
+    [ex - px * dw, ey - py * dw],
+    [srcX - px * sw, srcY - py * sw],
+  ].map(p => p.map(v => v.toFixed(1)).join(',')).join(' ');
+}
+
+// ---- variant generators --------------------------------------------------
+function baseRays() {
+  return RAYS.map((ray, i) => `<polygon points="${rayPolygon(ray)}" fill="url(#g)" opacity="${(ray.o*0.78).toFixed(2)}" />`).join('\n');
+}
+
+const defs = `<defs>
+  <radialGradient id="g" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.82"/>
+    <stop offset="28%" stop-color="#fff7cc" stop-opacity="0.64"/>
+    <stop offset="62%" stop-color="#fde68a" stop-opacity="0.32"/>
+    <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+  </radialGradient>
+  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="1.8" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="caustic" x="-30%" y="-30%" width="160%" height="160%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.03 0.15" numOctaves="3" seed="3" result="n">
+      <animate attributeName="seed" values="1;80;1" dur="8s" repeatCount="indefinite"/>
+    </feTurbulence>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="8" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="shimmer" x="-30%" y="-30%" width="160%" height="160%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="2" result="n">
+      <animate attributeName="seed" values="1;200;1" dur="0.6s" repeatCount="indefinite"/>
+    </feTurbulence>
+    <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 0.97  0 0 0 0 0.8  0 0 0 0.25 0" in="n" result="colored"/>
+    <feComposite in="colored" in2="SourceGraphic" operator="in"/>
+  </filter>
+
+</defs>`;
+
+const variants = [
+  {
+    name: "1. Diffraction Interference",
+    desc: "Marching bright/dim bands sweep down each ray. Clean, laser-like.",
+    active: true,
+    overlay: () => RAYS.map((ray, i) => {
+      const rad = ray.angle * Math.PI / 180;
+      const ex = srcX + ray.len * Math.cos(rad);
+      const ey = srcY + ray.len * Math.sin(rad);
+      return `<line x1="${srcX.toFixed(1)}" y1="${srcY.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#ffffff" stroke-width="${(ray.w*0.85).toFixed(1)}" stroke-opacity="0.38" stroke-dasharray="5 4">
+        <animate attributeName="stroke-dashoffset" values="0;-9" begin="${(i*0.22).toFixed(2)}s" dur="1.6s" repeatCount="indefinite"/>
+      </line>`;
+    }).join('\n'),
+  },
+  {
+    name: "2. Photon Burst Packets",
+    desc: "Bright energy pulse sweeps down each ray. Dramatic, kinetic.",
+    overlay: () => RAYS.map((ray, i) => {
+      const rad = ray.angle * Math.PI / 180;
+      const ex = srcX + ray.len * Math.cos(rad);
+      const ey = srcY + ray.len * Math.sin(rad);
+      const total = ray.len;
+      return `<line x1="${srcX.toFixed(1)}" y1="${srcY.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#ffffff" stroke-width="${(ray.w*0.9).toFixed(1)}" stroke-opacity="0.7" stroke-dasharray="8 ${(total-8).toFixed(0)}">
+        <animate attributeName="stroke-dashoffset" values="0;${-total}" begin="${(i*0.25).toFixed(2)}s" dur="2s" repeatCount="indefinite"/>
+      </line>`;
+    }).join('\n'),
+  },
+  {
+    name: "3. Caustic Wave Distortion",
+    desc: "Rays warp like light through water. Organic, fluid motion.",
+    filter: 'url(#caustic)',
+    overlay: () => '',
+  },
+  {
+    name: "4. Spectral Color Fringing",
+    desc: "Ray edges split into warm/cool bands. Subtle chromatic aberration.",
+    overlay: () => RAYS.map((ray, i) => {
+      return [
+        `<polygon points="${rayPolygon(ray)}" fill="none" stroke="#fbbf24" stroke-width="1.2" stroke-opacity="0.25" transform="translate(-2,0)"><animate attributeName="stroke-opacity" values="0.15;0.35;0.15" begin="${(i*0.2).toFixed(2)}s" dur="3s" repeatCount="indefinite"/></polygon>`,
+        `<polygon points="${rayPolygon(ray)}" fill="none" stroke="#fb923c" stroke-width="1.0" stroke-opacity="0.25" transform="translate(2,0)"><animate attributeName="stroke-opacity" values="0.15;0.35;0.15" begin="${(i*0.2+1.5).toFixed(2)}s" dur="3s" repeatCount="indefinite"/></polygon>`,
+      ].join('\n');
+    }).join('\n'),
+  },
+  {
+    name: "5. Shimmer Grain",
+    desc: "Fine quantum scintillation across all rays. Fast, subtle sparkle.",
+    filter: 'url(#shimmer)',
+    overlay: () => '',
+  },
+  {
+    name: "6. Intensity Breathing",
+    desc: "Purest form — rays breathe in opacity. No overlays, just light.",
+    overlay: () => '',
+  },
+  {
+    name: "7. Combined: Fringing + Bands",
+    desc: "Spectral color fringing on ALL rays + diffraction bands on side rays (center ray stays pure). Best of both.",
+    active: true,
+    overlay: () => {
+      // Spectral fringing on all rays
+      const fringes = RAYS.map((ray, i) => {
+        const rad = ray.angle * Math.PI / 180;
+        const cosA = Math.cos(rad), sinA = Math.sin(rad);
+        const ex = srcX + ray.len * cosA, ey = srcY + ray.len * sinA;
+        const px = -sinA, py = cosA;
+        const sw = 0.4 + ray.w * 0.08, dw = ray.w * 0.5;
+        const pts = (dx, dy) => [
+          [srcX + px * sw + dx, srcY + py * sw + dy],
+          [ex + px * dw + dx, ey + py * dw + dy],
+          [ex - px * dw + dx, ey - py * dw + dy],
+          [srcX - px * sw + dx, srcY - py * sw + dy],
+        ].map(p => p.map(v => v.toFixed(1)).join(',')).join(' ');
+        const shift = 1.5;
+        return `<polygon points="${pts(px*shift, py*shift)}" fill="none" stroke="#fbbf24" stroke-width="0.9">
+            <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" begin="${(i*0.18).toFixed(2)}s" dur="3.2s" repeatCount="indefinite"/>
+          </polygon>
+          <polygon points="${pts(-px*shift, -py*shift)}" fill="none" stroke="#fb923c" stroke-width="0.7">
+            <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" begin="${(i*0.18+1.6).toFixed(2)}s" dur="3.2s" repeatCount="indefinite"/>
+          </polygon>`;
+      }).join('\n');
+      // Diffraction bands on side rays only (skip center ray angle 90)
+      const bands = RAYS.filter(r => r.angle !== 90).map((ray, i) => {
+        const rad = ray.angle * Math.PI / 180;
+        const ex = srcX + ray.len * Math.cos(rad), ey = srcY + ray.len * Math.sin(rad);
+        return `<line x1="${srcX.toFixed(1)}" y1="${srcY.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#ffffff" stroke-width="${(ray.w*0.85).toFixed(1)}" stroke-opacity="0.35" stroke-dasharray="5 4">
+          <animate attributeName="stroke-dashoffset" values="0;-9" begin="${(i*0.22).toFixed(2)}s" dur="1.6s" repeatCount="indefinite"/>
+        </line>`;
+      }).join('\n');
+      return fringes + '\n' + bands;
+    },
+  },
+];
+
+// ---- render ----------------------------------------------------------------
+const grid = document.getElementById('grid');
+const wrap = (inner, filter) => `<svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+  ${defs}
+  <g ${filter ? `filter="${filter}"` : ''} class="rays">
+    ${baseRays()}
+    ${inner}
+  </g>
+</svg>`;
+
+variants.forEach((v, idx) => {
+  const card = document.createElement('div');
+  card.className = 'card' + (v.active ? ' active' : '');
+  card.innerHTML = wrap(v.overlay(), v.filter || null)
+    + `<div class="card-label">${v.name}</div>`
+    + `<div class="card-desc">${v.desc}</div>`;
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+  });
+  grid.appendChild(card);
+});
+</script>
+</body>
+</html>

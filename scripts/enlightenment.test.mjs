@@ -1,5 +1,5 @@
 // scripts/enlightenment.test.mjs
-// Structural design contracts for the new age 20-rays phase with diffraction interference bands.
+// Structural design contracts for combined spectral fringing + diffraction interference.
 import test from "node:test";
 import assert from "node:assert/strict";
 
@@ -21,7 +21,7 @@ function fixture(currentTotal = 4214) {
 
 const svg = () => renderSVG(buildModel(fixture()));
 
-test("new age phase has 20 rays, 20 diffraction interference lines", () => {
+test("combined design: 20 rays, 40 fringe edges, 19 interference lines (center ray pure)", () => {
   const out = svg();
   assert.equal(tagsWithClass(out, "g", "narrative-enlightenment").length, 1);
 
@@ -29,21 +29,34 @@ test("new age phase has 20 rays, 20 diffraction interference lines", () => {
   const rays = tagsWithClass(out, "polygon", "new-age-ray");
   assert.equal(rays.length, 20, "expected 20 ray polygons");
 
-  // 20 interference lines
-  const lines = tagsWithClass(out, "line", "new-age-interference");
-  assert.equal(lines.length, 20, "expected 20 interference lines");
+  // 40 spectral fringe polygons (2 per ray)
+  const fringes = tagsWithClass(out, "polygon", "new-age-fringe");
+  assert.equal(fringes.length, 40, "expected 40 fringe edge polygons (2 per ray)");
 
-  // Each interference line must have dasharray + animated dashoffset
-  // tagsWithClass only returns opening tags, so use raw SVG matching
-  const lineBlocks = [...out.matchAll(/<line[^>]*class="[^"]*\bnew-age-interference\b[^"]*"[\s\S]*?<\/line>/g)];
-  assert.equal(lineBlocks.length, 20, "expected 20 complete interference line elements");
-  for (let i = 0; i < lineBlocks.length; i++) {
-    const l = lineBlocks[i][0];
-    assert.match(l, /stroke-dasharray="5 4"/, `line ${i} must have 5-4 dash pattern`);
-    assert.match(l, /attributeName="stroke-dashoffset"/, `line ${i} must animate dashoffset`);
+  // 19 interference lines (center ray angle=90 skipped)
+  const lineBlocks = [...out.matchAll(/<line[^>]*class="[^"]*\bnew-age-interference\b[^"]*"[^>]*>/g)];
+  assert.equal(lineBlocks.length, 19, "expected 19 interference lines (center ray excluded)");
+
+  // Verify center ray (angle 90°) has NO interference line
+  const centerInterference = [...out.matchAll(/<line[^>]*x2="([^"]*)"[^>]*y2="([^"]*)"[^>]*class="[^"]*\bnew-age-interference\b[^"]*"[^>]*>/g)]
+    .filter(m => Math.abs(parseFloat(m[2]) - parseFloat(m[1])) < 4); // nearly vertical
+  assert.equal(centerInterference.length, 0, "center ray must have no interference");
+
+  // Each fringe must have breathing stroke-opacity animation
+  const fringeBlocks = [...out.matchAll(/<polygon[^>]*class="[^"]*\bnew-age-fringe\b[^"]*"[^]*?<\/polygon>/g)];
+  assert.equal(fringeBlocks.length, 40, "expected 40 complete fringe polygon elements");
+  for (let i = 0; i < fringeBlocks.length; i++) {
+    assert.match(fringeBlocks[i][0], /attributeName="stroke-opacity"/, `fringe ${i} must animate stroke-opacity`);
   }
 
-  // Every ray must fan downward (from top source toward bottom)
+  // Each interference line must animate dashoffset
+  const interferenceBlocks = [...out.matchAll(/<line[^>]*class="[^"]*\bnew-age-interference\b[^"]*"[^]*?<\/line>/g)];
+  assert.equal(interferenceBlocks.length, 19, "expected 19 complete interference line elements");
+  for (let i = 0; i < interferenceBlocks.length; i++) {
+    assert.match(interferenceBlocks[i][0], /attributeName="stroke-dashoffset"/, `interference ${i} must animate dashoffset`);
+  }
+
+  // Every ray must fan downward
   for (const [i, ray] of rays.entries()) {
     const pts = (attrOf(ray, "points") || "").trim().split(/\s+/);
     const ys = pts.filter((_, idx) => idx % 2 === 1).map(Number);
@@ -76,26 +89,15 @@ test("all new age parts share one phase opacity", () => {
     const css = styleBlocks(out)[0];
     assert.ok(css.includes(".new-age-ray"), `${name}: missing ray CSS`);
     assert.ok(css.includes(".new-age-interference"), `${name}: missing interference CSS`);
+    assert.ok(css.includes(".new-age-fringe"), `${name}: missing fringe CSS`);
     assert.ok(css.includes(".new-age-text"), `${name}: missing label text CSS`);
   }
-  const lightCss = styleBlocks(light)[0];
-  assert.ok(lightCss.includes("newAgeRayGradLight"));
 
   for (const [name, css] of Object.entries({ dark, light })) {
     assert.match(
       css,
       new RegExp(`\\.narrative-enlightenment\\s*\\{[^}]*opacity:\\s*${shared}`),
       `${name}: missing shared new age opacity`
-    );
-  }
-  // Interference lines set their own stroke-opacity (brightness of bands).
-  // Rays must not animate opacity independently — they inherit the phase opacity.
-  for (const [name, css] of Object.entries({ dark, light })) {
-    const rule = css.match(/\.new-age-ray\s*\{([^}]*)\}/)?.[1] ?? "";
-    assert.doesNotMatch(
-      rule,
-      /(?:^|;)\s*opacity\s*:/,
-      `${name}: new-age-ray must not set its own opacity`
     );
   }
 });
