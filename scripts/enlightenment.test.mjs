@@ -75,6 +75,30 @@ test("enlightenment phase has a bounded cloud, diagonal rays, and singularity tr
     );
   }
 
+  const highlights = [
+    ...out.matchAll(
+      /<path[^>]*class="[^"]*\benlightenment-ray-highlight\b[^"]*"[^>]*>[\s\S]*?<\/path>/g
+    ),
+  ].map((match) => match[0]);
+  assert.equal(highlights.length, 5, "expected one highlight per liquid ribbon");
+  for (const [i, highlight] of highlights.entries()) {
+    const d = attrOf(highlight, "d");
+    const nums = [...d.matchAll(/-?[\d.]+/g)].map((m) => Number(m[0]));
+    assert.ok(nums[0] < nums[nums.length - 2], `highlight ${i} must travel toward the cloud`);
+    assert.ok(nums[1] > nums[nums.length - 1], `highlight ${i} must climb toward the cloud`);
+    const highlightBlock = highlight;
+    assert.match(
+      highlightBlock,
+      /attributeName="stroke-dashoffset" values="1;0"/,
+      `highlight ${i} must use a monotonic one-way dash travel`
+    );
+    assert.doesNotMatch(
+      highlightBlock,
+      /values="0;0\.26;0"/,
+      `highlight ${i} must not oscillate back toward the singularity`
+    );
+  }
+
   const futureGhosts = tagsWithClass(out, "rect", "future-ghost");
   assert.equal(futureGhosts.length, 2, "enlightenment fixture must expose both future slots");
   const ghostCenters = futureGhosts.map(

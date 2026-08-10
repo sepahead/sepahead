@@ -815,13 +815,17 @@ function enlightenmentMarkup(portalX) {
       "Z",
     ].join(" ");
   };
+  // The highlight is authored tip → aperture, deliberately opposite the
+  // geometric reading of the ribbon. That makes its only visible traveling
+  // accent unambiguous: light is released from the singularity-side tip and
+  // climbs into the cloud; nothing animates back toward the singularity.
   const liquidRayHighlight = (end, i, phase = 0) => {
     const startY = cloudY - 8 + i * 4;
     const sx = cloudEdgeX;
     const ex = end.x;
     const ey = end.y;
     const sway = (i % 2 === 0 ? 1 : -1) * phase;
-    return `M ${sx.toFixed(1)} ${(startY + 1.4).toFixed(1)} C ${(sx - 7 + sway).toFixed(1)} ${(startY + 26).toFixed(1)} ${(ex + 54 - sway).toFixed(1)} ${(ey - 40).toFixed(1)} ${(ex + 3).toFixed(1)} ${(ey - 4).toFixed(1)}`;
+    return `M ${(ex + 3).toFixed(1)} ${(ey - 4).toFixed(1)} C ${(ex + 54 - sway).toFixed(1)} ${(ey - 40).toFixed(1)} ${(sx - 7 + sway).toFixed(1)} ${(startY + 26).toFixed(1)} ${sx.toFixed(1)} ${(startY + 1.4).toFixed(1)}`;
   };
   const ray = (end, i) => {
     const begin = (i * 0.34).toFixed(2);
@@ -835,7 +839,7 @@ function enlightenmentMarkup(portalX) {
     </path>
     <path d="${h0}" class="enlightenment-ray-highlight" pathLength="1" stroke-dasharray="0.08 0.18" stroke-dashoffset="0">
       <animate attributeName="d" values="${h0};${h1};${h0}" keyTimes="0;0.5;1" begin="${begin}s" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
-      <animate attributeName="stroke-dashoffset" values="0;0.26;0" begin="${begin}s" dur="3.2s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-dashoffset" values="1;0" begin="${begin}s" dur="3.2s" repeatCount="indefinite"/>
     </path>`;
   };
   const trace = (startY, target, i) => {
