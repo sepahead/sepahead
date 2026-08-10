@@ -227,71 +227,47 @@ for (const [label, currentTotal] of CASES) {
   });
 }
 
-test("the new age 20-lens array survives every branch", () => {
+test("the new age 20-rays fan survives every branch", () => {
   for (const [label, currentTotal] of CASES) {
     const svg = render(currentTotal);
     assert.equal(
-      (svg.match(/class="[^"]*\bnew-age-lens-back\b[^"]*"/g) || []).length,
+      (svg.match(/class="[^"]*\bnew-age-ray\b[^"]*"/g) || []).length,
       20,
-      `expected 20 lens-back ellipses (${label})`
-    );
-    assert.equal(
-      (svg.match(/class="[^"]*\bnew-age-lens-front\b[^"]*"/g) || []).length,
-      20,
-      `expected 20 lens-front ellipses (${label})`
-    );
-    assert.equal(
-      (svg.match(/class="[^"]*\bnew-age-trace-line\b[^"]*"/g) || []).length,
-      12,
-      `expected 12 trace lines (${label})`
+      `expected 20 ray polygons (${label})`
     );
     assert.equal(
       (svg.match(/class="[^"]*\bnew-age-spark\b[^"]*"/g) || []).length,
-      12,
-      `expected 12 spark particles (${label})`
+      10,
+      `expected 10 spark motes (${label})`
     );
-    assert.equal(
-      (svg.match(/class="[^"]*\bnew-age-filament\b[^"]*"/g) || []).length,
-      5,
-      `expected 5 trail filaments (${label})`
-    );
-    assert.equal(
-      (svg.match(/class="[^"]*\bnew-age-ambient\b[^"]*"/g) || []).length,
-      1,
-      `expected 1 ambient glow (${label})`
-    );
+    const rays = svg.match(/<polygon[^>]*class="[^"]*\bnew-age-ray\b[^"]*"[^>]*>/g) || [];
+    for (const ray of rays) {
+      const pts = (ray.match(/points="([^"]+)"/)?.[1] || "").trim().split(/\s+/);
+      assert.ok(pts.length >= 8, `ray must be a polygon with 4+ points (${label})`);
+    }
   }
 });
 
-test("written dark/light assets preserve 20-lens array and new gradient opacities", () => {
+test("written dark/light assets preserve 20-rays and ray gradient opacities", () => {
   const expectedStops = {
-    newAgeAmbientGrad: ["0.18", "0.06", "0"],
-    newAgeAmbientGradLight: ["0.14", "0.05", "0"],
-    newAgeLensGrad: ["0.94", "0.55", "0"],
-    newAgeLensGradLight: ["0.98", "0.52", "0"],
-    newAgeTraceGrad: ["0.28", "0.58", "0.92"],
-    newAgeTraceGradLight: ["0.34", "0.54", "0.96"],
+    newAgeRayGrad: ["0.82", "0.64", "0.32", "0"],
+    newAgeRayGradLight: ["0.88", "0.58", "0.28", "0"],
   };
   for (const theme of ["dark", "light"]) {
     const asset = readFileSync(resolve(REPO_ROOT, `assets/cumulative-${theme}.svg`), "utf8");
     assert.equal(
-      (asset.match(/class="[^"]*\bnew-age-lens-front\b[^"]*"/g) || []).length,
+      (asset.match(/class="[^"]*\bnew-age-ray\b[^"]*"/g) || []).length,
       20,
-      `${theme}: written asset must contain 20 lens-front ellipses`
+      `${theme}: written asset must contain 20 ray polygons`
     );
     assert.equal(
-      (asset.match(/class="[^"]*\bnew-age-lens-back\b[^"]*"/g) || []).length,
-      20,
-      `${theme}: written asset must contain 20 lens-back ellipses`
-    );
-    assert.equal(
-      (asset.match(/class="[^"]*\bnew-age-trace-line\b[^"]*"/g) || []).length,
-      12,
-      `${theme}: written asset must contain 12 trace lines`
+      (asset.match(/class="[^"]*\bnew-age-spark\b[^"]*"/g) || []).length,
+      10,
+      `${theme}: written asset must contain 10 spark motes`
     );
     const activeGradientIds =
       theme === "dark"
-        ? ["newAgeAmbientGrad", "newAgeLensGrad", "newAgeTraceGrad"]
+        ? ["newAgeRayGrad"]
         : Object.keys(expectedStops);
     for (const id of activeGradientIds) {
       const block = asset.match(new RegExp(`<(?:linear|radial)Gradient id="${id}"[^>]*>([\\s\\S]*?)</(?:linear|radial)Gradient>`))?.[1] ?? "";
@@ -305,22 +281,21 @@ test("written dark/light assets preserve 20-lens array and new gradient opacitie
   }
 });
 
-test("written assets retain bounded lens geometry", () => {
+test("written assets retain bounded ray geometry", () => {
   for (const theme of ["dark", "light"]) {
     const asset = readFileSync(resolve(REPO_ROOT, `assets/cumulative-${theme}.svg`), "utf8");
-    const lenses = asset.match(/<ellipse[^>]*class="[^\"]*\bnew-age-lens-front\b[^\"]*"[^>]*>/g) || [];
-    assert.equal(lenses.length, 20, `${theme}: expected 20 written lens-front ellipses`);
-    const centers = [];
-    for (const lens of lenses) {
-      const cx = Number(lens.match(/cx="([\d.]+)"/)?.[1] || "0");
-      const cy = Number(lens.match(/cy="([\d.]+)"/)?.[1] || "0");
-      assert.ok(cx > 680 && cx < 800, `${theme}: lens cx ${cx} must live in the upper-right`);
-      assert.ok(cy >= 120, `${theme}: lens cy ${cy} must stay inside the plot`);
-      centers.push([cx, cy]);
+    const rays = asset.match(/<polygon[^>]*class="[^\"]*\bnew-age-ray\b[^\"]*"[^>]*>/g) || [];
+    assert.equal(rays.length, 20, `${theme}: expected 20 written ray polygons`);
+    for (const ray of rays) {
+      const pts = (ray.match(/points="([^"]+)"/)?.[1] || "").trim().split(/\s+/);
+      assert.ok(pts.length >= 8, `${theme}: ray must have 4+ points`);
+      // Source points (first two) must be near the singularity boundary (~688)
+      const x0 = Number(pts[0]);
+      assert.ok(x0 > 685 && x0 < 750, `${theme}: ray source x=${x0} must be near boundary`);
+      // Destination points (last two) must extend right
+      const x2 = Number(pts[2]);
+      assert.ok(x2 > x0, `${theme}: ray must extend rightward`);
     }
-    // At least one lens must be in the trail (left of the main cluster)
-    const leftmost = Math.min(...centers.map((c) => c[0]));
-    assert.ok(leftmost < 740, `${theme}: trail must extend left of the core cluster, got leftmost=${leftmost}`);
   }
 });
 

@@ -568,49 +568,46 @@ const WAVE_RY_OUTER = artRy(23 / 12); // 46
 const WAVE_RY_MID = artRy(19 / 12); // 38
 const WAVE_RY_INNER = artRy(31 / 24); // 31
 
-// The new age: a 20-lens compound-eye array in the upper-right. Each lens is a
-// pair of offset ellipses creating refractive depth — the singularity's energy
-// is gathered, focused, and dispersed through this crystalline aperture.
-// Layout: core cluster (7) at the focal point, ring (7) surrounding it at even
-// polar spacing, and trail (6) arcing up-right from the singularity boundary
-// into the ring, so energy visibly flows INTO the new age.
-// Traces from the singularity follow the trail path, some passing through
-// multiple lenses. One shared phase opacity applied to the complete tableau.
+// The new age: 20 rays of light fanning out from the singularity boundary.
+// Each ray is a tapered luminous beam — narrow at the source, widening slightly
+// at its destination — filled with a radial gradient that fades from bright
+// ivory at the core to warm amber at the edges. Rays are arranged in a fan:
+// central rays are longest and brightest, edge rays are shorter and dimmer,
+// together creating a dramatic dawn-illumination effect. One shared phase
+// opacity applied to the complete tableau.
 const NEW_AGE_OPACITY = 0.52;
-const NEW_AGE_CENTER_X = PLOT_RIGHT - 20;
-const NEW_AGE_CENTER_Y = PLOT_TOP + 16;
-// 20 lenses: each defined by {dx, dy} offset from center, plus {rx, ry} radii.
-// Core (7): tight central cluster — the focal point.
-// Ring (7): evenly spaced surrounding halo.
-// Trail (6): ascending from boundary toward ring — the energy conduit.
-const NEW_AGE_LENSES = [
-  // Core cluster — tight, overlapping, highest density
-  { dx: 0, dy: 0, rx: 7.0, ry: 5.5 },
-  { dx: 5, dy: -2, rx: 6.0, ry: 4.5 },
-  { dx: -4, dy: 3, rx: 5.5, ry: 4.2 },
-  { dx: 3, dy: 5, rx: 4.8, ry: 3.6 },
-  { dx: -5, dy: -3, rx: 5.2, ry: 3.8 },
-  { dx: 6, dy: 1, rx: 4.2, ry: 3.2 },
-  { dx: -2, dy: -5, rx: 4.5, ry: 3.4 },
-  // Ring — polar spacing ≈51° steps from top, r=14
-  { dx: 0, dy: -14, rx: 4.8, ry: 3.6 },
-  { dx: 11, dy: -9, rx: 4.2, ry: 3.2 },
-  { dx: 14, dy: 1, rx: 3.8, ry: 2.8 },
-  { dx: 9, dy: 11, rx: 3.4, ry: 2.6 },
-  { dx: -2, dy: 14, rx: 3.2, ry: 2.4 },
-  { dx: -12, dy: 7, rx: 3.0, ry: 2.2 },
-  { dx: -14, dy: -3, rx: 3.5, ry: 2.6 },
-  // Trail — ascending from boundary toward ring (dx from -80 to -14)
-  { dx: -79, dy: 28, rx: 3.4, ry: 2.6 },
-  { dx: -67, dy: 22, rx: 3.2, ry: 2.4 },
-  { dx: -54, dy: 15, rx: 2.8, ry: 2.1 },
-  { dx: -40, dy: 9, rx: 2.6, ry: 1.9 },
-  { dx: -26, dy: 4, rx: 2.3, ry: 1.7 },
-  { dx: -15, dy: 1, rx: 2.0, ry: 1.5 },
+// 20 rays: each defined by {angle} in degrees from horizontal (0=right,
+// negative=up), {len} in pixels, {w} width at destination, {o} opacity factor.
+const NEW_AGE_RAYS = [
+  // Central core — straight ahead, longest and brightest
+  { angle: -8, len: 96, w: 3.8, o: 1.00 },
+  { angle: -4, len: 100, w: 4.2, o: 1.00 },
+  { angle: 0, len: 103, w: 4.5, o: 1.00 },
+  { angle: 4, len: 100, w: 4.2, o: 1.00 },
+  { angle: 8, len: 96, w: 3.8, o: 1.00 },
+  // Inner upper fan
+  { angle: -14, len: 92, w: 3.4, o: 0.92 },
+  { angle: -21, len: 86, w: 3.0, o: 0.85 },
+  { angle: -29, len: 78, w: 2.7, o: 0.78 },
+  // Inner lower fan
+  { angle: 14, len: 92, w: 3.4, o: 0.92 },
+  { angle: 21, len: 86, w: 3.0, o: 0.85 },
+  { angle: 29, len: 78, w: 2.7, o: 0.78 },
+  // Mid upper fan
+  { angle: -37, len: 68, w: 2.4, o: 0.68 },
+  { angle: -46, len: 58, w: 2.1, o: 0.58 },
+  // Mid lower fan
+  { angle: 37, len: 68, w: 2.4, o: 0.68 },
+  { angle: 46, len: 58, w: 2.1, o: 0.58 },
+  // Outer upper fan — shorter, dimmer
+  { angle: -55, len: 48, w: 1.8, o: 0.48 },
+  { angle: -65, len: 38, w: 1.5, o: 0.38 },
+  // Outer lower fan
+  { angle: 55, len: 48, w: 1.8, o: 0.48 },
+  { angle: 65, len: 38, w: 1.5, o: 0.38 },
+  // Steep accent — farthest reach
+  { angle: -75, len: 30, w: 1.2, o: 0.28 },
 ];
-// Traces target specific lenses: trail (14-19) and ring (8-13).
-// The order goes boundary→trail→ring→core, some passing through multiple.
-const NEW_AGE_TRACE_LENS_INDICES = [14, 15, 16, 17, 18, 19, 12, 13, 8, 9, 10, 11];
 
 // ---------------------------------------------------------------------------
 // Singularity portal: a gold event-horizon seam in the gap between the last
@@ -769,105 +766,72 @@ function portalFieldMarkup(px) {
 // stop before the plot edges; the destination is atmospheric context, never a
 // measured bar or a claim about contributions beyond the future placeholder.
 function enlightenmentDefs() {
-  return `<radialGradient id="newAgeAmbientGrad" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.18"/>
-      <stop offset="55%" stop-color="#f59e0b" stop-opacity="0.06"/>
+  return `<radialGradient id="newAgeRayGrad" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.82"/>
+      <stop offset="28%" stop-color="#fff7cc" stop-opacity="0.64"/>
+      <stop offset="62%" stop-color="#fde68a" stop-opacity="0.32"/>
       <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="newAgeAmbientGradLight" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.14"/>
-      <stop offset="55%" stop-color="#d97706" stop-opacity="0.05"/>
+    <radialGradient id="newAgeRayGradLight" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.88"/>
+      <stop offset="28%" stop-color="#fff7cc" stop-opacity="0.58"/>
+      <stop offset="62%" stop-color="#fbbf24" stop-opacity="0.28"/>
       <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="newAgeLensGrad" cx="0.45" cy="0.4" r="0.55">
-      <stop offset="0%" stop-color="#fff7cc" stop-opacity="0.94"/>
-      <stop offset="52%" stop-color="#fde68a" stop-opacity="0.55"/>
-      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
-    </radialGradient>
-    <radialGradient id="newAgeLensGradLight" cx="0.45" cy="0.4" r="0.55">
-      <stop offset="0%" stop-color="#fff7cc" stop-opacity="0.98"/>
-      <stop offset="52%" stop-color="#fbbf24" stop-opacity="0.52"/>
-      <stop offset="100%" stop-color="#b45309" stop-opacity="0"/>
-    </radialGradient>
-    <linearGradient id="newAgeTraceGrad" gradientUnits="userSpaceOnUse" x1="${NEW_AGE_CENTER_X - 80}" y1="${NEW_AGE_CENTER_Y + 30}" x2="${NEW_AGE_CENTER_X + 14}" y2="${NEW_AGE_CENTER_Y - 14}">
-      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.28"/>
-      <stop offset="40%" stop-color="#fbbf24" stop-opacity="0.58"/>
-      <stop offset="100%" stop-color="#fff7cc" stop-opacity="0.92"/>
-    </linearGradient>
-    <linearGradient id="newAgeTraceGradLight" gradientUnits="userSpaceOnUse" x1="${NEW_AGE_CENTER_X - 80}" y1="${NEW_AGE_CENTER_Y + 30}" x2="${NEW_AGE_CENTER_X + 14}" y2="${NEW_AGE_CENTER_Y - 14}">
-      <stop offset="0%" stop-color="#d97706" stop-opacity="0.34"/>
-      <stop offset="40%" stop-color="#b45309" stop-opacity="0.54"/>
-      <stop offset="100%" stop-color="#fff7cc" stop-opacity="0.96"/>
-    </linearGradient>
-    <filter id="newAgeGlow" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="1.2" result="b"/>
+    <filter id="newAgeGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.8" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>`;
 }
 
 function enlightenmentMarkup(portalX) {
-  const cx = NEW_AGE_CENTER_X;
-  const cy = NEW_AGE_CENTER_Y;
-  // Ambient glow: soft radial halo behind the core+ring cluster.
-  const ambientGlow = `<ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="22" ry="18" class="new-age-ambient"/>`;
-  // Each lens is two offset ellipses with varied back-offset for organic depth.
-  const offsets = [
-    [0.7,0.5],[0.9,0.4],[0.6,0.7],[0.8,0.6],[0.7,0.3],[1.0,0.5],[0.5,0.6],
-    [0.7,0.5],[0.8,0.4],[0.6,0.6],[0.9,0.5],[0.7,0.4],[0.8,0.5],[0.6,0.5],
-    [0.7,0.5],[0.8,0.5],[0.7,0.4],[0.6,0.5],[0.7,0.5],[0.8,0.4],
-  ];
-  const lensElement = (lens, i) => {
-    const [ox, oy] = offsets[i];
-    const x = (cx + lens.dx).toFixed(1);
-    const y = (cy + lens.dy).toFixed(1);
-    const backRx = (lens.rx + 0.8).toFixed(1);
-    const backRy = (lens.ry + 0.6).toFixed(1);
-    const frontRx = lens.rx.toFixed(1);
-    const frontRy = lens.ry.toFixed(1);
-    const bx = (cx + lens.dx + ox).toFixed(1);
-    const by = (cy + lens.dy + oy).toFixed(1);
-    return `<ellipse cx="${bx}" cy="${by}" rx="${backRx}" ry="${backRy}" class="new-age-lens-back"/>
-    <ellipse cx="${x}" cy="${y}" rx="${frontRx}" ry="${frontRy}" class="new-age-lens-front"/>`;
+  const srcX = portalX + 3;
+  const srcY = MID_Y;
+  // Each ray is a tapered polygon: narrow at the source, widening at the tip.
+  // The beam runs from the singularity boundary out into the new age.
+  const rayPolygon = (ray, i) => {
+    const rad = (ray.angle * Math.PI) / 180;
+    const cosA = Math.cos(rad);
+    const sinA = Math.sin(rad);
+    // Destination center
+    const ex = srcX + ray.len * cosA;
+    const ey = srcY + ray.len * sinA;
+    // Perpendicular direction for beam width
+    const px = -sinA;
+    const py = cosA;
+    // Source half-width (tight near the singularity)
+    const sw = 0.4 + ray.w * 0.08;
+    // Destination half-width
+    const dw = ray.w * 0.5;
+    const p = (x, y) => `${x.toFixed(1)} ${y.toFixed(1)}`;
+    const points = [
+      p(srcX + px * sw, srcY + py * sw),
+      p(ex + px * dw, ey + py * dw),
+      p(ex - px * dw, ey - py * dw),
+      p(srcX - px * sw, srcY - py * sw),
+    ];
+    const opacity = (ray.o * NEW_AGE_OPACITY).toFixed(2);
+    return `<polygon points="${points.join(" ")}" class="new-age-ray" opacity="${opacity}"/>`;
   };
-  // Filament: thin connecting line between consecutive trail lenses (14→19).
-  const filament = (i) => {
-    const a = NEW_AGE_LENSES[i];
-    const b = NEW_AGE_LENSES[i + 1];
-    return `<line x1="${(cx + a.dx).toFixed(1)}" y1="${(cy + a.dy).toFixed(1)}" x2="${(cx + b.dx).toFixed(1)}" y2="${(cy + b.dy).toFixed(1)}" class="new-age-filament"/>`;
-  };
-  // Trace from the singularity boundary to a lens.
-  // Traces targeting trail lenses (14-19) fan from boundary → lens.
-  // Traces targeting ring/core lenses pass through trail lenses first.
-  const trace = (lensIdx, i) => {
-    const lens = NEW_AGE_LENSES[lensIdx];
-    const tx = cx + lens.dx;
-    const ty = cy + lens.dy;
-    const sx = portalX + 4;
-    // Fan start positions: boundary center ± spread
-    const sy = MID_Y + (i - 5.5) * 10;
-    const c1x = sx + (tx - sx) * 0.30;
-    const c1y = sy + (ty - sy) * 0.08;
-    const c2x = tx - (tx - sx) * 0.22;
-    const c2y = ty - (ty - sy) * 0.15;
-    const d = `M ${sx.toFixed(1)} ${sy.toFixed(1)} C ${c1x.toFixed(1)} ${c1y.toFixed(1)} ${c2x.toFixed(1)} ${c2y.toFixed(1)} ${tx.toFixed(1)} ${ty.toFixed(1)}`;
-    const begin = (i * 0.30).toFixed(2);
-    const sparkR = (1.1 - i * 0.05).toFixed(2);
-    return `<g class="new-age-trace">
-      <path d="${d}" pathLength="1" stroke-dasharray="0.05 0.16" class="new-age-trace-line">
-        <animate attributeName="stroke-dashoffset" values="0;1" begin="${begin}s" dur="4.2s" repeatCount="indefinite"/>
-      </path>
-      <circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${sparkR}" class="new-age-spark">
-        <animateTransform attributeName="transform" type="translate" values="0 0;${(tx - sx).toFixed(1)} ${(ty - sy).toFixed(1)}" begin="${begin}s" dur="4.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.40 0 0.85 1"/>
-      </circle>
-    </g>`;
+  // Spark motes: tiny bright specks traveling along the central rays.
+  const spark = (i) => {
+    const ray = NEW_AGE_RAYS[Math.floor(i * 2.2) % 20];
+    const rad = (ray.angle * Math.PI) / 180;
+    const ex = srcX + ray.len * Math.cos(rad);
+    const ey = srcY + ray.len * Math.sin(rad);
+    const sx = srcX + 6;
+    const sy = srcY + (i - 5) * 12;
+    const begin = (i * 0.35).toFixed(2);
+    const r = (1.6 - i * 0.12).toFixed(2);
+    return `<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${r}" class="new-age-spark">
+      <animateTransform attributeName="transform" type="translate" values="0 0;${(ex - sx).toFixed(1)} ${(ey - sy).toFixed(1)}" begin="${begin}s" dur="3.8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.42 0 0.88 1"/>
+    </circle>`;
   };
   return `
   <g class="narrative-enlightenment">
-    <title>the new age: 20-lens compound-eye aperture refracting singularity energy</title>
-    ${ambientGlow}
-    ${NEW_AGE_LENSES.map(lensElement).join("\n    ")}
-    ${[14,15,16,17,18].map(filament).join("\n    ")}
-    ${NEW_AGE_TRACE_LENS_INDICES.map(trace).join("\n    ")}
+    <title>the new age: 20 rays of light fanning from the singularity into the future</title>
+    ${NEW_AGE_RAYS.map(rayPolygon).join("\n    ")}
+    ${Array.from({length: 10}, (_, i) => spark(i)).join("\n    ")}
   </g>
   <g class="new-age-label" opacity="${NEW_AGE_OPACITY}">
     <text x="${(PLOT_RIGHT - 2).toFixed(1)}" y="${(PLOT_TOP - 8).toFixed(1)}" text-anchor="end" class="new-age-text">the new age</text>
@@ -1790,7 +1754,7 @@ function renderSVG(model) {
     futureRows.length > 1
       ? `${futureRows[0].label} to ${futureRows[1].label} are an unstarted future runway; the enlightenment phase sits between them`
       : "",
-    "the visual phase motif continues into a 20-lens compound-eye aperture with singularity traces",
+    "the visual phase motif continues into 20 rays of light fanning from the singularity into the future",
   ].filter(Boolean);
   // Hedge the superlative while the record-holder is the year still running.
   // "peak 6,240 in 2026" alongside "2026 is still in progress" in the same
@@ -1923,12 +1887,8 @@ function renderSVG(model) {
     /* Every authored enlightenment part shares one phase opacity. The gradient
        stop opacities below remain colour falloff, not per-part intensity. */
     .narrative-enlightenment { pointer-events: none; opacity: ${NEW_AGE_OPACITY}; }
-    .new-age-lens-back { fill: #78350f; stroke: #92400e; stroke-width: 0.4; }
-    .new-age-lens-front { fill: url(#newAgeLensGrad); stroke: #fde68a; stroke-width: 0.6; filter: url(#newAgeGlow); }
-    .new-age-trace-line { fill: none; stroke: url(#newAgeTraceGrad); stroke-width: 0.7; stroke-linecap: round; }
-    .new-age-spark { fill: #fff7cc; filter: url(#newAgeGlow); }
-    .new-age-ambient { fill: url(#newAgeAmbientGrad); pointer-events: none; }
-    .new-age-filament { stroke: #b45309; stroke-width: 0.35; stroke-linecap: round; }
+    .new-age-ray { fill: url(#newAgeRayGrad); stroke: none; filter: url(#newAgeGlow); mix-blend-mode: screen; }
+    .new-age-spark { fill: #ffffff; filter: url(#newAgeGlow); }
     .new-age-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fde68a; letter-spacing: 2px; }
     .grid { stroke: #21262d; stroke-width: 1; }
     .baseline { stroke: #30363d; stroke-width: 1; }
@@ -2088,12 +2048,8 @@ function renderSVG(model) {
       .intake-head { fill: #a16207; }
       .intake-head-lime { fill: #4d7c0f; }
       .portal-boom { stroke: #4d7c0f; }
-      .new-age-lens-back { fill: #451a03; stroke: #78350f; }
-      .new-age-lens-front { fill: url(#newAgeLensGradLight); stroke: #d97706; }
-      .new-age-trace-line { stroke: url(#newAgeTraceGradLight); }
-      .new-age-spark { fill: #d97706; }
-      .new-age-ambient { fill: url(#newAgeAmbientGradLight); }
-      .new-age-filament { stroke: #a16207; }
+      .new-age-ray { fill: url(#newAgeRayGradLight); stroke: none; }
+      .new-age-spark { fill: #ffffff; }
       .new-age-text { fill: #92400e; }
       .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text, .new-age-text { stroke: #ffffff; }
     }
