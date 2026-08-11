@@ -578,38 +578,38 @@ const WAVE_RY_INNER = artRy(31 / 24); // 31
 // at the edges. Central rays shoot straight right; edge rays fan up/down.
 // One shared phase opacity applied to the complete tableau.
 const NEW_AGE_OPACITY = 1.0;
-// 20 rays fanning rightward from the singularity portal — a smooth
-// continuation of the warp field. 0° = horizontal right. Central rays
-// shoot straight right; edge rays fan upward and downward.
+// 20 rays fanning rightward from staggered positions along the singularity
+// portal edge — upper rays emerge higher, lower rays emerge lower, central
+// rays from the midline. 0° = horizontal right. Cone spans −55° to +50°.
 const NEW_AGE_RAYS = [
-  // Central core — straight right, longest and brightest
-  { angle: -2, len: 115, w: 6.0, o: 1.00 },
-  { angle: -1, len: 118, w: 5.5, o: 1.00 },
-  { angle: 0, len: 120, w: 6.0, o: 1.00 },
-  { angle: 1, len: 118, w: 5.5, o: 1.00 },
-  { angle: 2, len: 115, w: 6.0, o: 1.00 },
-  // Upper fan (was right fan) — boosted for upward emphasis
-  { angle: -6, len: 110, w: 4.4, o: 1.00 },
-  { angle: -10, len: 104, w: 4.0, o: 0.96 },
-  { angle: -14, len: 96, w: 3.5, o: 0.90 },
-  // Lower fan (was left fan)
-  { angle: 6, len: 110, w: 4.4, o: 0.92 },
-  { angle: 10, len: 104, w: 4.0, o: 0.85 },
-  { angle: 14, len: 96, w: 3.5, o: 0.78 },
-  // Mid upper fan — boosted
-  { angle: -18, len: 84, w: 3.0, o: 0.82 },
-  { angle: -22, len: 72, w: 2.6, o: 0.72 },
+  // Central core — straight right from portal center, longest and brightest
+  { angle: -2, len: 115, w: 6.0, o: 1.00, sy: 0 },
+  { angle: -1, len: 118, w: 5.5, o: 1.00, sy: 0 },
+  { angle: 0, len: 120, w: 6.0, o: 1.00, sy: 0 },
+  { angle: 1, len: 118, w: 5.5, o: 1.00, sy: 0 },
+  { angle: 2, len: 115, w: 6.0, o: 1.00, sy: 0 },
+  // Upper fan — staggered upward, wider angles
+  { angle: -10, len: 112, w: 4.4, o: 1.00, sy: -14 },
+  { angle: -18, len: 106, w: 4.0, o: 0.96, sy: -28 },
+  { angle: -26, len: 98, w: 3.5, o: 0.90, sy: -40 },
+  // Lower fan — staggered downward, wider angles
+  { angle: 8, len: 112, w: 4.4, o: 0.92, sy: 14 },
+  { angle: 16, len: 106, w: 4.0, o: 0.85, sy: 28 },
+  { angle: 24, len: 98, w: 3.5, o: 0.78, sy: 40 },
+  // Mid upper fan — wide, far from center
+  { angle: -34, len: 88, w: 3.0, o: 0.82, sy: -50 },
+  { angle: -42, len: 76, w: 2.6, o: 0.72, sy: -58 },
   // Mid lower fan
-  { angle: 18, len: 84, w: 3.0, o: 0.68 },
-  { angle: 22, len: 72, w: 2.6, o: 0.58 },
-  // Outer upper — boosted
-  { angle: -26, len: 58, w: 2.2, o: 0.62 },
-  { angle: -30, len: 46, w: 1.8, o: 0.52 },
+  { angle: 32, len: 88, w: 3.0, o: 0.68, sy: 50 },
+  { angle: 40, len: 76, w: 2.6, o: 0.58, sy: 58 },
+  // Outer upper — extreme angles, short beams from far edge of portal
+  { angle: -50, len: 62, w: 2.2, o: 0.62, sy: -62 },
+  { angle: -55, len: 50, w: 1.8, o: 0.52, sy: -66 },
   // Outer lower
-  { angle: 26, len: 58, w: 2.2, o: 0.48 },
-  { angle: 30, len: 46, w: 1.8, o: 0.38 },
-  // Steep upper accent — boosted
-  { angle: -34, len: 36, w: 1.5, o: 0.42 },
+  { angle: 46, len: 62, w: 2.2, o: 0.48, sy: 62 },
+  { angle: 50, len: 50, w: 1.8, o: 0.38, sy: 66 },
+  // Steep accent — widest upper ray
+  { angle: -55, len: 36, w: 1.5, o: 0.42, sy: -66 },
 ];
 
 // ---------------------------------------------------------------------------
@@ -788,18 +788,19 @@ function enlightenmentDefs() {
 }
 
 function enlightenmentMarkup(portalX) {
-  // Rays stream rightward from the singularity portal — a smooth continuation.
+  // Rays stream rightward from staggered positions along the portal edge —
+  // upper rays higher, lower rays lower, creating a wide exit cone.
   const srcX = portalX + 10;
-  const srcY = MID_Y;
+  const centerY = MID_Y;
   // Each ray is a tapered polygon: narrow at the source, widening at the tip.
-  // The beam runs from the portal out into the new age.
   const rayPolygon = (ray, i) => {
     const rad = (ray.angle * Math.PI) / 180;
     const cosA = Math.cos(rad);
     const sinA = Math.sin(rad);
+    const sy = centerY + (ray.sy || 0);
     // Destination center
     const ex = srcX + ray.len * cosA;
-    const ey = srcY + ray.len * sinA;
+    const ey = sy + ray.len * sinA;
     // Perpendicular direction for beam width
     const px = -sinA;
     const py = cosA;
@@ -809,10 +810,10 @@ function enlightenmentMarkup(portalX) {
     const dw = ray.w * 0.5;
     const p = (x, y) => `${x.toFixed(1)} ${y.toFixed(1)}`;
     const points = [
-      p(srcX + px * sw, srcY + py * sw),
+      p(srcX + px * sw, sy + py * sw),
       p(ex + px * dw, ey + py * dw),
       p(ex - px * dw, ey - py * dw),
-      p(srcX - px * sw, srcY - py * sw),
+      p(srcX - px * sw, sy - py * sw),
     ];
     const opacity = (ray.o * NEW_AGE_OPACITY).toFixed(2);
     return `<polygon points="${points.join(" ")}" class="new-age-ray" opacity="${opacity}"/>`;
@@ -823,8 +824,9 @@ function enlightenmentMarkup(portalX) {
     const rad = (ray.angle * Math.PI) / 180;
     const cosA = Math.cos(rad);
     const sinA = Math.sin(rad);
+    const sy = centerY + (ray.sy || 0);
     const ex = srcX + ray.len * cosA;
-    const ey = srcY + ray.len * sinA;
+    const ey = sy + ray.len * sinA;
     const px = -sinA;
     const py = cosA;
     const sw = 0.4 + ray.w * 0.08;
@@ -832,10 +834,10 @@ function enlightenmentMarkup(portalX) {
     const p = (x, y) => `${x.toFixed(1)} ${y.toFixed(1)}`;
     const shift = 1.5;
     const points = (dx, dy) => [
-      p(srcX + px * sw + dx, srcY + py * sw + dy),
+      p(srcX + px * sw + dx, sy + py * sw + dy),
       p(ex + px * dw + dx, ey + py * dw + dy),
       p(ex - px * dw + dx, ey - py * dw + dy),
-      p(srcX - px * sw + dx, srcY - py * sw + dy),
+      p(srcX - px * sw + dx, sy - py * sw + dy),
     ].join(" ");
     const begin = (i * 0.18).toFixed(2);
     return `<polygon points="${points(px * shift, py * shift)}" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
@@ -852,12 +854,13 @@ function enlightenmentMarkup(portalX) {
     const rad = (ray.angle * Math.PI) / 180;
     const cosA = Math.cos(rad);
     const sinA = Math.sin(rad);
+    const sy = centerY + (ray.sy || 0);
     const ex = srcX + ray.len * cosA;
-    const ey = srcY + ray.len * sinA;
+    const ey = sy + ray.len * sinA;
     const sw = ray.w * 0.85;
     const begin = (i * 0.22).toFixed(2);
     const period = 9;
-    return `<line x1="${srcX.toFixed(1)}" y1="${srcY.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#ffffff" stroke-width="${sw.toFixed(1)}" stroke-opacity="0.36" stroke-dasharray="5 4" class="new-age-interference">
+    return `<line x1="${srcX.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#ffffff" stroke-width="${sw.toFixed(1)}" stroke-opacity="0.36" stroke-dasharray="5 4" class="new-age-interference">
         <animate attributeName="stroke-dashoffset" values="0;${-period}" begin="${begin}s" dur="1.6s" repeatCount="indefinite"/>
       </line>`;
   };

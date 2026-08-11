@@ -299,10 +299,10 @@ test("written assets retain bounded ray geometry", () => {
     for (const ray of rays) {
       const pts = (ray.match(/points="([^"]+)"/)?.[1] || "").trim().split(/\s+/);
       assert.ok(pts.length >= 8, `${theme}: ray must have 4+ points`);
-      // Source points must be near the plot midline vertically
+      // Source points are staggered along the portal edge (spanning plot height)
       const x0 = Number(pts[0]);
       const y0 = Number(pts[1]);
-      assert.ok(y0 > 170 && y0 < 210, `${theme}: ray source y=${y0} must be near plot midline`);
+      assert.ok(y0 > 115 && y0 < 270, `${theme}: ray source y=${y0} must be within plot bounds`);
       // Rays must extend rightward from the source
       const x2 = Number(pts[2]);
       assert.ok(x2 > x0 + 10, `${theme}: ray must extend rightward`);
