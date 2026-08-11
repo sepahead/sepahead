@@ -627,8 +627,7 @@ const GOLDEN_AGE_RAYS = [
 // are keyTimes-encoded on begin="0s" animations, loops start only after
 // the reveal, and prefers-reduced-motion hides every <animate>/
 // <animateTransform>.
-function portalDefs(px, suffix = "") {
-  const S = suffix;
+function portalDefs(px) {
   const R = PLOT_RIGHT;
   const X = px.toFixed(1);
   // Horizontal fade for a warp ray: bright at the portal, gone at plot right.
@@ -664,8 +663,8 @@ function portalDefs(px, suffix = "") {
     ${exit("exitGoldL", "#65a30d", "#4d7c0f")}
     ${exit("exitCyanL", "#4d7c0f", "#365314")}
     ${exit("exitVioletL", "#84cc16", "#65a30d")}
-    <clipPath id="portalGap${S}"><rect x="${(px - 24).toFixed(1)}" y="${PLOT_TOP - 24}" width="40" height="${PLOT_HEIGHT + 48}"/></clipPath>
-    <filter id="portalWobble${S}" filterUnits="userSpaceOnUse" x="${(px - 44).toFixed(1)}" y="${PLOT_TOP - 24}" width="88" height="${PLOT_HEIGHT + 48}">
+    <clipPath id="portalGap"><rect x="${(px - 24).toFixed(1)}" y="${PLOT_TOP - 24}" width="40" height="${PLOT_HEIGHT + 48}"/></clipPath>
+    <filter id="portalWobble" filterUnits="userSpaceOnUse" x="${(px - 44).toFixed(1)}" y="${PLOT_TOP - 24}" width="88" height="${PLOT_HEIGHT + 48}">
       <feTurbulence type="fractalNoise" baseFrequency="0.02 0.05" numOctaves="3" seed="7" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="6" xChannelSelector="R" yChannelSelector="G"/>
     </filter>`;
@@ -791,7 +790,14 @@ function enlightenmentDefs() {
     <filter id="goldenAgeGlow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="1.8" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>`;
+    </filter>
+    <linearGradient id="prismGlassGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.12"/>
+      <stop offset="30%" stop-color="#ffffff" stop-opacity="0.50"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.82"/>
+      <stop offset="70%" stop-color="#ffffff" stop-opacity="0.50"/>
+      <stop offset="100%" stop-color="#fde68a" stop-opacity="0.12"/>
+    </linearGradient>`;
 }
 
 function enlightenmentMarkup(portalX) {
@@ -871,9 +877,38 @@ function enlightenmentMarkup(portalX) {
         <animate attributeName="stroke-dashoffset" values="0;${-period}" begin="${begin}s" dur="1.6s" repeatCount="indefinite"/>
       </line>`;
   };
+  // Glass prism: singularity projectiles shatter through it into golden age rays.
+  // Vibrations strongest at centre, reverberating elastically toward top/bottom.
+  const px = portalX.toFixed(1);
+  const prismWaves = () => {
+    const out = [];
+    for (let k = 0; k < 3; k++) {
+      const dy = LANE_STEP * (k + 1);
+      const amp = 4 + k * 5;
+      const dur = (1.4 + k * 0.35).toFixed(2);
+      const pa = portalX.toFixed(1);
+      const up0 = `M ${pa} ${(MID_Y - 2).toFixed(1)} Q ${(portalX+amp+5).toFixed(1)} ${(MID_Y-dy*0.35).toFixed(1)} ${(portalX+3).toFixed(1)} ${(MID_Y-dy*0.65).toFixed(1)} Q ${(portalX-amp+2).toFixed(1)} ${(MID_Y-dy*0.9).toFixed(1)} ${pa} ${(MID_Y-dy*1.1).toFixed(1)}`;
+      const up1 = `M ${pa} ${(MID_Y - 2).toFixed(1)} Q ${(portalX+amp+2).toFixed(1)} ${(MID_Y-dy*0.4).toFixed(1)} ${(portalX+6).toFixed(1)} ${(MID_Y-dy*0.62).toFixed(1)} Q ${(portalX-amp+0).toFixed(1)} ${(MID_Y-dy*0.88).toFixed(1)} ${(portalX+2).toFixed(1)} ${(MID_Y-dy*1.12).toFixed(1)}`;
+      const dn0 = `M ${pa} ${(MID_Y + 2).toFixed(1)} Q ${(portalX+amp+4).toFixed(1)} ${(MID_Y+dy*0.35).toFixed(1)} ${(portalX+2).toFixed(1)} ${(MID_Y+dy*0.65).toFixed(1)} Q ${(portalX-amp+3).toFixed(1)} ${(MID_Y+dy*0.9).toFixed(1)} ${pa} ${(MID_Y+dy*1.1).toFixed(1)}`;
+      const dn1 = `M ${pa} ${(MID_Y + 2).toFixed(1)} Q ${(portalX+amp+3).toFixed(1)} ${(MID_Y+dy*0.38).toFixed(1)} ${(portalX+5).toFixed(1)} ${(MID_Y+dy*0.63).toFixed(1)} Q ${(portalX-amp+1).toFixed(1)} ${(MID_Y+dy*0.87).toFixed(1)} ${(portalX+3).toFixed(1)} ${(MID_Y+dy*1.13).toFixed(1)}`;
+      out.push(
+        `<path d="${up0}" class="prism-wave"><animate attributeName="d" values="${up0};${up1};${up0}" dur="${dur}s" repeatCount="indefinite"/></path>`,
+        `<path d="${dn0}" class="prism-wave"><animate attributeName="d" values="${dn0};${dn1};${dn0}" dur="${dur}s" repeatCount="indefinite"/></path>`
+      );
+    }
+    return out.join("\n    ");
+  };
   return `
   <g class="narrative-enlightenment">
-    <title>the golden age: 20 rays streaming rightward from the singularity, spectral fringing and winged interference bands</title>
+    <title>the golden age: singularity projectiles shatter through glass into 20 rays</title>
+    <rect x="${(portalX - 3).toFixed(1)}" y="${(PLOT_TOP + 6).toFixed(1)}" width="6" height="${(PLOT_HEIGHT - 12).toFixed(1)}" rx="2" fill="url(#prismGlassGrad)" class="prism-body">
+      <animate attributeName="opacity" values="0.65;0.95;0.65" dur="1.8s" repeatCount="indefinite"/>
+    </rect>
+    <line x1="${px}" y1="${(PLOT_TOP + 10).toFixed(1)}" x2="${px}" y2="${(PLOT_BOTTOM - 10).toFixed(1)}" stroke="#ffffff" stroke-width="1.2" class="prism-core">
+      <animate attributeName="opacity" values="0.4;1;0.4" dur="0.9s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-width" values="0.8;2.2;0.8" dur="1.1s" repeatCount="indefinite"/>
+    </line>
+    ${prismWaves()}
     ${GOLDEN_AGE_RAYS.map(rayPolygon).join("\n    ")}
     ${GOLDEN_AGE_RAYS.map((r, i) => spectralFringe(r, i)).join("\n    ")}
     ${GOLDEN_AGE_RAYS.map((r, i) => interferenceLine(r, i)).join("\n    ")}
@@ -883,8 +918,7 @@ function enlightenmentMarkup(portalX) {
   </g>`;
 }
 
-function portalMarkup(px, fromLabel, toLabel, suffix = "") {
-  const S = suffix;
+function portalMarkup(px, fromLabel, toLabel) {
   const X = px.toFixed(1);
   const CX = (px - 4).toFixed(1);
   const top = PLOT_TOP;
@@ -895,7 +929,7 @@ function portalMarkup(px, fromLabel, toLabel, suffix = "") {
   return `
   <g class="narrative-context narrative-portal">
     <title>${title}</title>
-    <g filter="url(#portalWobble${S})" clip-path="url(#portalGap${S})">
+    <g filter="url(#portalWobble)" clip-path="url(#portalGap)">
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
       <ellipse cx="${CX}" cy="${midY}" rx="13" ry="${PORTAL_HALO_RY}" class="rm-g1">
         <animateTransform attributeName="transform" type="rotate" values="0 ${CX} ${midY};4 ${CX} ${midY};0 ${CX} ${midY};-4 ${CX} ${midY};0 ${CX} ${midY}" begin="2.4s" dur="7.2s" repeatCount="indefinite"/>
@@ -1729,15 +1763,6 @@ function renderSVG(model) {
     enlightenmentBoundaryX != null
       ? enlightenmentMarkup(enlightenmentBoundaryX)
       : "";
-  const enlightenmentPortal =
-    enlightenmentBoundaryX != null && futureStartIdx >= 0
-      ? portalMarkup(enlightenmentBoundaryX,
-          rows[futureStartIdx].label, rows[futureStartIdx + 1].label, "Ep")
-      : "";
-  const enlightenmentPortalDefsStr =
-    enlightenmentBoundaryX != null
-      ? portalDefs(enlightenmentBoundaryX, "Ep")
-      : "";
   const originBandRect = seamX != null
     ? `<rect x="${ox}" y="${PLOT_TOP}" width="${(seamX - ox).toFixed(1)}" height="${PLOT_HEIGHT}" class="origin-band">
     <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.3;1" begin="0s" dur="2.2s" fill="freeze"/>
@@ -1877,7 +1902,6 @@ function renderSVG(model) {
       <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     ${portalDefsStr}
-    ${enlightenmentPortalDefsStr}
     ${seamDefsStr}
     ${originDefsStr}
     ${portalX != null ? enlightenmentDefs() : ""}
@@ -1951,6 +1975,9 @@ function renderSVG(model) {
     .golden-age-fringe { pointer-events: none; stroke-linejoin: round; }
     .golden-age-interference { pointer-events: none; stroke-linecap: butt; }
     .golden-age-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fde68a; letter-spacing: 2px; }
+    .prism-body { fill: url(#prismGlassGrad); pointer-events: none; }
+    .prism-core { stroke: #ffffff; stroke-linecap: round; pointer-events: none; }
+    .prism-wave { fill: none; stroke: #fef3c7; stroke-width: 1.1; stroke-linecap: round; pointer-events: none; filter: url(#goldenAgeGlow); }
     .grid { stroke: #21262d; stroke-width: 1; }
     .baseline { stroke: #30363d; stroke-width: 1; }
     .bar { fill: url(#barGrad); }
@@ -2114,6 +2141,7 @@ function renderSVG(model) {
       .golden-age-fringe { }
       .golden-age-interference { stroke: #fef3c7; }
       .golden-age-text { fill: #92400e; }
+      .prism-wave { stroke: #d97706; }
       .headline, .sub, .value, .value-peak, .year, .portal-text, .seam-text, .origin-text, .golden-age-text { stroke: #ffffff; }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -2141,7 +2169,6 @@ function renderSVG(model) {
   ${origin}
   ${seam}
   ${portal}
-  ${enlightenmentPortal}
   ${warningBanner}
 </svg>`;
 }
