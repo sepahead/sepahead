@@ -17,11 +17,11 @@
     </linearGradient>
     <!-- Light-mode variants: darker, more saturated so the curve, fill and dot
          keep good contrast on a white background. -->
-    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="7" result="b"/>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5.5" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <filter id="peakLabelGlow" x="-50%" y="-50%" width="200%" height="200%">
+    <filter id="peakLabelGlow" x="-30%" y="-30%" width="160%" height="160%">
       <feGaussianBlur stdDeviation="2.5" result="b"/>
       <feComponentTransfer in="b" result="c"><feFuncA type="linear" slope="0.55"/></feComponentTransfer>
       <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
@@ -53,7 +53,7 @@
     </linearGradient>
     <clipPath id="portalGap"><rect x="452.6" y="96" width="40" height="188"/></clipPath>
     <filter id="portalWobble" filterUnits="userSpaceOnUse" x="432.6" y="96" width="88" height="188">
-      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.05" numOctaves="3" seed="7" result="n"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.05" numOctaves="2" seed="7" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="6" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
     <linearGradient id="seamGrad" gradientUnits="userSpaceOnUse" x1="266.3" y1="120" x2="266.3" y2="260">
@@ -126,7 +126,7 @@
       <stop offset="62%" stop-color="#fde68a" stop-opacity="0.48"/>
       <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
     </radialGradient>
-    <filter id="goldenAgeGlow" x="-50%" y="-50%" width="200%" height="200%">
+    <filter id="goldenAgeGlow" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="1.8" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
@@ -208,13 +208,13 @@
     /* Every authored enlightenment part shares one phase opacity. The gradient
        stop opacities below remain colour falloff, not per-part intensity. */
     .narrative-enlightenment { pointer-events: none; opacity: 1; }
-    .golden-age-ray { fill: url(#goldenAgeRayGrad); stroke: none; filter: url(#goldenAgeGlow); mix-blend-mode: screen; }
+    .golden-age-ray { fill: url(#goldenAgeRayGrad); stroke: none; mix-blend-mode: screen; }
     .golden-age-fringe { pointer-events: none; stroke-linejoin: round; }
     .golden-age-interference { pointer-events: none; stroke-linecap: butt; }
     .golden-age-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fde68a; letter-spacing: 2px; }
     .prism-body { fill: url(#prismGlassGrad); pointer-events: none; }
     .prism-core { stroke: #ffffff; stroke-linecap: round; pointer-events: none; }
-    .prism-wave { fill: none; stroke: #fef3c7; stroke-width: 1.1; stroke-linecap: round; pointer-events: none; filter: url(#goldenAgeGlow); }
+    .prism-wave { fill: none; stroke: #fef3c7; stroke-width: 1.1; stroke-linecap: round; pointer-events: none; }
     .grid { stroke: #21262d; stroke-width: 1; }
     .baseline { stroke: #30363d; stroke-width: 1; }
     .bar { fill: url(#barGrad); }
@@ -472,16 +472,16 @@
       <animate attributeName="opacity" values="0;0;0.98" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
       <animate attributeName="opacity" values="0.98;0.72;0.98" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
     </ellipse>
-    <line x1="434.6" y1="164.5" x2="472.6" y2="164.5" class="portal-ray px-gold" opacity="0.55" stroke-dasharray="5 3">
-      <animate attributeName="stroke-dashoffset" values="0;-12" begin="2.6s" dur="0.6s" repeatCount="indefinite"/>
+    <line x1="434.6" y1="164.5" x2="472.6" y2="164.5" class="portal-ray px-gold" opacity="0.55" stroke-dasharray="4 3">
+      <animate attributeName="stroke-dashoffset" values="0;-10" begin="2.6s" dur="0.6s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0;0.65;0.15;0" keyTimes="0;0.15;0.7;1" begin="2.6s" dur="0.6s" repeatCount="indefinite"/>
     </line>
-    <line x1="434.6" y1="190" x2="472.6" y2="190" class="portal-ray px-cyan" opacity="0.55" stroke-dasharray="6 3">
-      <animate attributeName="stroke-dashoffset" values="0;-14" begin="2.75s" dur="0.55s" repeatCount="indefinite"/>
+    <line x1="434.6" y1="190" x2="472.6" y2="190" class="portal-ray px-cyan" opacity="0.55" stroke-dasharray="5 2">
+      <animate attributeName="stroke-dashoffset" values="0;-12" begin="2.75s" dur="0.55s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0;0.65;0.15;0" keyTimes="0;0.15;0.7;1" begin="2.75s" dur="0.55s" repeatCount="indefinite"/>
     </line>
-    <line x1="434.6" y1="215.5" x2="472.6" y2="215.5" class="portal-ray px-violet" opacity="0.55" stroke-dasharray="5 2">
-      <animate attributeName="stroke-dashoffset" values="0;-16" begin="2.5s" dur="0.65s" repeatCount="indefinite"/>
+    <line x1="434.6" y1="215.5" x2="472.6" y2="215.5" class="portal-ray px-violet" opacity="0.55" stroke-dasharray="3 4">
+      <animate attributeName="stroke-dashoffset" values="0;-9" begin="2.5s" dur="0.65s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0;0.65;0.15;0" keyTimes="0;0.15;0.7;1" begin="2.5s" dur="0.65s" repeatCount="indefinite"/>
     </line>
     <path d="M 476.6 187.4 L 792 178.5" class="portal-ray px-gold" pathLength="1" stroke-dasharray="1 1">
@@ -550,7 +550,7 @@
     </circle>
   </g>
 
-  <g class="narrative-enlightenment">
+  <g class="narrative-enlightenment" filter="url(#goldenAgeGlow)">
     <title>the golden age: singularity projectiles shatter through glass into 20 rays</title>
     <g filter="url(#prismCaustic)">
     <rect x="683.9" y="126.0" width="6" height="128.0" rx="2" fill="url(#prismGlassGrad)" class="prism-body">
