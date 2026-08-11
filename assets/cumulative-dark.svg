@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" width="820" height="300" role="img" aria-label="Cumulative contributions 2014–2026: 9,675 total, highest so far 5,197 in 2026, shown as annual bars with a running cumulative total curve. 2014 to 2022 are grouped into one stacked bar totalling 539; average growth +193%/yr since 2023; 2026 is still in progress; 2027 is an empty placeholder for the year ahead; 2027 to 2028 are an unstarted future runway; the enlightenment phase sits between them; the visual phase motif continues into 20 rays of light with spectral fringing and winged interference bands">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" width="820" height="300" role="img" aria-label="Cumulative contributions 2014–2026: 9,667 total, highest so far 5,189 in 2026, shown as annual bars with a running cumulative total curve. 2014 to 2022 are grouped into one stacked bar totalling 539; average growth +193%/yr since 2023; 2026 is still in progress; 2027 is an empty placeholder for the year ahead; 2027 to 2028 are an unstarted future runway; the enlightenment phase sits between them; the visual phase motif continues into 20 rays of light with spectral fringing and winged interference bands">
   <defs>
     <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#22d3ee"/>
@@ -129,6 +129,12 @@
     <filter id="goldenAgeGlow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="1.8" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="prismCaustic" x="-30%" y="-30%" width="160%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03 0.15" numOctaves="3" seed="3" result="n">
+        <animate attributeName="seed" values="1;80;1" dur="8s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
     <linearGradient id="prismGlassGrad" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#fde68a" stop-opacity="0.12"/>
@@ -324,7 +330,7 @@
     }
   </style>
   <rect x="0.5" y="0.5" width="819" height="299" rx="16" class="panel"/>
-  <text x="56" y="58" class="headline">9,675</text>
+  <text x="56" y="58" class="headline">9,667</text>
   <text x="56" y="86" class="sub">total contributions since 2014</text>
   <text x="792" y="26" text-anchor="end" class="sub">avg growth +193%/yr since 2023</text>
   <line x1="56" y1="260.0" x2="792" y2="260.0" class="grid"/>
@@ -466,16 +472,16 @@
       <animate attributeName="opacity" values="0;0;0.98" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
       <animate attributeName="opacity" values="0.98;0.72;0.98" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
     </ellipse>
-    <line x1="434.6" y1="164.5" x2="472.6" y2="164.5" class="portal-ray px-gold" opacity="0.55" stroke-dasharray="4 3">
-      <animate attributeName="stroke-dashoffset" values="0;-15" begin="2.6s" dur="0.6s" repeatCount="indefinite"/>
+    <line x1="434.6" y1="164.5" x2="472.6" y2="164.5" class="portal-ray px-gold" opacity="0.55" stroke-dasharray="5 1">
+      <animate attributeName="stroke-dashoffset" values="0;-18" begin="2.6s" dur="0.6s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0;0.65;0.15;0" keyTimes="0;0.15;0.7;1" begin="2.6s" dur="0.6s" repeatCount="indefinite"/>
     </line>
-    <line x1="434.6" y1="190" x2="472.6" y2="190" class="portal-ray px-cyan" opacity="0.55" stroke-dasharray="4 4">
-      <animate attributeName="stroke-dashoffset" values="0;-16" begin="2.75s" dur="0.55s" repeatCount="indefinite"/>
+    <line x1="434.6" y1="190" x2="472.6" y2="190" class="portal-ray px-cyan" opacity="0.55" stroke-dasharray="3 1">
+      <animate attributeName="stroke-dashoffset" values="0;-12" begin="2.75s" dur="0.55s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0;0.65;0.15;0" keyTimes="0;0.15;0.7;1" begin="2.75s" dur="0.55s" repeatCount="indefinite"/>
     </line>
-    <line x1="434.6" y1="215.5" x2="472.6" y2="215.5" class="portal-ray px-violet" opacity="0.55" stroke-dasharray="8 2">
-      <animate attributeName="stroke-dashoffset" values="0;-11" begin="2.5s" dur="0.65s" repeatCount="indefinite"/>
+    <line x1="434.6" y1="215.5" x2="472.6" y2="215.5" class="portal-ray px-violet" opacity="0.55" stroke-dasharray="3 4">
+      <animate attributeName="stroke-dashoffset" values="0;-19" begin="2.5s" dur="0.65s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0;0.65;0.15;0" keyTimes="0;0.15;0.7;1" begin="2.5s" dur="0.65s" repeatCount="indefinite"/>
     </line>
     <path d="M 476.6 187.4 L 792 178.5" class="portal-ray px-gold" pathLength="1" stroke-dasharray="1 1">
@@ -546,6 +552,7 @@
 
   <g class="narrative-enlightenment">
     <title>the golden age: singularity projectiles shatter through glass into 20 rays</title>
+    <g filter="url(#prismCaustic)">
     <rect x="683.9" y="126.0" width="6" height="128.0" rx="2" fill="url(#prismGlassGrad)" class="prism-body">
       <animate attributeName="opacity" values="0.65;0.95;0.65" dur="1.8s" repeatCount="indefinite"/>
     </rect>
@@ -559,6 +566,7 @@
     <path d="M 686.9 192.0 Q 699.9 207.8 688.9 223.1 Q 680.9 235.8 686.9 246.0" class="prism-wave"><animate attributeName="d" values="M 686.9 192.0 Q 699.9 207.8 688.9 223.1 Q 680.9 235.8 686.9 246.0;M 686.9 192.0 Q 698.9 209.3 691.9 222.1 Q 678.9 234.3 689.9 247.5;M 686.9 192.0 Q 699.9 207.8 688.9 223.1 Q 680.9 235.8 686.9 246.0" dur="1.75s" repeatCount="indefinite"/></path>
     <path d="M 686.9 188.0 Q 705.9 163.3 689.9 140.4 Q 674.9 121.3 686.9 106.0" class="prism-wave"><animate attributeName="d" values="M 686.9 188.0 Q 705.9 163.3 689.9 140.4 Q 674.9 121.3 686.9 106.0;M 686.9 188.0 Q 702.9 159.5 692.9 142.7 Q 672.9 122.8 688.9 104.5;M 686.9 188.0 Q 705.9 163.3 689.9 140.4 Q 674.9 121.3 686.9 106.0" dur="2.10s" repeatCount="indefinite"/></path>
     <path d="M 686.9 192.0 Q 704.9 216.7 688.9 239.6 Q 675.9 258.7 686.9 274.0" class="prism-wave"><animate attributeName="d" values="M 686.9 192.0 Q 704.9 216.7 688.9 239.6 Q 675.9 258.7 686.9 274.0;M 686.9 192.0 Q 703.9 219.0 691.9 238.1 Q 673.9 256.4 689.9 276.3;M 686.9 192.0 Q 704.9 216.7 688.9 239.6 Q 675.9 258.7 686.9 274.0" dur="2.10s" repeatCount="indefinite"/></path>
+    </g>
     <polygon points="696.9 190.8 776.9 190.0 776.7 184.5 696.8 189.2" class="golden-age-ray" opacity="1.00"/>
     <polygon points="696.9 190.8 778.9 191.1 778.8 186.1 696.8 189.2" class="golden-age-ray" opacity="1.00"/>
     <polygon points="696.9 190.8 778.9 192.8 778.9 187.3 696.9 189.2" class="golden-age-ray" opacity="1.00"/>
@@ -753,10 +761,10 @@
   <g class="golden-age-label" opacity="1">
     <text x="790.0" y="112.0" text-anchor="end" class="golden-age-text">golden age</text>
   </g>
-  <path d="M 76.6 253.6 C 122.3 252.7 168.0 252.6 213.7 250.9 C 248.8 249.5 283.8 238.3 318.9 231.1 C 353.9 223.9 389.0 217.6 424.0 207.2 C 469.7 193.7 515.4 166.4 561.1 146.0 L 561.1 260 L 76.6 260 Z" class="cum-area">
+  <path d="M 76.6 253.6 C 122.3 252.7 168.0 252.6 213.7 250.9 C 248.8 249.5 283.8 238.3 318.9 231.1 C 353.9 223.9 389.0 217.6 424.0 207.2 C 469.7 193.6 515.4 166.4 561.1 146.0 L 561.1 260 L 76.6 260 Z" class="cum-area">
     <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.2;1" begin="0s" dur="2s" fill="freeze"/>
   </path>
-  <path d="M 76.6 253.6 C 122.3 252.7 168.0 252.6 213.7 250.9 C 248.8 249.5 283.8 238.3 318.9 231.1 C 353.9 223.9 389.0 217.6 424.0 207.2 C 469.7 193.7 515.4 166.4 561.1 146.0" class="cum-line" pathLength="1" stroke-dasharray="1 1">
+  <path d="M 76.6 253.6 C 122.3 252.7 168.0 252.6 213.7 250.9 C 248.8 249.5 283.8 238.3 318.9 231.1 C 353.9 223.9 389.0 217.6 424.0 207.2 C 469.7 193.6 515.4 166.4 561.1 146.0" class="cum-line" pathLength="1" stroke-dasharray="1 1">
     <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.15;1" begin="0s" dur="2s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.4 0 0.2 1"/>
     <animate attributeName="stroke-opacity" values="0.2;0.26;0.2" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
   </path>
@@ -836,21 +844,21 @@
     <text x="424.0" y="282" text-anchor="middle" class="year">2025</text>
   </g>
   <g>
-    <rect x="497.1" y="161.3" width="64.0" height="98.7" rx="5" class="bar-glow"/>
-    <rect x="497.1" y="161.3" width="64.0" height="98.7" rx="5" class="bar peak">
-      <title>2026: 5,197 contributions (year in progress) · cumulative 9,675</title>
-      <animate attributeName="height" from="0" to="98.7" begin="0.67s" dur="0.7s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
-      <animate attributeName="y" from="260" to="161.3" begin="0.67s" dur="0.7s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
+    <rect x="497.1" y="161.4" width="64.0" height="98.6" rx="5" class="bar-glow"/>
+    <rect x="497.1" y="161.4" width="64.0" height="98.6" rx="5" class="bar peak">
+      <title>2026: 5,189 contributions (year in progress) · cumulative 9,667</title>
+      <animate attributeName="height" from="0" to="98.6" begin="0.67s" dur="0.7s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
+      <animate attributeName="y" from="260" to="161.4" begin="0.67s" dur="0.7s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
 
     </rect>
-    <line x1="502.1" y1="162.3" x2="556.1" y2="162.3" class="bar-cap">
-      <animate attributeName="y1" from="260" to="162.3" begin="0.67s" dur="0.7s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
-      <animate attributeName="y2" from="260" to="162.3" begin="0.67s" dur="0.7s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
+    <line x1="502.1" y1="162.4" x2="556.1" y2="162.4" class="bar-cap">
+      <animate attributeName="y1" from="260" to="162.4" begin="0.67s" dur="0.7s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
+      <animate attributeName="y2" from="260" to="162.4" begin="0.67s" dur="0.7s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
       <animate attributeName="stroke-dashoffset" from="0" to="8" begin="1.37s" dur="2s" repeatCount="indefinite"/>
     </line>
     <g class="bar-label">
-      <text x="529.1" y="153.3" text-anchor="middle" class="value value-peak">5,197
-        <animate attributeName="y" from="260" to="153.3" begin="0.67s" dur="0.7s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
+      <text x="529.1" y="153.4" text-anchor="middle" class="value value-peak">5,189
+        <animate attributeName="y" from="260" to="153.4" begin="0.67s" dur="0.7s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
         <animate attributeName="opacity" from="0" to="1" begin="1.09s" dur="0.28s" fill="freeze"/>
       </text>
     </g>
