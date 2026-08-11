@@ -57,25 +57,25 @@
       <stop offset="100%" stop-color="#f59e0b"/>
     </linearGradient>
     <radialGradient id="seamAuraGrad" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.21"/>
-      <stop offset="60%" stop-color="#fbbf24" stop-opacity="0.12"/>
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.18"/>
+      <stop offset="60%" stop-color="#fbbf24" stop-opacity="0.09"/>
       <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="seamGlassGrad" gradientUnits="userSpaceOnUse" x1="266.3" y1="120" x2="266.3" y2="260">
-      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.12"/>
-      <stop offset="50%" stop-color="#fef3c7" stop-opacity="0.39"/>
-      <stop offset="100%" stop-color="#fde68a" stop-opacity="0.12"/>
+      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.09"/>
+      <stop offset="50%" stop-color="#fef3c7" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#fde68a" stop-opacity="0.09"/>
     </linearGradient>
     <linearGradient id="seamFieldGrad" gradientUnits="userSpaceOnUse" x1="266.3" y1="0" x2="792.0" y2="0">
-      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.38"/>
-      <stop offset="22%" stop-color="#eab308" stop-opacity="0.40"/>
-      <stop offset="45%" stop-color="#bef264" stop-opacity="0.52"/>
-      <stop offset="62%" stop-color="#a3e635" stop-opacity="0.56"/>
-      <stop offset="67%" stop-color="#84cc16" stop-opacity="0.54"/>
-      <stop offset="78%" stop-color="#a3e635" stop-opacity="0.52"/>
-      <stop offset="88%" stop-color="#fbbf24" stop-opacity="0.44"/>
-      <stop offset="96%" stop-color="#fde68a" stop-opacity="0.38"/>
-      <stop offset="100%" stop-color="#fff7cc" stop-opacity="0.26"/>
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.30"/>
+      <stop offset="22%" stop-color="#eab308" stop-opacity="0.32"/>
+      <stop offset="45%" stop-color="#bef264" stop-opacity="0.44"/>
+      <stop offset="62%" stop-color="#a3e635" stop-opacity="0.48"/>
+      <stop offset="67%" stop-color="#84cc16" stop-opacity="0.46"/>
+      <stop offset="78%" stop-color="#a3e635" stop-opacity="0.44"/>
+      <stop offset="88%" stop-color="#fbbf24" stop-opacity="0.36"/>
+      <stop offset="96%" stop-color="#fde68a" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#fff7cc" stop-opacity="0.20"/>
     </linearGradient>
     <linearGradient id="intakeTailGrad" gradientUnits="userSpaceOnUse" x1="269.1" y1="0" x2="285.1" y2="0">
       <stop offset="0%" stop-color="#fbbf24" stop-opacity="0"/>
@@ -92,20 +92,20 @@
       <stop offset="100%" stop-color="#e11d48"/>
     </linearGradient>
     <radialGradient id="originAuraGrad" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#fb7185" stop-opacity="0.21"/>
-      <stop offset="60%" stop-color="#fb7185" stop-opacity="0.12"/>
+      <stop offset="0%" stop-color="#fb7185" stop-opacity="0.16"/>
+      <stop offset="60%" stop-color="#fb7185" stop-opacity="0.08"/>
       <stop offset="100%" stop-color="#fb7185" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="originGlassGrad" gradientUnits="userSpaceOnUse" x1="61.0" y1="120" x2="61.0" y2="260">
-      <stop offset="0%" stop-color="#fda4af" stop-opacity="0.12"/>
-      <stop offset="50%" stop-color="#fecdd3" stop-opacity="0.39"/>
-      <stop offset="100%" stop-color="#fda4af" stop-opacity="0.12"/>
+      <stop offset="0%" stop-color="#fda4af" stop-opacity="0.08"/>
+      <stop offset="50%" stop-color="#fecdd3" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#fda4af" stop-opacity="0.08"/>
     </linearGradient>
     <linearGradient id="originBand" gradientUnits="userSpaceOnUse" x1="56.0" y1="0" x2="266.3" y2="0">
-      <stop offset="0%" stop-color="#fb7185" stop-opacity="0.34"/>
-      <stop offset="40%" stop-color="#f43f5e" stop-opacity="0.26"/>
-      <stop offset="72%" stop-color="#fb923c" stop-opacity="0.34"/>
-      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.38"/>
+      <stop offset="0%" stop-color="#fb7185" stop-opacity="0.26"/>
+      <stop offset="40%" stop-color="#f43f5e" stop-opacity="0.20"/>
+      <stop offset="72%" stop-color="#fb923c" stop-opacity="0.26"/>
+      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.30"/>
     </linearGradient>
     <filter id="originGlowSoft" filterUnits="userSpaceOnUse" x="15.0" y="86" width="92" height="208">
       <feGaussianBlur stdDeviation="1.5" result="b"/>
@@ -172,9 +172,9 @@
        README scale. Dim only graphical context; labels remain independently
        legible so the annotation still explains the motif in both themes. */
     .narrative-context.narrative-field,
-    .narrative-context.narrative-portal,
-    .narrative-context.narrative-seam,
-    .narrative-context.narrative-origin { opacity: 0.72; }
+    .narrative-context.narrative-portal { opacity: 0.80; }
+    .narrative-context.narrative-seam { opacity: 0.55; }
+    .narrative-context.narrative-origin { opacity: 0.50; }
     .narrative-label { opacity: 0.82; }
     /* Keep the context layer a calm, deterministic backdrop. Its authored base
        geometry is already the complete tableau, so hiding animation children
@@ -189,7 +189,7 @@
        the plot; they never become a new data encoding. */
     /* Every authored enlightenment part shares one phase opacity. The gradient
        stop opacities below remain colour falloff, not per-part intensity. */
-    .narrative-enlightenment { pointer-events: none; opacity: 0.95; }
+    .narrative-enlightenment { pointer-events: none; opacity: 1; }
     .new-age-ray { fill: url(#newAgeRayGrad); stroke: none; filter: url(#newAgeGlow); mix-blend-mode: screen; }
     .new-age-fringe { pointer-events: none; stroke-linejoin: round; }
     .new-age-interference { pointer-events: none; stroke-linecap: butt; }
@@ -252,8 +252,8 @@
     .rm-g2 { fill: #84cc16; }
     .rm-g3 { fill: #bef264; }
     .rm-core { fill: #ecfccb; }
-    .rm-swirl { fill: none; stroke: #d9f99d; stroke-width: 1.3; stroke-linecap: round; opacity: 0.88; }
-    .portal-ray { fill: none; stroke-width: 1; opacity: 0.75; }
+    .rm-swirl { fill: none; stroke: #d9f99d; stroke-width: 1.3; stroke-linecap: round; opacity: 0.92; }
+    .portal-ray { fill: none; stroke-width: 1; opacity: 0.88; }
     .portal-pulse { fill: none; stroke-width: 1.8; stroke-linecap: round; }
     .px-gold { stroke: url(#exitGold); }
     .px-cyan { stroke: url(#exitCyan); }
@@ -269,19 +269,19 @@
     .portal-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #a3e635; letter-spacing: 2.5px; }
     .seam-field { fill: url(#seamFieldGrad); }
     .seam-glass { fill: url(#seamGlassGrad); }
-    .origin-line { stroke: url(#originGrad); stroke-width: 1.2; stroke-linecap: round; filter: url(#originGlowSoft); }
+    .origin-line { stroke: url(#originGrad); stroke-width: 1.0; stroke-linecap: round; filter: url(#originGlowSoft); }
     .origin-glass { fill: url(#originGlassGrad); }
-    .origin-cell { fill: url(#originGlassGrad); stroke: url(#originGrad); stroke-width: 0.85; stroke-opacity: 0.9; }
-    .origin-pore { fill: none; stroke: url(#originGrad); stroke-width: 1.05; stroke-opacity: 0.9; }
+    .origin-cell { fill: url(#originGlassGrad); stroke: url(#originGrad); stroke-width: 0.75; stroke-opacity: 0.8; }
+    .origin-pore { fill: none; stroke: url(#originGrad); stroke-width: 0.95; stroke-opacity: 0.8; }
     .origin-nucleolus { fill: #fecdd3; }
     .origin-band { fill: url(#originBand); }
     .origin-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fb7185; letter-spacing: 2.5px; }
-    .gate-jamb { fill: none; stroke: url(#seamGrad); stroke-width: 1.4; filter: url(#seamGlowSoft); }
-    .gate-fan { stroke: url(#seamGrad); stroke-width: 1.2; stroke-opacity: 0.70; }
-    .gate-iris { fill: url(#seamGlassGrad); stroke: url(#seamGrad); stroke-width: 1.3; }
-    .gate-iris-inner { fill: none; stroke: url(#seamGrad); stroke-width: 1.2; }
+    .gate-jamb { fill: none; stroke: url(#seamGrad); stroke-width: 1.25; filter: url(#seamGlowSoft); }
+    .gate-fan { stroke: url(#seamGrad); stroke-width: 1.2; stroke-opacity: 0.60; }
+    .gate-iris { fill: url(#seamGlassGrad); stroke: url(#seamGrad); stroke-width: 1.15; }
+    .gate-iris-inner { fill: none; stroke: url(#seamGrad); stroke-width: 1.1; }
     .gate-port { fill: url(#seamGlassGrad); fill-opacity: 0.4; stroke: url(#seamGrad); stroke-width: 1.3; }
-    .gate-rail { stroke: url(#seamGrad); stroke-width: 1.4; stroke-opacity: 0.72; }
+    .gate-rail { stroke: url(#seamGrad); stroke-width: 1.4; stroke-opacity: 0.62; }
     .gate-slit { fill: #fde68a; }
     .gate-led { fill: #fde68a; fill-opacity: 0.9; }
     .seam-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; letter-spacing: 2.5px; }
@@ -443,13 +443,13 @@
   </g>
 
   <g class="narrative-context narrative-field">
-    <rect x="446.6" y="120" width="40" height="140" fill="url(#portalAura)" class="portal-aura" opacity="0.95">
-      <animate attributeName="opacity" values="0;0;0.95" keyTimes="0;0.5;1" begin="0s" dur="2.2s" fill="freeze"/>
-      <animate attributeName="opacity" values="0.95;0.65;0.95" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
+    <rect x="446.6" y="120" width="40" height="140" fill="url(#portalAura)" class="portal-aura" opacity="0.98">
+      <animate attributeName="opacity" values="0;0;0.98" keyTimes="0;0.5;1" begin="0s" dur="2.2s" fill="freeze"/>
+      <animate attributeName="opacity" values="0.98;0.72;0.98" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
     </rect>
-    <ellipse cx="472.6" cy="190" rx="11" ry="67.9" class="rm-glowEl" opacity="0.95">
-      <animate attributeName="opacity" values="0;0;0.95" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
-      <animate attributeName="opacity" values="0.95;0.65;0.95" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
+    <ellipse cx="472.6" cy="190" rx="11" ry="67.9" class="rm-glowEl" opacity="0.98">
+      <animate attributeName="opacity" values="0;0;0.98" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
+      <animate attributeName="opacity" values="0.98;0.72;0.98" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
     </ellipse>
     <path d="M 476.6 181.9 C 571.2 181.9 691.1 139.1 792 139.1" class="portal-ray px-gold" pathLength="1" stroke-dasharray="1 1">
       <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.6;1" begin="0s" dur="2.3s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.3 0 0.2 1"/>
@@ -533,198 +533,198 @@
 
   <g class="narrative-enlightenment">
     <title>the new age: 20 rays with spectral fringing, winged interference bands on the sides</title>
-    <polygon points="738.5 126.0 740.4 241.0 746.4 240.8 740.3 126.0" class="new-age-ray" opacity="0.95"/>
-    <polygon points="738.6 126.0 738.7 244.0 744.2 243.9 740.3 126.0" class="new-age-ray" opacity="0.95"/>
-    <polygon points="738.5 126.0 736.4 246.0 742.4 246.0 740.3 126.0" class="new-age-ray" opacity="0.95"/>
-    <polygon points="738.6 126.0 734.6 243.9 740.1 244.0 740.3 126.0" class="new-age-ray" opacity="0.95"/>
-    <polygon points="738.5 126.0 732.4 240.8 738.4 241.0 740.3 126.0" class="new-age-ray" opacity="0.95"/>
-    <polygon points="738.7 126.1 748.7 235.6 753.1 235.2 740.2 125.9" class="new-age-ray" opacity="0.95"/>
-    <polygon points="738.7 126.1 755.5 228.8 759.5 228.1 740.1 125.9" class="new-age-ray" opacity="0.91"/>
-    <polygon points="738.8 126.2 761.0 219.6 764.4 218.7 740.1 125.8" class="new-age-ray" opacity="0.85"/>
-    <polygon points="738.7 125.9 725.7 235.2 730.1 235.6 740.2 126.1" class="new-age-ray" opacity="0.87"/>
-    <polygon points="738.7 125.9 719.4 228.1 723.3 228.8 740.1 126.1" class="new-age-ray" opacity="0.81"/>
-    <polygon points="738.8 125.8 714.5 218.7 717.9 219.6 740.1 126.2" class="new-age-ray" opacity="0.74"/>
-    <polygon points="738.8 126.2 764.0 206.4 766.8 205.4 740.0 125.8" class="new-age-ray" opacity="0.78"/>
-    <polygon points="738.9 126.2 765.2 193.2 767.6 192.3 740.0 125.8" class="new-age-ray" opacity="0.68"/>
-    <polygon points="738.8 125.8 712.0 205.4 714.9 206.4 740.0 126.2" class="new-age-ray" opacity="0.65"/>
-    <polygon points="738.9 125.8 711.3 192.3 713.7 193.2 740.0 126.2" class="new-age-ray" opacity="0.55"/>
-    <polygon points="738.9 126.3 763.9 178.6 765.8 177.6 739.9 125.7" class="new-age-ray" opacity="0.59"/>
-    <polygon points="739.0 126.3 761.6 166.3 763.2 165.4 739.9 125.7" class="new-age-ray" opacity="0.49"/>
-    <polygon points="738.9 125.7 713.0 177.6 715.0 178.6 739.9 126.3" class="new-age-ray" opacity="0.46"/>
-    <polygon points="739.0 125.7 715.6 165.4 717.2 166.3 739.9 126.3" class="new-age-ray" opacity="0.36"/>
-    <polygon points="739.0 126.3 758.9 156.3 760.2 155.4 739.9 125.7" class="new-age-ray" opacity="0.40"/>
+    <polygon points="738.5 126.0 740.4 241.0 746.4 240.8 740.3 126.0" class="new-age-ray" opacity="1.00"/>
+    <polygon points="738.6 126.0 738.7 244.0 744.2 243.9 740.3 126.0" class="new-age-ray" opacity="1.00"/>
+    <polygon points="738.5 126.0 736.4 246.0 742.4 246.0 740.3 126.0" class="new-age-ray" opacity="1.00"/>
+    <polygon points="738.6 126.0 734.6 243.9 740.1 244.0 740.3 126.0" class="new-age-ray" opacity="1.00"/>
+    <polygon points="738.5 126.0 732.4 240.8 738.4 241.0 740.3 126.0" class="new-age-ray" opacity="1.00"/>
+    <polygon points="738.7 126.1 748.7 235.6 753.1 235.2 740.2 125.9" class="new-age-ray" opacity="1.00"/>
+    <polygon points="738.7 126.1 755.5 228.8 759.5 228.1 740.1 125.9" class="new-age-ray" opacity="0.96"/>
+    <polygon points="738.8 126.2 761.0 219.6 764.4 218.7 740.1 125.8" class="new-age-ray" opacity="0.90"/>
+    <polygon points="738.7 125.9 725.7 235.2 730.1 235.6 740.2 126.1" class="new-age-ray" opacity="0.92"/>
+    <polygon points="738.7 125.9 719.4 228.1 723.3 228.8 740.1 126.1" class="new-age-ray" opacity="0.85"/>
+    <polygon points="738.8 125.8 714.5 218.7 717.9 219.6 740.1 126.2" class="new-age-ray" opacity="0.78"/>
+    <polygon points="738.8 126.2 764.0 206.4 766.8 205.4 740.0 125.8" class="new-age-ray" opacity="0.82"/>
+    <polygon points="738.9 126.2 765.2 193.2 767.6 192.3 740.0 125.8" class="new-age-ray" opacity="0.72"/>
+    <polygon points="738.8 125.8 712.0 205.4 714.9 206.4 740.0 126.2" class="new-age-ray" opacity="0.68"/>
+    <polygon points="738.9 125.8 711.3 192.3 713.7 193.2 740.0 126.2" class="new-age-ray" opacity="0.58"/>
+    <polygon points="738.9 126.3 763.9 178.6 765.8 177.6 739.9 125.7" class="new-age-ray" opacity="0.62"/>
+    <polygon points="739.0 126.3 761.6 166.3 763.2 165.4 739.9 125.7" class="new-age-ray" opacity="0.52"/>
+    <polygon points="738.9 125.7 713.0 177.6 715.0 178.6 739.9 126.3" class="new-age-ray" opacity="0.48"/>
+    <polygon points="739.0 125.7 715.6 165.4 717.2 166.3 739.9 126.3" class="new-age-ray" opacity="0.38"/>
+    <polygon points="739.0 126.3 758.9 156.3 760.2 155.4 739.9 125.7" class="new-age-ray" opacity="0.42"/>
     <polygon points="737.1 126.1 738.9 241.1 744.9 240.9 738.8 126.0" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="0.00s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="0.00s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.0 126.0 741.9 241.0 747.9 240.8 741.8 125.9" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="1.00s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="1.00s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.1 126.0 737.2 244.1 742.7 244.0 738.8 126.0" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="0.18s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="0.18s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.1 126.0 740.2 244.0 745.7 243.9 741.8 126.0" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="1.18s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="1.18s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.0 126.0 734.9 246.0 740.9 246.0 738.8 126.0" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="0.36s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="0.36s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.0 126.0 737.9 246.0 743.9 246.0 741.8 126.0" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="1.36s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="1.36s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.1 126.0 733.1 243.9 738.6 244.0 738.8 126.0" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="0.54s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="0.54s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.1 126.0 736.1 244.0 741.6 244.1 741.8 126.0" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="1.54s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="1.54s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.1 125.9 730.9 240.8 736.9 241.0 738.8 126.0" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="0.72s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="0.72s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.0 126.0 733.9 240.9 739.9 241.1 741.8 126.1" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="1.72s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="1.72s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.2 126.2 747.2 235.8 751.6 235.3 738.7 126.1" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="0.90s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="0.90s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.2 125.9 750.2 235.5 754.6 235.0 741.7 125.8" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="1.90s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="1.90s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.2 126.4 754.0 229.0 758.0 228.3 738.7 126.1" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="1.08s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="1.08s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.2 125.9 757.0 228.5 760.9 227.8 741.6 125.6" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="2.08s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="2.08s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.3 126.5 759.5 219.9 762.9 219.1 738.6 126.2" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="1.26s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="1.26s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.2 125.8 762.4 219.2 765.8 218.4 741.5 125.5" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="2.26s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="2.26s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.2 125.8 724.3 235.0 728.6 235.5 738.7 125.9" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="1.44s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="1.44s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.2 126.1 727.2 235.3 731.6 235.8 741.7 126.2" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="2.44s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="2.44s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.2 125.6 717.9 227.8 721.9 228.5 738.7 125.9" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="1.62s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="1.62s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.2 126.1 720.9 228.3 724.8 229.0 741.6 126.4" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="2.62s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="2.62s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.3 125.5 713.1 218.4 716.4 219.2 738.6 125.8" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="1.80s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="1.80s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.2 126.2 716.0 219.1 719.4 219.9 741.5 126.5" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="2.80s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="2.80s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.4 126.7 762.5 206.8 765.4 205.9 738.6 126.3" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="1.98s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="1.98s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.2 125.7 765.4 205.9 768.2 205.0 741.5 125.3" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="2.98s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="2.98s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.5 126.8 763.8 193.8 766.2 192.8 738.6 126.3" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="2.16s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="2.16s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.3 125.7 766.6 192.7 769.0 191.7 741.4 125.2" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="3.16s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="3.16s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.4 125.3 710.6 205.0 713.5 205.9 738.6 125.7" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="2.34s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="2.34s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.2 126.3 713.5 205.9 716.3 206.8 741.5 126.7" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="3.34s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="3.34s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.5 125.2 709.9 191.7 712.3 192.7 738.6 125.7" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="2.52s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="2.52s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.3 126.3 712.6 192.8 715.1 193.8 741.4 126.8" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="3.52s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="3.52s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.6 126.9 762.5 179.3 764.5 178.3 738.6 126.4" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="2.70s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="2.70s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.3 125.6 765.2 178.0 767.2 177.0 741.3 125.1" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="3.70s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="3.70s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.7 127.0 760.4 167.0 761.9 166.1 738.6 126.5" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="2.88s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="2.88s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.3 125.5 762.9 165.5 764.5 164.6 741.2 125.0" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="3.88s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="3.88s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.6 125.1 711.7 177.0 713.6 178.0 738.6 125.6" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="3.06s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="3.06s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.3 126.4 714.4 178.3 716.3 179.3 741.3 126.9" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="4.06s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="4.06s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.7 125.0 714.4 164.6 715.9 165.5 738.6 125.5" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="3.24s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="3.24s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.3 126.5 716.9 166.1 718.5 167.0 741.2 127.0" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="4.24s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="4.24s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
     <polygon points="737.8 127.1 757.7 157.1 758.9 156.3 738.6 126.5" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="3.42s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="3.42s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
       <polygon points="740.2 125.5 760.2 155.4 761.4 154.6 741.1 124.9" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
-        <animate attributeName="stroke-opacity" values="0.12;0.28;0.12" keyTimes="0;0.5;1" begin="4.42s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="4.42s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
 
 
 
 
 
-    <line x1="739.4" y1="126.0" x2="750.9" y2="235.4" stroke="#ffffff" stroke-width="3.7" stroke-opacity="0.30" stroke-dasharray="5 4" class="new-age-interference">
+    <line x1="739.4" y1="126.0" x2="750.9" y2="235.4" stroke="#ffffff" stroke-width="3.7" stroke-opacity="0.36" stroke-dasharray="5 4" class="new-age-interference">
         <animate attributeName="stroke-dashoffset" values="0;-9" begin="1.10s" dur="1.6s" repeatCount="indefinite"/>
       </line>
-    <line x1="739.4" y1="126.0" x2="757.5" y2="228.4" stroke="#ffffff" stroke-width="3.4" stroke-opacity="0.30" stroke-dasharray="5 4" class="new-age-interference">
+    <line x1="739.4" y1="126.0" x2="757.5" y2="228.4" stroke="#ffffff" stroke-width="3.4" stroke-opacity="0.36" stroke-dasharray="5 4" class="new-age-interference">
         <animate attributeName="stroke-dashoffset" values="0;-9" begin="1.32s" dur="1.6s" repeatCount="indefinite"/>
       </line>
-    <line x1="739.4" y1="126.0" x2="762.7" y2="219.1" stroke="#ffffff" stroke-width="3.0" stroke-opacity="0.30" stroke-dasharray="5 4" class="new-age-interference">
+    <line x1="739.4" y1="126.0" x2="762.7" y2="219.1" stroke="#ffffff" stroke-width="3.0" stroke-opacity="0.36" stroke-dasharray="5 4" class="new-age-interference">
         <animate attributeName="stroke-dashoffset" values="0;-9" begin="1.54s" dur="1.6s" repeatCount="indefinite"/>
       </line>
-    <line x1="739.4" y1="126.0" x2="727.9" y2="235.4" stroke="#ffffff" stroke-width="3.7" stroke-opacity="0.30" stroke-dasharray="5 4" class="new-age-interference">
+    <line x1="739.4" y1="126.0" x2="727.9" y2="235.4" stroke="#ffffff" stroke-width="3.7" stroke-opacity="0.36" stroke-dasharray="5 4" class="new-age-interference">
         <animate attributeName="stroke-dashoffset" values="0;-9" begin="1.76s" dur="1.6s" repeatCount="indefinite"/>
       </line>
-    <line x1="739.4" y1="126.0" x2="721.4" y2="228.4" stroke="#ffffff" stroke-width="3.4" stroke-opacity="0.30" stroke-dasharray="5 4" class="new-age-interference">
+    <line x1="739.4" y1="126.0" x2="721.4" y2="228.4" stroke="#ffffff" stroke-width="3.4" stroke-opacity="0.36" stroke-dasharray="5 4" class="new-age-interference">
         <animate attributeName="stroke-dashoffset" values="0;-9" begin="1.98s" dur="1.6s" repeatCount="indefinite"/>
       </line>
-    <line x1="739.4" y1="126.0" x2="716.2" y2="219.1" stroke="#ffffff" stroke-width="3.0" stroke-opacity="0.30" stroke-dasharray="5 4" class="new-age-interference">
+    <line x1="739.4" y1="126.0" x2="716.2" y2="219.1" stroke="#ffffff" stroke-width="3.0" stroke-opacity="0.36" stroke-dasharray="5 4" class="new-age-interference">
         <animate attributeName="stroke-dashoffset" values="0;-9" begin="2.20s" dur="1.6s" repeatCount="indefinite"/>
       </line>
-    <line x1="739.4" y1="126.0" x2="765.4" y2="205.9" stroke="#ffffff" stroke-width="2.5" stroke-opacity="0.30" stroke-dasharray="5 4" class="new-age-interference">
+    <line x1="739.4" y1="126.0" x2="765.4" y2="205.9" stroke="#ffffff" stroke-width="2.5" stroke-opacity="0.36" stroke-dasharray="5 4" class="new-age-interference">
         <animate attributeName="stroke-dashoffset" values="0;-9" begin="2.42s" dur="1.6s" repeatCount="indefinite"/>
       </line>
-    <line x1="739.4" y1="126.0" x2="766.4" y2="192.8" stroke="#ffffff" stroke-width="2.2" stroke-opacity="0.30" stroke-dasharray="5 4" class="new-age-interference">
+    <line x1="739.4" y1="126.0" x2="766.4" y2="192.8" stroke="#ffffff" stroke-width="2.2" stroke-opacity="0.36" stroke-dasharray="5 4" class="new-age-interference">
         <animate attributeName="stroke-dashoffset" values="0;-9" begin="2.64s" dur="1.6s" repeatCount="indefinite"/>
       </line>
-    <line x1="739.4" y1="126.0" x2="713.5" y2="205.9" stroke="#ffffff" stroke-width="2.5" stroke-opacity="0.30" stroke-dasharray="5 4" class="new-age-interference">
+    <line x1="739.4" y1="126.0" x2="713.5" y2="205.9" stroke="#ffffff" stroke-width="2.5" stroke-opacity="0.36" stroke-dasharray="5 4" class="new-age-interference">
         <animate attributeName="stroke-dashoffset" values="0;-9" begin="2.86s" dur="1.6s" repeatCount="indefinite"/>
       </line>
-    <line x1="739.4" y1="126.0" x2="712.5" y2="192.8" stroke="#ffffff" stroke-width="2.2" stroke-opacity="0.30" stroke-dasharray="5 4" class="new-age-interference">
+    <line x1="739.4" y1="126.0" x2="712.5" y2="192.8" stroke="#ffffff" stroke-width="2.2" stroke-opacity="0.36" stroke-dasharray="5 4" class="new-age-interference">
         <animate attributeName="stroke-dashoffset" values="0;-9" begin="3.08s" dur="1.6s" repeatCount="indefinite"/>
       </line>
-    <line x1="739.4" y1="126.0" x2="764.9" y2="178.1" stroke="#ffffff" stroke-width="1.9" stroke-opacity="0.30" stroke-dasharray="5 4" class="new-age-interference">
+    <line x1="739.4" y1="126.0" x2="764.9" y2="178.1" stroke="#ffffff" stroke-width="1.9" stroke-opacity="0.36" stroke-dasharray="5 4" class="new-age-interference">
         <animate attributeName="stroke-dashoffset" values="0;-9" begin="3.30s" dur="1.6s" repeatCount="indefinite"/>
       </line>
-    <line x1="739.4" y1="126.0" x2="762.4" y2="165.8" stroke="#ffffff" stroke-width="1.5" stroke-opacity="0.30" stroke-dasharray="5 4" class="new-age-interference">
+    <line x1="739.4" y1="126.0" x2="762.4" y2="165.8" stroke="#ffffff" stroke-width="1.5" stroke-opacity="0.36" stroke-dasharray="5 4" class="new-age-interference">
         <animate attributeName="stroke-dashoffset" values="0;-9" begin="3.52s" dur="1.6s" repeatCount="indefinite"/>
       </line>
-    <line x1="739.4" y1="126.0" x2="714.0" y2="178.1" stroke="#ffffff" stroke-width="1.9" stroke-opacity="0.30" stroke-dasharray="5 4" class="new-age-interference">
+    <line x1="739.4" y1="126.0" x2="714.0" y2="178.1" stroke="#ffffff" stroke-width="1.9" stroke-opacity="0.36" stroke-dasharray="5 4" class="new-age-interference">
         <animate attributeName="stroke-dashoffset" values="0;-9" begin="3.74s" dur="1.6s" repeatCount="indefinite"/>
       </line>
-    <line x1="739.4" y1="126.0" x2="716.4" y2="165.8" stroke="#ffffff" stroke-width="1.5" stroke-opacity="0.30" stroke-dasharray="5 4" class="new-age-interference">
+    <line x1="739.4" y1="126.0" x2="716.4" y2="165.8" stroke="#ffffff" stroke-width="1.5" stroke-opacity="0.36" stroke-dasharray="5 4" class="new-age-interference">
         <animate attributeName="stroke-dashoffset" values="0;-9" begin="3.96s" dur="1.6s" repeatCount="indefinite"/>
       </line>
-    <line x1="739.4" y1="126.0" x2="759.6" y2="155.8" stroke="#ffffff" stroke-width="1.3" stroke-opacity="0.30" stroke-dasharray="5 4" class="new-age-interference">
+    <line x1="739.4" y1="126.0" x2="759.6" y2="155.8" stroke="#ffffff" stroke-width="1.3" stroke-opacity="0.36" stroke-dasharray="5 4" class="new-age-interference">
         <animate attributeName="stroke-dashoffset" values="0;-9" begin="4.18s" dur="1.6s" repeatCount="indefinite"/>
       </line>
   </g>
-  <g class="new-age-label" opacity="0.95">
+  <g class="new-age-label" opacity="1">
     <text x="790.0" y="112.0" text-anchor="end" class="new-age-text">the new age</text>
   </g>
   <path d="M 76.6 253.6 C 122.3 252.7 168.0 252.6 213.7 250.8 C 248.8 249.5 283.8 238.3 318.9 231.0 C 353.9 223.8 389.0 217.5 424.0 207.1 C 469.7 193.5 515.4 166.4 561.1 146.0 L 561.1 260 L 76.6 260 Z" class="cum-area">
