@@ -589,28 +589,28 @@ const GOLDEN_AGE_RAYS = [
   { angle: 0, len: 82, w: 5.5, o: 1.00, sy: 0 },
   { angle: 1, len: 82, w: 5.0, o: 1.00, sy: 0 },
   { angle: 2, len: 80, w: 5.5, o: 1.00, sy: 0 },
-  // Inner upper — slight upward fan
-  { angle: -6, len: 78, w: 4.0, o: 1.00, sy: -3 },
-  { angle: -12, len: 72, w: 3.8, o: 0.96, sy: -6 },
-  { angle: -18, len: 68, w: 3.2, o: 0.90, sy: -9 },
+  // source offsets reduced so rays stay within plot bounds
+  { angle: -6, len: 78, w: 4.0, o: 1.00, sy: -2 },
+  { angle: -12, len: 72, w: 3.8, o: 0.96, sy: -4 },
+  { angle: -18, len: 68, w: 3.2, o: 0.90, sy: -6 },
   // Inner lower — slight downward fan
-  { angle: 6, len: 78, w: 4.0, o: 0.92, sy: 3 },
-  { angle: 12, len: 72, w: 3.8, o: 0.85, sy: 6 },
-  { angle: 18, len: 68, w: 3.2, o: 0.78, sy: 9 },
+  { angle: 6, len: 78, w: 4.0, o: 0.92, sy: 2 },
+  { angle: 12, len: 72, w: 3.8, o: 0.85, sy: 4 },
+  { angle: 18, len: 68, w: 3.2, o: 0.78, sy: 6 },
   // Mid upper
-  { angle: -22, len: 60, w: 2.8, o: 0.82, sy: -10 },
-  { angle: -26, len: 52, w: 2.4, o: 0.72, sy: -12 },
+  { angle: -22, len: 60, w: 2.8, o: 0.82, sy: -7 },
+  { angle: -26, len: 52, w: 2.4, o: 0.72, sy: -8 },
   // Mid lower
-  { angle: 22, len: 60, w: 2.8, o: 0.68, sy: 10 },
-  { angle: 26, len: 52, w: 2.4, o: 0.58, sy: 12 },
+  { angle: 22, len: 60, w: 2.8, o: 0.68, sy: 7 },
+  { angle: 26, len: 52, w: 2.4, o: 0.58, sy: 8 },
   // Outer upper — widest, shortest
-  { angle: -28, len: 44, w: 2.0, o: 0.62, sy: -12 },
-  { angle: -28, len: 36, w: 1.7, o: 0.52, sy: -12 },
+  { angle: -28, len: 44, w: 2.0, o: 0.62, sy: -8 },
+  { angle: -28, len: 36, w: 1.7, o: 0.52, sy: -8 },
   // Outer lower
-  { angle: 28, len: 44, w: 2.0, o: 0.48, sy: 12 },
-  { angle: 28, len: 36, w: 1.7, o: 0.38, sy: 12 },
+  { angle: 28, len: 44, w: 2.0, o: 0.48, sy: 8 },
+  { angle: 28, len: 36, w: 1.7, o: 0.38, sy: 8 },
   // Steep upper accent
-  { angle: -28, len: 30, w: 1.4, o: 0.42, sy: -12 },
+  { angle: -28, len: 30, w: 1.4, o: 0.42, sy: -8 },
 ];
 
 // ---------------------------------------------------------------------------
@@ -745,7 +745,7 @@ function portalFieldMarkup(px) {
   };
   return `
   <g class="narrative-context narrative-field">
-    <rect x="${(px - 30).toFixed(1)}" y="${PLOT_TOP}" width="40" height="${PLOT_HEIGHT}" fill="url(#portalAura)" class="portal-aura" opacity="0.98">
+    <rect x="${(px - 30).toFixed(1)}" y="${(PLOT_TOP + 8).toFixed(1)}" width="40" height="${(PLOT_HEIGHT - 16).toFixed(1)}" fill="url(#portalAura)" class="portal-aura" opacity="0.98">
       <animate attributeName="opacity" values="0;0;0.98" keyTimes="0;0.5;1" begin="0s" dur="2.2s" fill="freeze"/>
       <animate attributeName="opacity" values="0.98;0.72;0.98" begin="2.2s" dur="3.6s" repeatCount="indefinite"/>
     </rect>
@@ -753,11 +753,9 @@ function portalFieldMarkup(px) {
       <animate attributeName="opacity" values="0;0;0.98" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
       <animate attributeName="opacity" values="0.98;0.72;0.98" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
     </ellipse>
-    ${approach(LANES[0], "px-gold", "2.6s", "0.6s")}
-    ${approach(LANES[1], "px-cyan", "2.75s", "0.55s")}
-    ${approach(LANES[2], "px-violet", "2.5s", "0.65s")}
-    ${approach(MID_Y + (LANES[3] - MID_Y) * 0.4, "px-gold", "2.9s", "0.5s")}
-    ${approach(MID_Y + (LANES[4] - MID_Y) * 0.4, "px-cyan", "2.65s", "0.6s")}
+    ${approach(LANES[1], "px-gold", "2.6s", "0.6s")}
+    ${approach(LANES[2], "px-cyan", "2.75s", "0.55s")}
+    ${approach(LANES[3], "px-violet", "2.5s", "0.65s")}
     ${ray(LANES[0], "px-gold", 2.3, 0.09, 0.9)}
     ${ray(LANES[1], "px-cyan", 2.5, 0.07, 0.9)}
     ${ray(LANES[2], "px-violet", 2.4, 0.08, 0.9)}
