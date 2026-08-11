@@ -115,16 +115,8 @@ function renderHeading({ label, comment, accent, begin = "0.6s" }) {
   const RULE_X2 = 856; // reaches the right edge, like the numbered section banners
   const cursorX = HLABEL_X + labelW + 10;
 
-  const sweepId = "sweep-more";
-  const sweep = sweepDefs(sweepId, {
-    x1from: HLABEL_X - 120, x1to: RULE_X2, x2from: HLABEL_X, x2to: RULE_X2 + 120, color: accentD, dur: "3.2s",
-  });
-
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(label.toLowerCase())}">
   <title>${escapeXML(label.toLowerCase())}</title>
-  <defs>
-    ${sweep}
-  </defs>
   <style>
     :root { color-scheme: light dark; }
     .prompt { font: 600 14px ${MONO}; fill: ${mutedD}; }
@@ -156,7 +148,6 @@ function renderHeading({ label, comment, accent, begin = "0.6s" }) {
   <text x="${HLABEL_X}" y="${BASE}" class="label" textLength="${labelW}" lengthAdjust="spacingAndGlyphs">${escapeXML(label)}</text>
   <text x="${RULE_X2}" y="${BASE}" text-anchor="end" class="cap">${escapeXML(comment)}</text>
   <line x1="${HLABEL_X}" y1="42.5" x2="${RULE_X2}" y2="42.5" class="rule"/>
-  <rect x="${HLABEL_X}" y="41" width="${RULE_X2 - HLABEL_X}" height="3" rx="1.5" fill="url(#${sweepId})"/>
   <rect x="${cursorX}" y="22" width="9" height="14" rx="1" class="cursor"/>
 </svg>
 `;
