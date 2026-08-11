@@ -1,14 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 52" width="860" height="52" role="img" aria-label="The pulse">
   <title>The pulse</title>
-  <defs>
-    <linearGradient id="sweep-pulse" gradientUnits="userSpaceOnUse" x1="12" y1="0" x2="132" y2="0">
-      <stop offset="0" stop-color="#22d3ee" stop-opacity="0"/>
-      <stop offset="0.5" stop-color="#22d3ee" stop-opacity="0.9"/>
-      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
-      <animate attributeName="x1" from="12" to="856" dur="3.2s" repeatCount="indefinite"/>
-      <animate attributeName="x2" from="132" to="976" dur="3.2s" repeatCount="indefinite"/>
-    </linearGradient>
-  </defs>
   <style>
     .idx    { font: 700 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #22d3ee; letter-spacing: 1px; }
     .prompt { font: 600 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
@@ -40,6 +31,5 @@
   <text x="132" y="33" class="label" textLength="108" lengthAdjust="spacingAndGlyphs">THE PULSE</text>
   <text x="856" y="33" text-anchor="end" class="cap"># active since 2014</text>
   <line x1="132" y1="42.5" x2="856" y2="42.5" class="rule"/>
-  <rect x="132" y="41" width="724" height="3" rx="1.5" fill="url(#sweep-pulse)"/>
   <rect x="250" y="22" width="9" height="14" rx="1" class="cursor"/>
 </svg>

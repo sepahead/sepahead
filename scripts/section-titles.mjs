@@ -53,19 +53,10 @@ function render(s) {
   const ruleX2 = 856; // hairline + "# …" count reach the right edge (4px margin, matching the left spine)
   const cursorX = LABEL_X + labelW + 10;
 
-  // Sweep spans the rule; bright band travels across it once per loop.
-  const sweepId = `sweep-${s.slug}`;
-  const sweep = sweepDefs(sweepId, {
-    x1from: ruleX1 - 120, x1to: ruleX2, x2from: ruleX1, x2to: ruleX2 + 120, color: accentD, dur: "3.2s",
-  });
-
   const aria = HEADING[s.slug];
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
   <title>${escapeXML(aria)}</title>
-  <defs>
-    ${sweep}
-  </defs>
   <style>
     :root { color-scheme: light dark; }
     .idx    { font: 700 13px ${MONO}; fill: ${accentD}; letter-spacing: 1px; }
@@ -100,7 +91,6 @@ function render(s) {
   <text x="${LABEL_X}" y="${BASE}" class="label" textLength="${labelW}" lengthAdjust="spacingAndGlyphs">${escapeXML(s.label)}</text>
   <text x="${ruleX2}" y="${BASE}" text-anchor="end" class="cap">${escapeXML(s.comment)}</text>
   <line x1="${ruleX1}" y1="42.5" x2="${ruleX2}" y2="42.5" class="rule"/>
-  <rect x="${ruleX1}" y="41" width="${ruleX2 - ruleX1}" height="3" rx="1.5" fill="url(#${sweepId})"/>
   <rect x="${cursorX}" y="22" width="9" height="14" rx="1" class="cursor"/>
 </svg>
 `;
