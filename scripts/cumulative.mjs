@@ -685,11 +685,12 @@ function portalFieldMarkup(px) {
   const R = PLOT_RIGHT;
   const midY = MID_Y;
   const span = R - px;
-  // Exit cone: straight rays from the tight portal pinch directly into
-  // the new-age light cone. No bezier curve — pure linear continuation.
+  // Exit cone: straight rays from a tight pinch to a narrow spread —
+  // never wider than the new-age cone to the right. Feeds directly in.
   const rayPath = (y) => {
     const yStart = midY + (y - midY) * 0.10;
-    return `M ${X} ${yStart.toFixed(1)} L ${R} ${y}`;
+    const yEnd = midY + (y - midY) * 0.50;
+    return `M ${X} ${yStart.toFixed(1)} L ${R} ${yEnd.toFixed(1)}`;
   };
   const ray = (y, cls, drawDur, dash, pulseDur) =>
     `<path d="${rayPath(y)}" class="portal-ray ${cls}" pathLength="1" stroke-dasharray="1 1">
