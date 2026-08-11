@@ -268,7 +268,7 @@
     .narrative-context.narrative-field,
     .narrative-context.narrative-portal,
     .narrative-context.narrative-seam,
-    .narrative-context.narrative-origin { opacity: 0.28; }
+    .narrative-context.narrative-origin { opacity: 0.55; }
     .narrative-label { opacity: 0.82; }
     /* Keep the context layer a calm, deterministic backdrop. Its authored base
        geometry is already the complete tableau, so hiding animation children
