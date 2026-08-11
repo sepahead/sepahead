@@ -914,7 +914,7 @@ function enlightenmentMarkup(portalX) {
     ${GOLDEN_AGE_RAYS.map((r, i) => interferenceLine(r, i)).join("\n    ")}
   </g>
   <g class="golden-age-label" opacity="${GOLDEN_AGE_OPACITY}">
-    <text x="${(PLOT_RIGHT - 2).toFixed(1)}" y="${(PLOT_TOP - 8).toFixed(1)}" text-anchor="end" class="golden-age-text">the golden age</text>
+    <text x="${(PLOT_RIGHT - 2).toFixed(1)}" y="${(PLOT_TOP - 8).toFixed(1)}" text-anchor="end" class="golden-age-text">golden age</text>
   </g>`;
 }
 
