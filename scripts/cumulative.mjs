@@ -302,7 +302,7 @@ function buildModel(years) {
 //    Bars: vertical cyan gradient, glowing + pulsing peak, staggered draw-in.
 // ---------------------------------------------------------------------------
 const W = 820;
-const H = 350;
+const H = 420;
 const PAD_LEFT = 56;
 const PAD_RIGHT = 28;
 const HEAD_TOP = 26; // headline number
@@ -311,7 +311,7 @@ const HEAD_TOP = 26; // headline number
 // derive from this box, so moving both edges together preserves their alignment
 // while opening a clear gap after "total contributions since <year>".
 const PLOT_TOP = 120;
-const PLOT_BOTTOM = 305; // baseline; year labels sit below
+const PLOT_BOTTOM = 375; // baseline; year labels sit below
 const PLOT_HEIGHT = PLOT_BOTTOM - PLOT_TOP;
 const PLOT_LEFT = PAD_LEFT;
 const PLOT_RIGHT = W - PAD_RIGHT;
