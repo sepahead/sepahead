@@ -568,7 +568,7 @@ const WAVE_RY_OUTER = artRy(23 / 12); // 46
 const WAVE_RY_MID = artRy(19 / 12); // 38
 const WAVE_RY_INNER = artRy(31 / 24); // 31
 
-// The new age: 20 rays streaming rightward from the singularity portal —
+// The golden age: 20 rays streaming rightward from the singularity portal —
 // a direct continuation of the warp field particles emerging from the
 // event horizon. Rotated 90° clockwise from the original top-down design,
 // so the beams now flow left→right (past → future) in smooth transition
@@ -577,12 +577,12 @@ const WAVE_RY_INNER = artRy(31 / 24); // 31
 // radial gradient that fades from bright ivory at the core to warm amber
 // at the edges. Central rays shoot straight right; edge rays fan up/down.
 // One shared phase opacity applied to the complete tableau.
-const NEW_AGE_OPACITY = 1.0;
+const GOLDEN_AGE_OPACITY = 1.0;
 // 20 rays fanning rightward from subtly staggered positions along the
 // portal edge. 0° = horizontal right. Cone spans −28° to +28°. Source
 // positions match the singularity's tight exit aperture (±12px). All
-// lengths capped so rays stay clear of the "the new age" label at right.
-const NEW_AGE_RAYS = [
+// lengths capped so rays stay clear of the "the golden age" label at right.
+const GOLDEN_AGE_RAYS = [
   // Central core — straight right from portal center
   { angle: -2, len: 80, w: 5.5, o: 1.00, sy: 0 },
   { angle: -1, len: 82, w: 5.0, o: 1.00, sy: 0 },
@@ -686,7 +686,7 @@ function portalFieldMarkup(px) {
   const midY = MID_Y;
   const span = R - px;
   // Exit cone: straight rays from a tight pinch, upper rays flatter
-  // than lower so they stay visibly subordinate to the new-age cone.
+  // than lower so they stay visibly subordinate to the golden-age cone.
   const rayPath = (y) => {
     const yStart = midY + (y - midY) * 0.10;
     const mult = y < midY ? 0.35 : 0.50;
@@ -781,19 +781,19 @@ function portalFieldMarkup(px) {
 // stop before the plot edges; the destination is atmospheric context, never a
 // measured bar or a claim about contributions beyond the future placeholder.
 function enlightenmentDefs() {
-  return `<radialGradient id="newAgeRayGrad" cx="0.5" cy="0.5" r="0.5">
+  return `<radialGradient id="goldenAgeRayGrad" cx="0.5" cy="0.5" r="0.5">
       <stop offset="0%" stop-color="#ffffff" stop-opacity="0.90"/>
       <stop offset="28%" stop-color="#fff7cc" stop-opacity="0.78"/>
       <stop offset="62%" stop-color="#fde68a" stop-opacity="0.48"/>
       <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="newAgeRayGradLight" cx="0.5" cy="0.5" r="0.5">
+    <radialGradient id="goldenAgeRayGradLight" cx="0.5" cy="0.5" r="0.5">
       <stop offset="0%" stop-color="#ffffff" stop-opacity="0.94"/>
       <stop offset="28%" stop-color="#fff7cc" stop-opacity="0.74"/>
       <stop offset="62%" stop-color="#fbbf24" stop-opacity="0.44"/>
       <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
     </radialGradient>
-    <filter id="newAgeGlow" x="-50%" y="-50%" width="200%" height="200%">
+    <filter id="goldenAgeGlow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="1.8" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>`;
@@ -827,8 +827,8 @@ function enlightenmentMarkup(portalX) {
       p(ex - px * dw, ey - py * dw),
       p(srcX - px * sw, sy - py * sw),
     ];
-    const opacity = (ray.o * NEW_AGE_OPACITY).toFixed(2);
-    return `<polygon points="${points.join(" ")}" class="new-age-ray" opacity="${opacity}"/>`;
+    const opacity = (ray.o * GOLDEN_AGE_OPACITY).toFixed(2);
+    return `<polygon points="${points.join(" ")}" class="golden-age-ray" opacity="${opacity}"/>`;
   };
   // Spectral color fringing: each ray gets two offset edge copies in warm
   // amber/rose, breathing gently — like chromatic aberration at the beam edges.
@@ -852,10 +852,10 @@ function enlightenmentMarkup(portalX) {
       p(srcX - px * sw + dx, sy - py * sw + dy),
     ].join(" ");
     const begin = (i * 0.18).toFixed(2);
-    return `<polygon points="${points(px * shift, py * shift)}" fill="none" stroke="#fbbf24" stroke-width="0.9" class="new-age-fringe">
+    return `<polygon points="${points(px * shift, py * shift)}" fill="none" stroke="#fbbf24" stroke-width="0.9" class="golden-age-fringe">
         <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="${begin}s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>
-      <polygon points="${points(-px * shift, -py * shift)}" fill="none" stroke="#fde68a" stroke-width="0.7" class="new-age-fringe">
+      <polygon points="${points(-px * shift, -py * shift)}" fill="none" stroke="#fde68a" stroke-width="0.7" class="golden-age-fringe">
         <animate attributeName="stroke-opacity" values="0.18;0.38;0.18" keyTimes="0;0.5;1" begin="${(parseFloat(begin)+1.0).toFixed(2)}s" dur="2.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
       </polygon>`;
   };
@@ -872,19 +872,19 @@ function enlightenmentMarkup(portalX) {
     const sw = ray.w * 0.85;
     const begin = (i * 0.22).toFixed(2);
     const period = 9;
-    return `<line x1="${srcX.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#ffffff" stroke-width="${sw.toFixed(1)}" stroke-opacity="0.36" stroke-dasharray="5 4" class="new-age-interference">
+    return `<line x1="${srcX.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#ffffff" stroke-width="${sw.toFixed(1)}" stroke-opacity="0.36" stroke-dasharray="5 4" class="golden-age-interference">
         <animate attributeName="stroke-dashoffset" values="0;${-period}" begin="${begin}s" dur="1.6s" repeatCount="indefinite"/>
       </line>`;
   };
   return `
   <g class="narrative-enlightenment">
-    <title>the new age: 20 rays streaming rightward from the singularity, spectral fringing and winged interference bands</title>
-    ${NEW_AGE_RAYS.map(rayPolygon).join("\n    ")}
-    ${NEW_AGE_RAYS.map((r, i) => spectralFringe(r, i)).join("\n    ")}
-    ${NEW_AGE_RAYS.map((r, i) => interferenceLine(r, i)).join("\n    ")}
+    <title>the golden age: 20 rays streaming rightward from the singularity, spectral fringing and winged interference bands</title>
+    ${GOLDEN_AGE_RAYS.map(rayPolygon).join("\n    ")}
+    ${GOLDEN_AGE_RAYS.map((r, i) => spectralFringe(r, i)).join("\n    ")}
+    ${GOLDEN_AGE_RAYS.map((r, i) => interferenceLine(r, i)).join("\n    ")}
   </g>
-  <g class="new-age-label" opacity="${NEW_AGE_OPACITY}">
-    <text x="${(PLOT_RIGHT - 2).toFixed(1)}" y="${(PLOT_TOP - 8).toFixed(1)}" text-anchor="end" class="new-age-text">the new age</text>
+  <g class="golden-age-label" opacity="${GOLDEN_AGE_OPACITY}">
+    <text x="${(PLOT_RIGHT - 2).toFixed(1)}" y="${(PLOT_TOP - 8).toFixed(1)}" text-anchor="end" class="golden-age-text">the golden age</text>
   </g>`;
 }
 
@@ -1940,11 +1940,11 @@ function renderSVG(model) {
        the plot; they never become a new data encoding. */
     /* Every authored enlightenment part shares one phase opacity. The gradient
        stop opacities below remain colour falloff, not per-part intensity. */
-    .narrative-enlightenment { pointer-events: none; opacity: ${NEW_AGE_OPACITY}; }
-    .new-age-ray { fill: url(#newAgeRayGrad); stroke: none; filter: url(#newAgeGlow); mix-blend-mode: screen; }
-    .new-age-fringe { pointer-events: none; stroke-linejoin: round; }
-    .new-age-interference { pointer-events: none; stroke-linecap: butt; }
-    .new-age-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fde68a; letter-spacing: 2px; }
+    .narrative-enlightenment { pointer-events: none; opacity: ${GOLDEN_AGE_OPACITY}; }
+    .golden-age-ray { fill: url(#goldenAgeRayGrad); stroke: none; filter: url(#goldenAgeGlow); mix-blend-mode: screen; }
+    .golden-age-fringe { pointer-events: none; stroke-linejoin: round; }
+    .golden-age-interference { pointer-events: none; stroke-linecap: butt; }
+    .golden-age-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fde68a; letter-spacing: 2px; }
     .grid { stroke: #21262d; stroke-width: 1; }
     .baseline { stroke: #30363d; stroke-width: 1; }
     .bar { fill: url(#barGrad); }
@@ -2050,7 +2050,7 @@ function renderSVG(model) {
        paint-order stroke in the page-background colour is invisible in the matching
        case and only appears to outline the text when the scheme mismatches, so the
        numbers stay legible on either background. */
-    .headline, .sub, .value, .value-peak, .year, .portal-text, .seam-text, .origin-text, .new-age-text { paint-order: stroke; stroke: #0d1117; stroke-width: 2; stroke-linejoin: round; }
+    .headline, .sub, .value, .value-peak, .year, .portal-text, .seam-text, .origin-text, .golden-age-text { paint-order: stroke; stroke: #0d1117; stroke-width: 2; stroke-linejoin: round; }
     @media (prefers-color-scheme: light) {
       .headline { fill: #0891b2; }
       .value-peak { fill: #0c4a6e; font-weight: 800; filter: none; }
@@ -2104,11 +2104,11 @@ function renderSVG(model) {
       .intake-head-lime { fill: #4d7c0f; }
       .portal-boom { stroke: #4d7c0f; stroke-width: 1.3; }
       .rm-swirl { opacity: 0.66; }
-      .new-age-ray { fill: url(#newAgeRayGradLight); stroke: none; }
-      .new-age-fringe { }
-      .new-age-interference { stroke: #fef3c7; }
-      .new-age-text { fill: #92400e; }
-      .headline, .sub, .value, .value-peak, .year, .portal-text, .seam-text, .origin-text, .new-age-text { stroke: #ffffff; }
+      .golden-age-ray { fill: url(#goldenAgeRayGradLight); stroke: none; }
+      .golden-age-fringe { }
+      .golden-age-interference { stroke: #fef3c7; }
+      .golden-age-text { fill: #92400e; }
+      .headline, .sub, .value, .value-peak, .year, .portal-text, .seam-text, .origin-text, .golden-age-text { stroke: #ffffff; }
     }
     @media (prefers-reduced-motion: reduce) {
       animate, animateTransform { display: none; }

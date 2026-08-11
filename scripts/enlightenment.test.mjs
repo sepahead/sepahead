@@ -25,22 +25,22 @@ test("winged design: 20 rays, 40 fringe edges, 15 interference lines (central 5 
   const out = svg();
   assert.equal(tagsWithClass(out, "g", "narrative-enlightenment").length, 1);
 
-  const rays = tagsWithClass(out, "polygon", "new-age-ray");
+  const rays = tagsWithClass(out, "polygon", "golden-age-ray");
   assert.equal(rays.length, 20);
 
-  const fringes = tagsWithClass(out, "polygon", "new-age-fringe");
+  const fringes = tagsWithClass(out, "polygon", "golden-age-fringe");
   assert.equal(fringes.length, 40);
 
   // 15 interference lines (20 total - 5 central core angles -2..2)
-  const lineBlocks = [...out.matchAll(/<line[^>]*class="[^"]*\bnew-age-interference\b[^"]*"[^>]*>/g)];
+  const lineBlocks = [...out.matchAll(/<line[^>]*class="[^"]*\bgolden-age-interference\b[^"]*"[^>]*>/g)];
   assert.equal(lineBlocks.length, 15, "expected 15 interference lines on wings");
 
-  const interferenceBlocks = [...out.matchAll(/<line[^>]*class="[^"]*\bnew-age-interference\b[^"]*"[^]*?<\/line>/g)];
+  const interferenceBlocks = [...out.matchAll(/<line[^>]*class="[^"]*\bgolden-age-interference\b[^"]*"[^]*?<\/line>/g)];
   for (let i = 0; i < interferenceBlocks.length; i++) {
     assert.match(interferenceBlocks[i][0], /stroke-dashoffset/, "interference must animate");
   }
 
-  const fringeBlocks = [...out.matchAll(/<polygon[^>]*class="[^"]*\bnew-age-fringe\b[^"]*"[^]*?<\/polygon>/g)];
+  const fringeBlocks = [...out.matchAll(/<polygon[^>]*class="[^"]*\bgolden-age-fringe\b[^"]*"[^]*?<\/polygon>/g)];
   for (let i = 0; i < fringeBlocks.length; i++) {
     assert.match(fringeBlocks[i][0], /repeatCount="indefinite"/, "fringe must repeat indefinitely");
   }
@@ -56,26 +56,26 @@ test("winged design: 20 rays, 40 fringe edges, 15 interference lines (central 5 
   assert.match(aria, /20 rays/);
 });
 
-test("new age uses dedicated ray gradient and glow filter", () => {
+test("golden age uses dedicated ray gradient and glow filter", () => {
   const out = svg();
-  assert.match(out, /id="newAgeRayGrad"/);
-  assert.match(out, /id="newAgeGlow"/);
+  assert.match(out, /id="goldenAgeRayGrad"/);
+  assert.match(out, /id="goldenAgeGlow"/);
 });
 
-test("all new age parts share one phase opacity", () => {
+test("all golden age parts share one phase opacity", () => {
   const out = svg();
   const shared = "1";
-  const labelStart = out.indexOf('<g class="new-age-label"');
+  const labelStart = out.indexOf('<g class="golden-age-label"');
   const label = out.slice(labelStart, out.indexOf("</g>", labelStart) + 4);
   assert.match(label, new RegExp(`opacity="${shared}"`));
 
   const { dark, light } = splitThemes(out);
   for (const [name, out] of Object.entries({ dark, light })) {
     const css = styleBlocks(out)[0];
-    assert.ok(css.includes(".new-age-ray"), `${name}: missing ray CSS`);
-    assert.ok(css.includes(".new-age-fringe"), `${name}: missing fringe CSS`);
-    assert.ok(css.includes(".new-age-interference"), `${name}: missing interference CSS`);
-    assert.ok(css.includes(".new-age-text"), `${name}: missing label text CSS`);
+    assert.ok(css.includes(".golden-age-ray"), `${name}: missing ray CSS`);
+    assert.ok(css.includes(".golden-age-fringe"), `${name}: missing fringe CSS`);
+    assert.ok(css.includes(".golden-age-interference"), `${name}: missing interference CSS`);
+    assert.ok(css.includes(".golden-age-text"), `${name}: missing label text CSS`);
   }
   for (const [name, css] of Object.entries({ dark, light })) {
     assert.match(css, new RegExp(`\\.narrative-enlightenment\\s*\\{[^}]*opacity:\\s*${shared}`));

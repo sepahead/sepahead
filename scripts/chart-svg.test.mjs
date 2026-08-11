@@ -227,25 +227,25 @@ for (const [label, currentTotal] of CASES) {
   });
 }
 
-test("the new age 20-rays fan survives every branch", () => {
+test("the golden age 20-rays fan survives every branch", () => {
   for (const [label, currentTotal] of CASES) {
     const svg = render(currentTotal);
     assert.equal(
-      (svg.match(/class="[^"]*\bnew-age-ray\b[^"]*"/g) || []).length,
+      (svg.match(/class="[^"]*\bgolden-age-ray\b[^"]*"/g) || []).length,
       20,
       `expected 20 ray polygons (${label})`
     );
     assert.equal(
-      (svg.match(/class="[^"]*\bnew-age-interference\b[^"]*"/g) || []).length,
+      (svg.match(/class="[^"]*\bgolden-age-interference\b[^"]*"/g) || []).length,
       15,
       `expected 15 interference lines on wings (${label})`
     );
     assert.equal(
-      (svg.match(/class="[^"]*\bnew-age-fringe\b[^"]*"/g) || []).length,
+      (svg.match(/class="[^"]*\bgolden-age-fringe\b[^"]*"/g) || []).length,
       40,
       `expected 40 fringe edge polygons (${label})`
     );
-    const rays = svg.match(/<polygon[^>]*class="[^"]*\bnew-age-ray\b[^"]*"[^>]*>/g) || [];
+    const rays = svg.match(/<polygon[^>]*class="[^"]*\bgolden-age-ray\b[^"]*"[^>]*>/g) || [];
     for (const ray of rays) {
       const pts = (ray.match(/points="([^"]+)"/)?.[1] || "").trim().split(/\s+/);
       assert.ok(pts.length >= 8, `ray must be a polygon with 4+ points (${label})`);
@@ -255,29 +255,29 @@ test("the new age 20-rays fan survives every branch", () => {
 
 test("written dark/light assets preserve 20-rays and ray gradient opacities", () => {
   const expectedStops = {
-    newAgeRayGrad: ["0.90", "0.78", "0.48", "0"],
-    newAgeRayGradLight: ["0.94", "0.74", "0.44", "0"],
+    goldenAgeRayGrad: ["0.90", "0.78", "0.48", "0"],
+    goldenAgeRayGradLight: ["0.94", "0.74", "0.44", "0"],
   };
   for (const theme of ["dark", "light"]) {
     const asset = readFileSync(resolve(REPO_ROOT, `assets/cumulative-${theme}.svg`), "utf8");
     assert.equal(
-      (asset.match(/class="[^"]*\bnew-age-ray\b[^"]*"/g) || []).length,
+      (asset.match(/class="[^"]*\bgolden-age-ray\b[^"]*"/g) || []).length,
       20,
       `${theme}: written asset must contain 20 ray polygons`
     );
     assert.equal(
-      (asset.match(/class="[^"]*\bnew-age-interference\b[^"]*"/g) || []).length,
+      (asset.match(/class="[^"]*\bgolden-age-interference\b[^"]*"/g) || []).length,
       15,
       `${theme}: written asset must contain 15 interference lines on wings`
     );
     assert.equal(
-      (asset.match(/class="[^"]*\bnew-age-fringe\b[^"]*"/g) || []).length,
+      (asset.match(/class="[^"]*\bgolden-age-fringe\b[^"]*"/g) || []).length,
       40,
       `${theme}: written asset must contain 40 fringe edges`
     );
     const activeGradientIds =
       theme === "dark"
-        ? ["newAgeRayGrad"]
+        ? ["goldenAgeRayGrad"]
         : Object.keys(expectedStops);
     for (const id of activeGradientIds) {
       const block = asset.match(new RegExp(`<(?:linear|radial)Gradient id="${id}"[^>]*>([\\s\\S]*?)</(?:linear|radial)Gradient>`))?.[1] ?? "";
@@ -294,7 +294,7 @@ test("written dark/light assets preserve 20-rays and ray gradient opacities", ()
 test("written assets retain bounded ray geometry", () => {
   for (const theme of ["dark", "light"]) {
     const asset = readFileSync(resolve(REPO_ROOT, `assets/cumulative-${theme}.svg`), "utf8");
-    const rays = asset.match(/<polygon[^>]*class="[^\"]*\bnew-age-ray\b[^\"]*"[^>]*>/g) || [];
+    const rays = asset.match(/<polygon[^>]*class="[^\"]*\bgolden-age-ray\b[^\"]*"[^>]*>/g) || [];
     assert.equal(rays.length, 20, `${theme}: expected 20 written ray polygons`);
     for (const ray of rays) {
       const pts = (ray.match(/points="([^"]+)"/)?.[1] || "").trim().split(/\s+/);
