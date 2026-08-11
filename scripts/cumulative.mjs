@@ -163,11 +163,11 @@ async function fetchYearTotals(
   endYear,
   fetchImpl = globalThis.fetch
 ) {
-  const out = [];
+  const promises = [];
   for (let year = startYear; year <= endYear; year += 1) {
-    out.push(await fetchYearTotal(login, year, fetchImpl));
+    promises.push(fetchYearTotal(login, year, fetchImpl));
   }
-  return out; // ascending by year
+  return Promise.all(promises); // ascending by year
 }
 
 // ---------------------------------------------------------------------------
@@ -933,24 +933,24 @@ function seamDefs(sx, endX) {
       <stop offset="100%" stop-color="#a16207"/>
     </linearGradient>
     <radialGradient id="seamAuraGrad" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.28"/>
-      <stop offset="60%" stop-color="#fbbf24" stop-opacity="0.16"/>
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.21"/>
+      <stop offset="60%" stop-color="#fbbf24" stop-opacity="0.12"/>
       <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="seamAuraGradLight" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#d97706" stop-opacity="0.30"/>
-      <stop offset="60%" stop-color="#d97706" stop-opacity="0.14"/>
+      <stop offset="0%" stop-color="#d97706" stop-opacity="0.22"/>
+      <stop offset="60%" stop-color="#d97706" stop-opacity="0.10"/>
       <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="seamGlassGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
-      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.16"/>
-      <stop offset="50%" stop-color="#fef3c7" stop-opacity="0.50"/>
-      <stop offset="100%" stop-color="#fde68a" stop-opacity="0.16"/>
+      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.12"/>
+      <stop offset="50%" stop-color="#fef3c7" stop-opacity="0.39"/>
+      <stop offset="100%" stop-color="#fde68a" stop-opacity="0.12"/>
     </linearGradient>
     <linearGradient id="seamGlassGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
-      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.14"/>
-      <stop offset="50%" stop-color="#fbbf24" stop-opacity="0.42"/>
-      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.14"/>
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.10"/>
+      <stop offset="50%" stop-color="#fbbf24" stop-opacity="0.31"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.10"/>
     </linearGradient>
     <linearGradient id="seamFieldGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${E}" y2="0">
       <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.38"/>
@@ -1009,24 +1009,24 @@ function originDefs(mx, ox, sx) {
       <stop offset="100%" stop-color="#9f1239"/>
     </linearGradient>
     <radialGradient id="originAuraGrad" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#fb7185" stop-opacity="0.28"/>
-      <stop offset="60%" stop-color="#fb7185" stop-opacity="0.16"/>
+      <stop offset="0%" stop-color="#fb7185" stop-opacity="0.21"/>
+      <stop offset="60%" stop-color="#fb7185" stop-opacity="0.12"/>
       <stop offset="100%" stop-color="#fb7185" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="originAuraGradLight" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#be123c" stop-opacity="0.30"/>
-      <stop offset="60%" stop-color="#be123c" stop-opacity="0.14"/>
+      <stop offset="0%" stop-color="#be123c" stop-opacity="0.22"/>
+      <stop offset="60%" stop-color="#be123c" stop-opacity="0.10"/>
       <stop offset="100%" stop-color="#be123c" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="originGlassGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
-      <stop offset="0%" stop-color="#fda4af" stop-opacity="0.16"/>
-      <stop offset="50%" stop-color="#fecdd3" stop-opacity="0.50"/>
-      <stop offset="100%" stop-color="#fda4af" stop-opacity="0.16"/>
+      <stop offset="0%" stop-color="#fda4af" stop-opacity="0.12"/>
+      <stop offset="50%" stop-color="#fecdd3" stop-opacity="0.39"/>
+      <stop offset="100%" stop-color="#fda4af" stop-opacity="0.12"/>
     </linearGradient>
     <linearGradient id="originGlassGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="${PLOT_TOP}" x2="${X}" y2="${PLOT_BOTTOM}">
-      <stop offset="0%" stop-color="#e11d48" stop-opacity="0.14"/>
-      <stop offset="50%" stop-color="#f43f5e" stop-opacity="0.42"/>
-      <stop offset="100%" stop-color="#e11d48" stop-opacity="0.14"/>
+      <stop offset="0%" stop-color="#e11d48" stop-opacity="0.10"/>
+      <stop offset="50%" stop-color="#f43f5e" stop-opacity="0.31"/>
+      <stop offset="100%" stop-color="#e11d48" stop-opacity="0.10"/>
     </linearGradient>
     <linearGradient id="originBand" gradientUnits="userSpaceOnUse" x1="${B}" y1="0" x2="${sx.toFixed(1)}" y2="0">
       <stop offset="0%" stop-color="#fb7185" stop-opacity="0.34"/>
@@ -1904,7 +1904,7 @@ function renderSVG(model) {
     .narrative-context.narrative-field,
     .narrative-context.narrative-portal,
     .narrative-context.narrative-seam,
-    .narrative-context.narrative-origin { opacity: 0.90; }
+    .narrative-context.narrative-origin { opacity: 0.72; }
     .narrative-label { opacity: 0.82; }
     /* Keep the context layer a calm, deterministic backdrop. Its authored base
        geometry is already the complete tableau, so hiding animation children
@@ -1999,19 +1999,19 @@ function renderSVG(model) {
     .portal-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #a3e635; letter-spacing: 2.5px; }
     .seam-field { fill: url(#seamFieldGrad); }
     .seam-glass { fill: url(#seamGlassGrad); }
-    .origin-line { stroke: url(#originGrad); stroke-width: 1.5; stroke-linecap: round; filter: url(#originGlowSoft); }
+    .origin-line { stroke: url(#originGrad); stroke-width: 1.2; stroke-linecap: round; filter: url(#originGlowSoft); }
     .origin-glass { fill: url(#originGlassGrad); }
-    .origin-cell { fill: url(#originGlassGrad); stroke: url(#originGrad); stroke-width: 1.0; stroke-opacity: 1.0; }
-    .origin-pore { fill: none; stroke: url(#originGrad); stroke-width: 1.2; stroke-opacity: 1.0; }
+    .origin-cell { fill: url(#originGlassGrad); stroke: url(#originGrad); stroke-width: 0.85; stroke-opacity: 0.9; }
+    .origin-pore { fill: none; stroke: url(#originGrad); stroke-width: 1.05; stroke-opacity: 0.9; }
     .origin-nucleolus { fill: #fecdd3; }
     .origin-band { fill: url(#originBand); }
     .origin-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fb7185; letter-spacing: 2.5px; }
-    .gate-jamb { fill: none; stroke: url(#seamGrad); stroke-width: 1.6; filter: url(#seamGlowSoft); }
-    .gate-fan { stroke: url(#seamGrad); stroke-width: 1.2; stroke-opacity: 0.85; }
-    .gate-iris { fill: url(#seamGlassGrad); stroke: url(#seamGrad); stroke-width: 1.5; }
-    .gate-iris-inner { fill: none; stroke: url(#seamGrad); stroke-width: 1.4; }
-    .gate-port { fill: url(#seamGlassGrad); fill-opacity: 0.5; stroke: url(#seamGrad); stroke-width: 1.3; }
-    .gate-rail { stroke: url(#seamGrad); stroke-width: 1.4; stroke-opacity: 0.85; }
+    .gate-jamb { fill: none; stroke: url(#seamGrad); stroke-width: 1.4; filter: url(#seamGlowSoft); }
+    .gate-fan { stroke: url(#seamGrad); stroke-width: 1.2; stroke-opacity: 0.70; }
+    .gate-iris { fill: url(#seamGlassGrad); stroke: url(#seamGrad); stroke-width: 1.3; }
+    .gate-iris-inner { fill: none; stroke: url(#seamGrad); stroke-width: 1.2; }
+    .gate-port { fill: url(#seamGlassGrad); fill-opacity: 0.4; stroke: url(#seamGrad); stroke-width: 1.3; }
+    .gate-rail { stroke: url(#seamGrad); stroke-width: 1.4; stroke-opacity: 0.72; }
     .gate-slit { fill: #fde68a; }
     .gate-led { fill: #fde68a; fill-opacity: 0.9; }
     .seam-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; letter-spacing: 2.5px; }
@@ -2063,8 +2063,8 @@ function renderSVG(model) {
       .origin-line { stroke: url(#originGradLight); filter: url(#originGlowSoft); }
       .origin-glass { fill: url(#originGlassGradLight); }
       .origin-aura { fill: url(#originAuraGradLight); }
-      .origin-cell { fill: url(#originGlassGradLight); stroke: #be123c; stroke-width: 0.9; stroke-opacity: 0.9; }
-      .origin-pore { stroke: #be123c; stroke-width: 1.1; stroke-opacity: 0.9; }
+      .origin-cell { fill: url(#originGlassGradLight); stroke: #be123c; stroke-width: 0.85; stroke-opacity: 0.85; }
+      .origin-pore { stroke: #be123c; stroke-width: 1.0; stroke-opacity: 0.85; }
       .origin-nucleolus { fill: #be123c; }
       .origin-band { fill: url(#originBandLight); }
       .origin-text { fill: #9f1239; }
