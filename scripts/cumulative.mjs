@@ -685,14 +685,11 @@ function portalFieldMarkup(px) {
   const R = PLOT_RIGHT;
   const midY = MID_Y;
   const span = R - px;
-  // Exit cone: rays burst OUT of the portal mouth — born tight around the
-  // portal centre, diverging outward to full plot height at the right edge
-  // (the singularity expands what passes through it).
+  // Exit cone: straight rays from the tight portal pinch directly into
+  // the new-age light cone. No bezier curve — pure linear continuation.
   const rayPath = (y) => {
     const yStart = midY + (y - midY) * 0.10;
-    const c1x = (px + span * 0.3).toFixed(1);
-    const c2x = (px + span * 0.68).toFixed(1);
-    return `M ${X} ${yStart.toFixed(1)} C ${c1x} ${yStart.toFixed(1)} ${c2x} ${y} ${R} ${y}`;
+    return `M ${X} ${yStart.toFixed(1)} L ${R} ${y}`;
   };
   const ray = (y, cls, drawDur, dash, pulseDur) =>
     `<path d="${rayPath(y)}" class="portal-ray ${cls}" pathLength="1" stroke-dasharray="1 1">
