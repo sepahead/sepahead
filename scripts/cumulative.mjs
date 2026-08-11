@@ -627,7 +627,8 @@ const GOLDEN_AGE_RAYS = [
 // are keyTimes-encoded on begin="0s" animations, loops start only after
 // the reveal, and prefers-reduced-motion hides every <animate>/
 // <animateTransform>.
-function portalDefs(px) {
+function portalDefs(px, suffix = "") {
+  const S = suffix;
   const R = PLOT_RIGHT;
   const X = px.toFixed(1);
   // Horizontal fade for a warp ray: bright at the portal, gone at plot right.
@@ -663,8 +664,8 @@ function portalDefs(px) {
     ${exit("exitGoldL", "#65a30d", "#4d7c0f")}
     ${exit("exitCyanL", "#4d7c0f", "#365314")}
     ${exit("exitVioletL", "#84cc16", "#65a30d")}
-    <clipPath id="portalGap"><rect x="${(px - 24).toFixed(1)}" y="${PLOT_TOP - 24}" width="40" height="${PLOT_HEIGHT + 48}"/></clipPath>
-    <filter id="portalWobble" filterUnits="userSpaceOnUse" x="${(px - 44).toFixed(1)}" y="${PLOT_TOP - 24}" width="88" height="${PLOT_HEIGHT + 48}">
+    <clipPath id="portalGap${S}"><rect x="${(px - 24).toFixed(1)}" y="${PLOT_TOP - 24}" width="40" height="${PLOT_HEIGHT + 48}"/></clipPath>
+    <filter id="portalWobble${S}" filterUnits="userSpaceOnUse" x="${(px - 44).toFixed(1)}" y="${PLOT_TOP - 24}" width="88" height="${PLOT_HEIGHT + 48}">
       <feTurbulence type="fractalNoise" baseFrequency="0.02 0.05" numOctaves="3" seed="7" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="6" xChannelSelector="R" yChannelSelector="G"/>
     </filter>`;
@@ -754,11 +755,9 @@ function portalFieldMarkup(px) {
     ${approach(LANES[1], "px-gold", "2.6s", "0.6s")}
     ${approach(LANES[2], "px-cyan", "2.75s", "0.55s")}
     ${approach(LANES[3], "px-violet", "2.5s", "0.65s")}
-    ${ray(LANES[0], "px-gold", 2.3, 0.09, 0.9)}
-    ${ray(LANES[1], "px-cyan", 2.5, 0.07, 0.9)}
-    ${ray(LANES[2], "px-violet", 2.4, 0.08, 0.9)}
-    ${ray(LANES[3], "px-gold", 2.6, 0.06, 0.9)}
-    ${ray(LANES[4], "px-cyan", 2.35, 0.09, 0.9)}
+    ${ray(LANES[1], "px-gold", 2.3, 0.09, 0.9)}
+    ${ray(LANES[2], "px-cyan", 2.5, 0.07, 0.9)}
+    ${ray(LANES[3], "px-violet", 2.4, 0.08, 0.9)}
     ${wave(10, WAVE_RY_OUTER, "pw-violet", "2.8s", "1.2s")}
     ${wave(15, WAVE_RY_MID, "pw-cyan", "3.2s", "1.2s")}
     ${wave(20, WAVE_RY_INNER, "pw-gold", "3.6s", "1.2s")}
@@ -884,7 +883,8 @@ function enlightenmentMarkup(portalX) {
   </g>`;
 }
 
-function portalMarkup(px, fromLabel, toLabel) {
+function portalMarkup(px, fromLabel, toLabel, suffix = "") {
+  const S = suffix;
   const X = px.toFixed(1);
   const CX = (px - 4).toFixed(1);
   const top = PLOT_TOP;
@@ -895,7 +895,7 @@ function portalMarkup(px, fromLabel, toLabel) {
   return `
   <g class="narrative-context narrative-portal">
     <title>${title}</title>
-    <g filter="url(#portalWobble)" clip-path="url(#portalGap)">
+    <g filter="url(#portalWobble${S})" clip-path="url(#portalGap${S})">
       <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
       <ellipse cx="${CX}" cy="${midY}" rx="13" ry="${PORTAL_HALO_RY}" class="rm-g1">
         <animateTransform attributeName="transform" type="rotate" values="0 ${CX} ${midY};4 ${CX} ${midY};0 ${CX} ${midY};-4 ${CX} ${midY};0 ${CX} ${midY}" begin="2.4s" dur="7.2s" repeatCount="indefinite"/>
@@ -1729,6 +1729,15 @@ function renderSVG(model) {
     enlightenmentBoundaryX != null
       ? enlightenmentMarkup(enlightenmentBoundaryX)
       : "";
+  const enlightenmentPortal =
+    enlightenmentBoundaryX != null && futureStartIdx >= 0
+      ? portalMarkup(enlightenmentBoundaryX,
+          rows[futureStartIdx].label, rows[futureStartIdx + 1].label, "Ep")
+      : "";
+  const enlightenmentPortalDefsStr =
+    enlightenmentBoundaryX != null
+      ? portalDefs(enlightenmentBoundaryX, "Ep")
+      : "";
   const originBandRect = seamX != null
     ? `<rect x="${ox}" y="${PLOT_TOP}" width="${(seamX - ox).toFixed(1)}" height="${PLOT_HEIGHT}" class="origin-band">
     <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.3;1" begin="0s" dur="2.2s" fill="freeze"/>
@@ -1868,6 +1877,7 @@ function renderSVG(model) {
       <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     ${portalDefsStr}
+    ${enlightenmentPortalDefsStr}
     ${seamDefsStr}
     ${originDefsStr}
     ${portalX != null ? enlightenmentDefs() : ""}
@@ -2131,6 +2141,7 @@ function renderSVG(model) {
   ${origin}
   ${seam}
   ${portal}
+  ${enlightenmentPortal}
   ${warningBanner}
 </svg>`;
 }
