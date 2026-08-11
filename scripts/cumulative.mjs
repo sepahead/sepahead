@@ -685,12 +685,10 @@ function portalFieldMarkup(px) {
   const R = PLOT_RIGHT;
   const midY = MID_Y;
   const span = R - px;
-  // Exit cone: straight rays from a tight pinch, upper rays flatter
-  // than lower so they stay visibly subordinate to the golden-age cone.
+  // Exit cone: straight rays from a tight pinch, evenly spaced.
   const rayPath = (y) => {
     const yStart = midY + (y - midY) * 0.10;
-    const mult = y < midY ? 0.35 : 0.50;
-    const yEnd = midY + (y - midY) * mult;
+    const yEnd = midY + (y - midY) * 0.45;
     return `M ${X} ${yStart.toFixed(1)} L ${R} ${yEnd.toFixed(1)}`;
   };
   // Warp-speed approach streaks: short lines converging into the portal
