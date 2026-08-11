@@ -472,15 +472,15 @@
       <animate attributeName="opacity" values="0;0;0.98" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
       <animate attributeName="opacity" values="0.98;0.72;0.98" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
     </ellipse>
-    <line x1="434.6" y1="164.5" x2="472.6" y2="164.5" class="portal-ray px-gold" opacity="0.55" stroke-dasharray="5 4">
-      <animate attributeName="stroke-dashoffset" values="0;-13" begin="2.6s" dur="0.6s" repeatCount="indefinite"/>
+    <line x1="434.6" y1="164.5" x2="472.6" y2="164.5" class="portal-ray px-gold" opacity="0.55" stroke-dasharray="5 3">
+      <animate attributeName="stroke-dashoffset" values="0;-12" begin="2.6s" dur="0.6s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0;0.65;0.15;0" keyTimes="0;0.15;0.7;1" begin="2.6s" dur="0.6s" repeatCount="indefinite"/>
     </line>
-    <line x1="434.6" y1="190" x2="472.6" y2="190" class="portal-ray px-cyan" opacity="0.55" stroke-dasharray="4 1">
-      <animate attributeName="stroke-dashoffset" values="0;-9" begin="2.75s" dur="0.55s" repeatCount="indefinite"/>
+    <line x1="434.6" y1="190" x2="472.6" y2="190" class="portal-ray px-cyan" opacity="0.55" stroke-dasharray="6 3">
+      <animate attributeName="stroke-dashoffset" values="0;-14" begin="2.75s" dur="0.55s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0;0.65;0.15;0" keyTimes="0;0.15;0.7;1" begin="2.75s" dur="0.55s" repeatCount="indefinite"/>
     </line>
-    <line x1="434.6" y1="215.5" x2="472.6" y2="215.5" class="portal-ray px-violet" opacity="0.55" stroke-dasharray="3 4">
+    <line x1="434.6" y1="215.5" x2="472.6" y2="215.5" class="portal-ray px-violet" opacity="0.55" stroke-dasharray="5 2">
       <animate attributeName="stroke-dashoffset" values="0;-16" begin="2.5s" dur="0.65s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0;0.65;0.15;0" keyTimes="0;0.15;0.7;1" begin="2.5s" dur="0.65s" repeatCount="indefinite"/>
     </line>
