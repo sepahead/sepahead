@@ -578,9 +578,8 @@ const WAVE_RY_INNER = artRy(31 / 24); // 31
 // at the edges. Central rays shoot straight right; edge rays fan up/down.
 // One shared phase opacity applied to the complete tableau.
 const NEW_AGE_OPACITY = 1.0;
-// 20 rays fanning rightward from staggered positions along the singularity
-// portal edge — upper rays emerge higher, lower rays emerge lower, central
-// rays from the midline. 0° = horizontal right. Cone spans −55° to +50°.
+// 20 rays fanning rightward from subtly staggered positions along the
+// portal edge. 0° = horizontal right. Cone spans −34° to +32°.
 const NEW_AGE_RAYS = [
   // Central core — straight right from portal center, longest and brightest
   { angle: -2, len: 115, w: 6.0, o: 1.00, sy: 0 },
@@ -588,28 +587,28 @@ const NEW_AGE_RAYS = [
   { angle: 0, len: 120, w: 6.0, o: 1.00, sy: 0 },
   { angle: 1, len: 118, w: 5.5, o: 1.00, sy: 0 },
   { angle: 2, len: 115, w: 6.0, o: 1.00, sy: 0 },
-  // Upper fan — staggered upward, wider angles
-  { angle: -10, len: 112, w: 4.4, o: 1.00, sy: -14 },
-  { angle: -18, len: 106, w: 4.0, o: 0.96, sy: -28 },
-  { angle: -26, len: 98, w: 3.5, o: 0.90, sy: -40 },
-  // Lower fan — staggered downward, wider angles
-  { angle: 8, len: 112, w: 4.4, o: 0.92, sy: 14 },
-  { angle: 16, len: 106, w: 4.0, o: 0.85, sy: 28 },
-  { angle: 24, len: 98, w: 3.5, o: 0.78, sy: 40 },
-  // Mid upper fan — wide, far from center
-  { angle: -34, len: 88, w: 3.0, o: 0.82, sy: -50 },
-  { angle: -42, len: 76, w: 2.6, o: 0.72, sy: -58 },
-  // Mid lower fan
-  { angle: 32, len: 88, w: 3.0, o: 0.68, sy: 50 },
-  { angle: 40, len: 76, w: 2.6, o: 0.58, sy: 58 },
-  // Outer upper — extreme angles, short beams from far edge of portal
-  { angle: -50, len: 62, w: 2.2, o: 0.62, sy: -62 },
-  { angle: -55, len: 50, w: 1.8, o: 0.52, sy: -66 },
+  // Inner upper — slight upward fan, slightly above center
+  { angle: -8, len: 110, w: 4.4, o: 1.00, sy: -10 },
+  { angle: -14, len: 104, w: 4.0, o: 0.96, sy: -20 },
+  { angle: -20, len: 96, w: 3.5, o: 0.90, sy: -30 },
+  // Inner lower — slight downward fan, slightly below center
+  { angle: 8, len: 110, w: 4.4, o: 0.92, sy: 10 },
+  { angle: 14, len: 104, w: 4.0, o: 0.85, sy: 20 },
+  { angle: 20, len: 96, w: 3.5, o: 0.78, sy: 30 },
+  // Mid upper
+  { angle: -26, len: 84, w: 3.0, o: 0.82, sy: -38 },
+  { angle: -30, len: 72, w: 2.6, o: 0.72, sy: -44 },
+  // Mid lower
+  { angle: 26, len: 84, w: 3.0, o: 0.68, sy: 38 },
+  { angle: 30, len: 72, w: 2.6, o: 0.58, sy: 44 },
+  // Outer upper — widest, shortest
+  { angle: -34, len: 58, w: 2.2, o: 0.62, sy: -48 },
+  { angle: -34, len: 46, w: 1.8, o: 0.52, sy: -52 },
   // Outer lower
-  { angle: 46, len: 62, w: 2.2, o: 0.48, sy: 62 },
-  { angle: 50, len: 50, w: 1.8, o: 0.38, sy: 66 },
-  // Steep accent — widest upper ray
-  { angle: -55, len: 36, w: 1.5, o: 0.42, sy: -66 },
+  { angle: 32, len: 58, w: 2.2, o: 0.48, sy: 48 },
+  { angle: 32, len: 46, w: 1.8, o: 0.38, sy: 52 },
+  // Steep upper accent
+  { angle: -34, len: 36, w: 1.5, o: 0.42, sy: -52 },
 ];
 
 // ---------------------------------------------------------------------------
