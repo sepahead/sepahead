@@ -685,13 +685,21 @@ function portalFieldMarkup(px) {
   const R = PLOT_RIGHT;
   const midY = MID_Y;
   const span = R - px;
-  // Exit cone: straight rays from a tight pinch to a narrow spread —
-  // never wider than the new-age cone to the right. Feeds directly in.
+  // Exit cone: straight rays from a tight pinch, upper rays flatter
+  // than lower so they stay visibly subordinate to the new-age cone.
   const rayPath = (y) => {
     const yStart = midY + (y - midY) * 0.10;
-    const yEnd = midY + (y - midY) * 0.50;
+    const mult = y < midY ? 0.35 : 0.50;
+    const yEnd = midY + (y - midY) * mult;
     return `M ${X} ${yStart.toFixed(1)} L ${R} ${yEnd.toFixed(1)}`;
   };
+  // Warp-speed approach streaks: short lines converging into the portal
+  // from the left — like particles rushing into the event horizon.
+  const approach = (y, cls, begin, dur) =>
+    `<line x1="${(px - 42).toFixed(1)}" y1="${y}" x2="${(px - 4).toFixed(1)}" y2="${y}" class="portal-ray ${cls}" opacity="0.55" stroke-dasharray="${(3 + Math.random() * 5).toFixed(0)} ${(1 + Math.random() * 3).toFixed(0)}">
+      <animate attributeName="stroke-dashoffset" values="0;${-(8 + Math.random() * 12).toFixed(0)}" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.65;0.15;0" keyTimes="0;0.15;0.7;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
+    </line>`;
   const ray = (y, cls, drawDur, dash, pulseDur) =>
     `<path d="${rayPath(y)}" class="portal-ray ${cls}" pathLength="1" stroke-dasharray="1 1">
       <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.6;1" begin="0s" dur="${drawDur}s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.3 0 0.2 1"/>
@@ -745,6 +753,11 @@ function portalFieldMarkup(px) {
       <animate attributeName="opacity" values="0;0;0.98" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
       <animate attributeName="opacity" values="0.98;0.72;0.98" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
     </ellipse>
+    ${approach(LANES[0], "px-gold", "2.6s", "0.6s")}
+    ${approach(LANES[1], "px-cyan", "2.75s", "0.55s")}
+    ${approach(LANES[2], "px-violet", "2.5s", "0.65s")}
+    ${approach(MID_Y + (LANES[3] - MID_Y) * 0.4, "px-gold", "2.9s", "0.5s")}
+    ${approach(MID_Y + (LANES[4] - MID_Y) * 0.4, "px-cyan", "2.65s", "0.6s")}
     ${ray(LANES[0], "px-gold", 2.3, 0.09, 0.9)}
     ${ray(LANES[1], "px-cyan", 2.5, 0.07, 0.9)}
     ${ray(LANES[2], "px-violet", 2.4, 0.08, 0.9)}
