@@ -665,7 +665,7 @@ function portalDefs(px) {
     ${exit("exitVioletL", "#84cc16", "#65a30d")}
     <clipPath id="portalGap"><rect x="${(px - 24).toFixed(1)}" y="${PLOT_TOP - 24}" width="40" height="${PLOT_HEIGHT + 48}"/></clipPath>
     <filter id="portalWobble" filterUnits="userSpaceOnUse" x="${(px - 44).toFixed(1)}" y="${PLOT_TOP - 24}" width="88" height="${PLOT_HEIGHT + 48}">
-      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.05" numOctaves="3" seed="7" result="n"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.05" numOctaves="2" seed="7" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="6" xChannelSelector="R" yChannelSelector="G"/>
     </filter>`;
 }
@@ -693,9 +693,10 @@ function portalFieldMarkup(px) {
   };
   // Warp-speed approach streaks: short lines converging into the portal
   // from the left — like particles rushing into the event horizon.
-  const approach = (y, cls, begin, dur) =>
-    `<line x1="${(px - 42).toFixed(1)}" y1="${y}" x2="${(px - 4).toFixed(1)}" y2="${y}" class="portal-ray ${cls}" opacity="0.55" stroke-dasharray="${(3 + Math.random() * 5).toFixed(0)} ${(1 + Math.random() * 3).toFixed(0)}">
-      <animate attributeName="stroke-dashoffset" values="0;${-(8 + Math.random() * 12).toFixed(0)}" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
+  const APPROACH_DASH = [["4 3", -10], ["5 2", -12], ["3 4", -9]];
+  const approach = (y, cls, begin, dur, dashIdx) =>
+    `<line x1="${(px - 42).toFixed(1)}" y1="${y}" x2="${(px - 4).toFixed(1)}" y2="${y}" class="portal-ray ${cls}" opacity="0.55" stroke-dasharray="${APPROACH_DASH[dashIdx][0]}">
+      <animate attributeName="stroke-dashoffset" values="0;${APPROACH_DASH[dashIdx][1]}" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0;0.65;0.15;0" keyTimes="0;0.15;0.7;1" begin="${begin}" dur="${dur}" repeatCount="indefinite"/>
     </line>`;
   const ray = (y, cls, drawDur, dash, pulseDur) =>
@@ -751,9 +752,9 @@ function portalFieldMarkup(px) {
       <animate attributeName="opacity" values="0;0;0.98" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
       <animate attributeName="opacity" values="0.98;0.72;0.98" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
     </ellipse>
-    ${approach(LANES[1], "px-gold", "2.6s", "0.6s")}
-    ${approach(LANES[2], "px-cyan", "2.75s", "0.55s")}
-    ${approach(LANES[3], "px-violet", "2.5s", "0.65s")}
+    ${approach(LANES[1], "px-gold", "2.6s", "0.6s", 0)}
+    ${approach(LANES[2], "px-cyan", "2.75s", "0.55s", 1)}
+    ${approach(LANES[3], "px-violet", "2.5s", "0.65s", 2)}
     ${ray(LANES[1], "px-gold", 2.3, 0.09, 0.9)}
     ${ray(LANES[2], "px-cyan", 2.5, 0.07, 0.9)}
     ${ray(LANES[3], "px-violet", 2.4, 0.08, 0.9)}
@@ -787,7 +788,7 @@ function enlightenmentDefs() {
       <stop offset="62%" stop-color="#fbbf24" stop-opacity="0.44"/>
       <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
     </radialGradient>
-    <filter id="goldenAgeGlow" x="-50%" y="-50%" width="200%" height="200%">
+    <filter id="goldenAgeGlow" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="1.8" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
@@ -905,7 +906,7 @@ function enlightenmentMarkup(portalX) {
     return out.join("\n    ");
   };
   return `
-  <g class="narrative-enlightenment">
+  <g class="narrative-enlightenment" filter="url(#goldenAgeGlow)">
     <title>the golden age: singularity projectiles shatter through glass into 20 rays</title>
     <g filter="url(#prismCaustic)">
     <rect x="${(portalX - 3).toFixed(1)}" y="${(PLOT_TOP + 6).toFixed(1)}" width="6" height="${(PLOT_HEIGHT - 12).toFixed(1)}" rx="2" fill="url(#prismGlassGrad)" class="prism-body">
@@ -1897,15 +1898,15 @@ function renderSVG(model) {
       <stop offset="55%" stop-color="#0891b2" stop-opacity="0.05"/>
       <stop offset="100%" stop-color="#0891b2" stop-opacity="0"/>
     </linearGradient>
-    <filter id="lineGlow" x="-20%" y="-40%" width="140%" height="180%">
+    <filter id="lineGlow" x="-15%" y="-30%" width="130%" height="160%">
       <feGaussianBlur stdDeviation="2.6" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="7" result="b"/>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5.5" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <filter id="peakLabelGlow" x="-50%" y="-50%" width="200%" height="200%">
+    <filter id="peakLabelGlow" x="-30%" y="-30%" width="160%" height="160%">
       <feGaussianBlur stdDeviation="2.5" result="b"/>
       <feComponentTransfer in="b" result="c"><feFuncA type="linear" slope="0.55"/></feComponentTransfer>
       <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
@@ -1980,13 +1981,13 @@ function renderSVG(model) {
     /* Every authored enlightenment part shares one phase opacity. The gradient
        stop opacities below remain colour falloff, not per-part intensity. */
     .narrative-enlightenment { pointer-events: none; opacity: ${GOLDEN_AGE_OPACITY}; }
-    .golden-age-ray { fill: url(#goldenAgeRayGrad); stroke: none; filter: url(#goldenAgeGlow); mix-blend-mode: screen; }
+    .golden-age-ray { fill: url(#goldenAgeRayGrad); stroke: none; mix-blend-mode: screen; }
     .golden-age-fringe { pointer-events: none; stroke-linejoin: round; }
     .golden-age-interference { pointer-events: none; stroke-linecap: butt; }
     .golden-age-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fde68a; letter-spacing: 2px; }
     .prism-body { fill: url(#prismGlassGrad); pointer-events: none; }
     .prism-core { stroke: #ffffff; stroke-linecap: round; pointer-events: none; }
-    .prism-wave { fill: none; stroke: #fef3c7; stroke-width: 1.1; stroke-linecap: round; pointer-events: none; filter: url(#goldenAgeGlow); }
+    .prism-wave { fill: none; stroke: #fef3c7; stroke-width: 1.1; stroke-linecap: round; pointer-events: none; }
     .grid { stroke: #21262d; stroke-width: 1; }
     .baseline { stroke: #30363d; stroke-width: 1; }
     .bar { fill: url(#barGrad); }
