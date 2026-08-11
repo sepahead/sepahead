@@ -255,8 +255,8 @@ test("the new age 20-rays fan survives every branch", () => {
 
 test("written dark/light assets preserve 20-rays and ray gradient opacities", () => {
   const expectedStops = {
-    newAgeRayGrad: ["0.85", "0.72", "0.40", "0"],
-    newAgeRayGradLight: ["0.90", "0.66", "0.36", "0"],
+    newAgeRayGrad: ["0.90", "0.78", "0.48", "0"],
+    newAgeRayGradLight: ["0.94", "0.74", "0.44", "0"],
   };
   for (const theme of ["dark", "light"]) {
     const asset = readFileSync(resolve(REPO_ROOT, `assets/cumulative-${theme}.svg`), "utf8");
@@ -287,7 +287,7 @@ test("written dark/light assets preserve 20-rays and ray gradient opacities", ()
         `${theme}: ${id} stop opacities must remain unchanged`
       );
     }
-    assert.match(asset, /\.narrative-enlightenment\s*\{[^}]*opacity:\s*0\.85/);
+    assert.match(asset, /\.narrative-enlightenment\s*\{[^}]*opacity:\s*0\.95/);
   }
 });
 
@@ -311,10 +311,10 @@ test("written assets retain bounded ray geometry", () => {
 
 test("legacy phase gradients retain their authored opacity snapshots", () => {
   const expected = {
-    seamFieldGrad: ["0.28", "0.30", "0.40", "0.44", "0.42", "0.40", "0.34", "0.28", "0.18"],
-    seamFieldGradLight: ["0.34", "0.32", "0.32", "0.33", "0.33", "0.32", "0.28", "0.24", "0.18"],
-    originBand: ["0.24", "0.18", "0.24", "0.28"],
-    originBandLight: ["0.26", "0.20", "0.26", "0.30"],
+    seamFieldGrad: ["0.38", "0.40", "0.52", "0.56", "0.54", "0.52", "0.44", "0.38", "0.26"],
+    seamFieldGradLight: ["0.44", "0.42", "0.42", "0.43", "0.43", "0.42", "0.38", "0.32", "0.26"],
+    originBand: ["0.34", "0.26", "0.34", "0.38"],
+    originBandLight: ["0.36", "0.28", "0.36", "0.40"],
     cumGrad: ["0.16", "0.06", "0"],
     cumGradLight: ["0.13", "0.05", "0"],
   };
