@@ -607,29 +607,29 @@
       <animate attributeName="opacity" values="0;0;0.98" keyTimes="0;0.5;1" begin="0s" dur="2.4s" fill="freeze"/>
       <animate attributeName="opacity" values="0.98;0.72;0.98" begin="2.4s" dur="3.6s" repeatCount="indefinite"/>
     </ellipse>
-    <line x1="434.6" y1="164.5" x2="472.6" y2="164.5" class="portal-ray px-gold" opacity="0.55" stroke-dasharray="4 4">
-      <animate attributeName="stroke-dashoffset" values="0;-16" begin="2.6s" dur="0.6s" repeatCount="indefinite"/>
+    <line x1="434.6" y1="164.5" x2="472.6" y2="164.5" class="portal-ray px-gold" opacity="0.55" stroke-dasharray="8 4">
+      <animate attributeName="stroke-dashoffset" values="0;-15" begin="2.6s" dur="0.6s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0;0.65;0.15;0" keyTimes="0;0.15;0.7;1" begin="2.6s" dur="0.6s" repeatCount="indefinite"/>
     </line>
-    <line x1="434.6" y1="190" x2="472.6" y2="190" class="portal-ray px-cyan" opacity="0.55" stroke-dasharray="5 3">
+    <line x1="434.6" y1="190" x2="472.6" y2="190" class="portal-ray px-cyan" opacity="0.55" stroke-dasharray="7 4">
       <animate attributeName="stroke-dashoffset" values="0;-18" begin="2.75s" dur="0.55s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0;0.65;0.15;0" keyTimes="0;0.15;0.7;1" begin="2.75s" dur="0.55s" repeatCount="indefinite"/>
     </line>
-    <line x1="434.6" y1="215.5" x2="472.6" y2="215.5" class="portal-ray px-violet" opacity="0.55" stroke-dasharray="8 3">
-      <animate attributeName="stroke-dashoffset" values="0;-14" begin="2.5s" dur="0.65s" repeatCount="indefinite"/>
+    <line x1="434.6" y1="215.5" x2="472.6" y2="215.5" class="portal-ray px-violet" opacity="0.55" stroke-dasharray="6 4">
+      <animate attributeName="stroke-dashoffset" values="0;-18" begin="2.5s" dur="0.65s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0;0.65;0.15;0" keyTimes="0;0.15;0.7;1" begin="2.5s" dur="0.65s" repeatCount="indefinite"/>
     </line>
-    <path d="M 476.6 184.9 L 792 172.2" class="portal-ray px-gold" pathLength="1" stroke-dasharray="1 1">
+    <path d="M 476.6 184.9 L 792 167.1" class="portal-ray px-gold" pathLength="1" stroke-dasharray="1 1">
       <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.6;1" begin="0s" dur="2.3s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.3 0 0.2 1"/>
     </path>
-    <path d="M 476.6 184.9 L 792 172.2" class="portal-pulse px-gold" pathLength="1" stroke-dasharray="0.09 0.91" opacity="0.9">
+    <path d="M 476.6 184.9 L 792 167.1" class="portal-pulse px-gold" pathLength="1" stroke-dasharray="0.09 0.91" opacity="0.9">
       <animate attributeName="opacity" values="0;0;0.9" keyTimes="0;0.85;1" begin="0s" dur="2.8s" fill="freeze"/>
       <animate attributeName="stroke-dashoffset" values="1;0" begin="2.8s" dur="0.9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 1 1"/>
     </path>
-    <path d="M 476.6 187.4 L 792 181.1" class="portal-ray px-cyan" pathLength="1" stroke-dasharray="1 1">
+    <path d="M 476.6 187.4 L 792 178.5" class="portal-ray px-cyan" pathLength="1" stroke-dasharray="1 1">
       <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.6;1" begin="0s" dur="2.5s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.3 0 0.2 1"/>
     </path>
-    <path d="M 476.6 187.4 L 792 181.1" class="portal-pulse px-cyan" pathLength="1" stroke-dasharray="0.07 0.93" opacity="0.9">
+    <path d="M 476.6 187.4 L 792 178.5" class="portal-pulse px-cyan" pathLength="1" stroke-dasharray="0.07 0.93" opacity="0.9">
       <animate attributeName="opacity" values="0;0;0.9" keyTimes="0;0.85;1" begin="0s" dur="2.8s" fill="freeze"/>
       <animate attributeName="stroke-dashoffset" values="1;0" begin="2.8s" dur="0.9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 1 1"/>
     </path>
@@ -640,17 +640,17 @@
       <animate attributeName="opacity" values="0;0;0.9" keyTimes="0;0.85;1" begin="0s" dur="2.8s" fill="freeze"/>
       <animate attributeName="stroke-dashoffset" values="1;0" begin="2.8s" dur="0.9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 1 1"/>
     </path>
-    <path d="M 476.6 192.6 L 792 202.8" class="portal-ray px-gold" pathLength="1" stroke-dasharray="1 1">
+    <path d="M 476.6 192.6 L 792 201.5" class="portal-ray px-gold" pathLength="1" stroke-dasharray="1 1">
       <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.6;1" begin="0s" dur="2.6s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.3 0 0.2 1"/>
     </path>
-    <path d="M 476.6 192.6 L 792 202.8" class="portal-pulse px-gold" pathLength="1" stroke-dasharray="0.06 0.94" opacity="0.9">
+    <path d="M 476.6 192.6 L 792 201.5" class="portal-pulse px-gold" pathLength="1" stroke-dasharray="0.06 0.94" opacity="0.9">
       <animate attributeName="opacity" values="0;0;0.9" keyTimes="0;0.85;1" begin="0s" dur="2.8s" fill="freeze"/>
       <animate attributeName="stroke-dashoffset" values="1;0" begin="2.8s" dur="0.9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 1 1"/>
     </path>
-    <path d="M 476.6 195.1 L 792 215.4" class="portal-ray px-cyan" pathLength="1" stroke-dasharray="1 1">
+    <path d="M 476.6 195.1 L 792 212.9" class="portal-ray px-cyan" pathLength="1" stroke-dasharray="1 1">
       <animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.6;1" begin="0s" dur="2.35s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.3 0 0.2 1"/>
     </path>
-    <path d="M 476.6 195.1 L 792 215.4" class="portal-pulse px-cyan" pathLength="1" stroke-dasharray="0.09 0.91" opacity="0.9">
+    <path d="M 476.6 195.1 L 792 212.9" class="portal-pulse px-cyan" pathLength="1" stroke-dasharray="0.09 0.91" opacity="0.9">
       <animate attributeName="opacity" values="0;0;0.9" keyTimes="0;0.85;1" begin="0s" dur="2.8s" fill="freeze"/>
       <animate attributeName="stroke-dashoffset" values="1;0" begin="2.8s" dur="0.9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;1" keySplines="0.55 0 1 1"/>
     </path>
