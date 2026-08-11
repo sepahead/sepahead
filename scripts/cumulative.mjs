@@ -579,7 +579,8 @@ const WAVE_RY_INNER = artRy(31 / 24); // 31
 // One shared phase opacity applied to the complete tableau.
 const NEW_AGE_OPACITY = 1.0;
 // 20 rays fanning rightward from subtly staggered positions along the
-// portal edge. 0° = horizontal right. Cone spans −34° to +32°.
+// portal edge. 0° = horizontal right. Cone spans −28° to +28°. Source
+// positions match the singularity's tight exit aperture (±12px).
 const NEW_AGE_RAYS = [
   // Central core — straight right from portal center, longest and brightest
   { angle: -2, len: 115, w: 6.0, o: 1.00, sy: 0 },
@@ -587,28 +588,28 @@ const NEW_AGE_RAYS = [
   { angle: 0, len: 120, w: 6.0, o: 1.00, sy: 0 },
   { angle: 1, len: 118, w: 5.5, o: 1.00, sy: 0 },
   { angle: 2, len: 115, w: 6.0, o: 1.00, sy: 0 },
-  // Inner upper — slight upward fan, slightly above center
-  { angle: -8, len: 110, w: 4.4, o: 1.00, sy: -10 },
-  { angle: -14, len: 104, w: 4.0, o: 0.96, sy: -20 },
-  { angle: -20, len: 96, w: 3.5, o: 0.90, sy: -30 },
-  // Inner lower — slight downward fan, slightly below center
-  { angle: 8, len: 110, w: 4.4, o: 0.92, sy: 10 },
-  { angle: 14, len: 104, w: 4.0, o: 0.85, sy: 20 },
-  { angle: 20, len: 96, w: 3.5, o: 0.78, sy: 30 },
+  // Inner upper — tight to center, slight upward fan
+  { angle: -6, len: 110, w: 4.4, o: 1.00, sy: -3 },
+  { angle: -12, len: 104, w: 4.0, o: 0.96, sy: -6 },
+  { angle: -18, len: 96, w: 3.5, o: 0.90, sy: -9 },
+  // Inner lower — tight to center, slight downward fan
+  { angle: 6, len: 110, w: 4.4, o: 0.92, sy: 3 },
+  { angle: 12, len: 104, w: 4.0, o: 0.85, sy: 6 },
+  { angle: 18, len: 96, w: 3.5, o: 0.78, sy: 9 },
   // Mid upper
-  { angle: -26, len: 84, w: 3.0, o: 0.82, sy: -38 },
-  { angle: -30, len: 72, w: 2.6, o: 0.72, sy: -44 },
+  { angle: -22, len: 84, w: 3.0, o: 0.82, sy: -10 },
+  { angle: -26, len: 72, w: 2.6, o: 0.72, sy: -12 },
   // Mid lower
-  { angle: 26, len: 84, w: 3.0, o: 0.68, sy: 38 },
-  { angle: 30, len: 72, w: 2.6, o: 0.58, sy: 44 },
+  { angle: 22, len: 84, w: 3.0, o: 0.68, sy: 10 },
+  { angle: 26, len: 72, w: 2.6, o: 0.58, sy: 12 },
   // Outer upper — widest, shortest
-  { angle: -34, len: 58, w: 2.2, o: 0.62, sy: -48 },
-  { angle: -34, len: 46, w: 1.8, o: 0.52, sy: -52 },
+  { angle: -28, len: 58, w: 2.2, o: 0.62, sy: -12 },
+  { angle: -28, len: 46, w: 1.8, o: 0.52, sy: -12 },
   // Outer lower
-  { angle: 32, len: 58, w: 2.2, o: 0.48, sy: 48 },
-  { angle: 32, len: 46, w: 1.8, o: 0.38, sy: 52 },
+  { angle: 28, len: 58, w: 2.2, o: 0.48, sy: 12 },
+  { angle: 28, len: 46, w: 1.8, o: 0.38, sy: 12 },
   // Steep upper accent
-  { angle: -34, len: 36, w: 1.5, o: 0.42, sy: -52 },
+  { angle: -28, len: 36, w: 1.5, o: 0.42, sy: -12 },
 ];
 
 // ---------------------------------------------------------------------------
@@ -687,7 +688,7 @@ function portalFieldMarkup(px) {
   // portal centre, diverging outward to full plot height at the right edge
   // (the singularity expands what passes through it).
   const rayPath = (y) => {
-    const yStart = midY + (y - midY) * 0.16;
+    const yStart = midY + (y - midY) * 0.10;
     const c1x = (px + span * 0.3).toFixed(1);
     const c2x = (px + span * 0.68).toFixed(1);
     return `M ${X} ${yStart.toFixed(1)} C ${c1x} ${yStart.toFixed(1)} ${c2x} ${y} ${R} ${y}`;
