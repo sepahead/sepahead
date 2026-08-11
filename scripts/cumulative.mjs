@@ -792,10 +792,10 @@ function enlightenmentDefs() {
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     <filter id="prismCaustic" x="-30%" y="-30%" width="160%" height="160%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.03 0.15" numOctaves="3" seed="3" result="n">
-        <animate attributeName="seed" values="1;80;1" dur="8s" repeatCount="indefinite"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.015 0.10" numOctaves="2" seed="3" result="n">
+        <animate attributeName="seed" values="1;60;1" dur="6s" repeatCount="indefinite"/>
       </feTurbulence>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
     <linearGradient id="prismGlassGrad" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#fde68a" stop-opacity="0.12"/>
@@ -914,6 +914,7 @@ function enlightenmentMarkup(portalX) {
     <line x1="${px}" y1="${(PLOT_TOP + 10).toFixed(1)}" x2="${px}" y2="${(PLOT_BOTTOM - 10).toFixed(1)}" stroke="#ffffff" stroke-width="1.2" class="prism-core">
       <animate attributeName="opacity" values="0.4;1;0.4" dur="0.9s" repeatCount="indefinite"/>
       <animate attributeName="stroke-width" values="0.8;2.2;0.8" dur="1.1s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" values="0 0;0.8 0;0 0;-0.6 0;0 0" dur="2.4s" repeatCount="indefinite"/>
     </line>
     ${prismWaves()}
     </g>
