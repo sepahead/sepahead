@@ -791,6 +791,12 @@ function enlightenmentDefs() {
       <feGaussianBlur stdDeviation="1.8" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
+    <filter id="prismCaustic" x="-30%" y="-30%" width="160%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03 0.15" numOctaves="3" seed="3" result="n">
+        <animate attributeName="seed" values="1;80;1" dur="8s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
     <linearGradient id="prismGlassGrad" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#fde68a" stop-opacity="0.12"/>
       <stop offset="30%" stop-color="#ffffff" stop-opacity="0.50"/>
@@ -901,6 +907,7 @@ function enlightenmentMarkup(portalX) {
   return `
   <g class="narrative-enlightenment">
     <title>the golden age: singularity projectiles shatter through glass into 20 rays</title>
+    <g filter="url(#prismCaustic)">
     <rect x="${(portalX - 3).toFixed(1)}" y="${(PLOT_TOP + 6).toFixed(1)}" width="6" height="${(PLOT_HEIGHT - 12).toFixed(1)}" rx="2" fill="url(#prismGlassGrad)" class="prism-body">
       <animate attributeName="opacity" values="0.65;0.95;0.65" dur="1.8s" repeatCount="indefinite"/>
     </rect>
@@ -909,6 +916,7 @@ function enlightenmentMarkup(portalX) {
       <animate attributeName="stroke-width" values="0.8;2.2;0.8" dur="1.1s" repeatCount="indefinite"/>
     </line>
     ${prismWaves()}
+    </g>
     ${GOLDEN_AGE_RAYS.map(rayPolygon).join("\n    ")}
     ${GOLDEN_AGE_RAYS.map((r, i) => spectralFringe(r, i)).join("\n    ")}
     ${GOLDEN_AGE_RAYS.map((r, i) => interferenceLine(r, i)).join("\n    ")}
