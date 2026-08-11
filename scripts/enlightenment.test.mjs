@@ -1,5 +1,5 @@
 // scripts/enlightenment.test.mjs
-// Spectral fringing on all rays + interference bands on wing rays only (like Tyrael's wings).
+// Spectral fringing on all rays + interference bands on wing rays only. Rays fan rightward from the portal.
 import test from "node:test";
 import assert from "node:assert/strict";
 
@@ -31,7 +31,7 @@ test("winged design: 20 rays, 40 fringe edges, 15 interference lines (central 5 
   const fringes = tagsWithClass(out, "polygon", "new-age-fringe");
   assert.equal(fringes.length, 40);
 
-  // 15 interference lines (20 total - 5 central core angles 88-92)
+  // 15 interference lines (20 total - 5 central core angles -2..2)
   const lineBlocks = [...out.matchAll(/<line[^>]*class="[^"]*\bnew-age-interference\b[^"]*"[^>]*>/g)];
   assert.equal(lineBlocks.length, 15, "expected 15 interference lines on wings");
 
@@ -48,11 +48,12 @@ test("winged design: 20 rays, 40 fringe edges, 15 interference lines (central 5 
   for (const [i, ray] of rays.entries()) {
     const pts = (attrOf(ray, "points") || "").trim().split(/\s+/);
     const ys = pts.filter((_, idx) => idx % 2 === 1).map(Number);
-    assert.ok(Math.min(...ys.slice(0,2)) < Math.max(...ys.slice(2,4)), "ray must fan downward");
+    const xs = pts.filter((_, idx) => idx % 2 === 0).map(Number);
+    assert.ok(xs[0] < xs[2], "ray must fan rightward from portal");
   }
 
   const aria = out.match(/aria-label="([^"]*)"/)?.[1] ?? "";
-  assert.match(aria, /20 rays of light/);
+  assert.match(aria, /20 rays/);
 });
 
 test("new age uses dedicated ray gradient and glow filter", () => {

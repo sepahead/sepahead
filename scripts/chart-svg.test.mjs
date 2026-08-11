@@ -299,20 +299,21 @@ test("written assets retain bounded ray geometry", () => {
     for (const ray of rays) {
       const pts = (ray.match(/points="([^"]+)"/)?.[1] || "").trim().split(/\s+/);
       assert.ok(pts.length >= 8, `${theme}: ray must have 4+ points`);
-      // Source points (first two) must be near the top of the plot
+      // Source points must be near the plot midline vertically
+      const x0 = Number(pts[0]);
       const y0 = Number(pts[1]);
-      assert.ok(y0 > 115 && y0 < 150, `${theme}: ray source y=${y0} must be near plot top`);
-      // Destination points (last two) must extend downward
-      const y2 = Number(pts[3]);
-      assert.ok(y2 > y0, `${theme}: ray must extend downward`);
+      assert.ok(y0 > 170 && y0 < 210, `${theme}: ray source y=${y0} must be near plot midline`);
+      // Rays must extend rightward from the source
+      const x2 = Number(pts[2]);
+      assert.ok(x2 > x0 + 10, `${theme}: ray must extend rightward`);
     }
   }
 });
 
 test("legacy phase gradients retain their authored opacity snapshots", () => {
   const expected = {
-    seamFieldGrad: ["0.30", "0.32", "0.44", "0.48", "0.46", "0.44", "0.36", "0.30", "0.20"],
-    seamFieldGradLight: ["0.44", "0.42", "0.42", "0.43", "0.43", "0.42", "0.38", "0.32", "0.26"],
+    seamFieldGrad: ["0.30", "0.32", "0.34", "0.38", "0.36", "0.34", "0.36", "0.30", "0.20"],
+    seamFieldGradLight: ["0.44", "0.42", "0.34", "0.34", "0.34", "0.33", "0.38", "0.32", "0.26"],
     originBand: ["0.26", "0.20", "0.26", "0.30"],
     originBandLight: ["0.36", "0.28", "0.36", "0.40"],
     cumGrad: ["0.16", "0.06", "0"],

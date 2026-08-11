@@ -568,47 +568,48 @@ const WAVE_RY_OUTER = artRy(23 / 12); // 46
 const WAVE_RY_MID = artRy(19 / 12); // 38
 const WAVE_RY_INNER = artRy(31 / 24); // 31
 
-// The new age: 20 rays of light streaming down from above — like divine
-// illumination pouring into the future from the top of the chart.
-// Each ray is a tapered luminous beam — narrow at the top source, widening
-// slightly at its destination — filled with a radial gradient that fades
-// from bright ivory at the core to warm amber at the edges. Rays fan outward
-// from nearly-vertical: central rays are longest and brightest, edge rays are
-// shorter and dimmer, together creating a dramatic top-down illumination.
+// The new age: 20 rays streaming rightward from the singularity portal —
+// a direct continuation of the warp field particles emerging from the
+// event horizon. Rotated 90° clockwise from the original top-down design,
+// so the beams now flow left→right (past → future) in smooth transition
+// from the singularity's exit cone. Each ray is a tapered luminous beam —
+// narrow at the portal source, widening at its destination — filled with a
+// radial gradient that fades from bright ivory at the core to warm amber
+// at the edges. Central rays shoot straight right; edge rays fan up/down.
 // One shared phase opacity applied to the complete tableau.
 const NEW_AGE_OPACITY = 1.0;
-// 20 rays fanning downward from the top-centre of the new age area.
-// 0° = horizontal right, 90° = straight down. Central rays go nearly straight
-// down; edge rays fan outward to the sides.
+// 20 rays fanning rightward from the singularity portal — a smooth
+// continuation of the warp field. 0° = horizontal right. Central rays
+// shoot straight right; edge rays fan upward and downward.
 const NEW_AGE_RAYS = [
-  // Central core — straight down, longest and brightest
-  { angle: 88, len: 115, w: 6.0, o: 1.00 },
-  { angle: 89, len: 118, w: 5.5, o: 1.00 },
-  { angle: 90, len: 120, w: 6.0, o: 1.00 },
-  { angle: 91, len: 118, w: 5.5, o: 1.00 },
-  { angle: 92, len: 115, w: 6.0, o: 1.00 },
-  // Inner right fan — boosted for recent-direction emphasis
-  { angle: 84, len: 110, w: 4.4, o: 1.00 },
-  { angle: 80, len: 104, w: 4.0, o: 0.96 },
-  { angle: 76, len: 96, w: 3.5, o: 0.90 },
-  // Inner left fan
-  { angle: 96, len: 110, w: 4.4, o: 0.92 },
-  { angle: 100, len: 104, w: 4.0, o: 0.85 },
-  { angle: 104, len: 96, w: 3.5, o: 0.78 },
-  // Mid right fan — boosted
-  { angle: 72, len: 84, w: 3.0, o: 0.82 },
-  { angle: 68, len: 72, w: 2.6, o: 0.72 },
-  // Mid left fan
-  { angle: 108, len: 84, w: 3.0, o: 0.68 },
-  { angle: 112, len: 72, w: 2.6, o: 0.58 },
-  // Outer right — boosted
-  { angle: 64, len: 58, w: 2.2, o: 0.62 },
-  { angle: 60, len: 46, w: 1.8, o: 0.52 },
-  // Outer left
-  { angle: 116, len: 58, w: 2.2, o: 0.48 },
-  { angle: 120, len: 46, w: 1.8, o: 0.38 },
-  // Steep accent — boosted
-  { angle: 56, len: 36, w: 1.5, o: 0.42 },
+  // Central core — straight right, longest and brightest
+  { angle: -2, len: 115, w: 6.0, o: 1.00 },
+  { angle: -1, len: 118, w: 5.5, o: 1.00 },
+  { angle: 0, len: 120, w: 6.0, o: 1.00 },
+  { angle: 1, len: 118, w: 5.5, o: 1.00 },
+  { angle: 2, len: 115, w: 6.0, o: 1.00 },
+  // Upper fan (was right fan) — boosted for upward emphasis
+  { angle: -6, len: 110, w: 4.4, o: 1.00 },
+  { angle: -10, len: 104, w: 4.0, o: 0.96 },
+  { angle: -14, len: 96, w: 3.5, o: 0.90 },
+  // Lower fan (was left fan)
+  { angle: 6, len: 110, w: 4.4, o: 0.92 },
+  { angle: 10, len: 104, w: 4.0, o: 0.85 },
+  { angle: 14, len: 96, w: 3.5, o: 0.78 },
+  // Mid upper fan — boosted
+  { angle: -18, len: 84, w: 3.0, o: 0.82 },
+  { angle: -22, len: 72, w: 2.6, o: 0.72 },
+  // Mid lower fan
+  { angle: 18, len: 84, w: 3.0, o: 0.68 },
+  { angle: 22, len: 72, w: 2.6, o: 0.58 },
+  // Outer upper — boosted
+  { angle: -26, len: 58, w: 2.2, o: 0.62 },
+  { angle: -30, len: 46, w: 1.8, o: 0.52 },
+  // Outer lower
+  { angle: 26, len: 58, w: 2.2, o: 0.48 },
+  { angle: 30, len: 46, w: 1.8, o: 0.38 },
+  // Steep upper accent — boosted
+  { angle: -34, len: 36, w: 1.5, o: 0.42 },
 ];
 
 // ---------------------------------------------------------------------------
@@ -636,23 +637,23 @@ function portalDefs(px) {
       <stop offset="100%" stop-color="${c1}" stop-opacity="0"/>
     </linearGradient>`;
   return `<radialGradient id="portalAura" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#84cc16" stop-opacity="0.60"/>
-      <stop offset="60%" stop-color="#84cc16" stop-opacity="0.30"/>
+      <stop offset="0%" stop-color="#84cc16" stop-opacity="0.42"/>
+      <stop offset="60%" stop-color="#84cc16" stop-opacity="0.20"/>
       <stop offset="100%" stop-color="#84cc16" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="portalAuraLight" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#4d7c0f" stop-opacity="0.40"/>
-      <stop offset="60%" stop-color="#4d7c0f" stop-opacity="0.22"/>
+      <stop offset="0%" stop-color="#4d7c0f" stop-opacity="0.26"/>
+      <stop offset="60%" stop-color="#4d7c0f" stop-opacity="0.14"/>
       <stop offset="100%" stop-color="#4d7c0f" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="rmGlow" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#a3e635" stop-opacity="0.82"/>
-      <stop offset="60%" stop-color="#84cc16" stop-opacity="0.45"/>
+      <stop offset="0%" stop-color="#a3e635" stop-opacity="0.58"/>
+      <stop offset="60%" stop-color="#84cc16" stop-opacity="0.32"/>
       <stop offset="100%" stop-color="#84cc16" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="rmGlowLight" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#65a30d" stop-opacity="0.62"/>
-      <stop offset="60%" stop-color="#4d7c0f" stop-opacity="0.35"/>
+      <stop offset="0%" stop-color="#65a30d" stop-opacity="0.44"/>
+      <stop offset="60%" stop-color="#4d7c0f" stop-opacity="0.24"/>
       <stop offset="100%" stop-color="#4d7c0f" stop-opacity="0"/>
     </radialGradient>
     ${exit("exitGold", "#d9f99d", "#84cc16")}
@@ -787,11 +788,11 @@ function enlightenmentDefs() {
 }
 
 function enlightenmentMarkup(portalX) {
-  // Rays stream down from the top of the new-age zone — like light from above.
-  const srcX = (portalX + PLOT_RIGHT) / 2;
-  const srcY = PLOT_TOP + 6;
+  // Rays stream rightward from the singularity portal — a smooth continuation.
+  const srcX = portalX + 10;
+  const srcY = MID_Y;
   // Each ray is a tapered polygon: narrow at the source, widening at the tip.
-  // The beam runs from the singularity boundary out into the new age.
+  // The beam runs from the portal out into the new age.
   const rayPolygon = (ray, i) => {
     const rad = (ray.angle * Math.PI) / 180;
     const cosA = Math.cos(rad);
@@ -845,9 +846,9 @@ function enlightenmentMarkup(portalX) {
       </polygon>`;
   };
   // Diffraction interference bands on the outer "wing" rays only —
-  // the central core (angles 88-92) stays pure, like Tyrael's angelic wings.
+  // the central core (angles -2 to 2) stays pure, a clean central beam.
   const interferenceLine = (ray, i) => {
-    if (ray.angle >= 88 && ray.angle <= 92) return "";
+    if (ray.angle >= -2 && ray.angle <= 2) return "";
     const rad = (ray.angle * Math.PI) / 180;
     const cosA = Math.cos(rad);
     const sinA = Math.sin(rad);
@@ -862,7 +863,7 @@ function enlightenmentMarkup(portalX) {
   };
   return `
   <g class="narrative-enlightenment">
-    <title>the new age: 20 rays with spectral fringing, winged interference bands on the sides</title>
+    <title>the new age: 20 rays streaming rightward from the singularity, spectral fringing and winged interference bands</title>
     ${NEW_AGE_RAYS.map(rayPolygon).join("\n    ")}
     ${NEW_AGE_RAYS.map((r, i) => spectralFringe(r, i)).join("\n    ")}
     ${NEW_AGE_RAYS.map((r, i) => interferenceLine(r, i)).join("\n    ")}
@@ -955,10 +956,10 @@ function seamDefs(sx, endX) {
     <linearGradient id="seamFieldGrad" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${E}" y2="0">
       <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.30"/>
       <stop offset="22%" stop-color="#eab308" stop-opacity="0.32"/>
-      <stop offset="45%" stop-color="#bef264" stop-opacity="0.44"/>
-      <stop offset="62%" stop-color="#a3e635" stop-opacity="0.48"/>
-      <stop offset="67%" stop-color="#84cc16" stop-opacity="0.46"/>
-      <stop offset="78%" stop-color="#a3e635" stop-opacity="0.44"/>
+      <stop offset="45%" stop-color="#bef264" stop-opacity="0.34"/>
+      <stop offset="62%" stop-color="#a3e635" stop-opacity="0.38"/>
+      <stop offset="67%" stop-color="#84cc16" stop-opacity="0.36"/>
+      <stop offset="78%" stop-color="#a3e635" stop-opacity="0.34"/>
       <stop offset="88%" stop-color="#fbbf24" stop-opacity="0.36"/>
       <stop offset="96%" stop-color="#fde68a" stop-opacity="0.30"/>
       <stop offset="100%" stop-color="#fff7cc" stop-opacity="0.20"/>
@@ -966,10 +967,10 @@ function seamDefs(sx, endX) {
     <linearGradient id="seamFieldGradLight" gradientUnits="userSpaceOnUse" x1="${X}" y1="0" x2="${E}" y2="0">
       <stop offset="0%" stop-color="#d97706" stop-opacity="0.44"/>
       <stop offset="22%" stop-color="#eab308" stop-opacity="0.42"/>
-      <stop offset="35%" stop-color="#a3a80c" stop-opacity="0.42"/>
-      <stop offset="58%" stop-color="#84cc16" stop-opacity="0.43"/>
-      <stop offset="67%" stop-color="#4d7c0f" stop-opacity="0.43"/>
-      <stop offset="78%" stop-color="#65a30d" stop-opacity="0.42"/>
+      <stop offset="35%" stop-color="#a3a80c" stop-opacity="0.34"/>
+      <stop offset="58%" stop-color="#84cc16" stop-opacity="0.34"/>
+      <stop offset="67%" stop-color="#4d7c0f" stop-opacity="0.34"/>
+      <stop offset="78%" stop-color="#65a30d" stop-opacity="0.33"/>
       <stop offset="88%" stop-color="#a16207" stop-opacity="0.38"/>
       <stop offset="96%" stop-color="#d97706" stop-opacity="0.32"/>
       <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.26"/>
@@ -1850,6 +1851,11 @@ function renderSVG(model) {
       <feGaussianBlur stdDeviation="7" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
+    <filter id="peakLabelGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5" result="b"/>
+      <feComponentTransfer in="b" result="c"><feFuncA type="linear" slope="0.55"/></feComponentTransfer>
+      <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
     ${portalDefsStr}
     ${seamDefsStr}
     ${originDefsStr}
@@ -1861,7 +1867,7 @@ function renderSVG(model) {
     .headline { font: 700 28px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #22d3ee; letter-spacing: -1px; }
     .sub { font: 500 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
     .value { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; }
-    .value-peak { font: 700 15px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #22d3ee; }
+    .value-peak { font: 700 16px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #ffffff; filter: url(#peakLabelGlow); }
     .year { font: 500 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
     .year-peak { font-weight: 700; fill: #22d3ee; }
     /* Next-year runway: dimmed so it reads as "not yet", not as a zero result.
@@ -1978,25 +1984,25 @@ function renderSVG(model) {
     .cum-line { fill: none; stroke: url(#cumLineGrad); stroke-width: 1.5; stroke-opacity: 0.2; stroke-linecap: round; stroke-linejoin: round; }
     .cum-dot { fill: #a5f3fc; fill-opacity: 0.35; stroke: #22d3ee; stroke-width: 0.8; stroke-opacity: 0.4; }
     .rm-glowEl { fill: url(#rmGlow); }
-    .rm-g1 { fill: #4d7c0f; }
-    .rm-g2 { fill: #84cc16; }
-    .rm-g3 { fill: #bef264; }
-    .rm-core { fill: #ecfccb; }
-    .rm-swirl { fill: none; stroke: #d9f99d; stroke-width: 1.3; stroke-linecap: round; opacity: 0.92; }
-    .portal-ray { fill: none; stroke-width: 1; opacity: 0.88; }
+    .rm-g1 { fill: #4d7c0f; opacity: 0.68; }
+    .rm-g2 { fill: #84cc16; opacity: 0.68; }
+    .rm-g3 { fill: #bef264; opacity: 0.68; }
+    .rm-core { fill: #d9f99d; }
+    .rm-swirl { fill: none; stroke: #d9f99d; stroke-width: 1.3; stroke-linecap: round; opacity: 0.68; }
+    .portal-ray { fill: none; stroke-width: 1; opacity: 0.68; }
     .portal-pulse { fill: none; stroke-width: 1.8; stroke-linecap: round; }
     .px-gold { stroke: url(#exitGold); }
     .px-cyan { stroke: url(#exitCyan); }
     .px-violet { stroke: url(#exitViolet); }
     .portal-mote { stroke: none; }
-    .pm-gold { fill: #d9f99d; }
-    .pm-cyan { fill: #ecfccb; }
-    .pm-violet { fill: #a3e635; }
+    .pm-gold { fill: #bef264; }
+    .pm-cyan { fill: #d9f99d; }
+    .pm-violet { fill: #84cc16; }
     .portal-wave { fill: none; stroke-width: 1.3; stroke-linecap: round; }
-    .pw-gold { stroke: #a3e635; }
-    .pw-cyan { stroke: #bef264; }
-    .pw-violet { stroke: #84cc16; }
-    .portal-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #a3e635; letter-spacing: 2.5px; }
+    .pw-gold { stroke: #84cc16; }
+    .pw-cyan { stroke: #a3e635; }
+    .pw-violet { stroke: #65a30d; }
+    .portal-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #84cc16; letter-spacing: 2.5px; }
     .seam-field { fill: url(#seamFieldGrad); }
     .seam-glass { fill: url(#seamGlassGrad); }
     .origin-line { stroke: url(#originGrad); stroke-width: 1.0; stroke-linecap: round; filter: url(#originGlowSoft); }
@@ -2029,10 +2035,10 @@ function renderSVG(model) {
        paint-order stroke in the page-background colour is invisible in the matching
        case and only appears to outline the text when the scheme mismatches, so the
        numbers stay legible on either background. */
-    .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text, .new-age-text { paint-order: stroke; stroke: #0d1117; stroke-width: 2; stroke-linejoin: round; }
+    .headline, .sub, .value, .value-peak, .year, .portal-text, .seam-text, .origin-text, .new-age-text { paint-order: stroke; stroke: #0d1117; stroke-width: 2; stroke-linejoin: round; }
     @media (prefers-color-scheme: light) {
       .headline { fill: #0891b2; }
-      .value-peak { fill: #0e7490; }
+      .value-peak { fill: #0c4a6e; font-weight: 800; filter: none; }
       .sub { fill: #57606a; }
       .value { fill: #1f2328; }
       .year { fill: #57606a; }
@@ -2050,14 +2056,14 @@ function renderSVG(model) {
       .px-gold { stroke: url(#exitGoldL); }
       .px-cyan { stroke: url(#exitCyanL); }
       .px-violet { stroke: url(#exitVioletL); }
-      .pm-gold { fill: #4d7c0f; }
+      .pm-gold { fill: #365314; }
       .pm-cyan { fill: #3f6212; }
-      .pm-violet { fill: #65a30d; }
-      .pw-gold { stroke: #65a30d; }
+      .pm-violet { fill: #4d7c0f; }
+      .pw-gold { stroke: #4d7c0f; }
       .pw-cyan { stroke: #3f6212; }
-      .pw-violet { stroke: #4d7c0f; }
+      .pw-violet { stroke: #365314; }
       .portal-aura { fill: url(#portalAuraLight); }
-      .portal-text { fill: #3f6212; }
+      .portal-text { fill: #365314; }
       .seam-field { fill: url(#seamFieldGradLight); }
       .seam-glass { fill: url(#seamGlassGradLight); }
       .origin-line { stroke: url(#originGradLight); filter: url(#originGlowSoft); }
@@ -2082,12 +2088,12 @@ function renderSVG(model) {
       .intake-head { fill: #a16207; }
       .intake-head-lime { fill: #4d7c0f; }
       .portal-boom { stroke: #4d7c0f; stroke-width: 1.3; }
-      .rm-swirl { opacity: 0.88; }
+      .rm-swirl { opacity: 0.66; }
       .new-age-ray { fill: url(#newAgeRayGradLight); stroke: none; }
       .new-age-fringe { }
       .new-age-interference { stroke: #fef3c7; }
       .new-age-text { fill: #92400e; }
-      .headline, .sub, .value, .year, .portal-text, .seam-text, .origin-text, .new-age-text { stroke: #ffffff; }
+      .headline, .sub, .value, .value-peak, .year, .portal-text, .seam-text, .origin-text, .new-age-text { stroke: #ffffff; }
     }
     @media (prefers-reduced-motion: reduce) {
       animate, animateTransform { display: none; }
