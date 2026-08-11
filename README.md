@@ -115,28 +115,28 @@
   <tr>
     <td width="33%" valign="top">
       <b>MODEL &amp; EXPLAIN</b><br/><br/>
-      <a href="https://github.com/sepahead/engram"><b>Engram</b></a> is a research-stage, domain-specific AI agent and custom harness for provenance-aware, closed-loop simulations of biophysical and functional neural models.
-      <a href="https://github.com/sepahead/prisoma"><b>Prisoma</b></a> implements canonical run-log and replay groundwork toward auditable intervention experiments for embodied-policy diagnosis.
-      <a href="https://github.com/sepahead/pid-rs"><b>pid-rs</b></a> supplies protocol-neutral PID and mutual-information estimators in process.
-      <a href="https://github.com/sepahead/cortexel"><b>Cortexel</b></a> turns labelled results into deterministic, inspectable figures and exact-value tables.
+      <a href="https://github.com/sepahead/engram"><b>Engram</b></a> is a research-stage, domain-specific AI agent utilizing a custom harness to orchestrate provenance-aware, closed-loop biophysical and functional neural simulations for reproducible R&amp;D.<br/><br/>
+      <a href="https://github.com/sepahead/prisoma"><b>Prisoma</b></a> is a public Rust/Python toolkit engineering canonical run-log and replay infrastructure for auditable capture-intervention-replay and embodied VLA-policy diagnosis.<br/><br/>
+      <a href="https://github.com/sepahead/pid-rs"><b>pid-rs</b></a> delivers protocol-neutral, safe-Rust mutual-information and Partial Information Decomposition (PID) estimators.<br/><br/>
+      <a href="https://github.com/sepahead/cortexel"><b>Cortexel</b></a> transforms strict declarative JSON into deterministic scientific SVGs and exact-value tables, enforcing fail-closed provenance for neural-simulation figures.
     </td>
     <td width="33%" valign="top">
       <b>PROPOSE &amp; GOVERN</b><br/><br/>
-      <a href="https://github.com/sepahead/NCP"><b>NCP</b></a> is the optional, versioned contract between simulators, controllers, bodies and observers.
-      <a href="https://github.com/sepahead/haldir"><b>Haldir</b></a> validates signed local intent and independently prepares a newly authorized command with a signed decision receipt.
-      <a href="https://github.com/sepahead/crebain"><b>CREBAIN</b></a> owns body state and makes the final software actuator-admission decision under the current session and bounded lease.
+      <a href="https://github.com/sepahead/NCP"><b>NCP</b></a> establishes a versioned, canonical-JSON communication contract linking neural simulators and neuromorphic controllers with robotics, UAVs, and observers.<br/><br/>
+      <a href="https://github.com/sepahead/haldir"><b>Haldir</b></a> acts as a Rust mission-authorization reference monitor, strictly validating signed controller intents and deterministic policies before preparing decision receipts.<br/><br/>
+      <a href="https://github.com/sepahead/crebain"><b>CREBAIN</b></a> is a research-only spatial-awareness prototype managing final body state and actuator admission through Gaussian-splat visualization, persistent 3D multimodal tracking, and ML detection.
     </td>
     <td width="33%" valign="top">
       <b>PERCEIVE &amp; RECONSTRUCT</b><br/><br/>
-      <a href="https://github.com/sepahead/manwe"><b>Manwe</b></a> develops vision, audio, multicamera and tracking candidates.
-      <a href="https://github.com/sepahead/galadriel"><b>Galadriel</b></a> observes cross-sensor statistical consistency and can contribute deny-only assessment.
-      <a href="https://github.com/sepahead/melkor"><b>Melkor</b></a> provides deterministic 3DGS conversion across PLY, SPZ and glTF, surfacing field provenance and numeric hazards; its current release candidate is source-only, with no production binary.
-      The <a href="https://github.com/sepahead/cobot-atlas"><b>cobot</b></a> and <a href="https://github.com/sepahead/relief-atlas"><b>relief</b></a> atlases are data inputs, never control paths.
+      <a href="https://github.com/sepahead/manwe"><b>Manwe</b></a> provides an alpha airspace-perception workbench integrating vision, audio, multi-camera geometry, and multi-target tracking via Python and Rust/Candle.<br/><br/>
+      <a href="https://github.com/sepahead/galadriel"><b>Galadriel</b></a> monitors cross-sensor statistical consistency using NIS/CUSUM and sign-preserving correlation to deliver fail-closed, deny-only diagnostic observations.<br/><br/>
+      <a href="https://github.com/sepahead/melkor"><b>Melkor</b></a> executes deterministic 3D Gaussian Splatting (3DGS) asset conversion across PLY, SPZ, and glTF formats, rigorously surfacing field provenance and numeric hazards; its release candidate is source-only, with no production binary.<br/><br/>
+      The <a href="https://github.com/sepahead/cobot-atlas"><b>cobot</b></a> and <a href="https://github.com/sepahead/relief-atlas"><b>relief</b></a> atlases supply high-volume, pipeline-generated 3D mesh datasets strictly as data inputs for VLA training, manipulation research, and humanitarian simulation.
     </td>
   </tr>
 </table>
 
-<p align="center"><sub><b>Boundary that matters:</b> every core remains independently runnable, and every command remains a proposal until CREBAIN admits it. Galadriel and Prisoma are read-only observers; pid-rs has no wire role; Cortexel is a one-way export sink. Graph lines denote optional protocol roles, application-owned seams, library use, research relationships or data flow&mdash;not deployed or qualified integration. NCP 1.0 remains an unreleased, release-blocked candidate.</sub></p>
+<p align="center"><sub><b>Boundary that matters:</b> Every system retains independent operability. Commands remain strictly proposals until explicitly authorized by CREBAIN's actuator-admission gates. Galadriel and Prisoma function solely as read-only observers; pid-rs calculates without wire protocols; Cortexel operates as a one-way export sink. Graph topography illustrates potential research relationships, data flows, and optional protocol boundaries&mdash;not certified production deployments. NCP 1.0 and its associated frameworks currently remain unreleased research candidates.</sub></p>
 
 <h3 align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-more-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-more-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-more-light.svg" width="820" height="50" decoding="async" loading="lazy" alt="More repositories — public research code and tools"/></picture></h3>
 
