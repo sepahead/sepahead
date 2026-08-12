@@ -44,7 +44,7 @@
   <rect x="222" y="47" width="9" height="15" rx="1" class="cursor"/>
 
   <g>
-    
+
     <circle cx="46" cy="88" r="4" class="pip">
       <animate attributeName="opacity" values="1;0.35;1" dur="1.8s" begin="0.00s" repeatCount="indefinite"/>
     </circle>
@@ -54,7 +54,7 @@
     <text x="233" y="96" class="note">// GPU-native</text>
   </g>
   <g>
-    
+
     <circle cx="46" cy="118" r="4" class="pip">
       <animate attributeName="opacity" values="1;0.35;1" dur="1.8s" begin="0.25s" repeatCount="indefinite"/>
     </circle>
@@ -74,7 +74,7 @@
     <text x="229" y="156" class="note">// turbocharged Pi · batteries-included</text>
   </g>
   <g>
-    
+
     <circle cx="46" cy="178" r="4" class="pip">
       <animate attributeName="opacity" values="1;0.35;1" dur="1.8s" begin="0.75s" repeatCount="indefinite"/>
     </circle>
@@ -84,7 +84,7 @@
     <text x="207" y="186" class="note">// long-horizon</text>
   </g>
   <g>
-    
+
     <circle cx="46" cy="208" r="4" class="pip">
       <animate attributeName="opacity" values="1;0.35;1" dur="1.8s" begin="1.00s" repeatCount="indefinite"/>
     </circle>

@@ -52,7 +52,7 @@
     @keyframes cur3 { 0%, 77% { visibility: hidden; } 77.01%, 95% { visibility: visible; } 95.01%, 100% { visibility: hidden; } }
     @keyframes curblink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
 
-    
+
     /* Reduced-motion: drop all animation; inline opacity attrs leave the first
        line visible and the rest hidden, and all cursors stay hidden. */
     @media (prefers-reduced-motion: reduce) {
