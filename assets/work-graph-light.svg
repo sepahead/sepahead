@@ -54,10 +54,10 @@
     <linearGradient id="eg7" gradientUnits="userSpaceOnUse" x1="473.9" y1="317.5" x2="482.2" y2="292"><stop offset="0%" stop-color="#9caf88"/><stop offset="100%" stop-color="#ef4444"/></linearGradient>
     <linearGradient id="eg8" gradientUnits="userSpaceOnUse" x1="457.2" y1="237.2" x2="205.7" y2="132.5"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#34d399"/></linearGradient>
     <linearGradient id="eg9" gradientUnits="userSpaceOnUse" x1="432.7" y1="121.3" x2="209" y2="116.8"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#34d399"/></linearGradient>
-    <linearGradient id="eg10" gradientUnits="userSpaceOnUse" x1="608.6" y1="139.6" x2="510" y2="127.1"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient>
+    <linearGradient id="eg10" gradientUnits="userSpaceOnUse" x1="643.2" y1="136.2" x2="509.1" y2="125.2"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient>
     <linearGradient id="eg11" gradientUnits="userSpaceOnUse" x1="642.5" y1="222.3" x2="521.6" y2="152"><stop offset="0%" stop-color="#fb923c"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient>
     <linearGradient id="eg12" gradientUnits="userSpaceOnUse" x1="669.7" y1="329" x2="500.4" y2="153.5"><stop offset="0%" stop-color="#fb7185"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient>
-    <linearGradient id="eg13" gradientUnits="userSpaceOnUse" x1="495.3" y1="331.2" x2="667.7" y2="170.8"><stop offset="0%" stop-color="#9caf88"/><stop offset="100%" stop-color="#60a5fa"/></linearGradient>
+    <linearGradient id="eg13" gradientUnits="userSpaceOnUse" x1="494.5" y1="330.4" x2="656.3" y2="172.8"><stop offset="0%" stop-color="#9caf88"/><stop offset="100%" stop-color="#60a5fa"/></linearGradient>
     <linearGradient id="eg14" gradientUnits="userSpaceOnUse" x1="503.6" y1="343.2" x2="640.8" y2="274.6"><stop offset="0%" stop-color="#9caf88"/><stop offset="100%" stop-color="#fb923c"/></linearGradient>
     <linearGradient id="eg15" gradientUnits="userSpaceOnUse" x1="508.9" y1="362.5" x2="603" y2="356"><stop offset="0%" stop-color="#9caf88"/><stop offset="100%" stop-color="#fb7185"/></linearGradient>
     <linearGradient id="eg16" gradientUnits="userSpaceOnUse" x1="110" y1="319" x2="110" y2="283"><stop offset="0%" stop-color="#e879f9"/><stop offset="100%" stop-color="#bcc6d1"/></linearGradient>
@@ -223,6 +223,17 @@
     .hd-tok-out      { fill: #fff1f0; }
     .hd-flash        { fill: #fff1f0; }
     .haldir-label    { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #2dd4bf; }
+    .cobot-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #93c5fd; }
+    .cobot-glow   { fill: none; stroke: #7dd3fc; stroke-width: 5; opacity: 0.32; filter: url(#soft); }
+    .cobot-inner  { fill: none; stroke: #8be7f2; stroke-opacity: 0.32; stroke-width: 1.1; }
+    .cobot-mer    { fill: none; stroke: #60a5fa; stroke-opacity: 0.45; stroke-width: 1.1; }
+    .cobot-par    { fill: none; stroke: #60a5fa; stroke-opacity: 0.45; stroke-width: 1.1; }
+    .cobot-node   { fill: #0b2038; stroke: #9cecf4; stroke-width: 1.8; stroke-linejoin: round; }
+    .cobot-route  { fill: none; stroke: #f7f3e9; stroke-width: 4.3; stroke-linecap: round; stroke-linejoin: round; }
+    .cobot-gold   { fill: #f6c453; stroke: #0b2038; stroke-width: 1.4; }
+    .cobot-pill   { fill: #f6c453; stroke: #0b2038; stroke-width: 1.4; }
+    .cobot-packet { fill: #ffffff; filter: url(#edgeGlow); }
+    .cobot-ping   { fill: none; stroke: #fbd38d; stroke-width: 1.6; }
     .wg-rule    { stroke: #30363d; stroke-width: 1; stroke-opacity: 0.55; }
     .wg-bracket { fill: none; stroke: #fbbf24; stroke-width: 1.5; stroke-linecap: round; stroke-opacity: 0.85; }
     .panel      { fill: #ffffff; fill-opacity: 0.022; stroke: #ffffff; stroke-opacity: 0.07; }
@@ -246,6 +257,7 @@
       .radar-label { fill: #0284c7; }
       .gal-label { fill: #dc2626; }
       .haldir-label { fill: #0d9488; }
+      .cobot-label { fill: #1d4ed8; }
       .wg-rule { stroke: #d0d7de; stroke-opacity: 0.9; }
       .wg-bracket { stroke: #b45309; }
       .panel { fill: #0b1f2a; fill-opacity: 0.025; stroke: #0b1f2a; stroke-opacity: 0.08; }
@@ -263,10 +275,10 @@
     <path d="M 473.9 317.5 Q 482.1 306.1 482.2 292" fill="none" stroke="url(#eg7)" stroke-width="2" stroke-linecap="round" class="edge"/>
     <path d="M 457.2 237.2 Q 341.4 160.9 205.7 132.5" fill="none" stroke="url(#eg8)" stroke-width="2" stroke-linecap="round" class="edge"/>
     <path d="M 432.7 121.3 Q 321.4 93.1 209 116.8" fill="none" stroke="url(#eg9)" stroke-width="2" stroke-linecap="round" class="edge"/>
-    <path d="M 608.6 139.6 Q 561.3 117.6 510 127.1" fill="none" stroke="url(#eg10)" stroke-width="2" stroke-linecap="round" class="edge"/>
+    <path d="M 643.2 136.2 Q 577.9 109.2 509.1 125.2" fill="none" stroke="url(#eg10)" stroke-width="2" stroke-linecap="round" class="edge"/>
     <path d="M 642.5 222.3 Q 593.3 167.8 521.6 152" fill="none" stroke="url(#eg11)" stroke-width="2" stroke-linecap="round" class="edge"/>
     <path d="M 669.7 329 Q 603.8 223.2 500.4 153.5" fill="none" stroke="url(#eg12)" stroke-width="2" stroke-linecap="round" class="edge"/>
-    <path d="M 495.3 331.2 Q 599.2 270 667.7 170.8" fill="none" stroke="url(#eg13)" stroke-width="2" stroke-linecap="round" class="edge"/>
+    <path d="M 494.5 330.4 Q 593.6 270.2 656.3 172.8" fill="none" stroke="url(#eg13)" stroke-width="2" stroke-linecap="round" class="edge"/>
     <path d="M 503.6 343.2 Q 583.2 330.8 640.8 274.6" fill="none" stroke="url(#eg14)" stroke-width="2" stroke-linecap="round" class="edge"/>
     <path d="M 508.9 362.5 Q 557 374.3 603 356" fill="none" stroke="url(#eg15)" stroke-width="2" stroke-linecap="round" class="edge"/>
     <path d="M 110 319 Q 104.2 301 110 283" fill="none" stroke="url(#eg16)" stroke-width="2" stroke-linecap="round" class="edge"/>
@@ -843,9 +855,53 @@
     </g>
   </g>
   <g>
-    <rect x="615.5" y="134" width="149" height="32" rx="8" class="chip" stroke="#60a5fa"/>
-    <polygon points="630.5,144 635.5,146.6 630.5,149.2 625.5,146.6" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/><polygon points="630.5,147.4 635.5,150 630.5,152.6 625.5,150" fill="#60a5fa" fill-opacity="0.24" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/><polygon points="630.5,150.8 635.5,153.4 630.5,156 625.5,153.4" fill="#60a5fa" fill-opacity="0.34" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/>
-    <text x="642.5" y="155" class="chip-label">COBOT-ATLAS</text>
+    <defs>
+      <radialGradient id="cobotFace" cx="38%" cy="28%" r="78%">
+        <stop offset="0%" stop-color="#244f86"/><stop offset="100%" stop-color="#091b31"/>
+      </radialGradient>
+      <linearGradient id="cobotRim" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#8be7f2"/><stop offset="55%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/>
+      </linearGradient>
+    </defs>
+    <circle class="cobot-glow" cx="690" cy="140" r="41"><animate attributeName="opacity" values="0.3;0.55;0.3" dur="4s" repeatCount="indefinite"/></circle>
+    <g filter="url(#nodeShadow)"><circle cx="690" cy="140" r="40" fill="url(#cobotFace)" stroke="url(#cobotRim)" stroke-width="3.2"/></g>
+    <circle cx="690" cy="140" r="34.3" class="cobot-inner"/>
+    <circle cx="690" cy="140" r="41.6" class="seat-hairline"/>
+    <g>
+      <animateTransform attributeName="transform" type="rotate" from="0 690 140" to="360 690 140" dur="60s" repeatCount="indefinite"/>
+      <ellipse cx="690" cy="140" rx="25.7" ry="34.3" class="cobot-mer"/>
+      <ellipse cx="690" cy="140" rx="11.1" ry="34.3" class="cobot-mer"/>
+    </g>
+    <path d="M656.8 131.4H723.2M656.8 148.6H723.2" class="cobot-par"/>
+    <g class="cobot-node">
+      <path d="M662.9 157.1L671.4 152.1L680 157.1L671.4 162.1Z"/>
+      <path d="M680 157.1L688.6 152.1L697.1 157.1L688.6 162.1Z"/>
+      <path d="M671.4 166.4L680 161.4L688.6 166.4L680 171.4Z"/>
+    </g>
+    <path d="M670.4 150.7V141.4L682.9 134.3L693.2 123.6L705.4 127.9M705.4 127.9L711.1 122.1M705.4 127.9L712.5 131.1" class="cobot-route"/>
+    <g class="cobot-gold">
+      <circle cx="670.4" cy="141.4" r="4.3"/>
+      <circle cx="682.9" cy="134.3" r="4.3"/>
+      <circle cx="693.2" cy="123.6" r="4.3"/>
+    </g>
+    <circle class="cobot-ping" cx="670.4" cy="141.4" r="4.3" opacity="0">
+        <animate attributeName="r" values="4.3;4.3;10.3;4.3" keyTimes="0;0.17;0.22;1" dur="6s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;0;0.85;0" keyTimes="0;0.17;0.22;1" dur="6s" repeatCount="indefinite"/>
+      </circle><circle class="cobot-ping" cx="682.9" cy="134.3" r="4.3" opacity="0">
+        <animate attributeName="r" values="4.3;4.3;10.3;4.3" keyTimes="0;0.45;0.50;1" dur="6s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;0;0.85;0" keyTimes="0;0.45;0.50;1" dur="6s" repeatCount="indefinite"/>
+      </circle><circle class="cobot-ping" cx="693.2" cy="123.6" r="4.3" opacity="0">
+        <animate attributeName="r" values="4.3;4.3;10.3;4.3" keyTimes="0;0.74;0.79;1" dur="6s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;0;0.85;0" keyTimes="0;0.74;0.79;1" dur="6s" repeatCount="indefinite"/>
+      </circle>
+    <rect x="662.5" y="150.4" width="16.1" height="6.4" rx="2.1" class="cobot-pill"/>
+    <circle class="cobot-packet" cx="670.4" cy="150.7" r="2" opacity="0">
+      <animate attributeName="cx" values="670.4;670.4;682.9;693.2;705.4" keyTimes="0;0.18;0.46;0.75;1" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="150.7;141.4;134.3;123.6;127.9" keyTimes="0;0.18;0.46;0.75;1" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;1;1;1;0" keyTimes="0;0.03;0.18;0.75;0.97;1" dur="6s" repeatCount="indefinite"/>
+    </circle>
+    <text x="690" y="88" text-anchor="middle" class="cobot-label">COBOT-ATLAS</text>
+    <polygon points="690,182 695,184.6 690,187.2 685,184.6" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/><polygon points="690,185.4 695,188 690,190.6 685,188" fill="#60a5fa" fill-opacity="0.24" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/><polygon points="690,188.8 695,191.4 690,194 685,191.4" fill="#60a5fa" fill-opacity="0.34" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/>
   </g>
   <g>
     <defs>

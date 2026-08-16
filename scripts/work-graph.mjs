@@ -57,7 +57,7 @@ const nodes = {
   ncp:         { x: 250, y: 256, color: "#fbbf24", kind: "gate", label: "NCP" },
   prisoma:     { x: 470, y: 122, color: "#a78bfa", kind: "triangle" },
   crebain:     { x: 458, y: 366, color: "#9caf88", kind: "raven" },
-  cobotatlas:  { x: 690, y: 150, color: "#60a5fa", kind: "chip", label: "cobot-atlas", dataset: true },
+  cobotatlas:  { x: 690, y: 140, color: "#60a5fa", kind: "cobot", label: "cobot-atlas", dataset: true },
   melkor:      { x: 690, y: 250, color: "#fb923c", kind: "cube" },
   reliefatlas: { x: 690, y: 350, color: "#fb7185", kind: "chip", label: "relief-atlas", dataset: true },
   cortexel:    { x: 110, y: 360, color: "#e879f9", kind: "voxel" },
@@ -154,6 +154,7 @@ function halfExtents(n) {
   if (n.kind === "sentinel") return { hw: 34, hh: 34, circle: true };
   if (n.kind === "haldir") return { hw: SEAT_R, hh: SEAT_R, circle: true };
   if (n.kind === "logo") return { hw: 46, hh: 46, circle: true };
+  if (n.kind === "cobot") return { hw: 40, hh: 40, circle: true };
   if (n.kind === "cube") return { hw: 48, hh: 48, circle: true };
   return { hw: nodeWidth(n) / 2, hh: CHIP_H / 2, circle: false };
 }
@@ -1922,6 +1923,74 @@ export function nodeMark(n) {
     <text x="${cx}" y="${f1(cy-46)}" text-anchor="middle" class="haldir-label">${escapeXML(n.label)}</text>
   </g>`;
   }
+  if (n.kind === "cobot") {
+    // cobot-atlas: THE ATLAS ORB — the project's own globe mark (a lit blue
+    // sphere with its meridian web, three dark survey nodes, a white route and
+    // three gold stations) drawn in the CV's cobot-atlas palette on a machined
+    // chrome-blue seat. Theme-FIXED (a real object); only the label ink and the
+    // outer hairline adapt. Motion: the meridian web turns slowly (the globe
+    // rotating), a white-hot packet travels the route from the base pill through
+    // the three gold stations to the junction (a data traversal across the
+    // atlas), each station pings as the packet lands, and the rim halo breathes.
+    // librsvg / reduced-motion hold the finished still: route full, stations lit.
+    const cx = n.x, cy = n.y;
+    const R = 40;              // face radius (node space)
+    const K = R / 112;         // 256-box source -> node space
+    const X = (u) => f1(cx + (u - 128) * K);
+    const Y = (v) => f1(cy + (v - 128) * K);
+    const GR = f1(12 * K);     // gold-station radius
+    // Constant-speed arrival fractions (route segments 26 / 40.3 / 41.7 / 36.1
+    // over a 144.1 total): station 1 -> 0.18, station 2 -> 0.46, station 3 -> 0.75.
+    const route = `M${X(73)} ${Y(158)}V${Y(132)}L${X(108)} ${Y(112)}L${X(137)} ${Y(82)}L${X(171)} ${Y(94)}M${X(171)} ${Y(94)}L${X(187)} ${Y(78)}M${X(171)} ${Y(94)}L${X(191)} ${Y(103)}`;
+    const packet = `<circle class="cobot-packet" cx="${X(73)}" cy="${Y(158)}" r="2" opacity="0">
+      <animate attributeName="cx" values="${X(73)};${X(73)};${X(108)};${X(137)};${X(171)}" keyTimes="0;0.18;0.46;0.75;1" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="${Y(158)};${Y(132)};${Y(112)};${Y(82)};${Y(94)}" keyTimes="0;0.18;0.46;0.75;1" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;1;1;1;0" keyTimes="0;0.03;0.18;0.75;0.97;1" dur="6s" repeatCount="indefinite"/>
+    </circle>`;
+    const ping = (u, v, at) => {
+      const a1 = (at - 0.01).toFixed(2), a2 = (at + 0.04).toFixed(2);
+      return `<circle class="cobot-ping" cx="${X(u)}" cy="${Y(v)}" r="${GR}" opacity="0">
+        <animate attributeName="r" values="${GR};${GR};${f1(12 * K + 6)};${GR}" keyTimes="0;${a1};${a2};1" dur="6s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;0;0.85;0" keyTimes="0;${a1};${a2};1" dur="6s" repeatCount="indefinite"/>
+      </circle>`;
+    };
+    return `<g>
+    <defs>
+      <radialGradient id="cobotFace" cx="38%" cy="28%" r="78%">
+        <stop offset="0%" stop-color="#244f86"/><stop offset="100%" stop-color="#091b31"/>
+      </radialGradient>
+      <linearGradient id="cobotRim" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#8be7f2"/><stop offset="55%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/>
+      </linearGradient>
+    </defs>
+    <circle class="cobot-glow" cx="${f1(cx)}" cy="${f1(cy)}" r="${R + 1}"><animate attributeName="opacity" values="0.3;0.55;0.3" dur="4s" repeatCount="indefinite"/></circle>
+    <g filter="url(#nodeShadow)"><circle cx="${f1(cx)}" cy="${f1(cy)}" r="${R}" fill="url(#cobotFace)" stroke="url(#cobotRim)" stroke-width="${f1(9 * K)}"/></g>
+    <circle cx="${f1(cx)}" cy="${f1(cy)}" r="${f1(96 * K)}" class="cobot-inner"/>
+    <circle cx="${f1(cx)}" cy="${f1(cy)}" r="${R + 1.6}" class="seat-hairline"/>
+    <g>
+      <animateTransform attributeName="transform" type="rotate" from="0 ${f1(cx)} ${f1(cy)}" to="360 ${f1(cx)} ${f1(cy)}" dur="60s" repeatCount="indefinite"/>
+      <ellipse cx="${f1(cx)}" cy="${f1(cy)}" rx="${f1(72 * K)}" ry="${f1(96 * K)}" class="cobot-mer"/>
+      <ellipse cx="${f1(cx)}" cy="${f1(cy)}" rx="${f1(31 * K)}" ry="${f1(96 * K)}" class="cobot-mer"/>
+    </g>
+    <path d="M${X(35)} ${Y(104)}H${X(221)}M${X(35)} ${Y(152)}H${X(221)}" class="cobot-par"/>
+    <g class="cobot-node">
+      <path d="M${X(52)} ${Y(176)}L${X(76)} ${Y(162)}L${X(100)} ${Y(176)}L${X(76)} ${Y(190)}Z"/>
+      <path d="M${X(100)} ${Y(176)}L${X(124)} ${Y(162)}L${X(148)} ${Y(176)}L${X(124)} ${Y(190)}Z"/>
+      <path d="M${X(76)} ${Y(202)}L${X(100)} ${Y(188)}L${X(124)} ${Y(202)}L${X(100)} ${Y(216)}Z"/>
+    </g>
+    <path d="${route}" class="cobot-route"/>
+    <g class="cobot-gold">
+      <circle cx="${X(73)}" cy="${Y(132)}" r="${GR}"/>
+      <circle cx="${X(108)}" cy="${Y(112)}" r="${GR}"/>
+      <circle cx="${X(137)}" cy="${Y(82)}" r="${GR}"/>
+    </g>
+    ${ping(73, 132, 0.18)}${ping(108, 112, 0.46)}${ping(137, 82, 0.75)}
+    <rect x="${X(51)}" y="${Y(157)}" width="${f1(45 * K)}" height="${f1(18 * K)}" rx="${f1(6 * K)}" class="cobot-pill"/>
+    ${packet}
+    <text x="${f1(cx)}" y="${f1(cy - R - 12)}" text-anchor="middle" class="cobot-label">${escapeXML(n.label)}</text>
+    ${datasetPlates(cx, cy + R + 8, n.color)}
+  </g>`;
+  }
 
   // small "chip" nodes
   const w = nodeWidth(n);
@@ -2166,6 +2235,17 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .hd-tok-out      { fill: #fff1f0; }
     .hd-flash        { fill: #fff1f0; }
     .haldir-label    { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #2dd4bf; }
+    .cobot-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #93c5fd; }
+    .cobot-glow   { fill: none; stroke: #7dd3fc; stroke-width: 5; opacity: 0.32; filter: url(#soft); }
+    .cobot-inner  { fill: none; stroke: #8be7f2; stroke-opacity: 0.32; stroke-width: 1.1; }
+    .cobot-mer    { fill: none; stroke: #60a5fa; stroke-opacity: 0.45; stroke-width: 1.1; }
+    .cobot-par    { fill: none; stroke: #60a5fa; stroke-opacity: 0.45; stroke-width: 1.1; }
+    .cobot-node   { fill: #0b2038; stroke: #9cecf4; stroke-width: 1.8; stroke-linejoin: round; }
+    .cobot-route  { fill: none; stroke: #f7f3e9; stroke-width: 4.3; stroke-linecap: round; stroke-linejoin: round; }
+    .cobot-gold   { fill: #f6c453; stroke: #0b2038; stroke-width: 1.4; }
+    .cobot-pill   { fill: #f6c453; stroke: #0b2038; stroke-width: 1.4; }
+    .cobot-packet { fill: #ffffff; filter: url(#edgeGlow); }
+    .cobot-ping   { fill: none; stroke: #fbd38d; stroke-width: 1.6; }
     .wg-rule    { stroke: #30363d; stroke-width: 1; stroke-opacity: 0.55; }
     .wg-bracket { fill: none; stroke: #fbbf24; stroke-width: 1.5; stroke-linecap: round; stroke-opacity: 0.85; }
     .panel      { fill: #ffffff; fill-opacity: 0.022; stroke: #ffffff; stroke-opacity: 0.07; }
@@ -2190,6 +2270,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .radar-label { fill: #0284c7; }
       .gal-label { fill: #dc2626; }
       .haldir-label { fill: #0d9488; }
+      .cobot-label { fill: #1d4ed8; }
       .wg-rule { stroke: #d0d7de; stroke-opacity: 0.9; }
       .wg-bracket { stroke: #b45309; }
       .panel { fill: #0b1f2a; fill-opacity: 0.025; stroke: #0b1f2a; stroke-opacity: 0.08; }
