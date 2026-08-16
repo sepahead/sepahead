@@ -796,7 +796,7 @@ function enlightenmentDefs() {
       <feTurbulence type="fractalNoise" baseFrequency="0.015 0.10" numOctaves="2" seed="3" result="n">
         <animate attributeName="seed" values="1;60;1" dur="6s" repeatCount="indefinite"/>
       </feTurbulence>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3.6" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
     <linearGradient id="prismGlassGrad" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#fde68a" stop-opacity="0.12"/>
@@ -804,6 +804,13 @@ function enlightenmentDefs() {
       <stop offset="50%" stop-color="#ffffff" stop-opacity="0.82"/>
       <stop offset="70%" stop-color="#ffffff" stop-opacity="0.50"/>
       <stop offset="100%" stop-color="#fde68a" stop-opacity="0.12"/>
+    </linearGradient>
+    <linearGradient id="prismGlassGradLight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.32"/>
+      <stop offset="30%" stop-color="#b45309" stop-opacity="0.58"/>
+      <stop offset="50%" stop-color="#92400e" stop-opacity="0.76"/>
+      <stop offset="70%" stop-color="#b45309" stop-opacity="0.58"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.32"/>
     </linearGradient>`;
 }
 
@@ -886,12 +893,11 @@ function enlightenmentMarkup(portalX) {
   };
   // Glass prism: singularity projectiles shatter through it into golden age rays.
   // Vibrations strongest at centre, reverberating elastically toward top/bottom.
-  const px = portalX.toFixed(1);
   const prismWaves = () => {
     const out = [];
     for (let k = 0; k < 3; k++) {
       const dy = LANE_STEP * (k + 1);
-      const amp = 4 + k * 5;
+      const amp = 5 + k * 6;
       const dur = (1.4 + k * 0.35).toFixed(2);
       const pa = portalX.toFixed(1);
       const up0 = `M ${pa} ${(MID_Y - 2).toFixed(1)} Q ${(portalX+amp+5).toFixed(1)} ${(MID_Y-dy*0.35).toFixed(1)} ${(portalX+3).toFixed(1)} ${(MID_Y-dy*0.65).toFixed(1)} Q ${(portalX-amp+2).toFixed(1)} ${(MID_Y-dy*0.9).toFixed(1)} ${pa} ${(MID_Y-dy*1.1).toFixed(1)}`;
@@ -912,11 +918,6 @@ function enlightenmentMarkup(portalX) {
     <rect x="${(portalX - 3).toFixed(1)}" y="${(PLOT_TOP + 6).toFixed(1)}" width="6" height="${(PLOT_HEIGHT - 12).toFixed(1)}" rx="2" fill="url(#prismGlassGrad)" class="prism-body">
       <animate attributeName="opacity" values="0.65;0.95;0.65" dur="1.8s" repeatCount="indefinite"/>
     </rect>
-    <line x1="${px}" y1="${(PLOT_TOP + 10).toFixed(1)}" x2="${px}" y2="${(PLOT_BOTTOM - 10).toFixed(1)}" stroke="#ffffff" stroke-width="1.2" class="prism-core">
-      <animate attributeName="opacity" values="0.4;1;0.4" dur="0.9s" repeatCount="indefinite"/>
-      <animate attributeName="stroke-width" values="0.8;2.2;0.8" dur="1.1s" repeatCount="indefinite"/>
-      <animateTransform attributeName="transform" type="translate" values="0 0;0.8 0;0 0;-0.6 0;0 0" dur="2.4s" repeatCount="indefinite"/>
-    </line>
     ${prismWaves()}
     </g>
     ${GOLDEN_AGE_RAYS.map(rayPolygon).join("\n    ")}
@@ -1986,7 +1987,6 @@ function renderSVG(model) {
     .golden-age-interference { pointer-events: none; stroke-linecap: butt; }
     .golden-age-text { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fde68a; letter-spacing: 2px; }
     .prism-body { fill: url(#prismGlassGrad); pointer-events: none; }
-    .prism-core { stroke: #ffffff; stroke-linecap: round; pointer-events: none; }
     .prism-wave { fill: none; stroke: #fef3c7; stroke-width: 1.1; stroke-linecap: round; pointer-events: none; }
     .grid { stroke: #21262d; stroke-width: 1; }
     .baseline { stroke: #30363d; stroke-width: 1; }
@@ -2151,7 +2151,8 @@ function renderSVG(model) {
       .golden-age-fringe { }
       .golden-age-interference { stroke: #fef3c7; }
       .golden-age-text { fill: #92400e; }
-      .prism-wave { stroke: #d97706; }
+      .prism-body { fill: url(#prismGlassGradLight); }
+      .prism-wave { stroke: #b45309; }
       .headline, .sub, .value, .value-peak, .year, .portal-text, .seam-text, .origin-text, .golden-age-text { stroke: #ffffff; }
     }
     @media (prefers-reduced-motion: reduce) {
