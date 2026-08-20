@@ -13,8 +13,9 @@
 // qualified deployment. Commander/body paths use two counter-flowing lanes;
 // read-only observer paths use one outward lane so authority is not implied.
 // Every project node is a bespoke "real object" mark on a machined border —
-// the crebain-badge / engram-medallion tier: NCP is a dual-lane contract gate
-// (perception ⇄ action through one checkpoint) on a solid amber badge seat;
+// the crebain-badge / engram-medallion tier: NCP is a dual-lane admission core
+// (perception ⇄ action through one fail-closed checkpoint) on a machined amber
+// protocol seal;
 // cortexel is a voxel NEURAL NETWORK on a fuchsia badge seat; crebain is its
 // own raven-in-crosshair brand mark; engram a machined silver medallion;
 // prisoma a smoked-glass prism with liquid-silver edges dispersing one beam
@@ -1430,37 +1431,59 @@ export function nodeMark(n) {
   </g>`;
   }
   if (n.kind === "gate") {
-    // NCP, TWO LANES, ONE GATE: an upper PERCEPTION lane (body→brain, packets
-    // right→left, dashed best-effort) + a lower ACTION lane (brain→body, left→
-    // right, solid express, SAFETY-GATED; its packet dwells to be verify-
-    // stamped then releases). Counter-flowing packets = two-way at a glance;
-    // dashed-vs-solid = the QoS asymmetry. The lanes fan straight into the live
-    // edges (prisoma=perception/top, crebain=action/bottom, engram=centre trunk).
+    // NCP, THE BIDIRECTIONAL ADMISSION CORE. Four physical ports terminate two
+    // counter-flowing lanes in one dark, bounded kernel: cyan/dashed perception
+    // travels body→brain (right→left); amber/solid action travels brain→body
+    // (left→right), waits at the closed kernel, is admitted, then continues.
+    // The central split diamond is a canonical typed boundary, not a release or
+    // certification mark. Motion explains routing + admission; the static frame
+    // remains a truthful fail-closed protocol seal with both directions visible.
+    const X = (x) => f1(n.x + x), Y = (y) => f1(n.y + y);
+    const diamond = (x, y, r) => `${X(x)},${Y(y-r)} ${X(x+r)},${Y(y)} ${X(x)},${Y(y+r)} ${X(x-r)},${Y(y)}`;
     return `<g>
+    <defs>
+      <radialGradient id="ncpWell" cx="50%" cy="42%" r="64%">
+        <stop offset="0%" stop-color="#182536"/><stop offset="70%" stop-color="#09111d"/><stop offset="100%" stop-color="#05080d"/>
+      </radialGradient>
+      <linearGradient id="ncpCore" x1="0" y1="${Y(-18)}" x2="0" y2="${Y(18)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#ffe9a3"/><stop offset="35%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#8a3d08"/>
+      </linearGradient>
+      <linearGradient id="ncpKernel" x1="${X(-6)}" y1="${Y(-6)}" x2="${X(6)}" y2="${Y(6)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#fff7d6"/><stop offset="45%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#b45309"/>
+      </linearGradient>
+    </defs>
     ${seat(n.x, n.y, "gate", ["#fde68a", "#fbbf24", "#92400e"])}
-    <g filter="url(#soft)" transform="translate(${f1(n.x - 250)} ${f1(n.y - 230)})">
-      <path d="M224 222 H243 M257 222 H276" class="gate-wire-perc"/>
-      <path d="M224 238 H243 M257 238 H276" class="gate-wire"/>
-      <circle cx="224" cy="222" r="2.2" class="gate-port"/>
-      <circle cx="276" cy="222" r="2.2" class="gate-port"/>
-      <circle cx="224" cy="238" r="2.2" class="gate-port"/>
-      <circle cx="276" cy="238" r="2.2" class="gate-port"/>
-      <rect x="247.5" y="214" width="5" height="32" rx="2.5" class="gate-bar">
-        <animate attributeName="fill-opacity" values="0.16;0.32;0.16" dur="2.8s" repeatCount="indefinite"/>
-      </rect>
-      <polyline points="246.6,238.6 249.4,241.2 253.2,235.6" class="gate-tick">
-        <animate attributeName="stroke-opacity" values="0.75;0.75;1;0.75;0.75" keyTimes="0;0.5;0.58;0.72;1" dur="2.6s" repeatCount="indefinite"/>
-        <animate attributeName="stroke-width" values="1.6;1.6;2.4;1.6;1.6" keyTimes="0;0.52;0.6;0.74;1" dur="2.6s" repeatCount="indefinite"/>
-      </polyline>
-      <circle cx="250" cy="222" r="2.6" class="gate-packet-perc">
-        <animate attributeName="cx" values="276;224" dur="1.9s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0.7;0.35;0.7;0.5;0.7" dur="1.9s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="240" cy="238" r="3" class="gate-packet">
-        <animate attributeName="cx" values="224;248;248;254;276" keyTimes="0;0.34;0.56;0.62;1" dur="2.6s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="1;1;0.3;1;1" keyTimes="0;0.34;0.56;0.62;1" dur="2.6s" repeatCount="indefinite"/>
-      </circle>
-    </g>
+    <circle cx="${n.x}" cy="${n.y}" r="30.4" class="gate-well"/>
+    <circle cx="${n.x}" cy="${n.y}" r="26.6" class="gate-index" stroke-dasharray="1 5.4"/>
+
+    <path d="M${X(-27)} ${Y(-9)}H${X(-12)} M${X(12)} ${Y(-9)}H${X(27)}" class="gate-lane gate-lane-perception"/>
+    <path d="M${X(-27)} ${Y(9)}H${X(-12)} M${X(12)} ${Y(9)}H${X(27)}" class="gate-lane gate-lane-action"/>
+    <path d="M${X(-25)} ${Y(-12)}L${X(-28)} ${Y(-9)}L${X(-25)} ${Y(-6)} M${X(25)} ${Y(6)}L${X(28)} ${Y(9)}L${X(25)} ${Y(12)}" class="gate-direction"/>
+
+    <polygon points="${diamond(-27,-9,3.2)}" class="gate-port gate-port-perception"/>
+    <polygon points="${diamond(27,-9,3.2)}" class="gate-port gate-port-perception"/>
+    <polygon points="${diamond(-27,9,3.2)}" class="gate-port gate-port-action"/>
+    <polygon points="${diamond(27,9,3.2)}" class="gate-port gate-port-action"/>
+
+    <path d="M${X(-8)} ${Y(-18)}H${X(8)}L${X(12)} ${Y(-14)}V${Y(14)}L${X(8)} ${Y(18)}H${X(-8)}L${X(-12)} ${Y(14)}V${Y(-14)}Z" class="gate-core"/>
+    <path d="M${X(-8)} ${Y(-9)}H${X(8)} M${X(-8)} ${Y(9)}H${X(8)}" class="gate-core-rail"/>
+    <path d="M${X(5)} ${Y(-12)}L${X(1)} ${Y(-9)}L${X(5)} ${Y(-6)} M${X(-5)} ${Y(6)}L${X(-1)} ${Y(9)}L${X(-5)} ${Y(12)}" class="gate-core-arrow"/>
+    <polygon points="${diamond(0,0,6.2)}" class="gate-kernel"/>
+    <path d="M${X(0)} ${Y(-4.3)}V${Y(4.3)}" class="gate-kernel-split"/>
+    <circle cx="${n.x}" cy="${n.y}" r="1.35" class="gate-kernel-hot"/>
+
+    <polygon points="${diamond(27,-9,2.1)}" class="gate-packet gate-packet-perception" filter="url(#edgeGlow)">
+      <animateTransform attributeName="transform" type="translate" values="0 0;${X(-15)-n.x} 0;${X(-15)-n.x} 0;${X(-37)-n.x} 0;${X(-54)-n.x} 0" keyTimes="0;0.28;0.40;0.70;1" dur="7.2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;1;0.55;1;1;0" keyTimes="0;0.04;0.24;0.40;0.72;0.96;1" dur="7.2s" repeatCount="indefinite"/>
+    </polygon>
+    <polygon points="${diamond(-27,9,2.3)}" class="gate-packet gate-packet-action" filter="url(#edgeGlow)">
+      <animateTransform attributeName="transform" type="translate" values="0 0;${X(15)-n.x} 0;${X(15)-n.x} 0;${X(37)-n.x} 0;${X(54)-n.x} 0" keyTimes="0;0.34;0.56;0.72;1" dur="7.2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;1;0.42;1;1;0" keyTimes="0;0.04;0.30;0.56;0.74;0.96;1" dur="7.2s" repeatCount="indefinite"/>
+    </polygon>
+    <circle cx="${n.x}" cy="${n.y}" r="8.2" class="gate-admit" opacity="0">
+      <animate attributeName="opacity" values="0;0;0.9;0;0" keyTimes="0;0.50;0.58;0.68;1" dur="7.2s" repeatCount="indefinite"/>
+      <animate attributeName="r" values="8.2;8.2;10.8;12.5;12.5" keyTimes="0;0.50;0.58;0.68;1" dur="7.2s" repeatCount="indefinite"/>
+    </circle>
     <text x="${n.x}" y="${f1(n.y + 46)}" text-anchor="middle" class="gate-label">${escapeXML(n.label)}</text>
   </g>`;
   }
@@ -2226,7 +2249,7 @@ const frame = `<g class="frame">
 // Assemble.
 // ---------------------------------------------------------------------------
 const aria =
-  "Conceptual standalone-first ecosystem map. Optional NCP role paths connect Engram as separate simulation responder or direct command proposer, CREBAIN as sole body and final software actuator admission authority, Haldir as gated command proposer, and Galadriel and Prisoma as read-only observers. Every command is only a proposal until CREBAIN independently admits it under a current session and bounded body-authority lease. In gated mode Engram sends Haldir-local signed intent that carries no NCP authority; Haldir independently creates and authorizes a new NCP command. A separate default-off Galadriel-Haldir edge carries deny-only assessment and authenticated disposition; its absence can never grant authority. Separately declared out-of-band CREBAIN telemetry may feed Galadriel. pid-rs is a protocol-neutral in-process library with no wire role, used optionally by Galadriel and Prisoma; Cortexel is a one-way labelled Engram export sink with no control path. Manwe, Melkor and atlas connections are research, tooling or data inputs, not control paths. Stacked-layer badges outside COBOT-ATLAS and RELIEF-ATLAS identify them as datasets. COBOT-ATLAS shows a conserved robotic pick, desk placement and return loop. RELIEF-ATLAS shows an indexed contact sheet of varied 3-D mesh records over terrain contours. It represents a 10,079-item manifest and prompt catalog with 125 public GLBs; it does not imply a complete 10,079-mesh corpus, publication completion or asset-level licensing approval. NCP 1.0 is an unreleased, release-blocked candidate; no line claims production deployment or qualification.";
+  "Conceptual standalone-first ecosystem map. Optional NCP role paths connect Engram as separate simulation responder or direct command proposer, CREBAIN as sole body and final software actuator admission authority, Haldir as gated command proposer, and Galadriel and Prisoma as read-only observers. Every command is only a proposal until CREBAIN independently admits it under a current session and bounded body-authority lease. In gated mode Engram sends Haldir-local signed intent that carries no NCP authority; Haldir independently creates and authorizes a new NCP command. A separate default-off Galadriel-Haldir edge carries deny-only assessment and authenticated disposition; its absence can never grant authority. Separately declared out-of-band CREBAIN telemetry may feed Galadriel. pid-rs is a protocol-neutral in-process library with no wire role, used optionally by Galadriel and Prisoma; Cortexel is a one-way labelled Engram export sink with no control path. Manwe, Melkor and atlas connections are research, tooling or data inputs, not control paths. The NCP mark shows a dashed cyan perception lane and solid amber action lane crossing one bounded admission core in opposite directions. Stacked-layer badges outside COBOT-ATLAS and RELIEF-ATLAS identify them as datasets. COBOT-ATLAS shows a conserved robotic pick, desk placement and return loop. RELIEF-ATLAS shows an indexed contact sheet of varied 3-D mesh records over terrain contours. It represents a 10,079-item manifest and prompt catalog with 125 public GLBs; it does not imply a complete 10,079-mesh corpus, publication completion or asset-level licensing approval. NCP 1.0 is an unreleased, release-blocked candidate; no line claims production deployment or qualification.";
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
   <defs>
@@ -2358,13 +2381,25 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .prz-blade-glint { stroke: #ffffff; stroke-width: 1.3; stroke-linecap: round; stroke-dasharray: 5 44; stroke-opacity: 0.95; }
     .prz-foot-hot { fill: #ffffff; }
     .tri-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c4b5fd; }
-    .gate-wire      { fill: none; stroke: #fbbf24; stroke-width: 2.6; stroke-linecap: round; opacity: 0.92; }
-    .gate-wire-perc { fill: none; stroke: #fbbf24; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 5 4; opacity: 0.6; }
-    .gate-bar       { fill: #fbbf24; fill-opacity: 0.16; stroke: #fbbf24; stroke-width: 2; }
-    .gate-port      { fill: #fbbf24; }
-    .gate-tick      { fill: none; stroke: #fde68a; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-    .gate-packet    { fill: #fde68a; }
-    .gate-packet-perc { fill: #fde68a; opacity: 0.7; }
+    .gate-well      { fill: url(#ncpWell); stroke: #0b111b; stroke-width: 1.2; }
+    .gate-index     { fill: none; stroke: #fbbf24; stroke-width: 0.75; stroke-opacity: 0.42; stroke-linecap: round; }
+    .gate-lane      { fill: none; stroke-linecap: round; }
+    .gate-lane-perception { stroke: #67e8f9; stroke-width: 1.45; stroke-opacity: 0.78; stroke-dasharray: 3.2 2.6; }
+    .gate-lane-action     { stroke: #fbbf24; stroke-width: 2.15; stroke-opacity: 0.96; }
+    .gate-direction { fill: none; stroke: #dbeafe; stroke-width: 0.85; stroke-opacity: 0.72; stroke-linecap: round; stroke-linejoin: round; }
+    .gate-port      { stroke-width: 0.7; stroke-linejoin: round; }
+    .gate-port-perception { fill: #083344; stroke: #a5f3fc; }
+    .gate-port-action     { fill: #451a03; stroke: #fde68a; }
+    .gate-core      { fill: #0a1019; stroke: url(#ncpCore); stroke-width: 1.8; stroke-linejoin: round; }
+    .gate-core-rail { fill: none; stroke: #fef3c7; stroke-width: 0.75; stroke-opacity: 0.48; stroke-linecap: round; }
+    .gate-core-arrow { fill: none; stroke: #fff7d6; stroke-width: 1; stroke-opacity: 0.82; stroke-linecap: round; stroke-linejoin: round; }
+    .gate-kernel    { fill: url(#ncpKernel); stroke: #fff7d6; stroke-width: 0.8; stroke-linejoin: round; }
+    .gate-kernel-split { fill: none; stroke: #451a03; stroke-width: 1.05; stroke-linecap: round; }
+    .gate-kernel-hot { fill: #ffffff; stroke: #fef3c7; stroke-width: 0.45; }
+    .gate-packet    { stroke-width: 0.45; stroke-linejoin: round; }
+    .gate-packet-perception { fill: #cffafe; stroke: #ffffff; }
+    .gate-packet-action     { fill: #fde68a; stroke: #ffffff; }
+    .gate-admit     { fill: none; stroke: #fff7d6; stroke-width: 1; }
     .gate-label     { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; text-anchor: middle; }
     .vox-top    { fill: #e879f9; fill-opacity: 0.6; stroke: #e879f9; stroke-width: 1.3; }
     .vox-left   { fill: #e879f9; fill-opacity: 0.32; stroke: #e879f9; stroke-width: 1.3; }
