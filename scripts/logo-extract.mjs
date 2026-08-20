@@ -19,10 +19,10 @@ const f1 = (v) => Number(v.toFixed(1));
 // glow/shadow bleed (the label is stripped, so no need to clip tightly).
 const SPEC = {
   pidrs:    { half: 50 },
-  ncp:      { half: 46 },
+  ncp:      { half: 46, aria: "NCP logo: a bounded four-plane contract with separate action proposal and receipt" },
   crebain:  { half: 64 }, // raven raster scaled to ~118 wide (radius ~59)
   melkor:   { half: 57 }, // hexagon + bezel
-  cortexel: { half: 53 }, // code-tag chevrons sit at the outer corners (~r47)
+  cortexel: { half: 53, aria: "Cortexel logo: declared neural data crosses a validation lattice into a deterministic figure with an attached exact-value disclosure table" }, // evidence cassette + caller-side sphere/voxel, with shadow bleed
   manwe:    { half: 44 },
   engram:   { half: 54 }, // medallion scaled to radius ~46 + bezel/shadow
   haldir:   { half: 46 },
@@ -54,10 +54,10 @@ function stripChrome(mark) {
 export function logoSVG(key) {
   const n = nodes[key];
   if (!n) throw new Error(`no node ${key}`);
-  const { half: H, dx = 0, dy = 0 } = SPEC[key];
+  const { half: H, dx = 0, dy = 0, aria = `${key} logo` } = SPEC[key];
   const vb = `${f1(n.x + dx - H)} ${f1(n.y + dy - H)} ${f1(2 * H)} ${f1(2 * H)}`;
   const mark = stripChrome(nodeMark(n));
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="${f1(2 * H)}" height="${f1(2 * H)}" role="img" aria-label="${key} logo">
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="${f1(2 * H)}" height="${f1(2 * H)}" role="img" aria-label="${aria}">
   <defs>${SHARED_DEFS}</defs>
   <style>${SHARED_STYLE}</style>
   ${mark}

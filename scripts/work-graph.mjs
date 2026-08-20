@@ -13,10 +13,12 @@
 // qualified deployment. Commander/body paths use two counter-flowing lanes;
 // read-only observer paths use one outward lane so authority is not implied.
 // Every project node is a bespoke "real object" mark on a machined border —
-// the crebain-badge / engram-medallion tier: NCP is a dual-lane admission core
-// (perception ⇄ action through one fail-closed checkpoint) on a machined amber
-// protocol seal;
-// cortexel is a voxel NEURAL NETWORK on a fuchsia badge seat; crebain is its
+// the crebain-badge / engram-medallion tier: NCP is a canonical four-plane
+// contract — angular JSON bounds, distinct plane keys, session/generation fence,
+// and a receipt separated from its action proposal — on a machined amber seal;
+// cortexel is a two-author evidence artifact: declared neuron/population data,
+// validation lattice, deterministic figure, exact-value table and digest;
+// crebain is its
 // own raven-in-crosshair brand mark; engram a machined silver medallion;
 // prisoma a smoked-glass prism with liquid-silver edges dispersing one beam
 // into the three PID components; melkor an obsidian forge plate whose black
@@ -59,13 +61,13 @@ const VSHIFT = 26; // push the graph body down so the taller canvas is balanced 
 const nodes = {
   engram:      { x: 110, y: 230, color: "#bcc6d1", kind: "logo" },
   pidrs:       { x: 166, y: 116, color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
-  ncp:         { x: 250, y: 256, color: "#fbbf24", kind: "gate", label: "NCP" },
+  ncp:         { x: 250, y: 256, color: "#fbbf24", kind: "contract", label: "NCP" },
   prisoma:     { x: 470, y: 122, color: "#a78bfa", kind: "triangle" },
   crebain:     { x: 458, y: 366, color: "#9caf88", kind: "raven" },
   cobotatlas:  { x: 690, y: 140, color: "#60a5fa", kind: "cobot", label: "cobot-atlas", dataset: true },
   melkor:      { x: 690, y: 250, color: "#fb923c", kind: "cube" },
   reliefatlas: { x: 690, y: 374, color: "#fb7185", kind: "relief", label: "relief-atlas", dataset: true },
-  cortexel:    { x: 110, y: 360, color: "#e879f9", kind: "voxel" },
+  cortexel:    { x: 110, y: 360, color: "#e879f9", kind: "artifact" },
   manwe:       { x: 298, y: 386, color: "#38bdf8", kind: "radar", label: "manwe" },
   galadriel:   { x: 495, y: 253, color: "#ef4444", kind: "sentinel", label: "galadriel" },
   haldir:      { x: 370, y: 254, color: "#2dd4bf", kind: "haldir", label: "haldir" },
@@ -133,7 +135,7 @@ for (const [a, b] of [
 const HUB_R = 46;
 const CUBE = 92; // melkor square, matched to a hub's diameter
 const TRI_CIRCUM = 53; // prisoma triangle circumradius (~92 wide, like the others)
-const SEAT_R = 34; // badge-seat radius shared by the seated marks (gate / voxel / optic)
+const SEAT_R = 34; // badge-seat radius shared by the seated marks (contract / artifact / optic)
 const CHIP_H = 32;
 const GAP = 7;
 
@@ -143,17 +145,17 @@ const escapeXML = (s) =>
 function nodeWidth(n) {
   if (n.kind === "hub") return (n.r || HUB_R) * 2;
   if (n.kind === "cube") return CUBE;
-  // gate (NCP): the dual-lane glyph is hand-tuned at fixed coords and its label
+  // contract (NCP): the four-plane glyph is hand-tuned at fixed coords and its label
   // floats below it, so size to the glyph (~7.8px/char), not the tracked label.
-  if (n.kind === "gate") return Math.round(n.label.length * 7.8 + 28);
+  if (n.kind === "contract") return Math.round(n.label.length * 7.8 + 28);
   // chips: the label sits INSIDE the rect, now bold + 2.5px tracked (10.3px/char)
   // so widen to keep it clear of the right edge.
   return Math.round(n.label.length * 10.3 + 36);
 }
 function halfExtents(n) {
   if (n.kind === "hub") return { hw: (n.r || HUB_R), hh: (n.r || HUB_R), circle: true };
-  if (n.kind === "gate") return { hw: SEAT_R, hh: SEAT_R, circle: true };
-  if (n.kind === "voxel") return { hw: SEAT_R, hh: SEAT_R, circle: true };
+  if (n.kind === "contract") return { hw: SEAT_R, hh: SEAT_R, circle: true };
+  if (n.kind === "artifact") return { hw: SEAT_R, hh: SEAT_R, circle: true };
   if (n.kind === "raven") return { hw: 44, hh: 44, circle: true };
   if (n.kind === "radar") return { hw: SEAT_R, hh: SEAT_R, circle: true };
   if (n.kind === "sentinel") return { hw: 34, hh: 34, circle: true };
@@ -1430,142 +1432,157 @@ export function nodeMark(n) {
     <text x="${n.x}" y="${f1(n.y + R / 2 + 16)}" text-anchor="middle" class="tri-label">${escapeXML(n.label)}</text>
   </g>`;
   }
-  if (n.kind === "gate") {
-    // NCP, THE BIDIRECTIONAL ADMISSION CORE. Four physical ports terminate two
-    // counter-flowing lanes in one dark, bounded kernel: cyan/dashed perception
-    // travels body→brain (right→left); amber/solid action travels brain→body
-    // (left→right), waits at the closed kernel, is admitted, then continues.
-    // The central split diamond is a canonical typed boundary, not a release or
-    // certification mark. Motion explains routing + admission; the static frame
-    // remains a truthful fail-closed protocol seal with both directions visible.
+  if (n.kind === "contract") {
+    // NCP, THE CANONICAL FOUR-PLANE CONTRACT. The prior central "gate" read too
+    // much like a broker or server. This mark makes the CONTRACT the object: two
+    // angular JSON-like braces bound four different plane keys (control,
+    // perception, action, observation) around a hollow identity-binding knot. A
+    // broken outer ring is the session/generation fence. The amber action proposal
+    // stops at the bound; only a separate white outline receipt returns. Motion
+    // illustrates one valid, currently-bound exchange — never universal admission,
+    // actuation, deployment, qualification, or physical-safety proof.
     const X = (x) => f1(n.x + x), Y = (y) => f1(n.y + y);
     const diamond = (x, y, r) => `${X(x)},${Y(y-r)} ${X(x+r)},${Y(y)} ${X(x)},${Y(y+r)} ${X(x-r)},${Y(y)}`;
+    const CYC = "8.4s";
     return `<g>
     <defs>
-      <radialGradient id="ncpWell" cx="50%" cy="42%" r="64%">
-        <stop offset="0%" stop-color="#182536"/><stop offset="70%" stop-color="#09111d"/><stop offset="100%" stop-color="#05080d"/>
+      <radialGradient id="ncpWell" cx="45%" cy="38%" r="72%">
+        <stop offset="0%" stop-color="#1b2736"/><stop offset="62%" stop-color="#09121e"/><stop offset="100%" stop-color="#03070c"/>
       </radialGradient>
-      <linearGradient id="ncpCore" x1="0" y1="${Y(-18)}" x2="0" y2="${Y(18)}" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#ffe9a3"/><stop offset="35%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#8a3d08"/>
+      <linearGradient id="ncpBrace" x1="0" y1="${Y(-20)}" x2="0" y2="${Y(20)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#fff3bd"/><stop offset="38%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#92400e"/>
       </linearGradient>
-      <linearGradient id="ncpKernel" x1="${X(-6)}" y1="${Y(-6)}" x2="${X(6)}" y2="${Y(6)}" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#fff7d6"/><stop offset="45%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#b45309"/>
-      </linearGradient>
+      <radialGradient id="ncpBindGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.82"/><stop offset="42%" stop-color="#fde68a" stop-opacity="0.24"/><stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+      </radialGradient>
     </defs>
     ${seat(n.x, n.y, "gate", ["#fde68a", "#fbbf24", "#92400e"])}
-    <circle cx="${n.x}" cy="${n.y}" r="30.4" class="gate-well"/>
-    <circle cx="${n.x}" cy="${n.y}" r="26.6" class="gate-index" stroke-dasharray="1 5.4"/>
+    <circle cx="${n.x}" cy="${n.y}" r="30.2" class="ncp-well"/>
 
-    <path d="M${X(-27)} ${Y(-9)}H${X(-12)} M${X(12)} ${Y(-9)}H${X(27)}" class="gate-lane gate-lane-perception"/>
-    <path d="M${X(-27)} ${Y(9)}H${X(-12)} M${X(12)} ${Y(9)}H${X(27)}" class="gate-lane gate-lane-action"/>
-    <path d="M${X(-25)} ${Y(-12)}L${X(-28)} ${Y(-9)}L${X(-25)} ${Y(-6)} M${X(25)} ${Y(6)}L${X(28)} ${Y(9)}L${X(25)} ${Y(12)}" class="gate-direction"/>
+    <g class="ncp-generation">
+      <path d="M${X(-20)} ${Y(-19)}A27.5 27.5 0 0 1 ${X(20)} ${Y(-19)}"/>
+      <path d="M${X(20)} ${Y(19)}A27.5 27.5 0 0 1 ${X(-20)} ${Y(19)}"/>
+      <animateTransform attributeName="transform" type="rotate" values="0 ${n.x} ${n.y};0 ${n.x} ${n.y};12 ${n.x} ${n.y};12 ${n.x} ${n.y};0 ${n.x} ${n.y}" keyTimes="0;0.61;0.67;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
+    </g>
 
-    <polygon points="${diamond(-27,-9,3.2)}" class="gate-port gate-port-perception"/>
-    <polygon points="${diamond(27,-9,3.2)}" class="gate-port gate-port-perception"/>
-    <polygon points="${diamond(-27,9,3.2)}" class="gate-port gate-port-action"/>
-    <polygon points="${diamond(27,9,3.2)}" class="gate-port gate-port-action"/>
+    <path d="M${X(-4)} ${Y(-19)}H${X(-9)}L${X(-13)} ${Y(-15)}V${Y(-7)}L${X(-17)} ${Y(-3)}L${X(-13)} ${Y(1)}V${Y(15)}L${X(-9)} ${Y(19)}H${X(-4)}" class="ncp-brace"/>
+    <path d="M${X(4)} ${Y(-19)}H${X(9)}L${X(13)} ${Y(-15)}V${Y(-7)}L${X(17)} ${Y(-3)}L${X(13)} ${Y(1)}V${Y(15)}L${X(9)} ${Y(19)}H${X(4)}" class="ncp-brace"/>
 
-    <path d="M${X(-8)} ${Y(-18)}H${X(8)}L${X(12)} ${Y(-14)}V${Y(14)}L${X(8)} ${Y(18)}H${X(-8)}L${X(-12)} ${Y(14)}V${Y(-14)}Z" class="gate-core"/>
-    <path d="M${X(-8)} ${Y(-9)}H${X(8)} M${X(-8)} ${Y(9)}H${X(8)}" class="gate-core-rail"/>
-    <path d="M${X(5)} ${Y(-12)}L${X(1)} ${Y(-9)}L${X(5)} ${Y(-6)} M${X(-5)} ${Y(6)}L${X(-1)} ${Y(9)}L${X(-5)} ${Y(12)}" class="gate-core-arrow"/>
-    <polygon points="${diamond(0,0,6.2)}" class="gate-kernel"/>
-    <path d="M${X(0)} ${Y(-4.3)}V${Y(4.3)}" class="gate-kernel-split"/>
-    <circle cx="${n.x}" cy="${n.y}" r="1.35" class="gate-kernel-hot"/>
+    <path d="M${X(0)} ${Y(-26)}V${Y(-6)}" class="ncp-plane ncp-control"/>
+    <path d="M${X(26)} ${Y(-3)}H${X(6)}" class="ncp-plane ncp-perception"/>
+    <path d="M${X(-26)} ${Y(3)}H${X(-6)}" class="ncp-plane ncp-action"/>
+    <path d="M${X(0)} ${Y(26)}V${Y(6)}" class="ncp-plane ncp-observation"/>
+    <path d="M${X(-6)} ${Y(9)}H${X(-22)}" class="ncp-receipt-lane"/>
 
-    <polygon points="${diamond(27,-9,2.1)}" class="gate-packet gate-packet-perception" filter="url(#edgeGlow)">
-      <animateTransform attributeName="transform" type="translate" values="0 0;${X(-15)-n.x} 0;${X(-15)-n.x} 0;${X(-37)-n.x} 0;${X(-54)-n.x} 0" keyTimes="0;0.28;0.40;0.70;1" dur="7.2s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;1;1;0.55;1;1;0" keyTimes="0;0.04;0.24;0.40;0.72;0.96;1" dur="7.2s" repeatCount="indefinite"/>
-    </polygon>
-    <polygon points="${diamond(-27,9,2.3)}" class="gate-packet gate-packet-action" filter="url(#edgeGlow)">
-      <animateTransform attributeName="transform" type="translate" values="0 0;${X(15)-n.x} 0;${X(15)-n.x} 0;${X(37)-n.x} 0;${X(54)-n.x} 0" keyTimes="0;0.34;0.56;0.72;1" dur="7.2s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;1;1;0.42;1;1;0" keyTimes="0;0.04;0.30;0.56;0.74;0.96;1" dur="7.2s" repeatCount="indefinite"/>
-    </polygon>
-    <circle cx="${n.x}" cy="${n.y}" r="8.2" class="gate-admit" opacity="0">
-      <animate attributeName="opacity" values="0;0;0.9;0;0" keyTimes="0;0.50;0.58;0.68;1" dur="7.2s" repeatCount="indefinite"/>
-      <animate attributeName="r" values="8.2;8.2;10.8;12.5;12.5" keyTimes="0;0.50;0.58;0.68;1" dur="7.2s" repeatCount="indefinite"/>
+    <rect x="${X(-2.5)}" y="${Y(-28.5)}" width="5" height="5" rx="0.8" class="ncp-key ncp-key-control"/>
+    <polygon points="${diamond(27,-3,3)}" class="ncp-key ncp-key-perception"/>
+    <polygon points="${diamond(-27,3,3.2)}" class="ncp-key ncp-key-action"/>
+    <circle cx="${X(0)}" cy="${Y(27)}" r="3" class="ncp-key ncp-key-observation"/>
+    <polygon points="${diamond(-22,9,2.25)}" class="ncp-receipt-home"/>
+
+    <path d="M${X(0)} ${Y(-6)}L${X(4.6)} ${Y(0)}L${X(0)} ${Y(6)}L${X(-4.6)} ${Y(0)}Z" class="ncp-knot"/>
+    <polygon points="${diamond(0,-4.2,2.15)}" class="ncp-cell ncp-cell-control"/>
+    <polygon points="${diamond(4.2,0,2.15)}" class="ncp-cell ncp-cell-perception"/>
+    <polygon points="${diamond(-4.2,0,2.15)}" class="ncp-cell ncp-cell-action"/>
+    <polygon points="${diamond(0,4.2,2.15)}" class="ncp-cell ncp-cell-observation"/>
+    <polygon points="${diamond(0,0,1.8)}" class="ncp-bind-core"/>
+    <circle cx="${n.x}" cy="${n.y}" r="8.1" class="ncp-bind-ring" opacity="0">
+      <animate attributeName="opacity" values="0;0;0.88;0;0" keyTimes="0;0.56;0.63;0.73;1" dur="${CYC}" repeatCount="indefinite"/>
+      <animate attributeName="r" values="8.1;8.1;11.2;12.6;12.6" keyTimes="0;0.56;0.63;0.73;1" dur="${CYC}" repeatCount="indefinite"/>
     </circle>
+
+    <rect x="${X(-1.65)}" y="${Y(-27.65)}" width="3.3" height="3.3" rx="0.55" class="ncp-packet ncp-packet-control" opacity="0">
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 19.2;0 19.2;0 0" keyTimes="0;0.08;0.22;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.06;0.09;0.88;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
+    </rect>
+    <polygon points="${diamond(27,-3,2.05)}" class="ncp-packet ncp-packet-perception" opacity="0">
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;-19.2 0;-19.2 0;0 0" keyTimes="0;0.20;0.36;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.18;0.21;0.88;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
+    </polygon>
+    <polygon points="${diamond(-27,3,2.25)}" class="ncp-packet ncp-packet-action" opacity="0">
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;19.2 0;19.2 0;0 0" keyTimes="0;0.32;0.48;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.30;0.33;0.88;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
+    </polygon>
+    <circle cx="${X(0)}" cy="${Y(27)}" r="1.8" class="ncp-packet ncp-packet-observation" opacity="0">
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 -19.2;0 -19.2;0 0" keyTimes="0;0.44;0.56;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.42;0.45;0.88;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
+    </circle>
+
+    <polygon points="${diamond(-22,9,2.25)}" class="ncp-receipt" opacity="0">
+      <animateTransform attributeName="transform" type="translate" values="16 0;16 0;0 0;0 0;16 0" keyTimes="0;0.72;0.86;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.70;0.73;0.88;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
+    </polygon>
     <text x="${n.x}" y="${f1(n.y + 46)}" text-anchor="middle" class="gate-label">${escapeXML(n.label)}</text>
   </g>`;
   }
-  if (n.kind === "voxel") {
-    // cortexel: a VOXEL NEURAL NETWORK as a genuine 3-D cluster: three isometric
-    // voxel-neurons both SIZED and dimmed by depth (the front-right neuron is
-    // larger + fully opaque, the apex recedes, smaller + fainter), wired by
-    // CALLIGRAPHIC connections: static, tapered pen-strokes that bow and fade into
-    // the distance (no moving packets), echoing the script wordmark below and
-    // distinct from the SVG's other live wired edges.
-    const vw = 8, vbh = 7, rh = vw / 2;
-    const T = { x: n.x,      y: n.y - 22, depth: 1.0 }; // farthest, up/back
-    const L = { x: n.x - 17, y: n.y + 11, depth: 0.5 }; // mid
-    const R = { x: n.x + 17, y: n.y + 11, depth: 0.0 }; // nearest, front
-    // Perspective: depth 0 (near)..1 (far) → opacity 1.0..0.45 AND scale 1.2..0.8.
-    const dop = (d) => Number((1 - d * 0.55).toFixed(3));
-    const dsc = (d) => 1.2 - d * 0.4;
-    const cube = (c, s) => {
-      const cw = vw * s, cbh = vbh * s, crh = rh * s, cyt = c.y - cbh / 2;
-      const bt = `${f1(c.x)},${f1(cyt - crh)}`;
-      const rr = `${f1(c.x + cw)},${f1(cyt)}`;
-      const ft = `${f1(c.x)},${f1(cyt + crh)}`;
-      const lf = `${f1(c.x - cw)},${f1(cyt)}`;
-      const rb = `${f1(c.x + cw)},${f1(cyt + cbh)}`;
-      const fb = `${f1(c.x)},${f1(cyt + crh + cbh)}`;
-      const lb = `${f1(c.x - cw)},${f1(cyt + cbh)}`;
-      return `<polygon points="${lf} ${ft} ${fb} ${lb}" class="vox-left" stroke-linejoin="round"/>` +
-        `<polygon points="${rr} ${ft} ${fb} ${rb}" class="vox-right" stroke-linejoin="round"/>` +
-        `<polygon points="${bt} ${rr} ${ft} ${lf}" class="vox-top" stroke-linejoin="round"/>`;
-    };
-    // Each cube scaled + dimmed as a unit by its depth, painted far → near.
-    const cubeAt = (c) => `<g opacity="${dop(c.depth)}">${cube(c, dsc(c.depth))}</g>`;
-    // Calligraphic connection: a tapered, bowed pen-stroke (a filled lens, pointed
-    // at both neurons, swelling at the middle) whose fill fades with the depth of
-    // its endpoints. currentColor resolves to .vox-net's theme-adaptive colour.
-    const grads = [];
-    let gi = 0;
-    const calli = (a, b, bow) => {
-      const id = `voxCalli${gi++}`;
-      grads.push(
-        `<linearGradient id="${id}" gradientUnits="userSpaceOnUse" x1="${f1(a.x)}" y1="${f1(a.y)}" x2="${f1(b.x)}" y2="${f1(b.y)}">` +
-          `<stop offset="0" stop-color="currentColor" stop-opacity="${dop(a.depth)}"/>` +
-          `<stop offset="1" stop-color="currentColor" stop-opacity="${dop(b.depth)}"/>` +
-          `</linearGradient>`
-      );
-      const ax = b.x - a.x, ay = b.y - a.y, ln = Math.hypot(ax, ay) || 1;
-      const nx = -ay / ln, ny = ax / ln;
-      const mx = (a.x + b.x) / 2 + nx * bow, my = (a.y + b.y) / 2 + ny * bow, hh = 2.2;
-      const up = `${f1(mx + nx * hh)} ${f1(my + ny * hh)}`;
-      const dn = `${f1(mx - nx * hh)} ${f1(my - ny * hh)}`;
-      return `<path d="M${f1(a.x)} ${f1(a.y)} Q${up} ${f1(b.x)} ${f1(b.y)} Q${dn} ${f1(a.x)} ${f1(a.y)} Z" fill="url(#${id})"/>`;
-    };
-    const conns = `${calli(T, L, 6)} ${calli(T, R, -6)} ${calli(L, R, 6)}`;
-    // Civilian SIGNAL PROPAGATION: neurons fire in depth order (apex T -> L -> near R)
-    // and a bright activation spark rides each connection between firings. Every
-    // animated element rests at r0 / opacity0, so librsvg + reduced-motion hold the
-    // clean static cluster. One 5s thought-pass, seamless loop. No red, no beams.
-    const VOX = "5s";
-    const fire = (c, p) => {
-      const kt = `0;${f1(p - 0.08)};${f1(p)};${f1(p + 0.13)};1`;
-      return `<circle cx="${f1(c.x)}" cy="${f1(c.y)}" r="0" fill="url(#voxFire)">` +
-        `<animate attributeName="r" values="0;0;11;0;0" keyTimes="${kt}" dur="${VOX}" repeatCount="indefinite"/>` +
-        `<animate attributeName="opacity" values="0;0;0.85;0;0" keyTimes="${kt}" dur="${VOX}" repeatCount="indefinite"/></circle>`;
-    };
-    const spark = (a, b, s, e) => {
-      const m = f1((s + e) / 2);
-      return `<circle r="1.8" fill="#fdf4ff" opacity="0">` +
-        `<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;${f1(s)};${f1(s + 0.02)};${f1(e - 0.02)};${f1(e)};1" dur="${VOX}" repeatCount="indefinite"/>` +
-        `<animateMotion path="M${f1(a.x)} ${f1(a.y)} L${f1(b.x)} ${f1(b.y)}" keyPoints="0;0;1;1" keyTimes="0;${f1(s)};${f1(e)};1" calcMode="linear" dur="${VOX}" repeatCount="indefinite"/></circle>`;
-    };
-    const firing = `${fire(T, 0.12)}${fire(L, 0.42)}${fire(R, 0.7)}`;
-    const sparks = `${spark(T, L, 0.16, 0.38)}${spark(T, R, 0.16, 0.38)}${spark(L, R, 0.46, 0.66)}`;
-    return `<g class="vox-net">
+  if (n.kind === "artifact") {
+    // Cortexel, THE TWO-AUTHOR EVIDENCE ARTIFACT. A caller-owned neuron sphere
+    // and population voxel sit on the left of an immutable validation lattice.
+    // The library-owned side is one deterministic figure cassette: plot above,
+    // exact-value/disclosure table permanently attached below, and digest notch
+    // in its chamfer. Motion visualizes a VALID request being bounded, rendered,
+    // disclosed, and hashed. It does not claim that arbitrary input passes, that
+    // caller declarations are Cortexel conclusions, or that the figure certifies
+    // scientific truth. Brand magenta is chrome; the plotted line is neutral so
+    // contract-selected scientific palettes retain their semantic authority.
+    const X = (x) => f1(n.x + x), Y = (y) => f1(n.y + y);
+    const CYC = "8.8s";
+    const sheet = `M${X(1)} ${Y(-21)}H${X(17)}L${X(23)} ${Y(-15)}V${Y(20)}H${X(1)}Z`;
+    return `<g class="ctx-mark">
     ${seat(n.x, n.y, "vox", ["#f5d0fe", "#e879f9", "#86198f"])}
-    <defs>${grads.join("")}
-      <radialGradient id="voxFire"><stop offset="0%" stop-color="#fbcfe8" stop-opacity="0.95"/><stop offset="45%" stop-color="#e879f9" stop-opacity="0.4"/><stop offset="100%" stop-color="#e879f9" stop-opacity="0"/></radialGradient>
+    <defs>
+      <radialGradient id="ctxWell" cx="42%" cy="36%" r="72%"><stop offset="0%" stop-color="#2a1233"/><stop offset="62%" stop-color="#120b1c"/><stop offset="100%" stop-color="#05070c"/></radialGradient>
+      <linearGradient id="ctxSheet" x1="0" y1="${Y(-21)}" x2="0" y2="${Y(20)}" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b1b47"/><stop offset="44%" stop-color="#1a1024"/><stop offset="100%" stop-color="#090b12"/></linearGradient>
+      <linearGradient id="ctxSheetEdge" x1="0" y1="${Y(-21)}" x2="0" y2="${Y(20)}" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fdf4ff"/><stop offset="36%" stop-color="#e879f9"/><stop offset="100%" stop-color="#86198f"/></linearGradient>
+      <radialGradient id="ctxScanGlow"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/><stop offset="38%" stop-color="#f0abfc" stop-opacity="0.35"/><stop offset="100%" stop-color="#e879f9" stop-opacity="0"/></radialGradient>
     </defs>
-    <g filter="url(#soft)">
-      ${conns}
-      ${cubeAt(T)} ${cubeAt(L)} ${cubeAt(R)}
+    <circle cx="${n.x}" cy="${n.y}" r="30.2" class="ctx-well"/>
+
+    <path d="M${X(-22)} ${Y(-10)}H${X(-8)} M${X(-22)} ${Y(9)}H${X(-8)}" class="ctx-declared-lane"/>
+    <circle cx="${X(-22)}" cy="${Y(-10)}" r="3.8" class="ctx-neuron"/>
+    <g class="ctx-voxel">
+      <polygon points="${X(-26)},${Y(7)} ${X(-22)},${Y(4.5)} ${X(-18)},${Y(7)} ${X(-22)},${Y(9.5)}" class="ctx-voxel-top"/>
+      <polygon points="${X(-26)},${Y(7)} ${X(-22)},${Y(9.5)} ${X(-22)},${Y(14)} ${X(-26)},${Y(11.5)}" class="ctx-voxel-left"/>
+      <polygon points="${X(-18)},${Y(7)} ${X(-22)},${Y(9.5)} ${X(-22)},${Y(14)} ${X(-18)},${Y(11.5)}" class="ctx-voxel-right"/>
     </g>
-    <g class="vox-fire">${firing}${sparks}</g>
+
+    <path d="M${X(-4)} ${Y(-20)}H${X(-8)}V${Y(20)}H${X(-4)}" class="ctx-boundary"/>
+    <path d="M${X(-8)} ${Y(-14)}H${X(-3)} M${X(-8)} ${Y(-7)}H${X(-3)} M${X(-8)} ${Y(0)}H${X(-3)} M${X(-8)} ${Y(7)}H${X(-3)} M${X(-8)} ${Y(14)}H${X(-3)}" class="ctx-lattice"/>
+    <circle cx="${X(-5.5)}" cy="${Y(-18)}" r="7" fill="url(#ctxScanGlow)" opacity="0">
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 36;0 36;0 0" keyTimes="0;0.24;0.43;0.92;1" dur="${CYC}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0;0.9;0.9;0;0" keyTimes="0;0.22;0.25;0.41;0.44;1" dur="${CYC}" repeatCount="indefinite"/>
+    </circle>
+
+    <path d="${sheet}" class="ctx-sheet-shadow" transform="translate(1.6 2)"/>
+    <path d="${sheet}" class="ctx-sheet"/>
+    <path d="M${X(17)} ${Y(-21)}V${Y(-15)}H${X(23)}" class="ctx-fold"/>
+    <rect x="${X(5)}" y="${Y(-15)}" width="14" height="22" rx="1.6" class="ctx-figure-field"/>
+    <path d="M${X(6.5)} ${Y(3)}L${X(10)} ${Y(-4)}L${X(13.5)} ${Y(-1)}L${X(17.7)} ${Y(-10)}" class="ctx-figure-trace" stroke-dasharray="29" stroke-dashoffset="0">
+      <animate attributeName="stroke-dashoffset" values="0;0;29;29;0;0" keyTimes="0;0.02;0.05;0.44;0.68;1" dur="${CYC}" repeatCount="indefinite"/>
+    </path>
+    <circle cx="${X(10)}" cy="${Y(-4)}" r="1.05" class="ctx-figure-point"/>
+    <circle cx="${X(13.5)}" cy="${Y(-1)}" r="1.05" class="ctx-figure-point"/>
+    <circle cx="${X(17.7)}" cy="${Y(-10)}" r="1.05" class="ctx-figure-point"/>
+
+    <path d="M${X(1)} ${Y(10)}H${X(23)}V${Y(20)}H${X(1)}Z" class="ctx-disclosure"/>
+    <path d="M${X(7.5)} ${Y(10)}V${Y(20)} M${X(13.5)} ${Y(10)}V${Y(20)} M${X(19)} ${Y(10)}V${Y(20)}" class="ctx-table-grid"/>
+    <rect x="${X(3.1)}" y="${Y(13.4)}" width="2.4" height="3.1" rx="0.5" class="ctx-table-cell"/>
+    <rect x="${X(9.2)}" y="${Y(12.3)}" width="2.5" height="5.3" rx="0.5" class="ctx-table-cell"/>
+    <rect x="${X(15.1)}" y="${Y(14.1)}" width="2.3" height="2.7" rx="0.5" class="ctx-table-cell"/>
+    <circle cx="${X(21)}" cy="${Y(15)}" r="1.55" class="ctx-digest"/>
+    <circle cx="${X(21)}" cy="${Y(15)}" r="2.7" class="ctx-digest-ring" opacity="0">
+      <animate attributeName="r" values="2.7;2.7;5.2;5.2" keyTimes="0;0.67;0.77;1" dur="${CYC}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0;0.9;0;0" keyTimes="0;0.67;0.70;0.80;1" dur="${CYC}" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="${X(-22)}" cy="${Y(-10)}" r="1.65" class="ctx-intake" opacity="0">
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;14 0;14 0;0 0" keyTimes="0;0.08;0.19;0.42;1" dur="${CYC}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.06;0.09;0.20;0.23;1" dur="${CYC}" repeatCount="indefinite"/>
+    </circle>
+    <polygon points="${X(-24)},${Y(9)} ${X(-22)},${Y(7.7)} ${X(-20)},${Y(9)} ${X(-22)},${Y(10.3)}" class="ctx-intake" opacity="0">
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;14 0;14 0;0 0" keyTimes="0;0.12;0.23;0.42;1" dur="${CYC}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.10;0.13;0.24;0.27;1" dur="${CYC}" repeatCount="indefinite"/>
+    </polygon>
     <text x="${n.x}" y="${f1(n.y + 48)}" text-anchor="middle" class="vox-label">${escapeXML(n.label)}</text>
   </g>`;
   }
@@ -2249,7 +2266,7 @@ const frame = `<g class="frame">
 // Assemble.
 // ---------------------------------------------------------------------------
 const aria =
-  "Conceptual standalone-first ecosystem map. Optional NCP role paths connect Engram as separate simulation responder or direct command proposer, CREBAIN as sole body and final software actuator admission authority, Haldir as gated command proposer, and Galadriel and Prisoma as read-only observers. Every command is only a proposal until CREBAIN independently admits it under a current session and bounded body-authority lease. In gated mode Engram sends Haldir-local signed intent that carries no NCP authority; Haldir independently creates and authorizes a new NCP command. A separate default-off Galadriel-Haldir edge carries deny-only assessment and authenticated disposition; its absence can never grant authority. Separately declared out-of-band CREBAIN telemetry may feed Galadriel. pid-rs is a protocol-neutral in-process library with no wire role, used optionally by Galadriel and Prisoma; Cortexel is a one-way labelled Engram export sink with no control path. Manwe, Melkor and atlas connections are research, tooling or data inputs, not control paths. The NCP mark shows a dashed cyan perception lane and solid amber action lane crossing one bounded admission core in opposite directions. Stacked-layer badges outside COBOT-ATLAS and RELIEF-ATLAS identify them as datasets. COBOT-ATLAS shows a conserved robotic pick, desk placement and return loop. RELIEF-ATLAS shows an indexed contact sheet of varied 3-D mesh records over terrain contours. It represents a 10,079-item manifest and prompt catalog with 125 public GLBs; it does not imply a complete 10,079-mesh corpus, publication completion or asset-level licensing approval. NCP 1.0 is an unreleased, release-blocked candidate; no line claims production deployment or qualification.";
+  "Conceptual standalone-first ecosystem map. Optional NCP role paths connect Engram as separate simulation responder or direct command proposer, CREBAIN as sole body and final software actuator admission authority, Haldir as gated command proposer, and Galadriel and Prisoma as read-only observers. Every command is only a proposal until CREBAIN independently admits it under a current session and bounded body-authority lease. In gated mode Engram sends Haldir-local signed intent that carries no NCP authority; Haldir independently creates and authorizes a new NCP command. A separate default-off Galadriel-Haldir edge carries deny-only assessment and authenticated disposition; its absence can never grant authority. Separately declared out-of-band CREBAIN telemetry may feed Galadriel. pid-rs is a protocol-neutral in-process library with no wire role, used optionally by Galadriel and Prisoma. Cortexel is a one-way labelled Engram export sink with no control path; its mark separates caller-declared neuron and population data from Cortexel-authored validation, deterministic figure, exact-value disclosure table and digest. Manwe, Melkor and atlas connections are research, tooling or data inputs, not control paths. The NCP mark depicts a bounded canonical contract with four visually distinct plane keys, a session and generation fence, an action proposal that stops at the bound, and a separate returning receipt; it is not a broker, actuator, release badge or certification mark. Stacked-layer badges outside COBOT-ATLAS and RELIEF-ATLAS identify them as datasets. COBOT-ATLAS shows a conserved robotic pick, desk placement and return loop. RELIEF-ATLAS shows an indexed contact sheet of varied 3-D mesh records over terrain contours. It represents a 10,079-item manifest and prompt catalog with 125 public GLBs; it does not imply a complete 10,079-mesh corpus, publication completion or asset-level licensing approval. NCP 1.0 is an unreleased, release-blocked candidate; no line claims production deployment or qualification.";
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
   <defs>
@@ -2381,35 +2398,61 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .prz-blade-glint { stroke: #ffffff; stroke-width: 1.3; stroke-linecap: round; stroke-dasharray: 5 44; stroke-opacity: 0.95; }
     .prz-foot-hot { fill: #ffffff; }
     .tri-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c4b5fd; }
-    .gate-well      { fill: url(#ncpWell); stroke: #0b111b; stroke-width: 1.2; }
-    .gate-index     { fill: none; stroke: #fbbf24; stroke-width: 0.75; stroke-opacity: 0.42; stroke-linecap: round; }
-    .gate-lane      { fill: none; stroke-linecap: round; }
-    .gate-lane-perception { stroke: #67e8f9; stroke-width: 1.45; stroke-opacity: 0.78; stroke-dasharray: 3.2 2.6; }
-    .gate-lane-action     { stroke: #fbbf24; stroke-width: 2.15; stroke-opacity: 0.96; }
-    .gate-direction { fill: none; stroke: #dbeafe; stroke-width: 0.85; stroke-opacity: 0.72; stroke-linecap: round; stroke-linejoin: round; }
-    .gate-port      { stroke-width: 0.7; stroke-linejoin: round; }
-    .gate-port-perception { fill: #083344; stroke: #a5f3fc; }
-    .gate-port-action     { fill: #451a03; stroke: #fde68a; }
-    .gate-core      { fill: #0a1019; stroke: url(#ncpCore); stroke-width: 1.8; stroke-linejoin: round; }
-    .gate-core-rail { fill: none; stroke: #fef3c7; stroke-width: 0.75; stroke-opacity: 0.48; stroke-linecap: round; }
-    .gate-core-arrow { fill: none; stroke: #fff7d6; stroke-width: 1; stroke-opacity: 0.82; stroke-linecap: round; stroke-linejoin: round; }
-    .gate-kernel    { fill: url(#ncpKernel); stroke: #fff7d6; stroke-width: 0.8; stroke-linejoin: round; }
-    .gate-kernel-split { fill: none; stroke: #451a03; stroke-width: 1.05; stroke-linecap: round; }
-    .gate-kernel-hot { fill: #ffffff; stroke: #fef3c7; stroke-width: 0.45; }
-    .gate-packet    { stroke-width: 0.45; stroke-linejoin: round; }
-    .gate-packet-perception { fill: #cffafe; stroke: #ffffff; }
-    .gate-packet-action     { fill: #fde68a; stroke: #ffffff; }
-    .gate-admit     { fill: none; stroke: #fff7d6; stroke-width: 1; }
+    .ncp-well       { fill: url(#ncpWell); stroke: #111827; stroke-width: 1.1; }
+    .ncp-generation path { fill: none; stroke: #fbbf24; stroke-width: 0.85; stroke-opacity: 0.42; stroke-dasharray: 11 3 2 3; stroke-linecap: round; }
+    .ncp-brace      { fill: none; stroke: url(#ncpBrace); stroke-width: 2.25; stroke-linecap: round; stroke-linejoin: round; }
+    .ncp-plane      { fill: none; stroke-linecap: round; }
+    .ncp-control    { stroke: #fde68a; stroke-width: 1.2; }
+    .ncp-perception { stroke: #67e8f9; stroke-width: 1.25; stroke-dasharray: 3.1 2.4; }
+    .ncp-action     { stroke: #fbbf24; stroke-width: 2.1; }
+    .ncp-observation{ stroke: #a5f3fc; stroke-width: 1.25; stroke-dasharray: 0.8 3.2; }
+    .ncp-receipt-lane { fill: none; stroke: #f8fafc; stroke-width: 0.7; stroke-opacity: 0.42; stroke-linecap: round; }
+    .ncp-key        { stroke-linejoin: round; }
+    .ncp-key-control { fill: #422006; stroke: #fef3c7; stroke-width: 0.8; }
+    .ncp-key-perception { fill: #071a26; stroke: #a5f3fc; stroke-width: 0.9; }
+    .ncp-key-action { fill: #fbbf24; stroke: #fff7d6; stroke-width: 0.75; }
+    .ncp-key-observation { fill: #071a26; stroke: #cffafe; stroke-width: 0.9; stroke-dasharray: 1 1.6; }
+    .ncp-receipt-home { fill: #07111d; stroke: #ffffff; stroke-width: 0.75; stroke-opacity: 0.72; stroke-linejoin: round; }
+    .ncp-knot       { fill: #050912; stroke: #fef3c7; stroke-width: 0.7; stroke-opacity: 0.8; stroke-linejoin: round; }
+    .ncp-cell       { stroke-width: 0.45; stroke-linejoin: round; }
+    .ncp-cell-control { fill: #fde68a; stroke: #fff7d6; }
+    .ncp-cell-perception { fill: #164e63; stroke: #cffafe; }
+    .ncp-cell-action { fill: #f59e0b; stroke: #fff7d6; }
+    .ncp-cell-observation { fill: #083344; stroke: #a5f3fc; }
+    .ncp-bind-core  { fill: #ffffff; stroke: #fde68a; stroke-width: 0.45; }
+    .ncp-bind-ring  { fill: none; stroke: #fff7d6; stroke-width: 0.9; filter: url(#edgeGlow); }
+    .ncp-packet     { stroke-width: 0.45; filter: url(#edgeGlow); }
+    .ncp-packet-control { fill: #fff7d6; stroke: #ffffff; }
+    .ncp-packet-perception { fill: #cffafe; stroke: #ffffff; }
+    .ncp-packet-action { fill: #fbbf24; stroke: #ffffff; }
+    .ncp-packet-observation { fill: #a5f3fc; stroke: #ffffff; }
+    .ncp-receipt    { fill: #07111d; stroke: #ffffff; stroke-width: 1.05; stroke-linejoin: round; filter: url(#edgeGlow); }
     .gate-label     { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; text-anchor: middle; }
-    .vox-top    { fill: #e879f9; fill-opacity: 0.6; stroke: #e879f9; stroke-width: 1.3; }
-    .vox-left   { fill: #e879f9; fill-opacity: 0.32; stroke: #e879f9; stroke-width: 1.3; }
-    .vox-right  { fill: #e879f9; fill-opacity: 0.15; stroke: #e879f9; stroke-width: 1.3; }
     .flag-k     { fill: #181818; }
     .flag-r     { fill: #d8001d; }
     .flag-g     { fill: #ffcc00; }
     .flag-edge  { fill: none; stroke: #ffffff; stroke-opacity: 0.16; stroke-width: 0.6; }
     .vox-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #f0abfc; }
-    .vox-net    { color: #e879f9; }
+    .ctx-well       { fill: url(#ctxWell); stroke: #1f1227; stroke-width: 1.1; }
+    .ctx-declared-lane { fill: none; stroke: #c4b5fd; stroke-width: 0.85; stroke-opacity: 0.58; stroke-dasharray: 2.1 2.3; stroke-linecap: round; }
+    .ctx-neuron     { fill: #e9d5ff; stroke: #ffffff; stroke-width: 0.8; }
+    .ctx-voxel-top  { fill: #e879f9; stroke: #fdf4ff; stroke-width: 0.55; stroke-linejoin: round; }
+    .ctx-voxel-left { fill: #a21caf; stroke: #f0abfc; stroke-width: 0.55; stroke-linejoin: round; }
+    .ctx-voxel-right{ fill: #701a75; stroke: #d946ef; stroke-width: 0.55; stroke-linejoin: round; }
+    .ctx-boundary   { fill: none; stroke: #fdf4ff; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; }
+    .ctx-lattice    { fill: none; stroke: #e879f9; stroke-width: 0.75; stroke-opacity: 0.72; stroke-linecap: round; }
+    .ctx-sheet-shadow { fill: #000000; fill-opacity: 0.62; }
+    .ctx-sheet      { fill: url(#ctxSheet); stroke: url(#ctxSheetEdge); stroke-width: 1.45; stroke-linejoin: round; }
+    .ctx-fold       { fill: none; stroke: #f5d0fe; stroke-width: 0.8; stroke-opacity: 0.72; stroke-linejoin: round; }
+    .ctx-figure-field { fill: #070a11; stroke: #e879f9; stroke-width: 0.55; stroke-opacity: 0.58; }
+    .ctx-figure-trace { fill: none; stroke: #f8fafc; stroke-width: 1.35; stroke-linecap: round; stroke-linejoin: round; }
+    .ctx-figure-point { fill: #ffffff; stroke: #e879f9; stroke-width: 0.45; }
+    .ctx-disclosure { fill: #220b2a; stroke: #f0abfc; stroke-width: 0.55; stroke-opacity: 0.82; }
+    .ctx-table-grid { fill: none; stroke: #f0abfc; stroke-width: 0.45; stroke-opacity: 0.5; }
+    .ctx-table-cell { fill: #f5d0fe; fill-opacity: 0.86; }
+    .ctx-digest     { fill: #ffffff; stroke: #e879f9; stroke-width: 0.55; }
+    .ctx-digest-ring{ fill: none; stroke: #fdf4ff; stroke-width: 0.8; filter: url(#edgeGlow); }
+    .ctx-intake     { fill: #fdf4ff; stroke: #e879f9; stroke-width: 0.45; filter: url(#edgeGlow); }
     .seat-creb     { fill: url(#crebGrad); }
     .creb-signal   { fill: none; stroke: #b6cf86; stroke-opacity: 0.7; stroke-width: 1.2; }
     .creb-xhair    { fill: none; stroke: #a8c07a; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linecap: round; }
