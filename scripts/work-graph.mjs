@@ -17,7 +17,7 @@
 // JSON-like bounds hold a quartered four-plane identity while a receipt remains
 // distinct from its action proposal — on a machined amber seal; cortexel is an
 // evidence fold: a neuron-seeded population voxel crosses a fail-closed bracket
-// into one deterministic neural spike-raster artifact;
+// into one deterministic action-potential figure artifact;
 // crebain is its
 // own raven-in-crosshair brand mark; engram a machined silver medallion;
 // prisoma a smoked-glass prism with liquid-silver edges dispersing one beam
@@ -1485,9 +1485,12 @@ export function nodeMark(n) {
     // Cortexel, THE EVIDENCE FOLD. One population voxel with a neuron seed is
     // still caller-owned on the left. The white bracket is the fail-closed
     // authorship/validation boundary. On the right, a single open C-shaped
-    // artifact contains a deterministic neural spike raster. It is declared
-    // neural data -> boundary -> inspectable computational-neuroscience evidence,
-    // not a generic chart UI, brain icon, or scientific-certification seal.
+    // artifact contains a deterministic neuronal action-potential figure. Its
+    // resting phase, rapid depolarization, overshoot, repolarization,
+    // afterhyperpolarization and recovery make the domain legible without axes.
+    // It is declared neural data -> boundary -> inspectable computational-
+    // neuroscience evidence, not a generic chart UI, brain icon, simulator claim,
+    // or scientific-certification seal.
     const X = (x) => f1(n.x + x), Y = (y) => f1(n.y + y);
     const CYC = "8.4s";
     return `<g class="ctx-mark">
@@ -1495,14 +1498,8 @@ export function nodeMark(n) {
     <defs>
       <radialGradient id="ctxWell" cx="42%" cy="36%" r="74%"><stop offset="0%" stop-color="#291132"/><stop offset="68%" stop-color="#110a1a"/><stop offset="100%" stop-color="#05070c"/></radialGradient>
       <linearGradient id="ctxArtifactEdge" x1="0" y1="${Y(-18)}" x2="0" y2="${Y(18)}" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fdf4ff"/><stop offset="38%" stop-color="#e879f9"/><stop offset="100%" stop-color="#86198f"/></linearGradient>
-      <clipPath id="ctxRasterClipA"><rect x="${X(4)}" y="${Y(-13)}" width="14" height="6">
-        <animate attributeName="width" values="14;14;0;0;14;14" keyTimes="0;0.02;0.05;0.42;0.52;1" dur="${CYC}" repeatCount="indefinite"/>
-      </rect></clipPath>
-      <clipPath id="ctxRasterClipB"><rect x="${X(4)}" y="${Y(-3)}" width="14" height="6">
-        <animate attributeName="width" values="14;14;0;0;14;14" keyTimes="0;0.02;0.05;0.48;0.58;1" dur="${CYC}" repeatCount="indefinite"/>
-      </rect></clipPath>
-      <clipPath id="ctxRasterClipC"><rect x="${X(4)}" y="${Y(6)}" width="14" height="6">
-        <animate attributeName="width" values="14;14;0;0;14;14" keyTimes="0;0.02;0.05;0.54;0.64;1" dur="${CYC}" repeatCount="indefinite"/>
+      <clipPath id="ctxActionPotentialClip"><rect x="${X(3.5)}" y="${Y(-14)}" width="15.5" height="29">
+        <animate attributeName="width" values="15.5;15.5;0;0;15.5;15.5" keyTimes="0;0.02;0.05;0.43;0.61;1" dur="${CYC}" repeatCount="indefinite"/>
       </rect></clipPath>
     </defs>
     <circle cx="${n.x}" cy="${n.y}" r="30.2" class="ctx-well"/>
@@ -1517,9 +1514,14 @@ export function nodeMark(n) {
     <path d="M${X(-3)} ${Y(-18)}H${X(-7)}V${Y(18)}H${X(-3)}" class="ctx-min-boundary"/>
 
     <path d="M${X(1)} ${Y(-16)}H${X(20)}V${Y(16)}H${X(1)}" class="ctx-min-artifact"/>
-    <path d="M${X(6)} ${Y(-12)}V${Y(-8)} M${X(10.5)} ${Y(-12)}V${Y(-8)} M${X(17)} ${Y(-12)}V${Y(-8)}" class="ctx-min-raster ctx-min-raster-a" clip-path="url(#ctxRasterClipA)"/>
-    <path d="M${X(8)} ${Y(-2)}V${Y(2)} M${X(14.5)} ${Y(-2)}V${Y(2)}" class="ctx-min-raster ctx-min-raster-b" clip-path="url(#ctxRasterClipB)"/>
-    <path d="M${X(5.5)} ${Y(7)}V${Y(11)} M${X(10)} ${Y(7)}V${Y(11)} M${X(14)} ${Y(7)}V${Y(11)} M${X(17)} ${Y(7)}V${Y(11)}" class="ctx-min-raster ctx-min-raster-c" clip-path="url(#ctxRasterClipC)"/>
+    <path d="M${X(4)} ${Y(7)}
+             C${X(5.6)} ${Y(7)} ${X(6.7)} ${Y(7)} ${X(7.4)} ${Y(6.7)}
+             C${X(8.1)} ${Y(6.2)} ${X(8.55)} ${Y(-8.8)} ${X(9.45)} ${Y(-11.5)}
+             C${X(9.85)} ${Y(-12.7)} ${X(10.35)} ${Y(-12.1)} ${X(10.75)} ${Y(-9.4)}
+             C${X(11.45)} ${Y(-4.2)} ${X(11.75)} ${Y(4.4)} ${X(12.9)} ${Y(9.4)}
+             C${X(13.55)} ${Y(12.3)} ${X(14.45)} ${Y(13.1)} ${X(15.2)} ${Y(10.5)}
+             C${X(16)} ${Y(7.9)} ${X(17)} ${Y(7)} ${X(18.5)} ${Y(7)}"
+          class="ctx-min-action-potential" clip-path="url(#ctxActionPotentialClip)"/>
 
     <polygon points="${X(-22)},${Y(2)} ${X(-19)},${Y(0)} ${X(-16)},${Y(2)} ${X(-19)},${Y(4)}" class="ctx-min-token" opacity="0">
       <animateTransform attributeName="transform" type="translate" values="0 0;0 0;12 0;12 0;0 0" keyTimes="0;0.10;0.27;0.90;1" dur="${CYC}" repeatCount="indefinite"/>
@@ -2212,7 +2214,7 @@ const frame = `<g class="frame">
 // Assemble.
 // ---------------------------------------------------------------------------
 const aria =
-  "Conceptual standalone-first ecosystem map. Optional NCP role paths connect Engram as separate simulation responder or direct command proposer, CREBAIN as sole body and final software actuator admission authority, Haldir as gated command proposer, and Galadriel and Prisoma as read-only observers. Every command is only a proposal until CREBAIN independently admits it under a current session and bounded body-authority lease. In gated mode Engram sends Haldir-local signed intent that carries no NCP authority; Haldir independently creates and authorizes a new NCP command. A separate default-off Galadriel-Haldir edge carries deny-only assessment and authenticated disposition; its absence can never grant authority. Separately declared out-of-band CREBAIN telemetry may feed Galadriel. pid-rs is a protocol-neutral in-process library with no wire role, used optionally by Galadriel and Prisoma. Cortexel is a one-way labelled Engram export sink with no control path; its evidence-fold mark shows a caller-owned neuron-seeded population voxel crossing a fail-closed authorship and validation bracket into one Cortexel-authored deterministic neural spike-raster artifact. Manwe, Melkor and atlas connections are research, tooling or data inputs, not control paths. The NCP contract-knot mark uses paired JSON-like bounds and a quartered diamond for one canonical four-plane identity; an amber action proposal stops at the bound and a separate hollow receipt returns. It is not a broker, actuator, release badge or certification mark. Stacked-layer badges outside COBOT-ATLAS and RELIEF-ATLAS identify them as datasets. COBOT-ATLAS shows a conserved robotic pick, desk placement and return loop. RELIEF-ATLAS shows an indexed contact sheet of varied 3-D mesh records over terrain contours. It represents a 10,079-item manifest and prompt catalog with 125 public GLBs; it does not imply a complete 10,079-mesh corpus, publication completion or asset-level licensing approval. NCP 1.0 is an unreleased, release-blocked candidate; no line claims production deployment or qualification.";
+  "Conceptual standalone-first ecosystem map. Optional NCP role paths connect Engram as separate simulation responder or direct command proposer, CREBAIN as sole body and final software actuator admission authority, Haldir as gated command proposer, and Galadriel and Prisoma as read-only observers. Every command is only a proposal until CREBAIN independently admits it under a current session and bounded body-authority lease. In gated mode Engram sends Haldir-local signed intent that carries no NCP authority; Haldir independently creates and authorizes a new NCP command. A separate default-off Galadriel-Haldir edge carries deny-only assessment and authenticated disposition; its absence can never grant authority. Separately declared out-of-band CREBAIN telemetry may feed Galadriel. pid-rs is a protocol-neutral in-process library with no wire role, used optionally by Galadriel and Prisoma. Cortexel is a one-way labelled Engram export sink with no control path; its evidence-fold mark shows a caller-owned neuron-seeded population voxel crossing a fail-closed authorship and validation bracket into one Cortexel-authored deterministic neuronal action-potential figure artifact. Manwe, Melkor and atlas connections are research, tooling or data inputs, not control paths. The NCP contract-knot mark uses paired JSON-like bounds and a quartered diamond for one canonical four-plane identity; an amber action proposal stops at the bound and a separate hollow receipt returns. It is not a broker, actuator, release badge or certification mark. Stacked-layer badges outside COBOT-ATLAS and RELIEF-ATLAS identify them as datasets. COBOT-ATLAS shows a conserved robotic pick, desk placement and return loop. RELIEF-ATLAS shows an indexed contact sheet of varied 3-D mesh records over terrain contours. It represents a 10,079-item manifest and prompt catalog with 125 public GLBs; it does not imply a complete 10,079-mesh corpus, publication completion or asset-level licensing approval. NCP 1.0 is an unreleased, release-blocked candidate; no line claims production deployment or qualification.";
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
   <defs>
@@ -2375,9 +2377,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .ctx-min-intake-lane   { fill: none; stroke: #c4b5fd; stroke-width: 0.8; stroke-opacity: 0.55; stroke-dasharray: 2 2.2; stroke-linecap: round; }
     .ctx-min-boundary      { fill: none; stroke: #fdf4ff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
     .ctx-min-artifact      { fill: none; stroke: url(#ctxArtifactEdge); stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; }
-    .ctx-min-raster        { fill: none; stroke: #ffffff; stroke-width: 1.25; stroke-linecap: round; }
-    .ctx-min-raster-b      { stroke-opacity: 0.92; }
-    .ctx-min-raster-c      { stroke-opacity: 0.84; }
+    .ctx-min-action-potential { fill: none; stroke: #ffffff; stroke-width: 1.45; stroke-linecap: round; stroke-linejoin: round; }
     .ctx-min-token         { fill: #fdf4ff; stroke: #e879f9; stroke-width: 0.45; filter: url(#edgeGlow); }
     .ctx-min-scan          { stroke: #ffffff; stroke-width: 1.2; stroke-linecap: round; filter: url(#edgeGlow); }
     .seat-creb     { fill: url(#crebGrad); }
