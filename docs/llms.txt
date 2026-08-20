@@ -22,6 +22,17 @@ domain-specific AI agent and custom harness for provenance-aware, closed-loop
 simulations of biophysical and functional neural models, alongside validation,
 perception and control tools for reproducible, auditable computational-neuroscience R&D.
 
+## Portfolio story
+From Signal to Frontier is the primary visual narrative: uncertain observations
+become bounded, inspectable machine action, then earn the right to move farther
+from supervision. It progresses through signal, world model, embodied system,
+authorization, evidence and an explicitly labeled future frontier. Solid paths
+mean directly inspectable evidence; dashed paths are conceptual or conditional;
+translucent paths are future thesis.
+
+- Five cinematic mural stories: https://sepahead.github.io/sepahead/mural/
+- Twenty-five art directions: https://sepahead.github.io/sepahead/mural/atlas/
+
 ## Selected work
 - [engram](https://github.com/sepahead/engram): Engram is a research-stage, domain-specific AI agent with a custom harness for biophysical and functional neural models. It orchestrates provenance-aware, closed-loop computational-neuroscience simulations for reproducible R&D. The public repository remains a placeholder pending source publication; it does not claim general paper reproduction or validated scientific results.
 - [NCP](https://github.com/sepahead/NCP): NCP is a versioned, project-agnostic canonical-JSON contract connecting neural simulators or neuromorphic controllers to robots, UAVs, simulators and read-only analysis clients. It has a Rust reference, an independent TypeScript validator/client and Python/C/C++ bindings; HEAD is an unreleased, release-blocked 1.0 candidate, while v0.8.0 remains the latest immutable release.

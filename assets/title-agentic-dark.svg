@@ -17,7 +17,7 @@
     }
   </style>
   <path d="M4 13 V39" class="spine"/>
-  <text x="22" y="33" class="idx">04</text>
+  <text x="22" y="33" class="idx">05</text>
   <text x="50" y="33" class="prompt">~/sep <tspan class="caret">&#10095;</tspan></text>
   <text x="132" y="33" class="label" textLength="232" lengthAdjust="spacingAndGlyphs">AGENTIC ENGINEERING</text>
   <text x="856" y="33" text-anchor="end" class="cap"># 5 in the loop</text>

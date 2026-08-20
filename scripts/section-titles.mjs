@@ -26,14 +26,16 @@ const BASE = 33; // text baseline
 const LABEL_X = 132;
 
 const SECTIONS = [
-  { slug: "pulse",     index: "01", label: "THE PULSE",     comment: "# active since 2014", accent: "pulse",     begin: "0s" },
-  { slug: "work",      index: "02", label: "SELECTED WORK", comment: `# ${PROJECTS.length} projects`,    accent: "work",      begin: "0.4s" },
-  { slug: "toolbox",   index: "03", label: "THE TOOLBOX",         comment: `# ${RAILS.length} stacks`,      accent: "toolbox",   begin: "0.8s" },
-  { slug: "agentic",   index: "04", label: "AGENTIC ENGINEERING", comment: `# ${AGENTS.length} in the loop`, accent: "agentic",   begin: "1.2s" },
-  { slug: "elsewhere", index: "05", label: "ELSEWHERE",           comment: "# always open",                    accent: "elsewhere", begin: "1.6s" },
+  { slug: "frontier",  index: "01", label: "FROM SIGNAL TO FRONTIER", comment: "# story before evidence", accent: "frontier", begin: "0s" },
+  { slug: "pulse",     index: "02", label: "THE PULSE",     comment: "# active since 2014", accent: "pulse",     begin: "0.3s" },
+  { slug: "work",      index: "03", label: "SELECTED WORK", comment: `# ${PROJECTS.length} projects`,    accent: "work",      begin: "0.6s" },
+  { slug: "toolbox",   index: "04", label: "THE TOOLBOX",         comment: `# ${RAILS.length} stacks`,      accent: "toolbox",   begin: "0.9s" },
+  { slug: "agentic",   index: "05", label: "AGENTIC ENGINEERING", comment: `# ${AGENTS.length} in the loop`, accent: "agentic",   begin: "1.2s" },
+  { slug: "elsewhere", index: "06", label: "ELSEWHERE",           comment: "# always open",                    accent: "elsewhere", begin: "1.5s" },
 ];
 
 const HEADING = {
+  frontier: "From signal to frontier",
   pulse: "The pulse",
   work: "Selected work",
   toolbox: "The toolbox",

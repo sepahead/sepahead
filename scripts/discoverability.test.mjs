@@ -7,6 +7,8 @@ import { PROJECTS } from "./data.mjs";
 
 const SITE_URL = "https://sepahead.github.io/sepahead/";
 const CV_URL = `${SITE_URL}cv/`;
+const MURAL_URL = `${SITE_URL}mural/`;
+const MURAL_ATLAS_URL = `${MURAL_URL}atlas/`;
 const CV_EN_URL = `${CV_URL}Sepehr_Mahmoudian_CV_EN.pdf`;
 const CV_DE_URL = `${CV_URL}Sepehr_Mahmoudian_CV_DE.pdf`;
 const PERSON_ID = `${SITE_URL}#person`;
@@ -146,7 +148,7 @@ function pdfTextViews(buffer) {
   return views;
 }
 
-test("sitemap lists only the canonical profile, chooser and reciprocal PDF editions", () => {
+test("sitemap lists the canonical profile, mural galleries, chooser and reciprocal PDF editions", () => {
   assert.match(sitemap, /xmlns:xhtml="http:\/\/www\.w3\.org\/1999\/xhtml"/);
 
   const blocks = [...sitemap.matchAll(/<url>\s*([\s\S]*?)\s*<\/url>/g)]
@@ -157,7 +159,7 @@ test("sitemap lists only the canonical profile, chooser and reciprocal PDF editi
     return match[1];
   });
 
-  assert.deepEqual(locations, [SITE_URL, CV_URL, CV_EN_URL, CV_DE_URL]);
+  assert.deepEqual(locations, [SITE_URL, CV_URL, MURAL_URL, MURAL_ATLAS_URL, CV_EN_URL, CV_DE_URL]);
 
   for (const block of blocks) {
     const location = block.match(/<loc>([^<]+)<\/loc>/)[1];

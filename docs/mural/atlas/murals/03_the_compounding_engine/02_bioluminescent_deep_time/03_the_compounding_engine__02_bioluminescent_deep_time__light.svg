@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 640" width="1600" height="640" role="img" aria-labelledby="title-03_the_compounding_engine-02_bioluminescent_deep_time-light desc-03_the_compounding_engine-02_bioluminescent_deep_time-light">
+  <title id="title-03_the_compounding_engine-02_bioluminescent_deep_time-light">THE COMPOUNDING ENGINE - Bioluminescent Deep-Time</title>
+  <desc id="desc-03_the_compounding_engine-02_bioluminescent_deep_time-light">Each auditable capability becomes a reusable instrument for the next reachable system. The composition reads left to right through model, measure, protocol, perceive, govern, explore. Solid luminous lines indicate direct evidence, dashed lines indicate conceptual or conditional relationships, and translucent elements indicate a future thesis. The 92-second animation explains sensing, routing, authorization, verification, or exploration and stops when reduced motion is requested.</desc>
+
+  <defs>
+    <linearGradient id="frameGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef3f7"/><stop offset=".55" stop-color="#ffffff"/><stop offset="1" stop-color="#f4f7fa"/>
+    </linearGradient>
+    <linearGradient id="spectrum" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#a3e635"/><stop offset="20%" stop-color="#2dd4bf"/><stop offset="40%" stop-color="#67e8f9"/><stop offset="60%" stop-color="#c084fc"/><stop offset="80%" stop-color="#fb7185"/><stop offset="100%" stop-color="#f0abfc"/></linearGradient>
+    <linearGradient id="scanFade" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#2dd4bf" stop-opacity="0"/><stop offset=".5" stop-color="#2dd4bf" stop-opacity=".35"/><stop offset="1" stop-color="#2dd4bf" stop-opacity="0"/></linearGradient>
+    <radialGradient id="moon" cx="34%" cy="30%"><stop stop-color="#ffffff"/><stop offset=".68" stop-color="#f0abfc"/><stop offset="1" stop-color="#4f6476"/></radialGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="softGlow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="shadow" x="-25%" y="-25%" width="150%" height="160%"><feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#637688" flood-opacity=".42"/></filter>
+    <pattern id="grain" width="48" height="48" patternUnits="userSpaceOnUse"><circle cx="7" cy="9" r="1" fill="#17212b" opacity=".08"/><circle cx="33" cy="24" r=".8" fill="#17212b" opacity=".06"/><path d="M0 42L48 6" stroke="#17212b" stroke-opacity=".025"/></pattern>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 1l8 4-8 4z" fill="#2dd4bf"/></marker>
+  </defs>
+
+  <style>
+    .bg { fill:#f4f7fa; }
+    .frame { fill:url(#frameGrad); stroke:#8295a7; stroke-width:2; }
+    .inner { fill:none; stroke:#c9d4de; stroke-width:1.4; }
+    .rule { stroke:#8295a7; stroke-width:1.5; }
+    .hairline { stroke:#c9d4de; stroke-width:1; }
+    .title { font:700 30px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing:5px; fill:#17212b; }
+    .subtitle { font:500 15px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill:#526577; }
+    .cap { font:600 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing:2px; fill:#526577; }
+    .stage-label { font:700 16px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing:2px; fill:#17212b; }
+    .small { font:600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing:1px; fill:#526577; }
+    .micro { font:600 9px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing:1.4px; fill:#526577; }
+    .claim { font:500 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill:#526577; }
+    .lead { fill:#263746; stroke:#263746; stroke-width:7; stroke-linejoin:round; }
+    .glass { stroke:#263746; stroke-width:7; stroke-linejoin:round; }
+    .glass-1 { fill:#a3e635; fill-opacity:0.34; }
+    .glass-2 { fill:#2dd4bf; fill-opacity:0.34; }
+    .glass-3 { fill:#67e8f9; fill-opacity:0.34; }
+    .glass-4 { fill:#c084fc; fill-opacity:0.34; }
+    .glass-5 { fill:#fb7185; fill-opacity:0.34; }
+    .glass-6 { fill:#f0abfc; fill-opacity:0.34; }
+    .scene-line { fill:none; stroke:#17212b; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
+    .scene-muted { fill:none; stroke:#526577; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .evidence { fill:none; stroke:#2dd4bf; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; filter:url(#softGlow); }
+    .concept { fill:none; stroke:#67e8f9; stroke-width:2.3; stroke-dasharray:10 10; stroke-linecap:round; opacity:.78; }
+    .future { fill:none; stroke:#f0abfc; stroke-width:2; stroke-dasharray:3 12; stroke-linecap:round; opacity:.55; }
+    .packet { fill:#17212b; stroke:#2dd4bf; stroke-width:2; filter:url(#glow); }
+    .hot { fill:#2dd4bf; filter:url(#glow); }
+    .warm { fill:#a3e635; filter:url(#softGlow); }
+    .ok { fill:#c084fc; filter:url(#softGlow); }
+    .deny { fill:#fb7185; filter:url(#softGlow); }
+    .person { fill:#fb7185; stroke:#263746; stroke-width:3; }
+    .skin { fill:#f0abfc; stroke:#263746; stroke-width:3; }
+    .motif { fill:none; stroke:#8295a7; stroke-width:2; }
+    .roots { stroke:#2dd4bf; stroke-width:2.5; }
+    .chart { stroke:#a3e635; stroke-width:1.5; }
+    .miniature { stroke:#a3e635; stroke-width:2; }
+    .holo-grid { stroke:#2dd4bf; stroke-width:1; }
+    .holo-scan { opacity:.32; }
+    .grain { fill:url(#grain); opacity:.8; }
+    .timeline { fill:#eef3f7; stroke:#8295a7; stroke-width:2; }
+    .timeline-done { fill:url(#spectrum); filter:url(#softGlow); }
+    .timeline-node { fill:#ffffff; stroke:#8295a7; stroke-width:3; }
+    .timeline-core { fill:#2dd4bf; filter:url(#softGlow); }
+    .timeline-label { font:700 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing:1.4px; fill:#526577; }
+    .tag { fill:#ffffff; stroke:#8295a7; stroke-width:1.4; }
+    .tag-dot { fill:#2dd4bf; }
+    .tag-text { font:600 9px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing:1px; fill:#17212b; }
+    .scan { animation:scan 23.00s ease-in-out infinite; }
+    .breathe { transform-box:fill-box; transform-origin:center; animation:breathe 8s ease-in-out infinite; }
+    .orbit { transform-box:fill-box; transform-origin:center; animation:orbit 24s linear infinite; }
+    .twinkle { animation:twinkle 6s ease-in-out infinite; }
+    .spore { transform-box:fill-box; transform-origin:center; animation:spore 13s ease-in-out infinite; }
+    .s1 { animation-delay:-2s } .s2 { animation-delay:-4s } .s3 { animation-delay:-6s }
+    .s4 { animation-delay:-8s } .s5 { animation-delay:-10s } .s6 { animation-delay:-12s }
+    .story-beam { stroke-dasharray:20 18; animation:flow 8s linear infinite; }
+    .reveal-1 { animation:reveal 92s ease-in-out infinite; animation-delay:0s; }
+    .reveal-2 { animation:reveal 92s ease-in-out infinite; animation-delay:-76.67s; }
+    .reveal-3 { animation:reveal 92s ease-in-out infinite; animation-delay:-61.33s; }
+    .reveal-4 { animation:reveal 92s ease-in-out infinite; animation-delay:-46.00s; }
+    .reveal-5 { animation:reveal 92s ease-in-out infinite; animation-delay:-30.67s; }
+    .reveal-6 { animation:reveal 92s ease-in-out infinite; animation-delay:-15.33s; }
+    @keyframes scan { 0%,100%{transform:translateX(-38px);opacity:.18}50%{transform:translateX(66px);opacity:.9} }
+    @keyframes breathe { 0%,100%{opacity:.72;transform:scale(.98)}50%{opacity:1;transform:scale(1.035)} }
+    @keyframes orbit { to{transform:rotate(360deg)} }
+    @keyframes twinkle { 0%,100%{opacity:.15}50%{opacity:.72} }
+    @keyframes spore { 0%,100%{transform:translateY(18px);opacity:.12}50%{transform:translateY(-28px);opacity:.65} }
+    @keyframes flow { to{stroke-dashoffset:-76} }
+    @keyframes reveal { 0%,8%,100%{opacity:.42}12%,26%{opacity:1}31%,95%{opacity:.42} }
+    @media (prefers-reduced-motion: reduce) {
+      animate, animateTransform, animateMotion { display:none; }
+      .scan,.breathe,.orbit,.twinkle,.spore,.story-beam,.reveal-1,.reveal-2,.reveal-3,.reveal-4,.reveal-5,.reveal-6 { animation:none; }
+    }
+  </style>
+  <rect class="bg" width="1600" height="640"/>
+  <rect class="frame" x="18" y="18" width="1564" height="604" rx="34"/>
+  <rect class="inner" x="34" y="34" width="1532" height="572" rx="27"/>
+  <rect class="grain" x="35" y="35" width="1530" height="570" rx="26"/>
+
+        <g class="motif roots" opacity=".33">
+          <path d="M22 448C166 350 176 222 330 154S546 290 700 186 898 98 1028 202s262 38 552-92"/>
+          <path d="M18 388c168-48 266 90 410 28s234-152 392-62 258 52 362-24 236-110 394-30"/>
+        </g><g fill="#2dd4bf"><circle class="spore s0" cx="70" cy="150" r="2" opacity="0.18"/><circle class="spore s1" cx="219" cy="211" r="3" opacity="0.26"/><circle class="spore s2" cx="368" cy="272" r="4" opacity="0.34"/><circle class="spore s3" cx="517" cy="333" r="5" opacity="0.42"/><circle class="spore s4" cx="666" cy="394" r="2" opacity="0.18"/><circle class="spore s5" cx="815" cy="455" r="3" opacity="0.26"/><circle class="spore s6" cx="964" cy="198" r="4" opacity="0.34"/><circle class="spore s0" cx="1113" cy="259" r="5" opacity="0.42"/><circle class="spore s1" cx="1262" cy="320" r="2" opacity="0.18"/><circle class="spore s2" cx="1411" cy="381" r="3" opacity="0.26"/><circle class="spore s3" cx="100" cy="442" r="4" opacity="0.34"/><circle class="spore s4" cx="249" cy="185" r="5" opacity="0.42"/><circle class="spore s5" cx="398" cy="246" r="2" opacity="0.18"/><circle class="spore s6" cx="547" cy="307" r="3" opacity="0.26"/><circle class="spore s0" cx="696" cy="368" r="4" opacity="0.34"/><circle class="spore s1" cx="845" cy="429" r="5" opacity="0.42"/><circle class="spore s2" cx="994" cy="172" r="2" opacity="0.18"/><circle class="spore s3" cx="1143" cy="233" r="3" opacity="0.26"/><circle class="spore s4" cx="1292" cy="294" r="4" opacity="0.34"/><circle class="spore s5" cx="1441" cy="355" r="5" opacity="0.42"/><circle class="spore s6" cx="130" cy="416" r="2" opacity="0.18"/><circle class="spore s0" cx="279" cy="159" r="3" opacity="0.26"/><circle class="spore s1" cx="428" cy="220" r="4" opacity="0.34"/><circle class="spore s2" cx="577" cy="281" r="5" opacity="0.42"/><circle class="spore s3" cx="726" cy="342" r="2" opacity="0.18"/><circle class="spore s4" cx="875" cy="403" r="3" opacity="0.26"/><circle class="spore s5" cx="1024" cy="464" r="4" opacity="0.34"/><circle class="spore s6" cx="1173" cy="207" r="5" opacity="0.42"/><circle class="spore s0" cx="1322" cy="268" r="2" opacity="0.18"/><circle class="spore s1" cx="1471" cy="329" r="3" opacity="0.26"/><circle class="spore s2" cx="160" cy="390" r="4" opacity="0.34"/><circle class="spore s3" cx="309" cy="451" r="5" opacity="0.42"/><circle class="spore s4" cx="458" cy="194" r="2" opacity="0.18"/><circle class="spore s5" cx="607" cy="255" r="3" opacity="0.26"/></g>
+  <g id="header">
+    <path d="M58 54v44" stroke="#2dd4bf" stroke-width="5" stroke-linecap="round"/>
+    <text class="title" x="78" y="75">THE COMPOUNDING ENGINE</text>
+    <text class="subtitle" x="78" y="99">Each auditable capability becomes a reusable instrument for the next reachable system.</text>
+    <text class="cap" x="1535" y="61" text-anchor="end">BIOLUMINESCENT DEEP-TIME / 92S LOOP</text>
+    <text class="cap" x="1535" y="83" text-anchor="end">SELF-CONTAINED SVG / LIGHT / REDUCED-MOTION SAFE</text>
+    <line class="rule" x1="58" y1="113" x2="1542" y2="113"/>
+  </g>
+
+    <g id="scene-compounding-engine">
+      <ellipse class="glass glass-2" cx="800" cy="301" rx="704" ry="180" opacity=".38"/>
+      <ellipse class="concept orbit" cx="800" cy="301" rx="630" ry="135"/>
+      <ellipse class="future orbit" cx="800" cy="301" rx="500" ry="208"/>
+      <path class="evidence story-beam" marker-end="url(#arrow)" d="M325 270C414 190 470 290 500 376s123 22 200-140 137 36 202 134 135-88 198-138 122 40 180 118"/>
+
+        <g class="reveal-1">
+          <circle class="glass glass-1" cx="325" cy="270" r="76"/>
+          <circle class="timeline-node" cx="325" cy="270" r="50"/>
+          <circle class="timeline-core breathe" cx="325" cy="270" r="13"/>
+          <text class="stage-label" x="325" y="275" text-anchor="middle">MODEL</text>
+          <text class="small" x="325" y="374" text-anchor="middle">Engram</text>
+        </g>
+        <g class="reveal-2">
+          <circle class="glass glass-2" cx="500" cy="376" r="76"/>
+          <circle class="timeline-node" cx="500" cy="376" r="50"/>
+          <circle class="timeline-core breathe" cx="500" cy="376" r="13"/>
+          <text class="stage-label" x="500" y="381" text-anchor="middle">MEASURE</text>
+          <text class="small" x="500" y="480" text-anchor="middle">pid-rs</text>
+        </g>
+        <g class="reveal-3">
+          <circle class="glass glass-3" cx="700" cy="236" r="76"/>
+          <circle class="timeline-node" cx="700" cy="236" r="50"/>
+          <circle class="timeline-core breathe" cx="700" cy="236" r="13"/>
+          <text class="stage-label" x="700" y="241" text-anchor="middle">PROTOCOL</text>
+          <text class="small" x="700" y="340" text-anchor="middle">NCP</text>
+        </g>
+        <g class="reveal-4">
+          <circle class="glass glass-4" cx="902" cy="370" r="76"/>
+          <circle class="timeline-node" cx="902" cy="370" r="50"/>
+          <circle class="timeline-core breathe" cx="902" cy="370" r="13"/>
+          <text class="stage-label" x="902" y="375" text-anchor="middle">PERCEIVE</text>
+          <text class="small" x="902" y="474" text-anchor="middle">Manwe / Melkor</text>
+        </g>
+        <g class="reveal-5">
+          <circle class="glass glass-5" cx="1100" cy="232" r="76"/>
+          <circle class="timeline-node" cx="1100" cy="232" r="50"/>
+          <circle class="timeline-core breathe" cx="1100" cy="232" r="13"/>
+          <text class="stage-label" x="1100" y="237" text-anchor="middle">GOVERN</text>
+          <text class="small" x="1100" y="336" text-anchor="middle">Haldir / Galadriel</text>
+        </g>
+        <g class="reveal-6">
+          <circle class="glass glass-6" cx="1280" cy="350" r="76"/>
+          <circle class="timeline-node" cx="1280" cy="350" r="50"/>
+          <circle class="timeline-core breathe" cx="1280" cy="350" r="13"/>
+          <text class="stage-label" x="1280" y="355" text-anchor="middle">EXPLORE</text>
+          <text class="small" x="1280" y="454" text-anchor="middle">CREBAIN / atlases</text>
+        </g>
+      <g transform="translate(800 302)" class="orbit">
+        <circle class="warm" cx="0" cy="0" r="29"/>
+        <circle class="hot" cx="0" cy="0" r="11"/>
+        <path class="scene-muted" d="M-116 0h232M0-116v232"/>
+        <circle class="packet" cx="116" cy="0" r="8"/>
+        <circle class="packet" cx="-116" cy="0" r="8"/>
+        <circle class="packet" cx="0" cy="116" r="8"/>
+        <circle class="packet" cx="0" cy="-116" r="8"/>
+      </g>
+      <g transform="translate(800 302)">
+        <circle class="timeline-node" r="78"/><circle class="timeline-core breathe" r="25"/>
+        <path class="evidence" d="M-20 8l15 15 31-40"/>
+        <text class="micro" x="0" y="57" text-anchor="middle">EVIDENCE -> NEXT REACH</text>
+      </g>
+      <path class="concept" d="M185 430Q800 490 1415 430"/>
+      <text class="cap" x="800" y="456" text-anchor="middle">REUSABLE CAPABILITIES / EXPLICIT BOUNDARIES / COMPOUNDING PROOF</text>
+    </g>
+  <g id="claim">
+    <line class="hairline" x1="58" y1="500" x2="1542" y2="500"/>
+    <text class="cap" x="58" y="522">CORE CLAIM</text>
+    <text class="claim" x="170" y="522">Each auditable capability becomes a reusable instrument for the next reachable system.</text>
+    <text class="micro" x="1542" y="541" text-anchor="end">SOLID = EVIDENCE  /  DASHED = CONDITIONAL  /  TRANSLUCENT = FUTURE</text>
+  </g>
+  <g id="timeline">
+    <text class="cap" x="58" y="553">STORY TIMELINE</text>
+    <rect class="timeline" x="94" y="570" width="1412" height="8" rx="4"/><rect class="timeline-done" x="94" y="572" width="1412" height="4" rx="2"/><g class="reveal-1"><circle class="timeline-node" cx="94.0" cy="574" r="14"/><circle class="timeline-core" cx="94.0" cy="574" r="5"/><text class="timeline-label" x="94.0" y="606" text-anchor="middle">MODEL</text></g><g class="reveal-2"><circle class="timeline-node" cx="376.4" cy="574" r="14"/><circle class="timeline-core" cx="376.4" cy="574" r="5"/><text class="timeline-label" x="376.4" y="606" text-anchor="middle">MEASURE</text></g><g class="reveal-3"><circle class="timeline-node" cx="658.8" cy="574" r="14"/><circle class="timeline-core" cx="658.8" cy="574" r="5"/><text class="timeline-label" x="658.8" y="606" text-anchor="middle">PROTOCOL</text></g><g class="reveal-4"><circle class="timeline-node" cx="941.2" cy="574" r="14"/><circle class="timeline-core" cx="941.2" cy="574" r="5"/><text class="timeline-label" x="941.2" y="606" text-anchor="middle">PERCEIVE</text></g><g class="reveal-5"><circle class="timeline-node" cx="1223.6" cy="574" r="14"/><circle class="timeline-core" cx="1223.6" cy="574" r="5"/><text class="timeline-label" x="1223.6" y="606" text-anchor="middle">GOVERN</text></g><g class="reveal-6"><circle class="timeline-node" cx="1506.0" cy="574" r="14"/><circle class="timeline-core" cx="1506.0" cy="574" r="5"/><text class="timeline-label" x="1506.0" y="606" text-anchor="middle">EXPLORE</text></g>
+  </g>
+</svg>

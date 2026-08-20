@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 52" width="860" height="52" role="img" aria-label="From signal to frontier">
+  <title>From signal to frontier</title>
+  <style>
+    .idx    { font: 700 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #38bdf8; letter-spacing: 1px; }
+    .prompt { font: 600 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
+    .caret  { fill: #38bdf8; }
+    .label  { font: 700 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; letter-spacing: 4px; }
+    .cap    { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; letter-spacing: 2px; }
+    .spine  { stroke: #38bdf8; stroke-width: 4; stroke-linecap: round; }
+    .rule   { stroke: #30363d; stroke-width: 1; }
+    .cursor { fill: #38bdf8; animation: curblink 1s steps(1) 0s infinite; }
+    @keyframes curblink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
+    text { paint-order: stroke; stroke: #0d1117; stroke-width: 2.6; stroke-linejoin: round; }
+    text { stroke: #ffffff; }
+      .idx { fill: #0369a1; }
+      .prompt { fill: #57606a; }
+      .caret { fill: #0369a1; }
+      .label { fill: #1f2328; }
+      .cap { fill: #57606a; }
+      .spine { stroke: #0369a1; }
+      .rule { stroke: #d0d7de; }
+      .cursor { fill: #0369a1; }
+    @media (prefers-reduced-motion: reduce) {
+      animate { display: none; }
+      .cursor { animation: none; visibility: hidden; }
+    }
+  </style>
+  <path d="M4 13 V39" class="spine"/>
+  <text x="22" y="33" class="idx">01</text>
+  <text x="50" y="33" class="prompt">~/sep <tspan class="caret">&#10095;</tspan></text>
+  <text x="132" y="33" class="label" textLength="281" lengthAdjust="spacingAndGlyphs">FROM SIGNAL TO FRONTIER</text>
+  <text x="856" y="33" text-anchor="end" class="cap"># story before evidence</text>
+  <line x1="132" y1="42.5" x2="856" y2="42.5" class="rule"/>
+  <rect x="423" y="22" width="9" height="14" rx="1" class="cursor"/>
+</svg>

@@ -63,6 +63,13 @@
   .accent { height: 2px; margin: 18px 0 2px; border-radius: 2px;
             background: linear-gradient(90deg, #22d3ee, #a78bfa 55%, rgba(167,139,250,0)); }
   .lede { margin: 22px 0 30px; }
+  .story {
+    margin: 28px 0 34px; padding: 12px;
+    border: 1px solid #30363d; border-radius: 14px;
+    background: linear-gradient(180deg, rgba(34,211,238,.045), rgba(167,139,250,.025));
+  }
+  .story img { display: block; width: 100%; height: auto; border-radius: 9px; }
+  .story p { color: #8b949e; margin: 11px 4px 3px; font-size: 12.5px; }
   h2 {
     font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
     color: #8b949e; margin: 34px 0 12px; font-weight: 600;
@@ -91,6 +98,8 @@
     .role { color: #7c3aed; }
     .proj b, summary { color: #1f2328; }
     .tag { color: #57606a; border-color: #d0d7de; }
+    .story { border-color: #d0d7de; background: linear-gradient(180deg, rgba(3,105,161,.04), rgba(124,58,237,.025)); }
+    .story p { color: #57606a; }
     .priv { border-color: #d0d7de; }
     details { border-color: #d8dee4; }
   }
@@ -556,6 +565,11 @@
     information-theoretic representation analysis, computational neuroscience, robotics and
     multimodal 3D perception. Mostly Rust and Python.
   </p>
+
+  <section class="story" id="from-signal-to-frontier" aria-label="From Signal to Frontier animated portfolio story">
+    <a href="mural/" aria-label="Explore all five cinematic mural stories"><picture><source media="(prefers-color-scheme: dark)" srcset="mural/assets/01_from_signal_to_frontier_master__dark.svg"><source media="(prefers-color-scheme: light)" srcset="mural/assets/01_from_signal_to_frontier_master__light.svg"><img src="mural/assets/01_from_signal_to_frontier_master__light.svg" width="1600" height="640" alt="From Signal to Frontier: a left-to-right mural moving from signal modeling through perception, embodiment, authorization, and evidence to an explicitly labeled future frontier." decoding="async"></picture></a>
+    <p><strong>From signal to frontier.</strong> The portfolio story in one animated mural. <a href="mural/">Explore the five cinematic master cuts &#8599;</a></p>
+  </section>
 
   <h2><span class="syntax" aria-hidden="true">// </span>Focus</h2>
   <div class="tags">

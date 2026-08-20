@@ -12,6 +12,7 @@ export const PALETTE = {
   rule: ["#30363d", "#d0d7de"],
   flow: ["#e2faff", "#22d3ee"],
   accents: {
+    frontier: ["#38bdf8", "#0369a1"],
     pulse: ["#22d3ee", "#0891b2"],
     work: ["#a78bfa", "#7c3aed"],
     toolbox: ["#fbbf24", "#b45309"],
