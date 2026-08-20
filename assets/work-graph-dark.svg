@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 512" width="860" height="512" role="img" aria-label="Conceptual standalone-first ecosystem map. Optional NCP role paths connect Engram as separate simulation responder or direct command proposer, CREBAIN as sole body and final software actuator admission authority, Haldir as gated command proposer, and Galadriel and Prisoma as read-only observers. Every command is only a proposal until CREBAIN independently admits it under a current session and bounded body-authority lease. In gated mode Engram sends Haldir-local signed intent that carries no NCP authority; Haldir independently creates and authorizes a new NCP command. A separate default-off Galadriel-Haldir edge carries deny-only assessment and authenticated disposition; its absence can never grant authority. Separately declared out-of-band CREBAIN telemetry may feed Galadriel. pid-rs is a protocol-neutral in-process library with no wire role, used optionally by Galadriel and Prisoma; Cortexel is a one-way labelled Engram export sink with no control path. Manwe, Melkor and atlas connections are research, tooling or data inputs, not control paths. The relief-atlas release token denotes a public subset, not a complete 10,079-mesh corpus or licensing approval. NCP 1.0 is an unreleased, release-blocked candidate; no line claims production deployment or qualification.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 512" width="860" height="512" role="img" aria-label="Conceptual standalone-first ecosystem map. Optional NCP role paths connect Engram as separate simulation responder or direct command proposer, CREBAIN as sole body and final software actuator admission authority, Haldir as gated command proposer, and Galadriel and Prisoma as read-only observers. Every command is only a proposal until CREBAIN independently admits it under a current session and bounded body-authority lease. In gated mode Engram sends Haldir-local signed intent that carries no NCP authority; Haldir independently creates and authorizes a new NCP command. A separate default-off Galadriel-Haldir edge carries deny-only assessment and authenticated disposition; its absence can never grant authority. Separately declared out-of-band CREBAIN telemetry may feed Galadriel. pid-rs is a protocol-neutral in-process library with no wire role, used optionally by Galadriel and Prisoma; Cortexel is a one-way labelled Engram export sink with no control path. Manwe, Melkor and atlas connections are research, tooling or data inputs, not control paths. Stacked-layer badges outside COBOT-ATLAS and RELIEF-ATLAS identify them as datasets. COBOT-ATLAS shows a conserved robotic pick, desk placement and return loop. RELIEF-ATLAS shows an indexed contact sheet of varied 3-D mesh records over terrain contours. It represents a 10,079-item manifest and prompt catalog with 125 public GLBs; it does not imply a complete 10,079-mesh corpus, publication completion or asset-level licensing approval. NCP 1.0 is an unreleased, release-blocked candidate; no line claims production deployment or qualification.">
   <defs>
     <radialGradient id="hubGrad" cx="50%" cy="42%" r="65%">
       <stop offset="0%" stop-color="#06281d"/>
@@ -233,6 +233,10 @@
     .cba-envelope    { fill: none; stroke: #60a5fa; stroke-width: 1; stroke-opacity: 0.45; stroke-linecap: round; }
     .cba-envelope-soft { stroke: #8be7f2; stroke-opacity: 0.16; stroke-dasharray: 1 5; }
     .cba-base        { fill: #091827; stroke: #60a5fa; stroke-width: 1.1; stroke-linejoin: round; }
+    .cba-desk-top    { fill: #173c66; stroke: #9cecf4; stroke-width: 0.8; stroke-linejoin: round; }
+    .cba-desk-apron  { fill: #0b2038; stroke: #60a5fa; stroke-width: 0.65; }
+    .cba-desk-leg    { fill: #091827; stroke: #60a5fa; stroke-width: 0.7; stroke-linejoin: round; }
+    .cba-source-pad  { fill: #102842; stroke: #7dd3fc; stroke-width: 0.75; stroke-linejoin: round; }
     .cba-link-a      { fill: url(#cbaArmA); stroke: #9cecf4; stroke-width: 0.8; stroke-linejoin: round; }
     .cba-link-b      { fill: url(#cbaArmB); stroke: #9cecf4; stroke-width: 0.8; stroke-linejoin: round; }
     .cba-link-rail   { fill: none; stroke: #d7fbff; stroke-opacity: 0.58; stroke-width: 0.8; stroke-linecap: round; }
@@ -246,36 +250,25 @@
     .cba-voxel-left  { fill: #cbd5e1; stroke: #e2faff; stroke-width: 0.8; stroke-linejoin: round; }
     .cba-voxel-right { fill: #64748b; stroke: #bfdbfe; stroke-width: 0.8; stroke-linejoin: round; }
     .cba-voxel-mesh  { fill: none; stroke: #ffffff; stroke-width: 0.5; stroke-opacity: 0.78; }
-    .cba-telemetry   { fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: round; filter: url(#edgeGlow); }
-    .cba-commit      { fill: none; stroke: #d7fbff; stroke-width: 1.2; }
+    .cba-contact     { fill: none; stroke: #d7fbff; stroke-width: 1.1; }
+    .atlas-dataset-disc { fill: #07111d; stroke-width: 1.35; }
+    .atlas-dataset-ring { fill: none; stroke: #f8fafc; stroke-width: 0.65; stroke-opacity: 0.3; }
     .rfa-label       { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fda4af; }
     .rfa-glow        { fill: none; stroke: #fda4af; stroke-width: 2; stroke-opacity: 0.12; stroke-linejoin: round; }
     .rfa-plate       { fill: url(#rfaPlate); }
     .rfa-bezel       { fill: none; stroke: url(#rfaBezel); stroke-width: 2.4; stroke-linejoin: round; }
     .rfa-groove      { fill: none; stroke: #05070b; stroke-opacity: 0.7; stroke-width: 1; stroke-linejoin: round; }
     .rfa-hairline    { fill: none; stroke: #2b333d; stroke-opacity: 0.58; stroke-width: 1; stroke-linejoin: round; }
-    .rfa-contour     { fill: none; stroke: #fda4af; stroke-width: 0.8; stroke-opacity: 0.24; stroke-linecap: round; }
-    .rfa-contour-a   { stroke-opacity: 0.34; }
-    .rfa-inlet       { fill: none; stroke: #fb7185; stroke-width: 0.85; stroke-opacity: 0.5; stroke-linecap: round; }
-    .rfa-port        { fill: #2a0a12; stroke: #fda4af; stroke-width: 1; }
-    .rfa-port-core   { fill: #fff1f2; }
-    .rfa-route       { fill: none; stroke: #fda4af; stroke-width: 1; stroke-opacity: 0.28; stroke-linecap: round; stroke-linejoin: round; }
-    .rfa-face        { stroke: #fda4af; stroke-width: 0.45; stroke-opacity: 0.42; stroke-linejoin: round; }
-    .rfa-face-0      { fill: #6b0928; }
-    .rfa-face-1      { fill: #9f1239; }
-    .rfa-face-2      { fill: #881337; }
-    .rfa-face-3      { fill: #3b0715; }
-    .rfa-face-4      { fill: #500724; }
-    .rfa-face-5      { fill: #be123c; }
-    .rfa-surface-contour { fill: none; stroke: #fecdd3; stroke-width: 0.55; stroke-opacity: 0.35; stroke-linecap: round; }
-    .rfa-mesh-edge   { fill: none; stroke: #ffe4e6; stroke-width: 0.75; stroke-opacity: 0.68; stroke-linejoin: round; }
-    .rfa-release     { fill: none; stroke: #fda4af; stroke-width: 0.85; stroke-opacity: 0.72; stroke-linecap: round; }
-    .rfa-output      { fill: #ffe4e6; stroke: #fb7185; stroke-width: 0.8; stroke-linejoin: round; }
-    .rfa-output-core { fill: #9f1239; }
-    .rfa-tracer      { fill: none; stroke: #fff1f2; stroke-width: 1.7; stroke-linecap: round; filter: url(#edgeGlow); }
-    .rfa-mesh-lit    { fill: none; stroke: #fff1f2; stroke-width: 1.4; stroke-linejoin: round; filter: url(#edgeGlow); }
-    .rfa-scan        { fill: #fff1f2; filter: url(#edgeGlow); }
-    .rfa-token       { fill: #fff1f2; stroke: #ffffff; stroke-width: 0.8; stroke-linejoin: round; filter: url(#edgeGlow); }
+    .rfa-contour     { fill: none; stroke: #fda4af; stroke-width: 0.65; stroke-opacity: 0.15; stroke-linecap: round; }
+    .rfa-contour-a   { stroke-opacity: 0.19; }
+    .rfa-sheet-back  { fill: #12070b; stroke: #881337; stroke-width: 0.75; stroke-opacity: 0.75; }
+    .rfa-sheet-mid   { fill: #260810; stroke: #be123c; stroke-width: 0.75; stroke-opacity: 0.68; }
+    .rfa-sheet-front { fill: #3a0a17; stroke: #fda4af; stroke-width: 0.8; stroke-opacity: 0.62; }
+    .rfa-index-rail  { fill: none; stroke: #fb7185; stroke-width: 0.7; stroke-opacity: 0.48; stroke-linecap: round; }
+    .rfa-index-tick  { stroke: #fecdd3; stroke-width: 0.7; stroke-opacity: 0.6; stroke-linecap: round; }
+    .rfa-record      { fill: #17070c; fill-opacity: 0.94; stroke: #fda4af; stroke-width: 0.8; stroke-opacity: 0.62; }
+    .rfa-sample      { fill: none; stroke: #ffe4e6; stroke-width: 0.75; stroke-opacity: 0.88; stroke-linecap: round; stroke-linejoin: round; }
+    .rfa-focus       { fill: none; stroke: #fff1f2; stroke-width: 1.05; stroke-linecap: round; filter: url(#edgeGlow); }
     .wg-rule    { stroke: #30363d; stroke-width: 1; stroke-opacity: 0.55; }
     .wg-bracket { fill: none; stroke: #fbbf24; stroke-width: 1.5; stroke-linecap: round; stroke-opacity: 0.85; }
     .panel      { fill: #ffffff; fill-opacity: 0.022; stroke: #ffffff; stroke-opacity: 0.07; }
@@ -902,53 +895,71 @@
     </g>
     <line class="cba-tick" x1="690" y1="106.8" x2="690" y2="101.8"/><line class="cba-tick" x1="703.5" y1="107.4" x2="704.6" y2="104.7"/><line class="cba-tick" x1="715" y1="115" x2="717" y2="113"/><line class="cba-tick" x1="722.6" y1="126.5" x2="725.3" y2="125.4"/><line class="cba-tick" x1="723.2" y1="140" x2="728.2" y2="140"/><line class="cba-tick" x1="722.6" y1="153.5" x2="725.3" y2="154.6"/><line class="cba-tick" x1="715" y1="165" x2="717" y2="167"/><line class="cba-tick" x1="703.5" y1="172.6" x2="704.6" y2="175.3"/><line class="cba-tick" x1="690" y1="173.2" x2="690" y2="178.2"/><line class="cba-tick" x1="676.5" y1="172.6" x2="675.4" y2="175.3"/><line class="cba-tick" x1="665" y1="165" x2="663" y2="167"/><line class="cba-tick" x1="657.4" y1="153.5" x2="654.7" y2="154.6"/><line class="cba-tick" x1="656.8" y1="140" x2="651.8" y2="140"/><line class="cba-tick" x1="657.4" y1="126.5" x2="654.7" y2="125.4"/><line class="cba-tick" x1="665" y1="115" x2="663" y2="113"/><line class="cba-tick" x1="676.5" y1="107.4" x2="675.4" y2="104.7"/>
     <path class="cba-base" d="M662,170H682L679 160H665Z"/>
-    <g class="cba-specimen">
+    <path class="cba-desk-top" d="M684,150H702L700 153H687Z"/>
+    <path class="cba-desk-apron" d="M687,153H700.5V155H687Z"/>
+    <path class="cba-desk-leg" d="M688.5,155H691V165H688.5ZM698,155H700.5V165H698Z M688,163H701V165H688Z"/>
+    <path class="cba-source-pad" d="M706,170H718L716 173H708Z"/>
+    <circle class="cba-contact" cx="696" cy="144" r="10" opacity="0">
+      <animate attributeName="opacity" values="0;0;0.8;0;0" keyTimes="0;0.49;0.51;0.55;1" dur="14.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle class="cba-contact" cx="712" cy="164" r="10" opacity="0">
+      <animate attributeName="opacity" values="0;0;0.8;0;0" keyTimes="0;0.96;0.975;0.995;1" dur="14.4s" repeatCount="indefinite"/>
+    </circle>
+    <g class="cba-specimen cba-specimen-source" opacity="1">
+      <animate attributeName="opacity" values="1;0;1;1" keyTimes="0;0.15;0.975;1" calcMode="discrete" dur="14.4s" repeatCount="indefinite"/>
+      <polygon class="cba-voxel-top" points="712,158 717,161 712,164 707,161"/>
+      <polygon class="cba-voxel-left" points="707,161 712,164 712,170 707,167"/>
+      <polygon class="cba-voxel-right" points="712,164 717,161 717,167 712,170"/>
+      <path class="cba-voxel-mesh" d="M709.5,159.5L714.5,162.5M709.5,162.5L714.5,159.5M712,164V170"/>
+    </g>
+    <g class="cba-specimen cba-specimen-desk" opacity="0" transform="translate(-16 -20)">
+      <animate attributeName="opacity" values="0;1;0;0" keyTimes="0;0.51;0.71;1" calcMode="discrete" dur="14.4s" repeatCount="indefinite"/>
       <polygon class="cba-voxel-top" points="712,158 717,161 712,164 707,161"/>
       <polygon class="cba-voxel-left" points="707,161 712,164 712,170 707,167"/>
       <polygon class="cba-voxel-right" points="712,164 717,161 717,167 712,170"/>
       <path class="cba-voxel-mesh" d="M709.5,159.5L714.5,162.5M709.5,162.5L714.5,159.5M712,164V170"/>
     </g>
     <g class="cba-arm">
-      <g>
-        <animateTransform attributeName="transform" type="rotate" values="0 672 155;0 672 155;-7 672 155;9 672 155;0 672 155;0 672 155" keyTimes="0;0.15;0.38;0.62;0.84;1" calcMode="spline" keySplines="0 0 1 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0 0 1 1" dur="7.2s" repeatCount="indefinite"/>
+      <g class="cba-joint cba-shoulder" transform="rotate(-2.05 672 155)">
+        <animateTransform attributeName="transform" type="rotate" values="-2.05 672 155;-2.05 672 155;0 672 155;0 672 155;-1.33 672 155;4.54 672 155;-9.99 672 155;-26.15 672 155;-32.73 672 155;-32.73 672 155;-26.15 672 155;-26.15 672 155;-32.73 672 155;-32.73 672 155;-26.15 672 155;-9.99 672 155;4.54 672 155;-1.33 672 155;0 672 155;0 672 155;-2.05 672 155" keyTimes="0;0.04;0.10;0.15;0.21;0.28;0.35;0.41;0.46;0.51;0.56;0.61;0.66;0.71;0.77;0.84;0.89;0.93;0.96;0.975;1" calcMode="spline" keySplines="0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1" dur="14.4s" repeatCount="indefinite"/>
         <polygon class="cba-link-a" points="674.9,157.1 691.9,134.1 686.1,129.9 669.1,152.9"/>
         <path class="cba-link-rail" d="M672,155L689,132"/>
         <circle class="cba-servo" cx="672" cy="155" r="7.4"/>
         <circle class="cba-encoder" cx="672" cy="155" r="5.2"/>
         <circle class="cba-servo-hot" cx="672" cy="155" r="2"/>
-        <g>
-          <animateTransform attributeName="transform" type="rotate" values="0 689 132;0 689 132;16 689 132;-12 689 132;0 689 132;0 689 132" keyTimes="0;0.15;0.38;0.62;0.84;1" calcMode="spline" keySplines="0 0 1 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0 0 1 1" dur="7.2s" repeatCount="indefinite"/>
+        <g class="cba-joint cba-elbow" transform="rotate(-12.34 689 132)">
+          <animateTransform attributeName="transform" type="rotate" values="-12.34 689 132;-12.34 689 132;0 689 132;0 689 132;-24.13 689 132;-58.39 689 132;-43.81 689 132;-29.19 689 132;-6.01 689 132;-6.01 689 132;-29.19 689 132;-29.19 689 132;-6.01 689 132;-6.01 689 132;-29.19 689 132;-43.81 689 132;-58.39 689 132;-24.13 689 132;0 689 132;0 689 132;-12.34 689 132" keyTimes="0;0.04;0.10;0.15;0.21;0.28;0.35;0.41;0.46;0.51;0.56;0.61;0.66;0.71;0.77;0.84;0.89;0.93;0.96;0.975;1" calcMode="spline" keySplines="0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1" dur="14.4s" repeatCount="indefinite"/>
           <polygon class="cba-link-b" points="688.1,135.1 709.1,141.1 710.9,134.9 689.9,128.9"/>
           <path class="cba-link-rail" d="M689,132L710,138"/>
           <circle class="cba-servo cba-servo-small" cx="689" cy="132" r="6.2"/>
           <circle class="cba-encoder" cx="689" cy="132" r="4.1"/>
           <circle class="cba-servo-hot" cx="689" cy="132" r="1.65"/>
-          <g>
-            <animateTransform attributeName="transform" type="rotate" values="0 710 138;0 710 138;-12 710 138;14 710 138;0 710 138;0 710 138" keyTimes="0;0.15;0.38;0.62;0.84;1" calcMode="spline" keySplines="0 0 1 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0 0 1 1" dur="7.2s" repeatCount="indefinite"/>
+          <g class="cba-joint cba-wrist-joint" transform="rotate(14.39 710 138)">
+            <animateTransform attributeName="transform" type="rotate" values="14.39 710 138;14.39 710 138;0 710 138;0 710 138;25.46 710 138;53.85 710 138;53.8 710 138;55.34 710 138;38.74 710 138;38.74 710 138;55.34 710 138;55.34 710 138;38.74 710 138;38.74 710 138;55.34 710 138;53.8 710 138;53.85 710 138;25.46 710 138;0 710 138;0 710 138;14.39 710 138" keyTimes="0;0.04;0.10;0.15;0.21;0.28;0.35;0.41;0.46;0.51;0.56;0.61;0.66;0.71;0.77;0.84;0.89;0.93;0.96;0.975;1" calcMode="spline" keySplines="0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1" dur="14.4s" repeatCount="indefinite"/>
             <path class="cba-tool" d="M710,138L712,151"/>
             <circle class="cba-servo cba-wrist" cx="710" cy="138" r="4.7"/>
             <circle class="cba-servo-hot" cx="710" cy="138" r="1.4"/>
+            <g class="cba-specimen cba-specimen-carried" opacity="0">
+      <animate attributeName="opacity" values="0;1;0;1;0;0" keyTimes="0;0.15;0.51;0.71;0.975;1" calcMode="discrete" dur="14.4s" repeatCount="indefinite"/>
+      <polygon class="cba-voxel-top" points="712,158 717,161 712,164 707,161"/>
+      <polygon class="cba-voxel-left" points="707,161 712,164 712,170 707,167"/>
+      <polygon class="cba-voxel-right" points="712,164 717,161 717,167 712,170"/>
+      <path class="cba-voxel-mesh" d="M709.5,159.5L714.5,162.5M709.5,162.5L714.5,159.5M712,164V170"/>
+    </g>
             <path class="cba-palm" d="M707.5 150.5H716.5"/>
-            <g class="cba-finger">
-              <animateTransform attributeName="transform" type="translate" values="0 0;0 0;-2 0;-2 0;0 0;0 0" keyTimes="0;0.15;0.38;0.62;0.84;1" dur="7.2s" repeatCount="indefinite"/>
+            <g class="cba-finger" transform="translate(-2 0)">
+              <animateTransform attributeName="transform" type="translate" values="-2 0;-2 0;-2 0;0 0;0 0;0 0;0 0;0 0;0 0;-2 0;-2 0;-2 0;-2 0;0 0;0 0;0 0;0 0;0 0;0 0;-2 0;-2 0" keyTimes="0;0.04;0.10;0.15;0.21;0.28;0.35;0.41;0.46;0.51;0.56;0.61;0.66;0.71;0.77;0.84;0.89;0.93;0.96;0.975;1" calcMode="spline" keySplines="0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1" dur="14.4s" repeatCount="indefinite"/>
               <path d="M709,150L706.5,158L709,160"/>
             </g>
-            <g class="cba-finger">
-              <animateTransform attributeName="transform" type="translate" values="0 0;0 0;2 0;2 0;0 0;0 0" keyTimes="0;0.15;0.38;0.62;0.84;1" dur="7.2s" repeatCount="indefinite"/>
+            <g class="cba-finger" transform="translate(2 0)">
+              <animateTransform attributeName="transform" type="translate" values="2 0;2 0;2 0;0 0;0 0;0 0;0 0;0 0;0 0;2 0;2 0;2 0;2 0;0 0;0 0;0 0;0 0;0 0;0 0;2 0;2 0" keyTimes="0;0.04;0.10;0.15;0.21;0.28;0.35;0.41;0.46;0.51;0.56;0.61;0.66;0.71;0.77;0.84;0.89;0.93;0.96;0.975;1" calcMode="spline" keySplines="0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1" dur="14.4s" repeatCount="indefinite"/>
               <path d="M715,150L717.5,158L715,160"/>
             </g>
           </g>
         </g>
       </g>
     </g>
-    <path class="cba-telemetry" d="M672,155 L689,132 L710,138 L712,151" opacity="0" stroke-dasharray="2 15" stroke-dashoffset="17">
-      <animate attributeName="stroke-dashoffset" values="17;17;0;0" keyTimes="0;0.12;0.34;1" dur="7.2s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;0.95;0.95;0;0" keyTimes="0;0.1;0.14;0.3;0.38;1" dur="7.2s" repeatCount="indefinite"/>
-    </path>
-    <circle class="cba-commit" cx="712" cy="163" r="12" opacity="0">
-      <animate attributeName="opacity" values="0;0;0.78;0;0" keyTimes="0;0.82;0.86;0.94;1" dur="7.2s" repeatCount="indefinite"/>
-    </circle>
-    <polygon points="663,113 668,115.6 663,118.2 658,115.6" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/><polygon points="663,116.4 668,119 663,121.6 658,119" fill="#60a5fa" fill-opacity="0.24" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/><polygon points="663,119.8 668,122.4 663,125 658,122.4" fill="#60a5fa" fill-opacity="0.34" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/>
+    <g class="atlas-dataset-badge" aria-hidden="true"><circle class="atlas-dataset-disc" cx="644" cy="103" r="8.4" stroke="#60a5fa"/><circle class="atlas-dataset-ring" cx="644" cy="103" r="6.7"/><polygon points="644,97 649,99.6 644,102.2 639,99.6" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/><polygon points="644,100.4 649,103 644,105.6 639,103" fill="#60a5fa" fill-opacity="0.24" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/><polygon points="644,103.8 649,106.4 644,109 639,106.4" fill="#60a5fa" fill-opacity="0.34" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/></g>
     <text x="690" y="88" text-anchor="middle" class="cba-label">COBOT-ATLAS</text>
   </g>
   <g>
@@ -1005,34 +1016,22 @@
     <path class="rfa-groove" d="M667.8,337 L712.2,337 L727,351.8 L727,396.2 L712.2,411 L667.8,411 L653,396.2 L653,351.8 Z"/>
     <path class="rfa-hairline" d="M665.2,332.6 L714.8,332.6 L731.4,349.2 L731.4,398.8 L714.8,415.4 L665.2,415.4 L648.6,398.8 L648.6,349.2 Z"/>
     <g clip-path="url(#rfaClip)">
-      <path class="rfa-contour rfa-contour-a" d="M661,364 C669,351 683,351 693,361 C701,368 699,376 708,381"/>
-      <path class="rfa-contour" d="M660,378 C671,368 682,370 689,379 C696,387 705,388 715,382"/>
-      <path class="rfa-contour" d="M666,392 C677,383 686,386 692,394 C698,401 708,400 717,394"/>
-      <path class="rfa-inlet" d="M659,354 C667,354 673,364 681,364"/><circle class="rfa-port" cx="659" cy="354" r="3"/><circle class="rfa-port-core" cx="659" cy="354" r="1"/><path class="rfa-inlet" d="M656,367 C667,367 673,371 679,371"/><circle class="rfa-port" cx="656" cy="367" r="3"/><circle class="rfa-port-core" cx="656" cy="367" r="1"/><path class="rfa-inlet" d="M656,381 C667,381 673,379 679,379"/><circle class="rfa-port" cx="656" cy="381" r="3"/><circle class="rfa-port-core" cx="656" cy="381" r="1"/><path class="rfa-inlet" d="M659,394 C667,394 673,386 682,386"/><circle class="rfa-port" cx="659" cy="394" r="3"/><circle class="rfa-port-core" cx="659" cy="394" r="1"/>
-      <path class="rfa-route" d="M659,354 C671,354 674,364 681,364 C687,366 685,373 688,378 L708,367 H721"/>
-      <polygon class="rfa-face rfa-face-0" points="688,378 677,362 694,356"/><polygon class="rfa-face rfa-face-1" points="688,378 694,356 708,367"/><polygon class="rfa-face rfa-face-2" points="688,378 708,367 701,387"/><polygon class="rfa-face rfa-face-3" points="688,378 701,387 685,393"/><polygon class="rfa-face rfa-face-4" points="688,378 685,393 673,379"/><polygon class="rfa-face rfa-face-5" points="688,378 673,379 677,362"/>
-      <path class="rfa-surface-contour" d="M678,375 C684,370 692,371 698,375 C702,378 703,381 701,384"/>
-      <path class="rfa-mesh-edge" d="M677,362 L694,356 L708,367 L701,387 L685,393 L673,379 Z M688,378 L677,362 M688,378 L694,356 M688,378 L708,367 M688,378 L701,387 M688,378 L685,393 M688,378 L673,379"/>
-      <path class="rfa-release" d="M705,369 H724 M706,373 H724"/>
-      <polygon class="rfa-output" points="721,367 726,372 721,377 716,372"/>
-      <circle class="rfa-output-core" cx="721" cy="372" r="1.25"/>
-      <path class="rfa-tracer" d="M659,354 C671,354 674,364 681,364 C687,366 685,373 688,378 L708,367 H721" stroke-dasharray="8 80" stroke-dashoffset="88" opacity="0">
-        <animate attributeName="stroke-dashoffset" values="88;88;0;0" keyTimes="0;0.28;0.62;1" dur="7.2s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.26;0.3;0.62;0.7;1" dur="7.2s" repeatCount="indefinite"/>
-      </path>
-      <path class="rfa-mesh-lit" d="M677,362 L694,356 L708,367 L701,387 L685,393 L673,379 Z M688,378 L677,362 M688,378 L694,356 M688,378 L708,367 M688,378 L701,387 M688,378 L685,393 M688,378 L673,379" opacity="0">
-        <animate attributeName="opacity" values="0;0;0.92;0.18;0" keyTimes="0;0.44;0.58;0.72;1" dur="7.2s" repeatCount="indefinite"/>
-      </path>
-      <circle class="rfa-scan" cx="659" cy="354" r="1.7" opacity="0">
-        <animate attributeName="cx" values="659;656;656;659;688;721;721" keyTimes="0;0.1;0.2;0.3;0.5;0.7;1" dur="7.2s" repeatCount="indefinite"/>
-        <animate attributeName="cy" values="354;367;381;394;378;372;372" keyTimes="0;0.1;0.2;0.3;0.5;0.7;1" dur="7.2s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0;1;1;1;1;0;0" keyTimes="0;0.1;0.2;0.3;0.5;0.7;1" dur="7.2s" repeatCount="indefinite"/>
-      </circle>
-      <polygon class="rfa-token" points="721,367 726,372 721,377 716,372" opacity="0">
-        <animateTransform attributeName="transform" type="translate" values="-14 0;-14 0;0 0;0 0" keyTimes="0;0.55;0.72;1" dur="7.2s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.54;0.66;0.78;1" dur="7.2s" repeatCount="indefinite"/>
-      </polygon>
+      <path class="rfa-contour rfa-contour-a" d="M659,361 C668,347 685,345 697,357 C707,366 702,375 717,382"/>
+      <path class="rfa-contour" d="M657,378 C670,366 683,368 691,379 C700,391 712,391 721,382"/>
+      <path class="rfa-contour" d="M663,396 C675,386 685,390 692,399 C700,408 713,405 721,397"/>
+      <path class="rfa-sheet-back" d="M663,357 H707 L712,362 V398 H663 Z"/>
+      <path class="rfa-sheet-mid" d="M664.5,355.5 H708.5 L713.5,360.5 V396.5 H664.5 Z"/>
+      <path class="rfa-sheet-front" d="M666,354 H710 L715,359 V395 H666 Z"/>
+      <path class="rfa-index-rail" d="M666,349H714"/>
+      <line class="rfa-index-tick" x1="666" y1="347.5" x2="666" y2="350.5"/><line class="rfa-index-tick" x1="672" y1="348" x2="672" y2="350"/><line class="rfa-index-tick" x1="678" y1="348" x2="678" y2="350"/><line class="rfa-index-tick" x1="684" y1="348" x2="684" y2="350"/><line class="rfa-index-tick" x1="690" y1="347.5" x2="690" y2="350.5"/><line class="rfa-index-tick" x1="696" y1="348" x2="696" y2="350"/><line class="rfa-index-tick" x1="702" y1="348" x2="702" y2="350"/><line class="rfa-index-tick" x1="708" y1="348" x2="708" y2="350"/><line class="rfa-index-tick" x1="714" y1="347.5" x2="714" y2="350.5"/>
+      <g class="rfa-record-group rfa-record-0" transform="translate(674 365)"><rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/><path class="rfa-sample" d="M0 -4 L4 -2 L4 3 L0 5 L-4 3 L-4 -2 Z M-4 -2 L0 0 L4 -2 M0 0 V5"/></g><g class="rfa-record-group rfa-record-1" transform="translate(690 365)"><rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/><path class="rfa-sample" d="M0 -4 L5 3 L-5 3 Z M0 -4 V1 M-5 3 L0 1 L5 3"/></g><g class="rfa-record-group rfa-record-2" transform="translate(706 365)"><rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/><path class="rfa-sample" d="M-4 -2 C-4 -4 4 -4 4 -2 V3 C4 5 -4 5 -4 3 Z M-4 -2 C-4 0 4 0 4 -2"/></g><g class="rfa-record-group rfa-record-3" transform="translate(674 384)"><rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/><path class="rfa-sample" d="M-5 4 V0 C-5 -5 5 -5 5 0 V4 H2 V0 C2 -1 -2 -1 -2 0 V4 Z"/></g><g class="rfa-record-group rfa-record-4" transform="translate(690 384)"><rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/><path class="rfa-sample" d="M-5 3 L-3 -3 L4 -2 L5 4 Z M-3 -3 L0 1 L4 -2 M0 1 L5 4 M0 1 L-5 3"/></g><g class="rfa-record-group rfa-record-5" transform="translate(706 384)"><rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/><path class="rfa-sample" d="M-5 -4 H3 V2 H-5 Z M-3 -2 H5 V4 H-3 Z M-3 -2 L1 1 L5 -2 M1 1 V4"/></g>
+      <g class="rfa-focus" transform="translate(674 365)" opacity="0.72">
+        <animateTransform attributeName="transform" type="translate" values="674 365;690 365;706 365;706 384;690 384;674 384;674 365" keyTimes="0;0.16;0.32;0.48;0.64;0.80;1" calcMode="linear" dur="8.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.48;0.95;0.48;0.95;0.48" keyTimes="0;0.25;0.5;0.75;1" dur="8.4s" repeatCount="indefinite"/>
+        <path d="M-6 -7H-3 M-6 -7V-4 M6 -7H3 M6 -7V-4 M-6 7H-3 M-6 7V4 M6 7H3 M6 7V4"/>
+      </g>
     </g>
+    <g class="atlas-dataset-badge" aria-hidden="true"><circle class="atlas-dataset-disc" cx="644" cy="337" r="8.4" stroke="#fb7185"/><circle class="atlas-dataset-ring" cx="644" cy="337" r="6.7"/><polygon points="644,331 649,333.6 644,336.2 639,333.6" fill="#fb7185" fill-opacity="0.16" stroke="#fb7185" stroke-width="1.1" stroke-linejoin="round"/><polygon points="644,334.4 649,337 644,339.6 639,337" fill="#fb7185" fill-opacity="0.24" stroke="#fb7185" stroke-width="1.1" stroke-linejoin="round"/><polygon points="644,337.8 649,340.4 644,343 639,340.4" fill="#fb7185" fill-opacity="0.34" stroke="#fb7185" stroke-width="1.1" stroke-linejoin="round"/></g>
     <text x="690" y="429" text-anchor="middle" class="rfa-label">RELIEF-ATLAS</text>
   </g>
   <g class="vox-net">

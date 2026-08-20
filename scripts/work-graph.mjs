@@ -21,9 +21,10 @@
 // into the three PID components; melkor an obsidian forge plate whose black
 // massif wears an uneven tactical survey mesh; manwe a lens barrel whose six-blade
 // iris frames a quadcopter caught in lock-on brackets; cobot-atlas a blue-chrome
-// kinematic cell whose articulated arm inspects a mesh voxel; relief-atlas a
-// rose-metal manifest engine turning contour-indexed inputs into one released
-// mesh; galadriel the sentinel shield; pid-rs a crisp instrument dial. The whole
+// kinematic cell whose articulated arm performs a conserved pick/place/return
+// loop; relief-atlas a rose-metal indexed contact sheet of varied 3-D relief
+// records; both atlas nodes carry the same external dataset badge. Galadriel is
+// the sentinel shield; pid-rs a crisp instrument dial. The whole
 // panel is wrapped in a
 // "provenance instrument" frame (amber corner brackets).
 // Theme-adaptive (prefers-color-scheme), reduced-motion safe. Zero deps.
@@ -300,6 +301,18 @@ function datasetPlates(cx, cy, color) {
     const pts = `${f1(cx)},${f1(c - hh)} ${f1(cx + hw)},${f1(c)} ${f1(cx)},${f1(c + hh)} ${f1(cx - hw)},${f1(c)}`;
     return `<polygon points="${pts}" fill="${color}" fill-opacity="${op[i]}" stroke="${color}" stroke-width="1.1" stroke-linejoin="round"/>`;
   }).join("");
+}
+
+// Shared external category badge for the two atlas nodes. Keeping the exact
+// stacked-plates glyph used by dataset chips makes "dataset" a system-wide
+// visual noun. Atlas marks place this badge outside their octagonal border so
+// it reads as metadata, never as part of the project-specific scene.
+function atlasDatasetBadge(cx, cy, color) {
+  return `<g class="atlas-dataset-badge" aria-hidden="true">` +
+    `<circle class="atlas-dataset-disc" cx="${f1(cx)}" cy="${f1(cy)}" r="8.4" stroke="${color}"/>` +
+    `<circle class="atlas-dataset-ring" cx="${f1(cx)}" cy="${f1(cy)}" r="6.7"/>` +
+    datasetPlates(cx, cy, color) +
+    `</g>`;
 }
 
 // crebain's wordmark flag: a clean, crisp German flag chip: three bands in rich
@@ -1936,17 +1949,20 @@ export function nodeMark(n) {
   if (n.kind === "cobot") {
     // cobot-atlas: THE KINEMATIC ATLAS CELL — a compact industrial-robot workcell,
     // not a generic globe. A blue-chrome octagonal metrology plate carries an
-    // articulated three-servo arm, encoder ticks, motion envelopes and one gold
-    // wireframe mesh voxel. The arm runs a restrained inspect / present / return
-    // cycle with genuinely nested shoulder, elbow and wrist rotations; the
-    // gripper opens only while the arm is away, then closes around the specimen.
-    // A white telemetry pulse follows the kinematic chain while the calibration
-    // arc scans. The static first frame is the completed, grasp-ready instrument,
-    // so librsvg and reduced-motion still communicate robotics + mesh dataset.
+    // articulated three-servo arm, encoder ticks, motion envelopes and one neutral
+    // mesh voxel. The arm now runs a complete, contact-correct manipulation loop:
+    // hover -> grasp at source -> lift -> traverse -> place on desk -> release ->
+    // re-grasp -> lift -> return -> release -> hover. Three mutually exclusive
+    // specimen instances (source-fixed, wrist-carried, desk-fixed) hand off at the
+    // exact contact keyframes, so the payload is physically attached while moving
+    // and exactly seated while released. Wrist counter-rotation keeps it upright.
+    // The static first frame is a completed pick-ready cell with the specimen on
+    // its source pad and the gripper hovering, so reduced-motion remains truthful.
+    // A shared stacked-plates dataset badge sits OUTSIDE the top-left border.
     // Theme-FIXED (a physical object); label and outer hairline alone adapt.
     const cx = n.x, cy = n.y;
     const R = 40;
-    const CYC = "7.2s";
+    const CYC = "14.4s"; // exactly two 7.2s atlas instrument cadences
     const X = (dx) => f1(cx + dx);
     const Y = (dy) => f1(cy + dy);
     const P = (dx, dy) => `${X(dx)},${Y(dy)}`;
@@ -1963,16 +1979,55 @@ export function nodeMark(n) {
       const outer = 38.2;
       return `<line class="cba-tick" x1="${X(inner * Math.cos(a))}" y1="${Y(inner * Math.sin(a))}" x2="${X(outer * Math.cos(a))}" y2="${Y(outer * Math.sin(a))}"/>`;
     }).join("");
-    // Arm pivots: shoulder S -> elbow E -> wrist W -> tool centre T.
+    // Arm pivots: shoulder S -> elbow E -> wrist W -> tool centre T. Every pose
+    // keeps q1+q2+q3=0, preserving a vertical gripper/payload. The selected poses
+    // put the grasp point at source (22,18), carry it through three collision-
+    // clearing waypoints, and seat it on the raised desk at (6,-2). The voxel's
+    // bottom is y=30 locally, so desk contact translates it (-16,-20) onto y=10.
     const S = [-18, 15], E = [-1, -8], WJ = [20, -2], T = [22, 11];
-    const motionTimes = "0;0.15;0.38;0.62;0.84;1";
-    const telemetryPath = `M${P(...S)} L${P(...E)} L${P(...WJ)} L${P(...T)}`;
-    const specimen = `<g class="cba-specimen">
+    const poseTimes = "0;0.04;0.10;0.15;0.21;0.28;0.35;0.41;0.46;0.51;0.56;0.61;0.66;0.71;0.77;0.84;0.89;0.93;0.96;0.975;1";
+    const armPose = {
+      H:  [-2.05,-12.34,14.39], // source hover
+      S:  [0,0,0],              // source contact
+      L1: [-1.33,-24.13,25.46], // first lift
+      L2: [4.54,-58.39,53.85],  // high clearance
+      M:  [-9.99,-43.81,53.80], // transfer midpoint
+      DH: [-26.15,-29.19,55.34],// desk hover
+      DC: [-32.73,-6.01,38.74], // desk contact
+    };
+    const poses = [
+      armPose.H, armPose.H, armPose.S, armPose.S, armPose.L1, armPose.L2,
+      armPose.M, armPose.DH, armPose.DC, armPose.DC, armPose.DH, armPose.DH,
+      armPose.DC, armPose.DC, armPose.DH, armPose.M, armPose.L2, armPose.L1,
+      armPose.S, armPose.S, armPose.H,
+    ];
+    const poseSplines = Array(poses.length - 1).fill("0.42 0 0.2 1").join(";");
+    const jointValues = (index, pivot) => poses
+      .map((pose) => `${pose[index]} ${X(pivot[0])} ${Y(pivot[1])}`).join(";");
+    const leftFinger = "-2 0;-2 0;-2 0;0 0;0 0;0 0;0 0;0 0;0 0;-2 0;-2 0;-2 0;-2 0;0 0;0 0;0 0;0 0;0 0;0 0;-2 0;-2 0";
+    const rightFinger = "2 0;2 0;2 0;0 0;0 0;0 0;0 0;0 0;0 0;2 0;2 0;2 0;2 0;0 0;0 0;0 0;0 0;0 0;0 0;2 0;2 0";
+    const opacityAnim = (values, keyTimes) =>
+      `<animate attributeName="opacity" values="${values}" keyTimes="${keyTimes}" calcMode="discrete" dur="${CYC}" repeatCount="indefinite"/>`;
+    const specimen = (className, opacity, motion = "", transform = "") => `<g class="cba-specimen ${className}" opacity="${opacity}"${transform ? ` transform="${transform}"` : ""}>
+      ${motion}
       <polygon class="cba-voxel-top" points="${P(22,18)} ${P(27,21)} ${P(22,24)} ${P(17,21)}"/>
       <polygon class="cba-voxel-left" points="${P(17,21)} ${P(22,24)} ${P(22,30)} ${P(17,27)}"/>
       <polygon class="cba-voxel-right" points="${P(22,24)} ${P(27,21)} ${P(27,27)} ${P(22,30)}"/>
       <path class="cba-voxel-mesh" d="M${P(19.5,19.5)}L${P(24.5,22.5)}M${P(19.5,22.5)}L${P(24.5,19.5)}M${P(22,24)}V${Y(30)}"/>
     </g>`;
+    const sourceSpecimen = specimen(
+      "cba-specimen-source", 1,
+      opacityAnim("1;0;1;1", "0;0.15;0.975;1"),
+    );
+    const deskSpecimen = specimen(
+      "cba-specimen-desk", 0,
+      opacityAnim("0;1;0;0", "0;0.51;0.71;1"),
+      "translate(-16 -20)",
+    );
+    const carriedSpecimen = specimen(
+      "cba-specimen-carried", 0,
+      opacityAnim("0;1;0;1;0;0", "0;0.15;0.51;0.71;0.975;1"),
+    );
     return `<g>
     <defs>
       <linearGradient id="cbaPlate" x1="0" y1="${Y(-R)}" x2="0" y2="${Y(R)}" gradientUnits="userSpaceOnUse">
@@ -2002,92 +2057,104 @@ export function nodeMark(n) {
     </g>
     ${ticks}
     <path class="cba-base" d="M${P(-28,30)}H${X(-8)}L${X(-11)} ${Y(20)}H${X(-25)}Z"/>
-    ${specimen}
+    <path class="cba-desk-top" d="M${P(-6,10)}H${X(12)}L${X(10)} ${Y(13)}H${X(-3)}Z"/>
+    <path class="cba-desk-apron" d="M${P(-3,13)}H${X(10.5)}V${Y(15)}H${X(-3)}Z"/>
+    <path class="cba-desk-leg" d="M${P(-1.5,15)}H${X(1)}V${Y(25)}H${X(-1.5)}ZM${P(8,15)}H${X(10.5)}V${Y(25)}H${X(8)}Z M${P(-2,23)}H${X(11)}V${Y(25)}H${X(-2)}Z"/>
+    <path class="cba-source-pad" d="M${P(16,30)}H${X(28)}L${X(26)} ${Y(33)}H${X(18)}Z"/>
+    <circle class="cba-contact" cx="${X(6)}" cy="${Y(4)}" r="10" opacity="0">
+      <animate attributeName="opacity" values="0;0;0.8;0;0" keyTimes="0;0.49;0.51;0.55;1" dur="${CYC}" repeatCount="indefinite"/>
+    </circle>
+    <circle class="cba-contact" cx="${X(22)}" cy="${Y(24)}" r="10" opacity="0">
+      <animate attributeName="opacity" values="0;0;0.8;0;0" keyTimes="0;0.96;0.975;0.995;1" dur="${CYC}" repeatCount="indefinite"/>
+    </circle>
+    ${sourceSpecimen}
+    ${deskSpecimen}
     <g class="cba-arm">
-      <g>
-        <animateTransform attributeName="transform" type="rotate" values="0 ${X(S[0])} ${Y(S[1])};0 ${X(S[0])} ${Y(S[1])};-7 ${X(S[0])} ${Y(S[1])};9 ${X(S[0])} ${Y(S[1])};0 ${X(S[0])} ${Y(S[1])};0 ${X(S[0])} ${Y(S[1])}" keyTimes="${motionTimes}" calcMode="spline" keySplines="0 0 1 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0 0 1 1" dur="${CYC}" repeatCount="indefinite"/>
+      <g class="cba-joint cba-shoulder" transform="rotate(-2.05 ${X(S[0])} ${Y(S[1])})">
+        <animateTransform attributeName="transform" type="rotate" values="${jointValues(0,S)}" keyTimes="${poseTimes}" calcMode="spline" keySplines="${poseSplines}" dur="${CYC}" repeatCount="indefinite"/>
         <polygon class="cba-link-a" points="${P(-15.1,17.1)} ${P(1.9,-5.9)} ${P(-3.9,-10.1)} ${P(-20.9,12.9)}"/>
         <path class="cba-link-rail" d="M${P(...S)}L${P(...E)}"/>
         <circle class="cba-servo" cx="${X(S[0])}" cy="${Y(S[1])}" r="7.4"/>
         <circle class="cba-encoder" cx="${X(S[0])}" cy="${Y(S[1])}" r="5.2"/>
         <circle class="cba-servo-hot" cx="${X(S[0])}" cy="${Y(S[1])}" r="2"/>
-        <g>
-          <animateTransform attributeName="transform" type="rotate" values="0 ${X(E[0])} ${Y(E[1])};0 ${X(E[0])} ${Y(E[1])};16 ${X(E[0])} ${Y(E[1])};-12 ${X(E[0])} ${Y(E[1])};0 ${X(E[0])} ${Y(E[1])};0 ${X(E[0])} ${Y(E[1])}" keyTimes="${motionTimes}" calcMode="spline" keySplines="0 0 1 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0 0 1 1" dur="${CYC}" repeatCount="indefinite"/>
+        <g class="cba-joint cba-elbow" transform="rotate(-12.34 ${X(E[0])} ${Y(E[1])})">
+          <animateTransform attributeName="transform" type="rotate" values="${jointValues(1,E)}" keyTimes="${poseTimes}" calcMode="spline" keySplines="${poseSplines}" dur="${CYC}" repeatCount="indefinite"/>
           <polygon class="cba-link-b" points="${P(-1.9,-4.9)} ${P(19.1,1.1)} ${P(20.9,-5.1)} ${P(-0.1,-11.1)}"/>
           <path class="cba-link-rail" d="M${P(...E)}L${P(...WJ)}"/>
           <circle class="cba-servo cba-servo-small" cx="${X(E[0])}" cy="${Y(E[1])}" r="6.2"/>
           <circle class="cba-encoder" cx="${X(E[0])}" cy="${Y(E[1])}" r="4.1"/>
           <circle class="cba-servo-hot" cx="${X(E[0])}" cy="${Y(E[1])}" r="1.65"/>
-          <g>
-            <animateTransform attributeName="transform" type="rotate" values="0 ${X(WJ[0])} ${Y(WJ[1])};0 ${X(WJ[0])} ${Y(WJ[1])};-12 ${X(WJ[0])} ${Y(WJ[1])};14 ${X(WJ[0])} ${Y(WJ[1])};0 ${X(WJ[0])} ${Y(WJ[1])};0 ${X(WJ[0])} ${Y(WJ[1])}" keyTimes="${motionTimes}" calcMode="spline" keySplines="0 0 1 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0 0 1 1" dur="${CYC}" repeatCount="indefinite"/>
+          <g class="cba-joint cba-wrist-joint" transform="rotate(14.39 ${X(WJ[0])} ${Y(WJ[1])})">
+            <animateTransform attributeName="transform" type="rotate" values="${jointValues(2,WJ)}" keyTimes="${poseTimes}" calcMode="spline" keySplines="${poseSplines}" dur="${CYC}" repeatCount="indefinite"/>
             <path class="cba-tool" d="M${P(...WJ)}L${P(...T)}"/>
             <circle class="cba-servo cba-wrist" cx="${X(WJ[0])}" cy="${Y(WJ[1])}" r="4.7"/>
             <circle class="cba-servo-hot" cx="${X(WJ[0])}" cy="${Y(WJ[1])}" r="1.4"/>
+            ${carriedSpecimen}
             <path class="cba-palm" d="M${X(17.5)} ${Y(10.5)}H${X(26.5)}"/>
-            <g class="cba-finger">
-              <animateTransform attributeName="transform" type="translate" values="0 0;0 0;-2 0;-2 0;0 0;0 0" keyTimes="${motionTimes}" dur="${CYC}" repeatCount="indefinite"/>
+            <g class="cba-finger" transform="translate(-2 0)">
+              <animateTransform attributeName="transform" type="translate" values="${leftFinger}" keyTimes="${poseTimes}" calcMode="spline" keySplines="${poseSplines}" dur="${CYC}" repeatCount="indefinite"/>
               <path d="M${P(19,10)}L${P(16.5,18)}L${P(19,20)}"/>
             </g>
-            <g class="cba-finger">
-              <animateTransform attributeName="transform" type="translate" values="0 0;0 0;2 0;2 0;0 0;0 0" keyTimes="${motionTimes}" dur="${CYC}" repeatCount="indefinite"/>
+            <g class="cba-finger" transform="translate(2 0)">
+              <animateTransform attributeName="transform" type="translate" values="${rightFinger}" keyTimes="${poseTimes}" calcMode="spline" keySplines="${poseSplines}" dur="${CYC}" repeatCount="indefinite"/>
               <path d="M${P(25,10)}L${P(27.5,18)}L${P(25,20)}"/>
             </g>
           </g>
         </g>
       </g>
     </g>
-    <path class="cba-telemetry" d="${telemetryPath}" opacity="0" stroke-dasharray="2 15" stroke-dashoffset="17">
-      <animate attributeName="stroke-dashoffset" values="17;17;0;0" keyTimes="0;0.12;0.34;1" dur="${CYC}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;0.95;0.95;0;0" keyTimes="0;0.1;0.14;0.3;0.38;1" dur="${CYC}" repeatCount="indefinite"/>
-    </path>
-    <circle class="cba-commit" cx="${X(22)}" cy="${Y(23)}" r="12" opacity="0">
-      <animate attributeName="opacity" values="0;0;0.78;0;0" keyTimes="0;0.82;0.86;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
-    </circle>
-    ${datasetPlates(cx - 27, cy - 21, n.color)}
+    ${atlasDatasetBadge(cx - 46, cy - 37, n.color)}
     <text x="${f1(cx)}" y="${f1(cy - R - 12)}" text-anchor="middle" class="cba-label">${escapeXML(n.label)}</text>
   </g>`;
   }
 
   if (n.kind === "relief") {
-    // relief-atlas: THE MANIFEST RELIEF ENGINE — a rose-metal cartographic
-    // instrument for a prompt/catalog-to-3D-asset pipeline, not an aid-agency
-    // badge and not a completion meter. Four neutral west-side inlet ports stand
-    // for the four geography manifests; engraved terrain contours converge on an
-    // intentionally irregular six-face mesh; one east-side rhombus is the public
-    // output subset. The mark avoids protected Red Cross / Red Crescent symbols,
-    // flags, victims, alarms, seals and certification cues. Motion is one calm,
-    // causal 7.2s pass: index the inputs, trace the contour route, resolve the mesh,
-    // release one token, then rest. Base geometry is already complete, so static
-    // renderers and reduced-motion users see the finished, truthful instrument.
+    // relief-atlas: THE INDEXED RELIEF CORPUS — a rose-metal contact sheet of
+    // heterogeneous 3-D relief records, not an ETL/generation pipeline and not a
+    // completion meter. Six permanently visible sample cards plus two rear catalog
+    // sheets communicate plurality, organization and collection depth. Their varied
+    // wireframes communicate mesh content; terrain contours preserve the relief
+    // domain. One calm focus bracket BROWSES existing records and returns to the
+    // first—nothing is manufactured, released, approved or marked complete. This
+    // remains truthful to a 10,079-item manifest/prompt catalog with 125 public GLBs
+    // and no recorded asset-level licenses, without encoding a misleading ratio.
+    // The shared dataset badge is taxonomy chrome OUTSIDE the top-left border.
+    // No crosses, crescents, victims, flags, alarms, seals or certification cues.
     const cx = n.x, cy = n.y;
-    const CYC = "7.2s";
+    const CYC = "8.4s";
     const X = (dx) => f1(cx + dx);
     const Y = (dy) => f1(cy + dy);
     const P = (dx, dy) => `${X(dx)},${Y(dy)}`;
     const platePath = (s = 1) =>
       `M${P(-24*s,-40*s)} L${P(24*s,-40*s)} L${P(40*s,-24*s)} L${P(40*s,24*s)} ` +
       `L${P(24*s,40*s)} L${P(-24*s,40*s)} L${P(-40*s,24*s)} L${P(-40*s,-24*s)} Z`;
-    const ports = [[-31,-20],[-34,-7],[-34,7],[-31,20]];
-    const targets = [[-9,-10],[-11,-3],[-11,5],[-8,12]];
-    const inletEls = ports.map(([px, py], i) =>
-      `<path class="rfa-inlet" d="M${P(px,py)} C${P(-23,py)} ${P(-17,targets[i][1])} ${P(...targets[i])}"/>` +
-      `<circle class="rfa-port" cx="${X(px)}" cy="${Y(py)}" r="3"/>` +
-      `<circle class="rfa-port-core" cx="${X(px)}" cy="${Y(py)}" r="1"/>`
+    const sheetPath = (dx = 0, dy = 0) =>
+      `M${P(-24+dx,-20+dy)} H${X(20+dx)} L${P(25+dx,-15+dy)} V${Y(21+dy)} H${X(-24+dx)} Z`;
+    const records = [
+      [-16,-9,"cube"], [0,-9,"pyramid"], [16,-9,"cylinder"],
+      [-16,10,"arch"], [0,10,"terrain"], [16,10,"crate"],
+    ];
+    const glyphs = {
+      cube: "M0 -4 L4 -2 L4 3 L0 5 L-4 3 L-4 -2 Z M-4 -2 L0 0 L4 -2 M0 0 V5",
+      pyramid: "M0 -4 L5 3 L-5 3 Z M0 -4 V1 M-5 3 L0 1 L5 3",
+      cylinder: "M-4 -2 C-4 -4 4 -4 4 -2 V3 C4 5 -4 5 -4 3 Z M-4 -2 C-4 0 4 0 4 -2",
+      arch: "M-5 4 V0 C-5 -5 5 -5 5 0 V4 H2 V0 C2 -1 -2 -1 -2 0 V4 Z",
+      terrain: "M-5 3 L-3 -3 L4 -2 L5 4 Z M-3 -3 L0 1 L4 -2 M0 1 L5 4 M0 1 L-5 3",
+      crate: "M-5 -4 H3 V2 H-5 Z M-3 -2 H5 V4 H-3 Z M-3 -2 L1 1 L5 -2 M1 1 V4",
+    };
+    const recordEls = records.map(([rx, ry, kind], i) =>
+      `<g class="rfa-record-group rfa-record-${i}" transform="translate(${X(rx)} ${Y(ry)})">` +
+        `<rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/>` +
+        `<path class="rfa-sample" d="${glyphs[kind]}"/>` +
+      `</g>`
     ).join("");
-    // The center is deliberately off-axis and the perimeter non-radial: this
-    // should read as resolved terrain, never as a symmetric gemstone.
-    const A=[-13,-12], B=[4,-18], C=[18,-7], D=[11,13], E=[-5,19], F=[-17,5], O=[-2,4];
-    const verts=[A,B,C,D,E,F];
-    const faces=verts.map((v,i)=>
-      `<polygon class="rfa-face rfa-face-${i}" points="${P(...O)} ${P(...v)} ${P(...verts[(i+1)%verts.length])}"/>`
-    ).join("");
-    const meshPath = `M${P(...A)} L${P(...B)} L${P(...C)} L${P(...D)} L${P(...E)} L${P(...F)} Z ` +
-      verts.map(v=>`M${P(...O)} L${P(...v)}`).join(" ");
-    const route = `M${P(-31,-20)} C${P(-19,-20)} ${P(-16,-10)} ${P(-9,-10)} ` +
-      `C${P(-3,-8)} ${P(-5,-1)} ${P(...O)} L${P(...C)} H${X(31)}`;
-    const scanX = [-31,-34,-34,-31,O[0],31,31].map(X).join(";");
-    const scanY = [-20,-7,7,20,O[1],-2,-2].map(Y).join(";");
-    const scanTimes = "0;0.1;0.2;0.3;0.5;0.7;1";
+    const indexTicks = Array.from({ length: 9 }, (_, i) => {
+      const tx = -24 + i * 6;
+      const h = i % 4 === 0 ? 3 : 2;
+      return `<line class="rfa-index-tick" x1="${X(tx)}" y1="${Y(-25-h/2)}" x2="${X(tx)}" y2="${Y(-25+h/2)}"/>`;
+    }).join("");
+    const focusOrder = [records[0],records[1],records[2],records[5],records[4],records[3],records[0]];
+    const focusSequence = focusOrder.map(([rx, ry]) => `${X(rx)} ${Y(ry)}`).join(";");
     return `<g>
     <defs>
       <linearGradient id="rfaPlate" x1="0" y1="${Y(-40)}" x2="0" y2="${Y(40)}" gradientUnits="userSpaceOnUse">
@@ -2104,34 +2171,22 @@ export function nodeMark(n) {
     <path class="rfa-groove" d="${platePath(0.925)}"/>
     <path class="rfa-hairline" d="${platePath(1.035)}"/>
     <g clip-path="url(#rfaClip)">
-      <path class="rfa-contour rfa-contour-a" d="M${P(-29,-10)} C${P(-21,-23)} ${P(-7,-23)} ${P(3,-13)} C${P(11,-6)} ${P(9,2)} ${P(18,7)}"/>
-      <path class="rfa-contour" d="M${P(-30,4)} C${P(-19,-6)} ${P(-8,-4)} ${P(-1,5)} C${P(6,13)} ${P(15,14)} ${P(25,8)}"/>
-      <path class="rfa-contour" d="M${P(-24,18)} C${P(-13,9)} ${P(-4,12)} ${P(2,20)} C${P(8,27)} ${P(18,26)} ${P(27,20)}"/>
-      ${inletEls}
-      <path class="rfa-route" d="${route}"/>
-      ${faces}
-      <path class="rfa-surface-contour" d="M${P(-12,1)} C${P(-6,-4)} ${P(2,-3)} ${P(8,1)} C${P(12,4)} ${P(13,7)} ${P(11,10)}"/>
-      <path class="rfa-mesh-edge" d="${meshPath}"/>
-      <path class="rfa-release" d="M${P(15,-5)} H${X(34)} M${P(16,-1)} H${X(34)}"/>
-      <polygon class="rfa-output" points="${P(31,-7)} ${P(36,-2)} ${P(31,3)} ${P(26,-2)}"/>
-      <circle class="rfa-output-core" cx="${X(31)}" cy="${Y(-2)}" r="1.25"/>
-      <path class="rfa-tracer" d="${route}" stroke-dasharray="8 80" stroke-dashoffset="88" opacity="0">
-        <animate attributeName="stroke-dashoffset" values="88;88;0;0" keyTimes="0;0.28;0.62;1" dur="${CYC}" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.26;0.3;0.62;0.7;1" dur="${CYC}" repeatCount="indefinite"/>
-      </path>
-      <path class="rfa-mesh-lit" d="${meshPath}" opacity="0">
-        <animate attributeName="opacity" values="0;0;0.92;0.18;0" keyTimes="0;0.44;0.58;0.72;1" dur="${CYC}" repeatCount="indefinite"/>
-      </path>
-      <circle class="rfa-scan" cx="${X(-31)}" cy="${Y(-20)}" r="1.7" opacity="0">
-        <animate attributeName="cx" values="${scanX}" keyTimes="${scanTimes}" dur="${CYC}" repeatCount="indefinite"/>
-        <animate attributeName="cy" values="${scanY}" keyTimes="${scanTimes}" dur="${CYC}" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0;1;1;1;1;0;0" keyTimes="${scanTimes}" dur="${CYC}" repeatCount="indefinite"/>
-      </circle>
-      <polygon class="rfa-token" points="${P(31,-7)} ${P(36,-2)} ${P(31,3)} ${P(26,-2)}" opacity="0">
-        <animateTransform attributeName="transform" type="translate" values="-14 0;-14 0;0 0;0 0" keyTimes="0;0.55;0.72;1" dur="${CYC}" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.54;0.66;0.78;1" dur="${CYC}" repeatCount="indefinite"/>
-      </polygon>
+      <path class="rfa-contour rfa-contour-a" d="M${P(-31,-13)} C${P(-22,-27)} ${P(-5,-29)} ${P(7,-17)} C${P(17,-8)} ${P(12,1)} ${P(27,8)}"/>
+      <path class="rfa-contour" d="M${P(-33,4)} C${P(-20,-8)} ${P(-7,-6)} ${P(1,5)} C${P(10,17)} ${P(22,17)} ${P(31,8)}"/>
+      <path class="rfa-contour" d="M${P(-27,22)} C${P(-15,12)} ${P(-5,16)} ${P(2,25)} C${P(10,34)} ${P(23,31)} ${P(31,23)}"/>
+      <path class="rfa-sheet-back" d="${sheetPath(-3,3)}"/>
+      <path class="rfa-sheet-mid" d="${sheetPath(-1.5,1.5)}"/>
+      <path class="rfa-sheet-front" d="${sheetPath()}"/>
+      <path class="rfa-index-rail" d="M${P(-24,-25)}H${X(24)}"/>
+      ${indexTicks}
+      ${recordEls}
+      <g class="rfa-focus" transform="translate(${X(-16)} ${Y(-9)})" opacity="0.72">
+        <animateTransform attributeName="transform" type="translate" values="${focusSequence}" keyTimes="0;0.16;0.32;0.48;0.64;0.80;1" calcMode="linear" dur="${CYC}" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.48;0.95;0.48;0.95;0.48" keyTimes="0;0.25;0.5;0.75;1" dur="${CYC}" repeatCount="indefinite"/>
+        <path d="M-6 -7H-3 M-6 -7V-4 M6 -7H3 M6 -7V-4 M-6 7H-3 M-6 7V4 M6 7H3 M6 7V4"/>
+      </g>
     </g>
+    ${atlasDatasetBadge(cx - 46, cy - 37, n.color)}
     <text x="${cx}" y="${f1(cy + 55)}" text-anchor="middle" class="rfa-label">${escapeXML(n.label)}</text>
   </g>`;
   }
@@ -2171,7 +2226,7 @@ const frame = `<g class="frame">
 // Assemble.
 // ---------------------------------------------------------------------------
 const aria =
-  "Conceptual standalone-first ecosystem map. Optional NCP role paths connect Engram as separate simulation responder or direct command proposer, CREBAIN as sole body and final software actuator admission authority, Haldir as gated command proposer, and Galadriel and Prisoma as read-only observers. Every command is only a proposal until CREBAIN independently admits it under a current session and bounded body-authority lease. In gated mode Engram sends Haldir-local signed intent that carries no NCP authority; Haldir independently creates and authorizes a new NCP command. A separate default-off Galadriel-Haldir edge carries deny-only assessment and authenticated disposition; its absence can never grant authority. Separately declared out-of-band CREBAIN telemetry may feed Galadriel. pid-rs is a protocol-neutral in-process library with no wire role, used optionally by Galadriel and Prisoma; Cortexel is a one-way labelled Engram export sink with no control path. Manwe, Melkor and atlas connections are research, tooling or data inputs, not control paths. The relief-atlas release token denotes a public subset, not a complete 10,079-mesh corpus or licensing approval. NCP 1.0 is an unreleased, release-blocked candidate; no line claims production deployment or qualification.";
+  "Conceptual standalone-first ecosystem map. Optional NCP role paths connect Engram as separate simulation responder or direct command proposer, CREBAIN as sole body and final software actuator admission authority, Haldir as gated command proposer, and Galadriel and Prisoma as read-only observers. Every command is only a proposal until CREBAIN independently admits it under a current session and bounded body-authority lease. In gated mode Engram sends Haldir-local signed intent that carries no NCP authority; Haldir independently creates and authorizes a new NCP command. A separate default-off Galadriel-Haldir edge carries deny-only assessment and authenticated disposition; its absence can never grant authority. Separately declared out-of-band CREBAIN telemetry may feed Galadriel. pid-rs is a protocol-neutral in-process library with no wire role, used optionally by Galadriel and Prisoma; Cortexel is a one-way labelled Engram export sink with no control path. Manwe, Melkor and atlas connections are research, tooling or data inputs, not control paths. Stacked-layer badges outside COBOT-ATLAS and RELIEF-ATLAS identify them as datasets. COBOT-ATLAS shows a conserved robotic pick, desk placement and return loop. RELIEF-ATLAS shows an indexed contact sheet of varied 3-D mesh records over terrain contours. It represents a 10,079-item manifest and prompt catalog with 125 public GLBs; it does not imply a complete 10,079-mesh corpus, publication completion or asset-level licensing approval. NCP 1.0 is an unreleased, release-blocked candidate; no line claims production deployment or qualification.";
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
   <defs>
@@ -2392,6 +2447,10 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .cba-envelope    { fill: none; stroke: #60a5fa; stroke-width: 1; stroke-opacity: 0.45; stroke-linecap: round; }
     .cba-envelope-soft { stroke: #8be7f2; stroke-opacity: 0.16; stroke-dasharray: 1 5; }
     .cba-base        { fill: #091827; stroke: #60a5fa; stroke-width: 1.1; stroke-linejoin: round; }
+    .cba-desk-top    { fill: #173c66; stroke: #9cecf4; stroke-width: 0.8; stroke-linejoin: round; }
+    .cba-desk-apron  { fill: #0b2038; stroke: #60a5fa; stroke-width: 0.65; }
+    .cba-desk-leg    { fill: #091827; stroke: #60a5fa; stroke-width: 0.7; stroke-linejoin: round; }
+    .cba-source-pad  { fill: #102842; stroke: #7dd3fc; stroke-width: 0.75; stroke-linejoin: round; }
     .cba-link-a      { fill: url(#cbaArmA); stroke: #9cecf4; stroke-width: 0.8; stroke-linejoin: round; }
     .cba-link-b      { fill: url(#cbaArmB); stroke: #9cecf4; stroke-width: 0.8; stroke-linejoin: round; }
     .cba-link-rail   { fill: none; stroke: #d7fbff; stroke-opacity: 0.58; stroke-width: 0.8; stroke-linecap: round; }
@@ -2405,36 +2464,25 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .cba-voxel-left  { fill: #cbd5e1; stroke: #e2faff; stroke-width: 0.8; stroke-linejoin: round; }
     .cba-voxel-right { fill: #64748b; stroke: #bfdbfe; stroke-width: 0.8; stroke-linejoin: round; }
     .cba-voxel-mesh  { fill: none; stroke: #ffffff; stroke-width: 0.5; stroke-opacity: 0.78; }
-    .cba-telemetry   { fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: round; filter: url(#edgeGlow); }
-    .cba-commit      { fill: none; stroke: #d7fbff; stroke-width: 1.2; }
+    .cba-contact     { fill: none; stroke: #d7fbff; stroke-width: 1.1; }
+    .atlas-dataset-disc { fill: #07111d; stroke-width: 1.35; }
+    .atlas-dataset-ring { fill: none; stroke: #f8fafc; stroke-width: 0.65; stroke-opacity: 0.3; }
     .rfa-label       { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fda4af; }
     .rfa-glow        { fill: none; stroke: #fda4af; stroke-width: 2; stroke-opacity: 0.12; stroke-linejoin: round; }
     .rfa-plate       { fill: url(#rfaPlate); }
     .rfa-bezel       { fill: none; stroke: url(#rfaBezel); stroke-width: 2.4; stroke-linejoin: round; }
     .rfa-groove      { fill: none; stroke: #05070b; stroke-opacity: 0.7; stroke-width: 1; stroke-linejoin: round; }
     .rfa-hairline    { fill: none; stroke: #2b333d; stroke-opacity: 0.58; stroke-width: 1; stroke-linejoin: round; }
-    .rfa-contour     { fill: none; stroke: #fda4af; stroke-width: 0.8; stroke-opacity: 0.24; stroke-linecap: round; }
-    .rfa-contour-a   { stroke-opacity: 0.34; }
-    .rfa-inlet       { fill: none; stroke: #fb7185; stroke-width: 0.85; stroke-opacity: 0.5; stroke-linecap: round; }
-    .rfa-port        { fill: #2a0a12; stroke: #fda4af; stroke-width: 1; }
-    .rfa-port-core   { fill: #fff1f2; }
-    .rfa-route       { fill: none; stroke: #fda4af; stroke-width: 1; stroke-opacity: 0.28; stroke-linecap: round; stroke-linejoin: round; }
-    .rfa-face        { stroke: #fda4af; stroke-width: 0.45; stroke-opacity: 0.42; stroke-linejoin: round; }
-    .rfa-face-0      { fill: #6b0928; }
-    .rfa-face-1      { fill: #9f1239; }
-    .rfa-face-2      { fill: #881337; }
-    .rfa-face-3      { fill: #3b0715; }
-    .rfa-face-4      { fill: #500724; }
-    .rfa-face-5      { fill: #be123c; }
-    .rfa-surface-contour { fill: none; stroke: #fecdd3; stroke-width: 0.55; stroke-opacity: 0.35; stroke-linecap: round; }
-    .rfa-mesh-edge   { fill: none; stroke: #ffe4e6; stroke-width: 0.75; stroke-opacity: 0.68; stroke-linejoin: round; }
-    .rfa-release     { fill: none; stroke: #fda4af; stroke-width: 0.85; stroke-opacity: 0.72; stroke-linecap: round; }
-    .rfa-output      { fill: #ffe4e6; stroke: #fb7185; stroke-width: 0.8; stroke-linejoin: round; }
-    .rfa-output-core { fill: #9f1239; }
-    .rfa-tracer      { fill: none; stroke: #fff1f2; stroke-width: 1.7; stroke-linecap: round; filter: url(#edgeGlow); }
-    .rfa-mesh-lit    { fill: none; stroke: #fff1f2; stroke-width: 1.4; stroke-linejoin: round; filter: url(#edgeGlow); }
-    .rfa-scan        { fill: #fff1f2; filter: url(#edgeGlow); }
-    .rfa-token       { fill: #fff1f2; stroke: #ffffff; stroke-width: 0.8; stroke-linejoin: round; filter: url(#edgeGlow); }
+    .rfa-contour     { fill: none; stroke: #fda4af; stroke-width: 0.65; stroke-opacity: 0.15; stroke-linecap: round; }
+    .rfa-contour-a   { stroke-opacity: 0.19; }
+    .rfa-sheet-back  { fill: #12070b; stroke: #881337; stroke-width: 0.75; stroke-opacity: 0.75; }
+    .rfa-sheet-mid   { fill: #260810; stroke: #be123c; stroke-width: 0.75; stroke-opacity: 0.68; }
+    .rfa-sheet-front { fill: #3a0a17; stroke: #fda4af; stroke-width: 0.8; stroke-opacity: 0.62; }
+    .rfa-index-rail  { fill: none; stroke: #fb7185; stroke-width: 0.7; stroke-opacity: 0.48; stroke-linecap: round; }
+    .rfa-index-tick  { stroke: #fecdd3; stroke-width: 0.7; stroke-opacity: 0.6; stroke-linecap: round; }
+    .rfa-record      { fill: #17070c; fill-opacity: 0.94; stroke: #fda4af; stroke-width: 0.8; stroke-opacity: 0.62; }
+    .rfa-sample      { fill: none; stroke: #ffe4e6; stroke-width: 0.75; stroke-opacity: 0.88; stroke-linecap: round; stroke-linejoin: round; }
+    .rfa-focus       { fill: none; stroke: #fff1f2; stroke-width: 1.05; stroke-linecap: round; filter: url(#edgeGlow); }
     .wg-rule    { stroke: #30363d; stroke-width: 1; stroke-opacity: 0.55; }
     .wg-bracket { fill: none; stroke: #fbbf24; stroke-width: 1.5; stroke-linecap: round; stroke-opacity: 0.85; }
     .panel      { fill: #ffffff; fill-opacity: 0.022; stroke: #ffffff; stroke-opacity: 0.07; }
