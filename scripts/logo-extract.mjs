@@ -27,6 +27,7 @@ const SPEC = {
   engram:   { half: 54 }, // medallion scaled to radius ~46 + bezel/shadow
   haldir:   { half: 46 },
   prisoma:  { half: 52, dy: -9 }, // apex-heavy triangle (hairline -55.8, base+shadow ~+38): recentre on the visual midpoint
+  cobotatlas: { half: 49 }, // kinematic cell: octagon r40 + soft bezel/glow
 };
 
 // Remove a whole <g class="cls">...</g> group (balanced, handles nesting).

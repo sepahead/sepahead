@@ -20,8 +20,9 @@
 // prisoma a smoked-glass prism with liquid-silver edges dispersing one beam
 // into the three PID components; melkor an obsidian forge plate whose black
 // massif wears an uneven tactical survey mesh; manwe a lens barrel whose six-blade
-// iris frames a quadcopter caught in lock-on brackets; galadriel the sentinel
-// shield; pid-rs a crisp instrument dial. The whole panel is wrapped in a
+// iris frames a quadcopter caught in lock-on brackets; cobot-atlas a blue-chrome
+// kinematic cell whose articulated arm inspects a mesh voxel; galadriel the
+// sentinel shield; pid-rs a crisp instrument dial. The whole panel is wrapped in a
 // "provenance instrument" frame (amber corner brackets).
 // Theme-adaptive (prefers-color-scheme), reduced-motion safe. Zero deps.
 // Run: `node scripts/work-graph.mjs`.
@@ -1924,75 +1925,123 @@ export function nodeMark(n) {
   </g>`;
   }
   if (n.kind === "cobot") {
-    // cobot-atlas: THE ATLAS ORB — the project's own globe mark (a lit blue
-    // sphere with its meridian web, three dark survey nodes, a white route and
-    // three gold stations) drawn in the CV's cobot-atlas palette on a machined
-    // chrome-blue seat. Theme-FIXED (a real object); only the label ink and the
-    // outer hairline adapt. Motion: the meridian web turns slowly (the globe
-    // rotating), a white-hot packet travels the route from the base pill through
-    // the three gold stations to the junction (a data traversal across the
-    // atlas), each station pings as the packet lands, and the rim halo breathes.
-    // librsvg / reduced-motion hold the finished still: route full, stations lit.
+    // cobot-atlas: THE KINEMATIC ATLAS CELL — a compact industrial-robot workcell,
+    // not a generic globe. A blue-chrome octagonal metrology plate carries an
+    // articulated three-servo arm, encoder ticks, motion envelopes and one gold
+    // wireframe mesh voxel. The arm runs a restrained inspect / present / return
+    // cycle with genuinely nested shoulder, elbow and wrist rotations; the
+    // gripper opens only while the arm is away, then closes around the specimen.
+    // A white telemetry pulse follows the kinematic chain while the calibration
+    // arc scans. The static first frame is the completed, grasp-ready instrument,
+    // so librsvg and reduced-motion still communicate robotics + mesh dataset.
+    // Theme-FIXED (a physical object); label and outer hairline alone adapt.
     const cx = n.x, cy = n.y;
-    const R = 40;              // face radius (node space)
-    const K = R / 112;         // 256-box source -> node space
-    const X = (u) => f1(cx + (u - 128) * K);
-    const Y = (v) => f1(cy + (v - 128) * K);
-    const GR = f1(12 * K);     // gold-station radius
-    // Constant-speed arrival fractions (route segments 26 / 40.3 / 41.7 / 36.1
-    // over a 144.1 total): station 1 -> 0.18, station 2 -> 0.46, station 3 -> 0.75.
-    const route = `M${X(73)} ${Y(158)}V${Y(132)}L${X(108)} ${Y(112)}L${X(137)} ${Y(82)}L${X(171)} ${Y(94)}M${X(171)} ${Y(94)}L${X(187)} ${Y(78)}M${X(171)} ${Y(94)}L${X(191)} ${Y(103)}`;
-    const packet = `<circle class="cobot-packet" cx="${X(73)}" cy="${Y(158)}" r="2" opacity="0">
-      <animate attributeName="cx" values="${X(73)};${X(73)};${X(108)};${X(137)};${X(171)}" keyTimes="0;0.18;0.46;0.75;1" dur="6s" repeatCount="indefinite"/>
-      <animate attributeName="cy" values="${Y(158)};${Y(132)};${Y(112)};${Y(82)};${Y(94)}" keyTimes="0;0.18;0.46;0.75;1" dur="6s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;1;1;1;1;0" keyTimes="0;0.03;0.18;0.75;0.97;1" dur="6s" repeatCount="indefinite"/>
-    </circle>`;
-    const ping = (u, v, at) => {
-      const a1 = (at - 0.01).toFixed(2), a2 = (at + 0.04).toFixed(2);
-      return `<circle class="cobot-ping" cx="${X(u)}" cy="${Y(v)}" r="${GR}" opacity="0">
-        <animate attributeName="r" values="${GR};${GR};${f1(12 * K + 6)};${GR}" keyTimes="0;${a1};${a2};1" dur="6s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0;0;0.85;0" keyTimes="0;${a1};${a2};1" dur="6s" repeatCount="indefinite"/>
-      </circle>`;
+    const R = 40;
+    const CYC = "7.2s";
+    const X = (dx) => f1(cx + dx);
+    const Y = (dy) => f1(cy + dy);
+    const P = (dx, dy) => `${X(dx)},${Y(dy)}`;
+    const octPath = (r) => {
+      const pts = Array.from({ length: 8 }, (_, i) => {
+        const a = -Math.PI / 2 + (i * Math.PI) / 4;
+        return `${X(r * Math.cos(a))} ${Y(r * Math.sin(a))}`;
+      });
+      return `M${pts.join(" L")} Z`;
     };
+    const ticks = Array.from({ length: 16 }, (_, i) => {
+      const a = -Math.PI / 2 + (i * Math.PI) / 8;
+      const inner = i % 4 === 0 ? 33.2 : 35.3;
+      const outer = 38.2;
+      return `<line class="cba-tick" x1="${X(inner * Math.cos(a))}" y1="${Y(inner * Math.sin(a))}" x2="${X(outer * Math.cos(a))}" y2="${Y(outer * Math.sin(a))}"/>`;
+    }).join("");
+    // Arm pivots: shoulder S -> elbow E -> wrist W -> tool centre T.
+    const S = [-18, 15], E = [-1, -8], WJ = [20, -2], T = [22, 11];
+    const motionTimes = "0;0.15;0.38;0.62;0.84;1";
+    const telemetryPath = `M${P(...S)} L${P(...E)} L${P(...WJ)} L${P(...T)}`;
+    const specimen = `<g class="cba-specimen">
+      <polygon class="cba-voxel-top" points="${P(22,18)} ${P(27,21)} ${P(22,24)} ${P(17,21)}"/>
+      <polygon class="cba-voxel-left" points="${P(17,21)} ${P(22,24)} ${P(22,30)} ${P(17,27)}"/>
+      <polygon class="cba-voxel-right" points="${P(22,24)} ${P(27,21)} ${P(27,27)} ${P(22,30)}"/>
+      <path class="cba-voxel-mesh" d="M${P(19.5,19.5)}L${P(24.5,22.5)}M${P(19.5,22.5)}L${P(24.5,19.5)}M${P(22,24)}V${Y(30)}"/>
+    </g>`;
     return `<g>
     <defs>
-      <radialGradient id="cobotFace" cx="38%" cy="28%" r="78%">
-        <stop offset="0%" stop-color="#244f86"/><stop offset="100%" stop-color="#091b31"/>
-      </radialGradient>
-      <linearGradient id="cobotRim" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#8be7f2"/><stop offset="55%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/>
+      <linearGradient id="cbaPlate" x1="0" y1="${Y(-R)}" x2="0" y2="${Y(R)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#173c66"/><stop offset="48%" stop-color="#0b2038"/><stop offset="100%" stop-color="#06111f"/>
       </linearGradient>
+      <linearGradient id="cbaBezel" x1="${X(-R)}" y1="${Y(-R)}" x2="${X(R)}" y2="${Y(R)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#d7fbff"/><stop offset="24%" stop-color="#7dd3fc"/><stop offset="58%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1e3a8a"/>
+      </linearGradient>
+      <linearGradient id="cbaArmA" x1="${X(-21)}" y1="${Y(-10)}" x2="${X(3)}" y2="${Y(19)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#d7fbff"/><stop offset="22%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#173c66"/>
+      </linearGradient>
+      <linearGradient id="cbaArmB" x1="${X(-2)}" y1="${Y(-11)}" x2="${X(24)}" y2="${Y(2)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#9cecf4"/><stop offset="45%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#142f55"/>
+      </linearGradient>
+      <radialGradient id="cbaServo" cx="36%" cy="28%" r="76%"><stop offset="0%" stop-color="#2a5f93"/><stop offset="65%" stop-color="#0b2038"/><stop offset="100%" stop-color="#040b13"/></radialGradient>
+      <clipPath id="cbaClip"><path d="${octPath(R - 1.2)}"/></clipPath>
     </defs>
-    <circle class="cobot-glow" cx="${f1(cx)}" cy="${f1(cy)}" r="${R + 1}"><animate attributeName="opacity" values="0.3;0.55;0.3" dur="4s" repeatCount="indefinite"/></circle>
-    <g filter="url(#nodeShadow)"><circle cx="${f1(cx)}" cy="${f1(cy)}" r="${R}" fill="url(#cobotFace)" stroke="url(#cobotRim)" stroke-width="${f1(9 * K)}"/></g>
-    <circle cx="${f1(cx)}" cy="${f1(cy)}" r="${f1(96 * K)}" class="cobot-inner"/>
-    <circle cx="${f1(cx)}" cy="${f1(cy)}" r="${R + 1.6}" class="seat-hairline"/>
-    <g>
-      <animateTransform attributeName="transform" type="rotate" from="0 ${f1(cx)} ${f1(cy)}" to="360 ${f1(cx)} ${f1(cy)}" dur="60s" repeatCount="indefinite"/>
-      <ellipse cx="${f1(cx)}" cy="${f1(cy)}" rx="${f1(72 * K)}" ry="${f1(96 * K)}" class="cobot-mer"/>
-      <ellipse cx="${f1(cx)}" cy="${f1(cy)}" rx="${f1(31 * K)}" ry="${f1(96 * K)}" class="cobot-mer"/>
+    <path class="cba-glow" d="${octPath(R + 1)}"/>
+    <g filter="url(#nodeShadow)"><path d="${octPath(R)}" class="cba-plate"/></g>
+    <path d="${octPath(R)}" class="cba-bezel"/>
+    <path d="${octPath(R - 3.1)}" class="cba-groove"/>
+    <path d="${octPath(R + 1.4)}" class="cba-hairline"/>
+    <g clip-path="url(#cbaClip)">
+      <path class="cba-grid" d="M${X(-31)} ${Y(-15)}H${X(31)}M${X(-31)} ${Y(0)}H${X(31)}M${X(-31)} ${Y(15)}H${X(31)}M${X(-15)} ${Y(-31)}V${Y(31)}M${X(0)} ${Y(-31)}V${Y(31)}M${X(15)} ${Y(-31)}V${Y(31)}"/>
+      <path class="cba-envelope" d="M${X(-28)} ${Y(10)} A34 34 0 0 1 ${X(26)} ${Y(-20)}" stroke-dasharray="5 4"/>
+      <path class="cba-envelope cba-envelope-soft" d="M${X(-25)} ${Y(23)} A31 31 0 0 1 ${X(31)} ${Y(8)}"/>
     </g>
-    <path d="M${X(35)} ${Y(104)}H${X(221)}M${X(35)} ${Y(152)}H${X(221)}" class="cobot-par"/>
-    <g class="cobot-node">
-      <path d="M${X(52)} ${Y(176)}L${X(76)} ${Y(162)}L${X(100)} ${Y(176)}L${X(76)} ${Y(190)}Z"/>
-      <path d="M${X(100)} ${Y(176)}L${X(124)} ${Y(162)}L${X(148)} ${Y(176)}L${X(124)} ${Y(190)}Z"/>
-      <path d="M${X(76)} ${Y(202)}L${X(100)} ${Y(188)}L${X(124)} ${Y(202)}L${X(100)} ${Y(216)}Z"/>
+    ${ticks}
+    <path class="cba-base" d="M${P(-28,30)}H${X(-8)}L${X(-11)} ${Y(20)}H${X(-25)}Z"/>
+    ${specimen}
+    <g class="cba-arm">
+      <g>
+        <animateTransform attributeName="transform" type="rotate" values="0 ${X(S[0])} ${Y(S[1])};0 ${X(S[0])} ${Y(S[1])};-7 ${X(S[0])} ${Y(S[1])};9 ${X(S[0])} ${Y(S[1])};0 ${X(S[0])} ${Y(S[1])};0 ${X(S[0])} ${Y(S[1])}" keyTimes="${motionTimes}" calcMode="spline" keySplines="0 0 1 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0 0 1 1" dur="${CYC}" repeatCount="indefinite"/>
+        <polygon class="cba-link-a" points="${P(-15.1,17.1)} ${P(1.9,-5.9)} ${P(-3.9,-10.1)} ${P(-20.9,12.9)}"/>
+        <path class="cba-link-rail" d="M${P(...S)}L${P(...E)}"/>
+        <circle class="cba-servo" cx="${X(S[0])}" cy="${Y(S[1])}" r="7.4"/>
+        <circle class="cba-encoder" cx="${X(S[0])}" cy="${Y(S[1])}" r="5.2"/>
+        <circle class="cba-servo-hot" cx="${X(S[0])}" cy="${Y(S[1])}" r="2"/>
+        <g>
+          <animateTransform attributeName="transform" type="rotate" values="0 ${X(E[0])} ${Y(E[1])};0 ${X(E[0])} ${Y(E[1])};16 ${X(E[0])} ${Y(E[1])};-12 ${X(E[0])} ${Y(E[1])};0 ${X(E[0])} ${Y(E[1])};0 ${X(E[0])} ${Y(E[1])}" keyTimes="${motionTimes}" calcMode="spline" keySplines="0 0 1 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0 0 1 1" dur="${CYC}" repeatCount="indefinite"/>
+          <polygon class="cba-link-b" points="${P(-1.9,-4.9)} ${P(19.1,1.1)} ${P(20.9,-5.1)} ${P(-0.1,-11.1)}"/>
+          <path class="cba-link-rail" d="M${P(...E)}L${P(...WJ)}"/>
+          <circle class="cba-servo cba-servo-small" cx="${X(E[0])}" cy="${Y(E[1])}" r="6.2"/>
+          <circle class="cba-encoder" cx="${X(E[0])}" cy="${Y(E[1])}" r="4.1"/>
+          <circle class="cba-servo-hot" cx="${X(E[0])}" cy="${Y(E[1])}" r="1.65"/>
+          <g>
+            <animateTransform attributeName="transform" type="rotate" values="0 ${X(WJ[0])} ${Y(WJ[1])};0 ${X(WJ[0])} ${Y(WJ[1])};-12 ${X(WJ[0])} ${Y(WJ[1])};14 ${X(WJ[0])} ${Y(WJ[1])};0 ${X(WJ[0])} ${Y(WJ[1])};0 ${X(WJ[0])} ${Y(WJ[1])}" keyTimes="${motionTimes}" calcMode="spline" keySplines="0 0 1 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0 0 1 1" dur="${CYC}" repeatCount="indefinite"/>
+            <path class="cba-tool" d="M${P(...WJ)}L${P(...T)}"/>
+            <circle class="cba-servo cba-wrist" cx="${X(WJ[0])}" cy="${Y(WJ[1])}" r="4.7"/>
+            <circle class="cba-servo-hot" cx="${X(WJ[0])}" cy="${Y(WJ[1])}" r="1.4"/>
+            <path class="cba-palm" d="M${X(17.5)} ${Y(10.5)}H${X(26.5)}"/>
+            <g class="cba-finger">
+              <animateTransform attributeName="transform" type="translate" values="0 0;0 0;-2 0;-2 0;0 0;0 0" keyTimes="${motionTimes}" dur="${CYC}" repeatCount="indefinite"/>
+              <path d="M${P(19,10)}L${P(16.5,18)}L${P(19,20)}"/>
+            </g>
+            <g class="cba-finger">
+              <animateTransform attributeName="transform" type="translate" values="0 0;0 0;2 0;2 0;0 0;0 0" keyTimes="${motionTimes}" dur="${CYC}" repeatCount="indefinite"/>
+              <path d="M${P(25,10)}L${P(27.5,18)}L${P(25,20)}"/>
+            </g>
+          </g>
+        </g>
+      </g>
     </g>
-    <path d="${route}" class="cobot-route"/>
-    <g class="cobot-gold">
-      <circle cx="${X(73)}" cy="${Y(132)}" r="${GR}"/>
-      <circle cx="${X(108)}" cy="${Y(112)}" r="${GR}"/>
-      <circle cx="${X(137)}" cy="${Y(82)}" r="${GR}"/>
-    </g>
-    ${ping(73, 132, 0.18)}${ping(108, 112, 0.46)}${ping(137, 82, 0.75)}
-    <rect x="${X(51)}" y="${Y(157)}" width="${f1(45 * K)}" height="${f1(18 * K)}" rx="${f1(6 * K)}" class="cobot-pill"/>
-    ${packet}
-    <text x="${f1(cx)}" y="${f1(cy - R - 12)}" text-anchor="middle" class="cobot-label">${escapeXML(n.label)}</text>
-    ${datasetPlates(cx, cy + R + 8, n.color)}
+    <path class="cba-telemetry" d="${telemetryPath}" opacity="0" stroke-dasharray="2 15" stroke-dashoffset="17">
+      <animate attributeName="stroke-dashoffset" values="17;17;0;0" keyTimes="0;0.12;0.34;1" dur="${CYC}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0;0.95;0.95;0;0" keyTimes="0;0.1;0.14;0.3;0.38;1" dur="${CYC}" repeatCount="indefinite"/>
+    </path>
+    <circle class="cba-commit" cx="${X(22)}" cy="${Y(23)}" r="12" opacity="0">
+      <animate attributeName="opacity" values="0;0;0.78;0;0" keyTimes="0;0.82;0.86;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
+    </circle>
+    ${datasetPlates(cx - 27, cy - 21, n.color)}
+    <text x="${f1(cx)}" y="${f1(cy - R - 12)}" text-anchor="middle" class="cba-label">${escapeXML(n.label)}</text>
   </g>`;
   }
 
-  // small "chip" nodes
+  // Small "chip" nodes. Guard the fallback explicitly so a misspelled bespoke
+  // kind cannot silently degrade into a generic pill in the published graph.
+  if (n.kind !== "chip") throw new Error(`work graph has no renderer for node kind: ${n.kind}`);
   const w = nodeWidth(n);
   const x = n.x - w / 2;
   const y = n.y - CHIP_H / 2;
@@ -2076,7 +2125,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     ${gradDefs.join("\n    ")}
   </defs>
   <style>
-    :root { --hub-accent: #34d399; --cube-accent: #fb923c; --tri-accent: #a78bfa; color-scheme: light dark; }
+    :root { color-scheme: light dark; }
     .cap        { font: 400 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
     .edge       { opacity: 0.55; }
     .edge-contract  { filter: url(#edgeGlow); }
@@ -2235,24 +2284,38 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .hd-tok-out      { fill: #fff1f0; }
     .hd-flash        { fill: #fff1f0; }
     .haldir-label    { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #2dd4bf; }
-    .cobot-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #93c5fd; }
-    .cobot-glow   { fill: none; stroke: #7dd3fc; stroke-width: 5; opacity: 0.32; filter: url(#soft); }
-    .cobot-inner  { fill: none; stroke: #8be7f2; stroke-opacity: 0.32; stroke-width: 1.1; }
-    .cobot-mer    { fill: none; stroke: #60a5fa; stroke-opacity: 0.45; stroke-width: 1.1; }
-    .cobot-par    { fill: none; stroke: #60a5fa; stroke-opacity: 0.45; stroke-width: 1.1; }
-    .cobot-node   { fill: #0b2038; stroke: #9cecf4; stroke-width: 1.8; stroke-linejoin: round; }
-    .cobot-route  { fill: none; stroke: #f7f3e9; stroke-width: 4.3; stroke-linecap: round; stroke-linejoin: round; }
-    .cobot-gold   { fill: #f6c453; stroke: #0b2038; stroke-width: 1.4; }
-    .cobot-pill   { fill: #f6c453; stroke: #0b2038; stroke-width: 1.4; }
-    .cobot-packet { fill: #ffffff; filter: url(#edgeGlow); }
-    .cobot-ping   { fill: none; stroke: #fbd38d; stroke-width: 1.6; }
+    .cba-label       { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #93c5fd; }
+    .cba-glow        { fill: none; stroke: #7dd3fc; stroke-width: 3.5; stroke-opacity: 0.22; filter: url(#soft); stroke-linejoin: round; }
+    .cba-plate       { fill: url(#cbaPlate); }
+    .cba-bezel       { fill: none; stroke: url(#cbaBezel); stroke-width: 2.4; stroke-linejoin: round; }
+    .cba-groove      { fill: none; stroke: #05070b; stroke-opacity: 0.68; stroke-width: 1; stroke-linejoin: round; }
+    .cba-hairline    { fill: none; stroke: #2b333d; stroke-opacity: 0.6; stroke-width: 1; stroke-linejoin: round; }
+    .cba-grid        { fill: none; stroke: #60a5fa; stroke-width: 0.6; stroke-opacity: 0.09; }
+    .cba-tick        { stroke: #8be7f2; stroke-width: 0.9; stroke-opacity: 0.55; stroke-linecap: round; }
+    .cba-envelope    { fill: none; stroke: #60a5fa; stroke-width: 1; stroke-opacity: 0.45; stroke-linecap: round; }
+    .cba-envelope-soft { stroke: #8be7f2; stroke-opacity: 0.16; stroke-dasharray: 1 5; }
+    .cba-base        { fill: #091827; stroke: #60a5fa; stroke-width: 1.1; stroke-linejoin: round; }
+    .cba-link-a      { fill: url(#cbaArmA); stroke: #9cecf4; stroke-width: 0.8; stroke-linejoin: round; }
+    .cba-link-b      { fill: url(#cbaArmB); stroke: #9cecf4; stroke-width: 0.8; stroke-linejoin: round; }
+    .cba-link-rail   { fill: none; stroke: #d7fbff; stroke-opacity: 0.58; stroke-width: 0.8; stroke-linecap: round; }
+    .cba-servo       { fill: url(#cbaServo); stroke: #9cecf4; stroke-width: 1.3; }
+    .cba-encoder     { fill: none; stroke: #60a5fa; stroke-width: 1.1; stroke-dasharray: 2 2; }
+    .cba-servo-hot   { fill: #e2faff; stroke: #ffffff; stroke-width: 0.55; }
+    .cba-tool        { fill: none; stroke: #9cecf4; stroke-width: 3.8; stroke-linecap: round; }
+    .cba-palm        { fill: none; stroke: #d7fbff; stroke-width: 2.4; stroke-linecap: round; }
+    .cba-finger      { fill: none; stroke: #d7fbff; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .cba-voxel-top   { fill: #f8fafc; stroke: #ffffff; stroke-width: 0.8; stroke-linejoin: round; }
+    .cba-voxel-left  { fill: #cbd5e1; stroke: #e2faff; stroke-width: 0.8; stroke-linejoin: round; }
+    .cba-voxel-right { fill: #64748b; stroke: #bfdbfe; stroke-width: 0.8; stroke-linejoin: round; }
+    .cba-voxel-mesh  { fill: none; stroke: #ffffff; stroke-width: 0.5; stroke-opacity: 0.78; }
+    .cba-telemetry   { fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: round; filter: url(#edgeGlow); }
+    .cba-commit      { fill: none; stroke: #d7fbff; stroke-width: 1.2; }
     .wg-rule    { stroke: #30363d; stroke-width: 1; stroke-opacity: 0.55; }
     .wg-bracket { fill: none; stroke: #fbbf24; stroke-width: 1.5; stroke-linecap: round; stroke-opacity: 0.85; }
     .panel      { fill: #ffffff; fill-opacity: 0.022; stroke: #ffffff; stroke-opacity: 0.07; }
     text { paint-order: stroke; stroke: #0d1117; stroke-width: 2.6; stroke-linejoin: round; text-transform: uppercase; letter-spacing: 2.5px; }
     @media (prefers-color-scheme: light) {
       text { stroke: #ffffff; }
-      :root { --hub-accent: #059669; --cube-accent: #c2410c; --tri-accent: #7c3aed; }
       .cap { fill: #57606a; }
       .contract-flow { stroke: #22d3ee; }
       .chip { fill: #ffffff; }
@@ -2270,12 +2333,14 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .radar-label { fill: #0284c7; }
       .gal-label { fill: #dc2626; }
       .haldir-label { fill: #0d9488; }
-      .cobot-label { fill: #1d4ed8; }
+      .cba-label { fill: #1d4ed8; }
+      .cba-hairline { stroke: #334155; stroke-opacity: 0.42; }
+      .cba-glow { stroke-opacity: 0.13; }
       .wg-rule { stroke: #d0d7de; stroke-opacity: 0.9; }
       .wg-bracket { stroke: #b45309; }
       .panel { fill: #0b1f2a; fill-opacity: 0.025; stroke: #0b1f2a; stroke-opacity: 0.08; }
     }
-    @media (prefers-reduced-motion: reduce) { animate, animateTransform { display: none; } }
+    @media (prefers-reduced-motion: reduce) { animate, animateMotion, animateTransform { display: none; } }
   </style>
 
   <rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="16" class="panel"/>

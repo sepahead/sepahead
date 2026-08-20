@@ -64,7 +64,6 @@
     <linearGradient id="eg17" gradientUnits="userSpaceOnUse" x1="338.7" y1="380.9" x2="407.4" y2="372.3"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#9caf88"/></linearGradient>
   </defs>
   <style>
-    :root { --hub-accent: #34d399; --cube-accent: #fb923c; --tri-accent: #a78bfa; }
     .cap        { font: 400 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
     .edge       { opacity: 0.55; }
     .edge-contract  { filter: url(#edgeGlow); }
@@ -223,22 +222,37 @@
     .hd-tok-out      { fill: #fff1f0; }
     .hd-flash        { fill: #fff1f0; }
     .haldir-label    { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #2dd4bf; }
-    .cobot-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #93c5fd; }
-    .cobot-glow   { fill: none; stroke: #7dd3fc; stroke-width: 5; opacity: 0.32; filter: url(#soft); }
-    .cobot-inner  { fill: none; stroke: #8be7f2; stroke-opacity: 0.32; stroke-width: 1.1; }
-    .cobot-mer    { fill: none; stroke: #60a5fa; stroke-opacity: 0.45; stroke-width: 1.1; }
-    .cobot-par    { fill: none; stroke: #60a5fa; stroke-opacity: 0.45; stroke-width: 1.1; }
-    .cobot-node   { fill: #0b2038; stroke: #9cecf4; stroke-width: 1.8; stroke-linejoin: round; }
-    .cobot-route  { fill: none; stroke: #f7f3e9; stroke-width: 4.3; stroke-linecap: round; stroke-linejoin: round; }
-    .cobot-gold   { fill: #f6c453; stroke: #0b2038; stroke-width: 1.4; }
-    .cobot-pill   { fill: #f6c453; stroke: #0b2038; stroke-width: 1.4; }
-    .cobot-packet { fill: #ffffff; filter: url(#edgeGlow); }
-    .cobot-ping   { fill: none; stroke: #fbd38d; stroke-width: 1.6; }
+    .cba-label       { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #93c5fd; }
+    .cba-glow        { fill: none; stroke: #7dd3fc; stroke-width: 3.5; stroke-opacity: 0.22; filter: url(#soft); stroke-linejoin: round; }
+    .cba-plate       { fill: url(#cbaPlate); }
+    .cba-bezel       { fill: none; stroke: url(#cbaBezel); stroke-width: 2.4; stroke-linejoin: round; }
+    .cba-groove      { fill: none; stroke: #05070b; stroke-opacity: 0.68; stroke-width: 1; stroke-linejoin: round; }
+    .cba-hairline    { fill: none; stroke: #2b333d; stroke-opacity: 0.6; stroke-width: 1; stroke-linejoin: round; }
+    .cba-grid        { fill: none; stroke: #60a5fa; stroke-width: 0.6; stroke-opacity: 0.09; }
+    .cba-tick        { stroke: #8be7f2; stroke-width: 0.9; stroke-opacity: 0.55; stroke-linecap: round; }
+    .cba-envelope    { fill: none; stroke: #60a5fa; stroke-width: 1; stroke-opacity: 0.45; stroke-linecap: round; }
+    .cba-envelope-soft { stroke: #8be7f2; stroke-opacity: 0.16; stroke-dasharray: 1 5; }
+    .cba-base        { fill: #091827; stroke: #60a5fa; stroke-width: 1.1; stroke-linejoin: round; }
+    .cba-link-a      { fill: url(#cbaArmA); stroke: #9cecf4; stroke-width: 0.8; stroke-linejoin: round; }
+    .cba-link-b      { fill: url(#cbaArmB); stroke: #9cecf4; stroke-width: 0.8; stroke-linejoin: round; }
+    .cba-link-rail   { fill: none; stroke: #d7fbff; stroke-opacity: 0.58; stroke-width: 0.8; stroke-linecap: round; }
+    .cba-servo       { fill: url(#cbaServo); stroke: #9cecf4; stroke-width: 1.3; }
+    .cba-encoder     { fill: none; stroke: #60a5fa; stroke-width: 1.1; stroke-dasharray: 2 2; }
+    .cba-servo-hot   { fill: #e2faff; stroke: #ffffff; stroke-width: 0.55; }
+    .cba-tool        { fill: none; stroke: #9cecf4; stroke-width: 3.8; stroke-linecap: round; }
+    .cba-palm        { fill: none; stroke: #d7fbff; stroke-width: 2.4; stroke-linecap: round; }
+    .cba-finger      { fill: none; stroke: #d7fbff; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .cba-voxel-top   { fill: #f8fafc; stroke: #ffffff; stroke-width: 0.8; stroke-linejoin: round; }
+    .cba-voxel-left  { fill: #cbd5e1; stroke: #e2faff; stroke-width: 0.8; stroke-linejoin: round; }
+    .cba-voxel-right { fill: #64748b; stroke: #bfdbfe; stroke-width: 0.8; stroke-linejoin: round; }
+    .cba-voxel-mesh  { fill: none; stroke: #ffffff; stroke-width: 0.5; stroke-opacity: 0.78; }
+    .cba-telemetry   { fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: round; filter: url(#edgeGlow); }
+    .cba-commit      { fill: none; stroke: #d7fbff; stroke-width: 1.2; }
     .wg-rule    { stroke: #30363d; stroke-width: 1; stroke-opacity: 0.55; }
     .wg-bracket { fill: none; stroke: #fbbf24; stroke-width: 1.5; stroke-linecap: round; stroke-opacity: 0.85; }
     .panel      { fill: #ffffff; fill-opacity: 0.022; stroke: #ffffff; stroke-opacity: 0.07; }
     text { paint-order: stroke; stroke: #0d1117; stroke-width: 2.6; stroke-linejoin: round; text-transform: uppercase; letter-spacing: 2.5px; }
-    @media (prefers-reduced-motion: reduce) { animate, animateTransform { display: none; } }
+    @media (prefers-reduced-motion: reduce) { animate, animateMotion, animateTransform { display: none; } }
   </style>
 
   <rect x="0.5" y="0.5" width="859" height="511" rx="16" class="panel"/>
@@ -833,52 +847,81 @@
   </g>
   <g>
     <defs>
-      <radialGradient id="cobotFace" cx="38%" cy="28%" r="78%">
-        <stop offset="0%" stop-color="#244f86"/><stop offset="100%" stop-color="#091b31"/>
-      </radialGradient>
-      <linearGradient id="cobotRim" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#8be7f2"/><stop offset="55%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/>
+      <linearGradient id="cbaPlate" x1="0" y1="100" x2="0" y2="180" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#173c66"/><stop offset="48%" stop-color="#0b2038"/><stop offset="100%" stop-color="#06111f"/>
       </linearGradient>
+      <linearGradient id="cbaBezel" x1="650" y1="100" x2="730" y2="180" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#d7fbff"/><stop offset="24%" stop-color="#7dd3fc"/><stop offset="58%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1e3a8a"/>
+      </linearGradient>
+      <linearGradient id="cbaArmA" x1="669" y1="130" x2="693" y2="159" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#d7fbff"/><stop offset="22%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#173c66"/>
+      </linearGradient>
+      <linearGradient id="cbaArmB" x1="688" y1="129" x2="714" y2="142" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#9cecf4"/><stop offset="45%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#142f55"/>
+      </linearGradient>
+      <radialGradient id="cbaServo" cx="36%" cy="28%" r="76%"><stop offset="0%" stop-color="#2a5f93"/><stop offset="65%" stop-color="#0b2038"/><stop offset="100%" stop-color="#040b13"/></radialGradient>
+      <clipPath id="cbaClip"><path d="M690 101.2 L717.4 112.6 L728.8 140 L717.4 167.4 L690 178.8 L662.6 167.4 L651.2 140 L662.6 112.6 Z"/></clipPath>
     </defs>
-    <circle class="cobot-glow" cx="690" cy="140" r="41"><animate attributeName="opacity" values="0.3;0.55;0.3" dur="4s" repeatCount="indefinite"/></circle>
-    <g filter="url(#nodeShadow)"><circle cx="690" cy="140" r="40" fill="url(#cobotFace)" stroke="url(#cobotRim)" stroke-width="3.2"/></g>
-    <circle cx="690" cy="140" r="34.3" class="cobot-inner"/>
-    <circle cx="690" cy="140" r="41.6" class="seat-hairline"/>
-    <g>
-      <animateTransform attributeName="transform" type="rotate" from="0 690 140" to="360 690 140" dur="60s" repeatCount="indefinite"/>
-      <ellipse cx="690" cy="140" rx="25.7" ry="34.3" class="cobot-mer"/>
-      <ellipse cx="690" cy="140" rx="11.1" ry="34.3" class="cobot-mer"/>
+    <path class="cba-glow" d="M690 99 L719 111 L731 140 L719 169 L690 181 L661 169 L649 140 L661 111 Z"/>
+    <g filter="url(#nodeShadow)"><path d="M690 100 L718.3 111.7 L730 140 L718.3 168.3 L690 180 L661.7 168.3 L650 140 L661.7 111.7 Z" class="cba-plate"/></g>
+    <path d="M690 100 L718.3 111.7 L730 140 L718.3 168.3 L690 180 L661.7 168.3 L650 140 L661.7 111.7 Z" class="cba-bezel"/>
+    <path d="M690 103.1 L716.1 113.9 L726.9 140 L716.1 166.1 L690 176.9 L663.9 166.1 L653.1 140 L663.9 113.9 Z" class="cba-groove"/>
+    <path d="M690 98.6 L719.3 110.7 L731.4 140 L719.3 169.3 L690 181.4 L660.7 169.3 L648.6 140 L660.7 110.7 Z" class="cba-hairline"/>
+    <g clip-path="url(#cbaClip)">
+      <path class="cba-grid" d="M659 125H721M659 140H721M659 155H721M675 109V171M690 109V171M705 109V171"/>
+      <path class="cba-envelope" d="M662 150 A34 34 0 0 1 716 120" stroke-dasharray="5 4"/>
+      <path class="cba-envelope cba-envelope-soft" d="M665 163 A31 31 0 0 1 721 148"/>
     </g>
-    <path d="M656.8 131.4H723.2M656.8 148.6H723.2" class="cobot-par"/>
-    <g class="cobot-node">
-      <path d="M662.9 157.1L671.4 152.1L680 157.1L671.4 162.1Z"/>
-      <path d="M680 157.1L688.6 152.1L697.1 157.1L688.6 162.1Z"/>
-      <path d="M671.4 166.4L680 161.4L688.6 166.4L680 171.4Z"/>
+    <line class="cba-tick" x1="690" y1="106.8" x2="690" y2="101.8"/><line class="cba-tick" x1="703.5" y1="107.4" x2="704.6" y2="104.7"/><line class="cba-tick" x1="715" y1="115" x2="717" y2="113"/><line class="cba-tick" x1="722.6" y1="126.5" x2="725.3" y2="125.4"/><line class="cba-tick" x1="723.2" y1="140" x2="728.2" y2="140"/><line class="cba-tick" x1="722.6" y1="153.5" x2="725.3" y2="154.6"/><line class="cba-tick" x1="715" y1="165" x2="717" y2="167"/><line class="cba-tick" x1="703.5" y1="172.6" x2="704.6" y2="175.3"/><line class="cba-tick" x1="690" y1="173.2" x2="690" y2="178.2"/><line class="cba-tick" x1="676.5" y1="172.6" x2="675.4" y2="175.3"/><line class="cba-tick" x1="665" y1="165" x2="663" y2="167"/><line class="cba-tick" x1="657.4" y1="153.5" x2="654.7" y2="154.6"/><line class="cba-tick" x1="656.8" y1="140" x2="651.8" y2="140"/><line class="cba-tick" x1="657.4" y1="126.5" x2="654.7" y2="125.4"/><line class="cba-tick" x1="665" y1="115" x2="663" y2="113"/><line class="cba-tick" x1="676.5" y1="107.4" x2="675.4" y2="104.7"/>
+    <path class="cba-base" d="M662,170H682L679 160H665Z"/>
+    <g class="cba-specimen">
+      <polygon class="cba-voxel-top" points="712,158 717,161 712,164 707,161"/>
+      <polygon class="cba-voxel-left" points="707,161 712,164 712,170 707,167"/>
+      <polygon class="cba-voxel-right" points="712,164 717,161 717,167 712,170"/>
+      <path class="cba-voxel-mesh" d="M709.5,159.5L714.5,162.5M709.5,162.5L714.5,159.5M712,164V170"/>
     </g>
-    <path d="M670.4 150.7V141.4L682.9 134.3L693.2 123.6L705.4 127.9M705.4 127.9L711.1 122.1M705.4 127.9L712.5 131.1" class="cobot-route"/>
-    <g class="cobot-gold">
-      <circle cx="670.4" cy="141.4" r="4.3"/>
-      <circle cx="682.9" cy="134.3" r="4.3"/>
-      <circle cx="693.2" cy="123.6" r="4.3"/>
+    <g class="cba-arm">
+      <g>
+        <animateTransform attributeName="transform" type="rotate" values="0 672 155;0 672 155;-7 672 155;9 672 155;0 672 155;0 672 155" keyTimes="0;0.15;0.38;0.62;0.84;1" calcMode="spline" keySplines="0 0 1 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0 0 1 1" dur="7.2s" repeatCount="indefinite"/>
+        <polygon class="cba-link-a" points="674.9,157.1 691.9,134.1 686.1,129.9 669.1,152.9"/>
+        <path class="cba-link-rail" d="M672,155L689,132"/>
+        <circle class="cba-servo" cx="672" cy="155" r="7.4"/>
+        <circle class="cba-encoder" cx="672" cy="155" r="5.2"/>
+        <circle class="cba-servo-hot" cx="672" cy="155" r="2"/>
+        <g>
+          <animateTransform attributeName="transform" type="rotate" values="0 689 132;0 689 132;16 689 132;-12 689 132;0 689 132;0 689 132" keyTimes="0;0.15;0.38;0.62;0.84;1" calcMode="spline" keySplines="0 0 1 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0 0 1 1" dur="7.2s" repeatCount="indefinite"/>
+          <polygon class="cba-link-b" points="688.1,135.1 709.1,141.1 710.9,134.9 689.9,128.9"/>
+          <path class="cba-link-rail" d="M689,132L710,138"/>
+          <circle class="cba-servo cba-servo-small" cx="689" cy="132" r="6.2"/>
+          <circle class="cba-encoder" cx="689" cy="132" r="4.1"/>
+          <circle class="cba-servo-hot" cx="689" cy="132" r="1.65"/>
+          <g>
+            <animateTransform attributeName="transform" type="rotate" values="0 710 138;0 710 138;-12 710 138;14 710 138;0 710 138;0 710 138" keyTimes="0;0.15;0.38;0.62;0.84;1" calcMode="spline" keySplines="0 0 1 1;0.42 0 0.2 1;0.42 0 0.2 1;0.42 0 0.2 1;0 0 1 1" dur="7.2s" repeatCount="indefinite"/>
+            <path class="cba-tool" d="M710,138L712,151"/>
+            <circle class="cba-servo cba-wrist" cx="710" cy="138" r="4.7"/>
+            <circle class="cba-servo-hot" cx="710" cy="138" r="1.4"/>
+            <path class="cba-palm" d="M707.5 150.5H716.5"/>
+            <g class="cba-finger">
+              <animateTransform attributeName="transform" type="translate" values="0 0;0 0;-2 0;-2 0;0 0;0 0" keyTimes="0;0.15;0.38;0.62;0.84;1" dur="7.2s" repeatCount="indefinite"/>
+              <path d="M709,150L706.5,158L709,160"/>
+            </g>
+            <g class="cba-finger">
+              <animateTransform attributeName="transform" type="translate" values="0 0;0 0;2 0;2 0;0 0;0 0" keyTimes="0;0.15;0.38;0.62;0.84;1" dur="7.2s" repeatCount="indefinite"/>
+              <path d="M715,150L717.5,158L715,160"/>
+            </g>
+          </g>
+        </g>
+      </g>
     </g>
-    <circle class="cobot-ping" cx="670.4" cy="141.4" r="4.3" opacity="0">
-        <animate attributeName="r" values="4.3;4.3;10.3;4.3" keyTimes="0;0.17;0.22;1" dur="6s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0;0;0.85;0" keyTimes="0;0.17;0.22;1" dur="6s" repeatCount="indefinite"/>
-      </circle><circle class="cobot-ping" cx="682.9" cy="134.3" r="4.3" opacity="0">
-        <animate attributeName="r" values="4.3;4.3;10.3;4.3" keyTimes="0;0.45;0.50;1" dur="6s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0;0;0.85;0" keyTimes="0;0.45;0.50;1" dur="6s" repeatCount="indefinite"/>
-      </circle><circle class="cobot-ping" cx="693.2" cy="123.6" r="4.3" opacity="0">
-        <animate attributeName="r" values="4.3;4.3;10.3;4.3" keyTimes="0;0.74;0.79;1" dur="6s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0;0;0.85;0" keyTimes="0;0.74;0.79;1" dur="6s" repeatCount="indefinite"/>
-      </circle>
-    <rect x="662.5" y="150.4" width="16.1" height="6.4" rx="2.1" class="cobot-pill"/>
-    <circle class="cobot-packet" cx="670.4" cy="150.7" r="2" opacity="0">
-      <animate attributeName="cx" values="670.4;670.4;682.9;693.2;705.4" keyTimes="0;0.18;0.46;0.75;1" dur="6s" repeatCount="indefinite"/>
-      <animate attributeName="cy" values="150.7;141.4;134.3;123.6;127.9" keyTimes="0;0.18;0.46;0.75;1" dur="6s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;1;1;1;1;0" keyTimes="0;0.03;0.18;0.75;0.97;1" dur="6s" repeatCount="indefinite"/>
+    <path class="cba-telemetry" d="M672,155 L689,132 L710,138 L712,151" opacity="0" stroke-dasharray="2 15" stroke-dashoffset="17">
+      <animate attributeName="stroke-dashoffset" from="17" to="0" dur="1.8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.95;0.95;0" keyTimes="0;0.1;0.8;1" dur="1.8s" repeatCount="indefinite"/>
+    </path>
+    <circle class="cba-commit" cx="712" cy="163" r="12" opacity="0">
+      <animate attributeName="opacity" values="0;0;0.78;0;0" keyTimes="0;0.82;0.86;0.94;1" dur="7.2s" repeatCount="indefinite"/>
     </circle>
-    <text x="690" y="88" text-anchor="middle" class="cobot-label">COBOT-ATLAS</text>
-    <polygon points="690,182 695,184.6 690,187.2 685,184.6" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/><polygon points="690,185.4 695,188 690,190.6 685,188" fill="#60a5fa" fill-opacity="0.24" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/><polygon points="690,188.8 695,191.4 690,194 685,191.4" fill="#60a5fa" fill-opacity="0.34" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/>
+    <polygon points="663,113 668,115.6 663,118.2 658,115.6" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/><polygon points="663,116.4 668,119 663,121.6 658,119" fill="#60a5fa" fill-opacity="0.24" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/><polygon points="663,119.8 668,122.4 663,125 658,122.4" fill="#60a5fa" fill-opacity="0.34" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/>
+    <text x="690" y="88" text-anchor="middle" class="cba-label">COBOT-ATLAS</text>
   </g>
   <g>
     <defs>
