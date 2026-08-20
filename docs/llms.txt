@@ -22,13 +22,9 @@ domain-specific AI agent and custom harness for provenance-aware, closed-loop
 simulations of biophysical and functional neural models, alongside validation,
 perception and control tools for reproducible, auditable computational-neuroscience R&D.
 
-## Portfolio story
-From Signal to Frontier is the primary visual narrative: uncertain observations
-become bounded, inspectable machine action, then earn the right to move farther
-from supervision. It progresses through signal, world model, embodied system,
-authorization, evidence and an explicitly labeled future frontier. Solid paths
-mean directly inspectable evidence; dashed paths are conceptual or conditional;
-translucent paths are future thesis.
+## Unlisted mural archive
+The animated mural system is intentionally omitted from the visible GitHub
+profile and Pages homepage. Its complete archive remains directly accessible:
 
 - Five cinematic mural stories: https://sepahead.github.io/sepahead/mural/
 - Twenty-five art directions: https://sepahead.github.io/sepahead/mural/atlas/

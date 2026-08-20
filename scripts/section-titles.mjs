@@ -2,7 +2,9 @@
 // scripts/section-titles.mjs
 // Generates assets/title-<slug>.svg, one terminal-prompt "command line" banner
 // per README section, so the whole profile reads as a single terminal session
-// (the hero is line 00; each section is a numbered command 01..04). Each banner:
+// (the hero is line 00; each visible section is a numbered command 01..05).
+// The unlisted mural archive is intentionally not a profile section and therefore
+// receives no number here. Each banner:
 // an accent SPINE, a two-digit INDEX, a "~/sep ❯" prompt, the section LABEL
 // (neutral ink, never the accent, so it passes contrast on both grounds), a
 // right-aligned static "# …" comment, an animated swept hairline rule, and a
@@ -26,16 +28,14 @@ const BASE = 33; // text baseline
 const LABEL_X = 132;
 
 const SECTIONS = [
-  { slug: "frontier",  index: "01", label: "FROM SIGNAL TO FRONTIER", comment: "# story before evidence", accent: "frontier", begin: "0s" },
-  { slug: "pulse",     index: "02", label: "THE PULSE",     comment: "# active since 2014", accent: "pulse",     begin: "0.3s" },
-  { slug: "work",      index: "03", label: "SELECTED WORK", comment: `# ${PROJECTS.length} projects`,    accent: "work",      begin: "0.6s" },
-  { slug: "toolbox",   index: "04", label: "THE TOOLBOX",         comment: `# ${RAILS.length} stacks`,      accent: "toolbox",   begin: "0.9s" },
-  { slug: "agentic",   index: "05", label: "AGENTIC ENGINEERING", comment: `# ${AGENTS.length} in the loop`, accent: "agentic",   begin: "1.2s" },
-  { slug: "elsewhere", index: "06", label: "ELSEWHERE",           comment: "# always open",                    accent: "elsewhere", begin: "1.5s" },
+  { slug: "pulse",     index: "01", label: "THE PULSE",     comment: "# active since 2014", accent: "pulse",     begin: "0s" },
+  { slug: "work",      index: "02", label: "SELECTED WORK", comment: `# ${PROJECTS.length} projects`,    accent: "work",      begin: "0.3s" },
+  { slug: "toolbox",   index: "03", label: "THE TOOLBOX",         comment: `# ${RAILS.length} stacks`,      accent: "toolbox",   begin: "0.6s" },
+  { slug: "agentic",   index: "04", label: "AGENTIC ENGINEERING", comment: `# ${AGENTS.length} in the loop`, accent: "agentic",   begin: "0.9s" },
+  { slug: "elsewhere", index: "05", label: "ELSEWHERE",           comment: "# always open",                    accent: "elsewhere", begin: "1.2s" },
 ];
 
 const HEADING = {
-  frontier: "From signal to frontier",
   pulse: "The pulse",
   work: "Selected work",
   toolbox: "The toolbox",

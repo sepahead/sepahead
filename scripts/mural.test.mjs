@@ -20,23 +20,48 @@ function read(path) {
   return readFileSync(path, "utf8");
 }
 
-test("profile places the narrative after the social strip and before activity", () => {
+test("visible profile and homepage omit the mural while direct archive access remains", () => {
   const markdown = read(join(ROOT, "README.md"));
-  const social = markdown.indexOf("social-x-light.svg");
-  const mural = markdown.indexOf("from-signal-to-frontier-dark.svg");
-  const pulse = markdown.indexOf("title-pulse-dark.svg");
-  assert.ok(social >= 0 && mural > social && pulse > mural);
-  assert.match(markdown, /Solid paths mean directly inspectable evidence/i);
-  assert.match(markdown, /future thesis is translucent/i);
+  const homepage = read(join(ROOT, "docs", "index.html"));
+  const llms = read(join(ROOT, "docs", "llms.txt"));
+  const sitemap = read(join(ROOT, "docs", "sitemap.xml"));
+  const archiveUrl = "https://sepahead.github.io/sepahead/mural/";
+
+  assert.doesNotMatch(markdown, /title-frontier-(?:dark|light)\.svg|from-signal-to-frontier-(?:dark|light)\.svg/);
+  assert.doesNotMatch(homepage, /class="story"|id="from-signal-to-frontier"|mural\/assets\//);
+  assert.match(markdown, new RegExp(archiveUrl.replaceAll(".", "\\.")));
+  assert.match(llms, /## Unlisted mural archive/);
+  assert.ok(llms.includes(archiveUrl));
+  assert.ok(sitemap.includes(`<loc>${archiveUrl}</loc>`));
+  assert.ok(existsSync(join(DOCS, "index.html")));
+  assert.ok(existsSync(join(DOCS, "atlas", "index.html")));
 });
 
-test("section numbering now starts with the founder story", () => {
-  assert.match(read(join(ROOT, "assets", "title-frontier-dark.svg")), />01<\/text>/);
-  assert.match(read(join(ROOT, "assets", "title-pulse-dark.svg")), />02<\/text>/);
-  assert.match(read(join(ROOT, "assets", "title-work-dark.svg")), />03<\/text>/);
+test("mural generator cannot reintroduce a visible profile embed", () => {
+  const generator = read(join(ROOT, "scripts", "generate-mural-system.py"));
+  const insert = generator.match(/def readme_insert\(\) -> str:\n([\s\S]*?)\n\ndef package_readme/);
+  assert.ok(insert, "readme_insert generator is missing");
+  assert.match(insert[1], /intentionally unlisted/i);
+  assert.match(insert[1], /https:\/\/sepahead\.github\.io\/sepahead\/mural\//);
+  assert.doesNotMatch(insert[1], /<h3|<picture|<img|title-frontier|from-signal-to-frontier-(?:dark|light)\.svg/);
 });
 
-test("profile mural pair is accessible, self-contained, and reduced-motion safe", () => {
+test("visible section numbering starts at Pulse and stays contiguous", () => {
+  const expected = [
+    ["pulse", "01"],
+    ["work", "02"],
+    ["toolbox", "03"],
+    ["agentic", "04"],
+    ["elsewhere", "05"],
+  ];
+  for (const [slug, index] of expected) {
+    for (const theme of ["dark", "light"]) {
+      assert.match(read(join(ROOT, "assets", `title-${slug}-${theme}.svg`)), new RegExp(`>${index}<\\/text>`));
+    }
+  }
+});
+
+test("archived primary mural pair is accessible, self-contained, and reduced-motion safe", () => {
   for (const theme of ["dark", "light"]) {
     const svg = read(join(ROOT, "assets", `from-signal-to-frontier-${theme}.svg`));
     assert.match(svg, /^<svg[^>]+role="img"[^>]+aria-labelledby=/);

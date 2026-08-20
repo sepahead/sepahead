@@ -22,6 +22,8 @@ const PROFILE_ID = `${SITE_URL}#profilepage`;
 const WORK_ID = `${SITE_URL}#selected-work`;
 const AVATAR_URL = "https://github.com/sepahead.png";
 const CV_URL = `${SITE_URL}cv/`;
+const MURAL_URL = `${SITE_URL}mural/`;
+const MURAL_ATLAS_URL = `${MURAL_URL}atlas/`;
 const CV_EN_URL = `${CV_URL}Sepehr_Mahmoudian_CV_EN.pdf`;
 const CV_DE_URL = `${CV_URL}Sepehr_Mahmoudian_CV_DE.pdf`;
 const PROFESSIONAL_TITLE = "Senior AI Engineer";
@@ -314,6 +316,13 @@ domain-specific AI agent and custom harness for provenance-aware, closed-loop
 simulations of biophysical and functional neural models, alongside validation,
 perception and control tools for reproducible, auditable computational-neuroscience R&D.
 
+## Unlisted mural archive
+The animated mural system is intentionally omitted from the visible GitHub
+profile and Pages homepage. Its complete archive remains directly accessible:
+
+- Five cinematic mural stories: ${MURAL_URL}
+- Twenty-five art directions: ${MURAL_ATLAS_URL}
+
 ## Selected work
 ${selected.join("\n")}
 
@@ -347,6 +356,12 @@ function renderSitemap() {
   </url>
   <url>
     <loc>${CV_URL}</loc>
+  </url>
+  <url>
+    <loc>${MURAL_URL}</loc>
+  </url>
+  <url>
+    <loc>${MURAL_ATLAS_URL}</loc>
   </url>
   <url>
     <loc>${CV_EN_URL}</loc>

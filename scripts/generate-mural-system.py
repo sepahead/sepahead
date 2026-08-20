@@ -799,26 +799,14 @@ def masters_gallery_html(asset_prefix: str = "svg", atlas_href: str = "../START_
  <div class="links"><a href="{dark}">dark SVG</a><a href="{light}">light SVG</a></div>
 </article>""")
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SepAhead Cinematic Mural Masters</title><meta name="description" content="Five flagship animated SVG murals explaining a research systems portfolio from signal to frontier."><style>{gallery_css()}</style></head><body>
-<header class="hero"><div class="kicker">SEPAHEAD / CINEMATIC MASTER CUTS</div><h1>Use one. Link to the rest.</h1><p>The profile uses From Signal to Frontier as its single founder-story mural. The other master cuts live here as deeper explanations of mission flow, compounding capability, evidence maturity, and venture-scale frontier.</p><div class="controls"><a class="pill" href="{atlas_href}">open all 25 directions</a><button class="theme" data-theme>view light SVGs</button></div></header>
+<header class="hero"><div class="kicker">SEPAHEAD / UNLISTED CINEMATIC MASTER CUTS</div><h1>Five preserved stories.</h1><p>This direct-access archive is intentionally omitted from the visible GitHub profile and Pages homepage. It preserves deeper explanations of mission flow, compounding capability, evidence maturity, and venture-scale frontier.</p><div class="controls"><a class="pill" href="{atlas_href}">open all 25 directions</a><button class="theme" data-theme>view light SVGs</button></div></header>
 <div class="note"><strong>Reading grammar:</strong> cave art supplies deep-time narrative; stained glass supplies material structure; cybernetics supplies motion semantics; space appears only as the terminal frontier.</div><main>{''.join(cards)}</main><footer>The mural explains the work; it does not replace the evidence. Every label preserves the profile's released, conditional, and future-state boundaries.</footer><script>{gallery_script()}</script></body></html>"""
 
 
 def readme_insert() -> str:
-    alt = (
-        "From Signal to Frontier: an animated stained-glass story moving left to right from deep memory and signal modeling, "
-        "through multimodal perception, embodied systems, authorization gates, and inspectable evidence, to a clearly labeled "
-        "future lunar frontier. Solid paths mean directly inspectable evidence; dashed paths are conceptual or conditional; "
-        "translucent paths are future thesis."
-    )
-    return f"""<!-- BEGIN:from-signal-to-frontier -->
-<h3 align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-frontier-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-frontier-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/title-frontier-light.svg" width="820" height="50" decoding="async" alt="From signal to frontier - the portfolio story in one animated mural"/></picture></h3>
-
-<p align="center">
-<a href="https://sepahead.github.io/sepahead/mural/" title="Explore all five cinematic mural stories"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/from-signal-to-frontier-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/from-signal-to-frontier-light.svg"><img src="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/from-signal-to-frontier-light.svg" width="820" height="328" decoding="async" alt="{esc(alt)}"/></picture></a>
-</p>
-
-<p align="center"><sub><b>Story grammar:</b> evidence is solid, optional or conditional seams are dashed, and future thesis is translucent. <a href="https://sepahead.github.io/sepahead/mural/">Explore the five cinematic master cuts &#8599;</a></sub></p>
-<!-- END:from-signal-to-frontier -->
+    return """<!-- The animated mural is intentionally unlisted from the visible
+GitHub profile. Preserve direct access at:
+https://sepahead.github.io/sepahead/mural/ -->
 """
 
 
@@ -831,7 +819,7 @@ Start here:
 
 1. Open `START_HERE.html` to compare all 25 concepts live.
 2. Open `cinematic_masters/CINEMATIC_MASTERS.html` to review the five flagship cuts.
-3. Use `profile_integration/README_INSERT.md` and the two lead SVGs for the GitHub profile.
+3. Keep `profile_integration/README_INSERT.md` as the non-visible archive note.
 4. Read `docs/IMPLEMENTATION_GUIDE.md` for deployment, accessibility, and maintenance.
 
 ## What is included
@@ -840,13 +828,14 @@ Start here:
 - Dark and light versions of every concept = 50 animated SVGs.
 - 5 high-density cinematic masters in dark and light = 10 master SVGs.
 - Static PNG previews for every concept and every master.
-- A GitHub-ready primary mural pair: From Signal to Frontier / Obsidian Mission Glass.
-- A ready-to-paste README section, selection matrix, manifest, checksums, and source generator.
+- A preserved primary mural pair: From Signal to Frontier / Obsidian Mission Glass.
+- A non-visible README archive note, selection matrix, manifest, checksums, and source generator.
 - A visual PDF field guide and 20-lens quality review.
 
 ## Primary recommendation
 
-Use **From Signal to Frontier / Obsidian Mission Glass** once, directly after the social/CV strip and before activity. Link it to the deeper five-master gallery. Do not stack five large murals in the README.
+Do not embed a mural in the visible GitHub profile or Pages homepage. Preserve
+the complete system at the direct-access `/mural/` archive.
 
 ## Truthfulness grammar
 
@@ -865,12 +854,12 @@ def implementation_guide() -> str:
 
 1. Hero
 2. Social and CV strip
-3. From Signal to Frontier mural
-4. The Pulse / contribution evidence
-5. Selected Work
-6. Ecosystem map, toolbox, agentic stack, and contact
+3. The Pulse / contribution evidence
+4. Selected Work
+5. Ecosystem map, toolbox, agentic stack, and contact
 
-This order establishes the thesis before presenting proof. The mural is an explanatory bridge, not a decorative header.
+The visible profile begins its numbered evidence flow with The Pulse. The mural
+is an unlisted archive, not a numbered profile section.
 
 ## File placement
 
@@ -881,7 +870,9 @@ Copy these files into the profile repository:
 - `profile_integration/assets/title-frontier-dark.svg`
 - `profile_integration/assets/title-frontier-light.svg`
 
-Paste `profile_integration/README_INSERT.md` after the CV links and before the current Pulse heading.
+Do not paste a visible mural block into the profile. The generated
+`profile_integration/README_INSERT.md` contains only a non-rendering maintenance
+comment with the direct archive URL.
 
 The complete deeper gallery is in `site/mural/`. It is suitable for GitHub Pages at `/mural/`.
 
@@ -889,7 +880,8 @@ The complete deeper gallery is in `site/mural/`. It is suitable for GitHub Pages
 
 The primary loop is 84 seconds. Movement maps to sensing, routing, admission, evidence, orbit, or exploration. It intentionally includes long quiet holds. Every file honors `prefers-reduced-motion: reduce`; the static composition remains complete without movement.
 
-GitHub receives separate dark and light files through a `<picture>` element because relying on theme media queries inside a raw SVG is less predictable. The fallback `<img>` points to the light asset and has a complete narrative alt description.
+The archive receives separate dark and light files. It remains fully accessible
+at its direct route without being embedded on the profile or homepage.
 
 ## Maintenance
 
@@ -905,7 +897,7 @@ def selection_matrix() -> str:
     rows = [
         "| Story family | Best role | Recommended art direction | Profile use |",
         "| --- | --- | --- | --- |",
-        "| From Signal to Frontier | Founder narrative | Obsidian Mission Glass | Primary README mural |",
+        "| From Signal to Frontier | Founder narrative | Obsidian Mission Glass | Unlisted archive |",
         "| One Mission, End to End | Concrete demo companion | Bioluminescent Deep-Time | Deep gallery / demo |",
         "| The Compounding Engine | Founder-market fit | Celestial Cartographer | Portfolio / pitch |",
         "| The Evidence Observatory | Credibility and maturity | Lapis Cybernetic Miniature | Technical diligence |",
