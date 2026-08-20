@@ -19,10 +19,10 @@ const f1 = (v) => Number(v.toFixed(1));
 // glow/shadow bleed (the label is stripped, so no need to clip tightly).
 const SPEC = {
   pidrs:    { half: 50 },
-  ncp:      { half: 46, aria: "NCP logo: a bounded four-plane contract with separate action proposal and receipt" },
+  ncp:      { half: 46, aria: "NCP logo: paired contract bounds hold one quartered four-plane knot while proposal and receipt remain distinct" },
   crebain:  { half: 64 }, // raven raster scaled to ~118 wide (radius ~59)
   melkor:   { half: 57 }, // hexagon + bezel
-  cortexel: { half: 53, aria: "Cortexel logo: declared neural data crosses a validation lattice into a deterministic figure with an attached exact-value disclosure table" }, // evidence cassette + caller-side sphere/voxel, with shadow bleed
+  cortexel: { half: 46, aria: "Cortexel logo: a neuron-seeded population voxel crosses a validation bracket into one deterministic digest-bound figure artifact" },
   manwe:    { half: 44 },
   engram:   { half: 54 }, // medallion scaled to radius ~46 + bezel/shadow
   haldir:   { half: 46 },

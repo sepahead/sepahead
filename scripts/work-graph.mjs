@@ -13,11 +13,11 @@
 // qualified deployment. Commander/body paths use two counter-flowing lanes;
 // read-only observer paths use one outward lane so authority is not implied.
 // Every project node is a bespoke "real object" mark on a machined border —
-// the crebain-badge / engram-medallion tier: NCP is a canonical four-plane
-// contract — angular JSON bounds, distinct plane keys, session/generation fence,
-// and a receipt separated from its action proposal — on a machined amber seal;
-// cortexel is a two-author evidence artifact: declared neuron/population data,
-// validation lattice, deterministic figure, exact-value table and digest;
+// the crebain-badge / engram-medallion tier: NCP is a contract knot — paired
+// JSON-like bounds hold a quartered four-plane identity while a receipt remains
+// distinct from its action proposal — on a machined amber seal; cortexel is an
+// evidence fold: a neuron-seeded population voxel crosses a fail-closed bracket
+// into one deterministic, digest-bound figure artifact;
 // crebain is its
 // own raven-in-crosshair brand mark; engram a machined silver medallion;
 // prisoma a smoked-glass prism with liquid-silver edges dispersing one beam
@@ -349,7 +349,7 @@ function germanFlag(cxf, top, w) {
   );
 }
 
-// Solid badge seat shared by the seated marks (NCP's gate, cortexel's voxel
+// Solid badge seat shared by the seated marks (NCP's knot, cortexel's evidence
 // net): an accent-tinted machined disc at manwe's border grade — a chrome
 // gradient bezel in the project hue (lit crown → accent → shadowed base), a
 // dark inner groove, an outer hairline that keeps the edge crisp on white,
@@ -1433,156 +1433,97 @@ export function nodeMark(n) {
   </g>`;
   }
   if (n.kind === "contract") {
-    // NCP, THE CANONICAL FOUR-PLANE CONTRACT. The prior central "gate" read too
-    // much like a broker or server. This mark makes the CONTRACT the object: two
-    // angular JSON-like braces bound four different plane keys (control,
-    // perception, action, observation) around a hollow identity-binding knot. A
-    // broken outer ring is the session/generation fence. The amber action proposal
-    // stops at the bound; only a separate white outline receipt returns. Motion
-    // illustrates one valid, currently-bound exchange — never universal admission,
-    // actuation, deployment, qualification, or physical-safety proof.
+    // NCP, THE CONTRACT KNOT. Two domains meet inside canonical JSON-like
+    // bounds without collapsing into a broker: amber is the action-proposal
+    // side, cyan is perception/observation, and the quartered diamond is the
+    // four-plane wire contract. A proposal enters and stops; a different,
+    // hollow receipt returns. The whole static identity is just { ◈ }.
     const X = (x) => f1(n.x + x), Y = (y) => f1(n.y + y);
     const diamond = (x, y, r) => `${X(x)},${Y(y-r)} ${X(x+r)},${Y(y)} ${X(x)},${Y(y+r)} ${X(x-r)},${Y(y)}`;
-    const CYC = "8.4s";
+    const CYC = "8s";
     return `<g>
     <defs>
-      <radialGradient id="ncpWell" cx="45%" cy="38%" r="72%">
-        <stop offset="0%" stop-color="#1b2736"/><stop offset="62%" stop-color="#09121e"/><stop offset="100%" stop-color="#03070c"/>
-      </radialGradient>
-      <linearGradient id="ncpBrace" x1="0" y1="${Y(-20)}" x2="0" y2="${Y(20)}" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#fff3bd"/><stop offset="38%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#92400e"/>
-      </linearGradient>
-      <radialGradient id="ncpBindGlow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.82"/><stop offset="42%" stop-color="#fde68a" stop-opacity="0.24"/><stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
-      </radialGradient>
+      <radialGradient id="ncpWell" cx="44%" cy="36%" r="74%"><stop offset="0%" stop-color="#182434"/><stop offset="68%" stop-color="#08111c"/><stop offset="100%" stop-color="#03070c"/></radialGradient>
+      <linearGradient id="ncpBrace" x1="0" y1="${Y(-18)}" x2="0" y2="${Y(18)}" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fff3bd"/><stop offset="44%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#92400e"/></linearGradient>
+      <linearGradient id="ncpCyan" x1="0" y1="${Y(-18)}" x2="0" y2="${Y(18)}" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#cffafe"/><stop offset="44%" stop-color="#67e8f9"/><stop offset="100%" stop-color="#0e7490"/></linearGradient>
     </defs>
     ${seat(n.x, n.y, "gate", ["#fde68a", "#fbbf24", "#92400e"])}
     <circle cx="${n.x}" cy="${n.y}" r="30.2" class="ncp-well"/>
 
-    <g class="ncp-generation">
-      <path d="M${X(-20)} ${Y(-19)}A27.5 27.5 0 0 1 ${X(20)} ${Y(-19)}"/>
-      <path d="M${X(20)} ${Y(19)}A27.5 27.5 0 0 1 ${X(-20)} ${Y(19)}"/>
-      <animateTransform attributeName="transform" type="rotate" values="0 ${n.x} ${n.y};0 ${n.x} ${n.y};12 ${n.x} ${n.y};12 ${n.x} ${n.y};0 ${n.x} ${n.y}" keyTimes="0;0.61;0.67;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
-    </g>
+    <path d="M${X(-26)} ${Y(0)}H${X(-17)}" class="ncp-min-lane ncp-min-lane-action"/>
+    <path d="M${X(26)} ${Y(0)}H${X(17)}" class="ncp-min-lane ncp-min-lane-sense"/>
+    <path d="M${X(-4)} ${Y(-17)}H${X(-9)}L${X(-13)} ${Y(-13)}V${Y(-6)}L${X(-17)} ${Y(0)}L${X(-13)} ${Y(6)}V${Y(13)}L${X(-9)} ${Y(17)}H${X(-4)}" class="ncp-min-brace ncp-min-brace-action"/>
+    <path d="M${X(4)} ${Y(-17)}H${X(9)}L${X(13)} ${Y(-13)}V${Y(-6)}L${X(17)} ${Y(0)}L${X(13)} ${Y(6)}V${Y(13)}L${X(9)} ${Y(17)}H${X(4)}" class="ncp-min-brace ncp-min-brace-sense"/>
 
-    <path d="M${X(-4)} ${Y(-19)}H${X(-9)}L${X(-13)} ${Y(-15)}V${Y(-7)}L${X(-17)} ${Y(-3)}L${X(-13)} ${Y(1)}V${Y(15)}L${X(-9)} ${Y(19)}H${X(-4)}" class="ncp-brace"/>
-    <path d="M${X(4)} ${Y(-19)}H${X(9)}L${X(13)} ${Y(-15)}V${Y(-7)}L${X(17)} ${Y(-3)}L${X(13)} ${Y(1)}V${Y(15)}L${X(9)} ${Y(19)}H${X(4)}" class="ncp-brace"/>
+    <polygon points="${X(0)},${Y(-7)} ${X(3)},${Y(0)} ${X(-3)},${Y(0)}" class="ncp-plane-top"/>
+    <polygon points="${X(7)},${Y(0)} ${X(0)},${Y(3)} ${X(0)},${Y(-3)}" class="ncp-plane-right"/>
+    <polygon points="${X(0)},${Y(7)} ${X(-3)},${Y(0)} ${X(3)},${Y(0)}" class="ncp-plane-bottom"/>
+    <polygon points="${X(-7)},${Y(0)} ${X(0)},${Y(-3)} ${X(0)},${Y(3)}" class="ncp-plane-left"/>
+    <polygon points="${diamond(0,0,7)}" class="ncp-min-knot"/>
+    <polygon points="${diamond(0,0,1.55)}" class="ncp-min-void"/>
 
-    <path d="M${X(0)} ${Y(-26)}V${Y(-6)}" class="ncp-plane ncp-control"/>
-    <path d="M${X(26)} ${Y(-3)}H${X(6)}" class="ncp-plane ncp-perception"/>
-    <path d="M${X(-26)} ${Y(3)}H${X(-6)}" class="ncp-plane ncp-action"/>
-    <path d="M${X(0)} ${Y(26)}V${Y(6)}" class="ncp-plane ncp-observation"/>
-    <path d="M${X(-6)} ${Y(9)}H${X(-22)}" class="ncp-receipt-lane"/>
-
-    <rect x="${X(-2.5)}" y="${Y(-28.5)}" width="5" height="5" rx="0.8" class="ncp-key ncp-key-control"/>
-    <polygon points="${diamond(27,-3,3)}" class="ncp-key ncp-key-perception"/>
-    <polygon points="${diamond(-27,3,3.2)}" class="ncp-key ncp-key-action"/>
-    <circle cx="${X(0)}" cy="${Y(27)}" r="3" class="ncp-key ncp-key-observation"/>
-    <polygon points="${diamond(-22,9,2.25)}" class="ncp-receipt-home"/>
-
-    <path d="M${X(0)} ${Y(-6)}L${X(4.6)} ${Y(0)}L${X(0)} ${Y(6)}L${X(-4.6)} ${Y(0)}Z" class="ncp-knot"/>
-    <polygon points="${diamond(0,-4.2,2.15)}" class="ncp-cell ncp-cell-control"/>
-    <polygon points="${diamond(4.2,0,2.15)}" class="ncp-cell ncp-cell-perception"/>
-    <polygon points="${diamond(-4.2,0,2.15)}" class="ncp-cell ncp-cell-action"/>
-    <polygon points="${diamond(0,4.2,2.15)}" class="ncp-cell ncp-cell-observation"/>
-    <polygon points="${diamond(0,0,1.8)}" class="ncp-bind-core"/>
-    <circle cx="${n.x}" cy="${n.y}" r="8.1" class="ncp-bind-ring" opacity="0">
-      <animate attributeName="opacity" values="0;0;0.88;0;0" keyTimes="0;0.56;0.63;0.73;1" dur="${CYC}" repeatCount="indefinite"/>
-      <animate attributeName="r" values="8.1;8.1;11.2;12.6;12.6" keyTimes="0;0.56;0.63;0.73;1" dur="${CYC}" repeatCount="indefinite"/>
-    </circle>
-
-    <rect x="${X(-1.65)}" y="${Y(-27.65)}" width="3.3" height="3.3" rx="0.55" class="ncp-packet ncp-packet-control" opacity="0">
-      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 19.2;0 19.2;0 0" keyTimes="0;0.08;0.22;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.06;0.09;0.88;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
-    </rect>
-    <polygon points="${diamond(27,-3,2.05)}" class="ncp-packet ncp-packet-perception" opacity="0">
-      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;-19.2 0;-19.2 0;0 0" keyTimes="0;0.20;0.36;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.18;0.21;0.88;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
+    <polygon points="${diamond(-25,0,2.2)}" class="ncp-min-proposal" opacity="0">
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;16 0;16 0;0 0" keyTimes="0;0.10;0.34;0.90;1" dur="${CYC}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.08;0.11;0.42;0.47;1" dur="${CYC}" repeatCount="indefinite"/>
     </polygon>
-    <polygon points="${diamond(-27,3,2.25)}" class="ncp-packet ncp-packet-action" opacity="0">
-      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;19.2 0;19.2 0;0 0" keyTimes="0;0.32;0.48;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.30;0.33;0.88;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
-    </polygon>
-    <circle cx="${X(0)}" cy="${Y(27)}" r="1.8" class="ncp-packet ncp-packet-observation" opacity="0">
-      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 -19.2;0 -19.2;0 0" keyTimes="0;0.44;0.56;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.42;0.45;0.88;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
+    <circle cx="${X(25)}" cy="${Y(0)}" r="2" class="ncp-min-signal" opacity="0">
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;-16 0;-16 0;0 0" keyTimes="0;0.24;0.46;0.90;1" dur="${CYC}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.22;0.25;0.52;0.57;1" dur="${CYC}" repeatCount="indefinite"/>
     </circle>
-
-    <polygon points="${diamond(-22,9,2.25)}" class="ncp-receipt" opacity="0">
-      <animateTransform attributeName="transform" type="translate" values="16 0;16 0;0 0;0 0;16 0" keyTimes="0;0.72;0.86;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.70;0.73;0.88;0.94;1" dur="${CYC}" repeatCount="indefinite"/>
+    <circle cx="${n.x}" cy="${n.y}" r="8.4" class="ncp-min-bind" opacity="0">
+      <animate attributeName="r" values="8.4;8.4;11.5;11.5" keyTimes="0;0.54;0.67;1" dur="${CYC}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0;0.82;0;0" keyTimes="0;0.53;0.57;0.69;1" dur="${CYC}" repeatCount="indefinite"/>
+    </circle>
+    <polygon points="${diamond(-25,0,2.25)}" class="ncp-min-receipt" opacity="0">
+      <animateTransform attributeName="transform" type="translate" values="16 0;16 0;0 0;0 0;16 0" keyTimes="0;0.68;0.84;0.90;1" dur="${CYC}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.66;0.69;0.85;0.90;1" dur="${CYC}" repeatCount="indefinite"/>
     </polygon>
     <text x="${n.x}" y="${f1(n.y + 46)}" text-anchor="middle" class="gate-label">${escapeXML(n.label)}</text>
   </g>`;
   }
   if (n.kind === "artifact") {
-    // Cortexel, THE TWO-AUTHOR EVIDENCE ARTIFACT. A caller-owned neuron sphere
-    // and population voxel sit on the left of an immutable validation lattice.
-    // The library-owned side is one deterministic figure cassette: plot above,
-    // exact-value/disclosure table permanently attached below, and digest notch
-    // in its chamfer. Motion visualizes a VALID request being bounded, rendered,
-    // disclosed, and hashed. It does not claim that arbitrary input passes, that
-    // caller declarations are Cortexel conclusions, or that the figure certifies
-    // scientific truth. Brand magenta is chrome; the plotted line is neutral so
-    // contract-selected scientific palettes retain their semantic authority.
+    // Cortexel, THE EVIDENCE FOLD. One population voxel with a neuron seed is
+    // still caller-owned on the left. The white bracket is the fail-closed
+    // authorship/validation boundary. On the right, a single open C-shaped
+    // artifact contains one deterministic trace and closes on its digest point.
+    // It is data -> boundary -> inspectable evidence, not a chart UI.
     const X = (x) => f1(n.x + x), Y = (y) => f1(n.y + y);
-    const CYC = "8.8s";
-    const sheet = `M${X(1)} ${Y(-21)}H${X(17)}L${X(23)} ${Y(-15)}V${Y(20)}H${X(1)}Z`;
+    const CYC = "8.4s";
     return `<g class="ctx-mark">
     ${seat(n.x, n.y, "vox", ["#f5d0fe", "#e879f9", "#86198f"])}
     <defs>
-      <radialGradient id="ctxWell" cx="42%" cy="36%" r="72%"><stop offset="0%" stop-color="#2a1233"/><stop offset="62%" stop-color="#120b1c"/><stop offset="100%" stop-color="#05070c"/></radialGradient>
-      <linearGradient id="ctxSheet" x1="0" y1="${Y(-21)}" x2="0" y2="${Y(20)}" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3b1b47"/><stop offset="44%" stop-color="#1a1024"/><stop offset="100%" stop-color="#090b12"/></linearGradient>
-      <linearGradient id="ctxSheetEdge" x1="0" y1="${Y(-21)}" x2="0" y2="${Y(20)}" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fdf4ff"/><stop offset="36%" stop-color="#e879f9"/><stop offset="100%" stop-color="#86198f"/></linearGradient>
-      <radialGradient id="ctxScanGlow"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/><stop offset="38%" stop-color="#f0abfc" stop-opacity="0.35"/><stop offset="100%" stop-color="#e879f9" stop-opacity="0"/></radialGradient>
+      <radialGradient id="ctxWell" cx="42%" cy="36%" r="74%"><stop offset="0%" stop-color="#291132"/><stop offset="68%" stop-color="#110a1a"/><stop offset="100%" stop-color="#05070c"/></radialGradient>
+      <linearGradient id="ctxArtifactEdge" x1="0" y1="${Y(-18)}" x2="0" y2="${Y(18)}" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fdf4ff"/><stop offset="38%" stop-color="#e879f9"/><stop offset="100%" stop-color="#86198f"/></linearGradient>
     </defs>
     <circle cx="${n.x}" cy="${n.y}" r="30.2" class="ctx-well"/>
 
-    <path d="M${X(-22)} ${Y(-10)}H${X(-8)} M${X(-22)} ${Y(9)}H${X(-8)}" class="ctx-declared-lane"/>
-    <circle cx="${X(-22)}" cy="${Y(-10)}" r="3.8" class="ctx-neuron"/>
-    <g class="ctx-voxel">
-      <polygon points="${X(-26)},${Y(7)} ${X(-22)},${Y(4.5)} ${X(-18)},${Y(7)} ${X(-22)},${Y(9.5)}" class="ctx-voxel-top"/>
-      <polygon points="${X(-26)},${Y(7)} ${X(-22)},${Y(9.5)} ${X(-22)},${Y(14)} ${X(-26)},${Y(11.5)}" class="ctx-voxel-left"/>
-      <polygon points="${X(-18)},${Y(7)} ${X(-22)},${Y(9.5)} ${X(-22)},${Y(14)} ${X(-18)},${Y(11.5)}" class="ctx-voxel-right"/>
+    <g class="ctx-min-voxel">
+      <polygon points="${X(-25)},${Y(-2)} ${X(-19)},${Y(-6)} ${X(-13)},${Y(-2)} ${X(-19)},${Y(2)}" class="ctx-min-voxel-top"/>
+      <polygon points="${X(-25)},${Y(-2)} ${X(-19)},${Y(2)} ${X(-19)},${Y(9)} ${X(-25)},${Y(5)}" class="ctx-min-voxel-left"/>
+      <polygon points="${X(-13)},${Y(-2)} ${X(-19)},${Y(2)} ${X(-19)},${Y(9)} ${X(-13)},${Y(5)}" class="ctx-min-voxel-right"/>
+      <circle cx="${X(-19)}" cy="${Y(-2)}" r="1.35" class="ctx-min-neuron"/>
     </g>
+    <path d="M${X(-12)} ${Y(2)}H${X(-7)}" class="ctx-min-intake-lane"/>
+    <path d="M${X(-3)} ${Y(-18)}H${X(-7)}V${Y(18)}H${X(-3)}" class="ctx-min-boundary"/>
 
-    <path d="M${X(-4)} ${Y(-20)}H${X(-8)}V${Y(20)}H${X(-4)}" class="ctx-boundary"/>
-    <path d="M${X(-8)} ${Y(-14)}H${X(-3)} M${X(-8)} ${Y(-7)}H${X(-3)} M${X(-8)} ${Y(0)}H${X(-3)} M${X(-8)} ${Y(7)}H${X(-3)} M${X(-8)} ${Y(14)}H${X(-3)}" class="ctx-lattice"/>
-    <circle cx="${X(-5.5)}" cy="${Y(-18)}" r="7" fill="url(#ctxScanGlow)" opacity="0">
-      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 36;0 36;0 0" keyTimes="0;0.24;0.43;0.92;1" dur="${CYC}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;0.9;0.9;0;0" keyTimes="0;0.22;0.25;0.41;0.44;1" dur="${CYC}" repeatCount="indefinite"/>
-    </circle>
-
-    <path d="${sheet}" class="ctx-sheet-shadow" transform="translate(1.6 2)"/>
-    <path d="${sheet}" class="ctx-sheet"/>
-    <path d="M${X(17)} ${Y(-21)}V${Y(-15)}H${X(23)}" class="ctx-fold"/>
-    <rect x="${X(5)}" y="${Y(-15)}" width="14" height="22" rx="1.6" class="ctx-figure-field"/>
-    <path d="M${X(6.5)} ${Y(3)}L${X(10)} ${Y(-4)}L${X(13.5)} ${Y(-1)}L${X(17.7)} ${Y(-10)}" class="ctx-figure-trace" stroke-dasharray="29" stroke-dashoffset="0">
-      <animate attributeName="stroke-dashoffset" values="0;0;29;29;0;0" keyTimes="0;0.02;0.05;0.44;0.68;1" dur="${CYC}" repeatCount="indefinite"/>
+    <path d="M${X(1)} ${Y(-16)}H${X(20)}V${Y(16)}H${X(1)}" class="ctx-min-artifact"/>
+    <path d="M${X(5)} ${Y(5)}L${X(10)} ${Y(-5)}L${X(14)} ${Y(0)}L${X(18)} ${Y(-9)}" class="ctx-min-trace" stroke-dasharray="31" stroke-dashoffset="0">
+      <animate attributeName="stroke-dashoffset" values="0;0;31;31;0;0" keyTimes="0;0.02;0.05;0.43;0.66;1" dur="${CYC}" repeatCount="indefinite"/>
     </path>
-    <circle cx="${X(10)}" cy="${Y(-4)}" r="1.05" class="ctx-figure-point"/>
-    <circle cx="${X(13.5)}" cy="${Y(-1)}" r="1.05" class="ctx-figure-point"/>
-    <circle cx="${X(17.7)}" cy="${Y(-10)}" r="1.05" class="ctx-figure-point"/>
+    <circle cx="${X(17)}" cy="${Y(16)}" r="1.65" class="ctx-min-digest"/>
 
-    <path d="M${X(1)} ${Y(10)}H${X(23)}V${Y(20)}H${X(1)}Z" class="ctx-disclosure"/>
-    <path d="M${X(7.5)} ${Y(10)}V${Y(20)} M${X(13.5)} ${Y(10)}V${Y(20)} M${X(19)} ${Y(10)}V${Y(20)}" class="ctx-table-grid"/>
-    <rect x="${X(3.1)}" y="${Y(13.4)}" width="2.4" height="3.1" rx="0.5" class="ctx-table-cell"/>
-    <rect x="${X(9.2)}" y="${Y(12.3)}" width="2.5" height="5.3" rx="0.5" class="ctx-table-cell"/>
-    <rect x="${X(15.1)}" y="${Y(14.1)}" width="2.3" height="2.7" rx="0.5" class="ctx-table-cell"/>
-    <circle cx="${X(21)}" cy="${Y(15)}" r="1.55" class="ctx-digest"/>
-    <circle cx="${X(21)}" cy="${Y(15)}" r="2.7" class="ctx-digest-ring" opacity="0">
-      <animate attributeName="r" values="2.7;2.7;5.2;5.2" keyTimes="0;0.67;0.77;1" dur="${CYC}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;0.9;0;0" keyTimes="0;0.67;0.70;0.80;1" dur="${CYC}" repeatCount="indefinite"/>
-    </circle>
-
-    <circle cx="${X(-22)}" cy="${Y(-10)}" r="1.65" class="ctx-intake" opacity="0">
-      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;14 0;14 0;0 0" keyTimes="0;0.08;0.19;0.42;1" dur="${CYC}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.06;0.09;0.20;0.23;1" dur="${CYC}" repeatCount="indefinite"/>
-    </circle>
-    <polygon points="${X(-24)},${Y(9)} ${X(-22)},${Y(7.7)} ${X(-20)},${Y(9)} ${X(-22)},${Y(10.3)}" class="ctx-intake" opacity="0">
-      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;14 0;14 0;0 0" keyTimes="0;0.12;0.23;0.42;1" dur="${CYC}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.10;0.13;0.24;0.27;1" dur="${CYC}" repeatCount="indefinite"/>
+    <polygon points="${X(-22)},${Y(2)} ${X(-19)},${Y(0)} ${X(-16)},${Y(2)} ${X(-19)},${Y(4)}" class="ctx-min-token" opacity="0">
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;12 0;12 0;0 0" keyTimes="0;0.10;0.27;0.90;1" dur="${CYC}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.08;0.11;0.28;0.32;1" dur="${CYC}" repeatCount="indefinite"/>
     </polygon>
+    <line x1="${X(-7)}" y1="${Y(-14)}" x2="${X(-7)}" y2="${Y(-8)}" class="ctx-min-scan" opacity="0">
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 22;0 22;0 0" keyTimes="0;0.28;0.43;0.90;1" dur="${CYC}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.26;0.29;0.41;0.44;1" dur="${CYC}" repeatCount="indefinite"/>
+    </line>
+    <circle cx="${X(17)}" cy="${Y(16)}" r="2.9" class="ctx-min-digest-ring" opacity="0">
+      <animate attributeName="r" values="2.8;2.8;5.4;5.4" keyTimes="0;0.66;0.78;1" dur="${CYC}" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0;0.9;0;0" keyTimes="0;0.65;0.69;0.80;1" dur="${CYC}" repeatCount="indefinite"/>
+    </circle>
     <text x="${n.x}" y="${f1(n.y + 48)}" text-anchor="middle" class="vox-label">${escapeXML(n.label)}</text>
   </g>`;
   }
@@ -2266,7 +2207,7 @@ const frame = `<g class="frame">
 // Assemble.
 // ---------------------------------------------------------------------------
 const aria =
-  "Conceptual standalone-first ecosystem map. Optional NCP role paths connect Engram as separate simulation responder or direct command proposer, CREBAIN as sole body and final software actuator admission authority, Haldir as gated command proposer, and Galadriel and Prisoma as read-only observers. Every command is only a proposal until CREBAIN independently admits it under a current session and bounded body-authority lease. In gated mode Engram sends Haldir-local signed intent that carries no NCP authority; Haldir independently creates and authorizes a new NCP command. A separate default-off Galadriel-Haldir edge carries deny-only assessment and authenticated disposition; its absence can never grant authority. Separately declared out-of-band CREBAIN telemetry may feed Galadriel. pid-rs is a protocol-neutral in-process library with no wire role, used optionally by Galadriel and Prisoma. Cortexel is a one-way labelled Engram export sink with no control path; its mark separates caller-declared neuron and population data from Cortexel-authored validation, deterministic figure, exact-value disclosure table and digest. Manwe, Melkor and atlas connections are research, tooling or data inputs, not control paths. The NCP mark depicts a bounded canonical contract with four visually distinct plane keys, a session and generation fence, an action proposal that stops at the bound, and a separate returning receipt; it is not a broker, actuator, release badge or certification mark. Stacked-layer badges outside COBOT-ATLAS and RELIEF-ATLAS identify them as datasets. COBOT-ATLAS shows a conserved robotic pick, desk placement and return loop. RELIEF-ATLAS shows an indexed contact sheet of varied 3-D mesh records over terrain contours. It represents a 10,079-item manifest and prompt catalog with 125 public GLBs; it does not imply a complete 10,079-mesh corpus, publication completion or asset-level licensing approval. NCP 1.0 is an unreleased, release-blocked candidate; no line claims production deployment or qualification.";
+  "Conceptual standalone-first ecosystem map. Optional NCP role paths connect Engram as separate simulation responder or direct command proposer, CREBAIN as sole body and final software actuator admission authority, Haldir as gated command proposer, and Galadriel and Prisoma as read-only observers. Every command is only a proposal until CREBAIN independently admits it under a current session and bounded body-authority lease. In gated mode Engram sends Haldir-local signed intent that carries no NCP authority; Haldir independently creates and authorizes a new NCP command. A separate default-off Galadriel-Haldir edge carries deny-only assessment and authenticated disposition; its absence can never grant authority. Separately declared out-of-band CREBAIN telemetry may feed Galadriel. pid-rs is a protocol-neutral in-process library with no wire role, used optionally by Galadriel and Prisoma. Cortexel is a one-way labelled Engram export sink with no control path; its evidence-fold mark shows a caller-owned neuron-seeded population voxel crossing a fail-closed authorship and validation bracket into one Cortexel-authored deterministic figure artifact whose lower terminus is digest-bound. Manwe, Melkor and atlas connections are research, tooling or data inputs, not control paths. The NCP contract-knot mark uses paired JSON-like bounds and a quartered diamond for one canonical four-plane identity; an amber action proposal stops at the bound and a separate hollow receipt returns. It is not a broker, actuator, release badge or certification mark. Stacked-layer badges outside COBOT-ATLAS and RELIEF-ATLAS identify them as datasets. COBOT-ATLAS shows a conserved robotic pick, desk placement and return loop. RELIEF-ATLAS shows an indexed contact sheet of varied 3-D mesh records over terrain contours. It represents a 10,079-item manifest and prompt catalog with 125 public GLBs; it does not imply a complete 10,079-mesh corpus, publication completion or asset-level licensing approval. NCP 1.0 is an unreleased, release-blocked candidate; no line claims production deployment or qualification.";
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
   <defs>
@@ -2398,61 +2339,42 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .prz-blade-glint { stroke: #ffffff; stroke-width: 1.3; stroke-linecap: round; stroke-dasharray: 5 44; stroke-opacity: 0.95; }
     .prz-foot-hot { fill: #ffffff; }
     .tri-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c4b5fd; }
-    .ncp-well       { fill: url(#ncpWell); stroke: #111827; stroke-width: 1.1; }
-    .ncp-generation path { fill: none; stroke: #fbbf24; stroke-width: 0.85; stroke-opacity: 0.42; stroke-dasharray: 11 3 2 3; stroke-linecap: round; }
-    .ncp-brace      { fill: none; stroke: url(#ncpBrace); stroke-width: 2.25; stroke-linecap: round; stroke-linejoin: round; }
-    .ncp-plane      { fill: none; stroke-linecap: round; }
-    .ncp-control    { stroke: #fde68a; stroke-width: 1.2; }
-    .ncp-perception { stroke: #67e8f9; stroke-width: 1.25; stroke-dasharray: 3.1 2.4; }
-    .ncp-action     { stroke: #fbbf24; stroke-width: 2.1; }
-    .ncp-observation{ stroke: #a5f3fc; stroke-width: 1.25; stroke-dasharray: 0.8 3.2; }
-    .ncp-receipt-lane { fill: none; stroke: #f8fafc; stroke-width: 0.7; stroke-opacity: 0.42; stroke-linecap: round; }
-    .ncp-key        { stroke-linejoin: round; }
-    .ncp-key-control { fill: #422006; stroke: #fef3c7; stroke-width: 0.8; }
-    .ncp-key-perception { fill: #071a26; stroke: #a5f3fc; stroke-width: 0.9; }
-    .ncp-key-action { fill: #fbbf24; stroke: #fff7d6; stroke-width: 0.75; }
-    .ncp-key-observation { fill: #071a26; stroke: #cffafe; stroke-width: 0.9; stroke-dasharray: 1 1.6; }
-    .ncp-receipt-home { fill: #07111d; stroke: #ffffff; stroke-width: 0.75; stroke-opacity: 0.72; stroke-linejoin: round; }
-    .ncp-knot       { fill: #050912; stroke: #fef3c7; stroke-width: 0.7; stroke-opacity: 0.8; stroke-linejoin: round; }
-    .ncp-cell       { stroke-width: 0.45; stroke-linejoin: round; }
-    .ncp-cell-control { fill: #fde68a; stroke: #fff7d6; }
-    .ncp-cell-perception { fill: #164e63; stroke: #cffafe; }
-    .ncp-cell-action { fill: #f59e0b; stroke: #fff7d6; }
-    .ncp-cell-observation { fill: #083344; stroke: #a5f3fc; }
-    .ncp-bind-core  { fill: #ffffff; stroke: #fde68a; stroke-width: 0.45; }
-    .ncp-bind-ring  { fill: none; stroke: #fff7d6; stroke-width: 0.9; filter: url(#edgeGlow); }
-    .ncp-packet     { stroke-width: 0.45; filter: url(#edgeGlow); }
-    .ncp-packet-control { fill: #fff7d6; stroke: #ffffff; }
-    .ncp-packet-perception { fill: #cffafe; stroke: #ffffff; }
-    .ncp-packet-action { fill: #fbbf24; stroke: #ffffff; }
-    .ncp-packet-observation { fill: #a5f3fc; stroke: #ffffff; }
-    .ncp-receipt    { fill: #07111d; stroke: #ffffff; stroke-width: 1.05; stroke-linejoin: round; filter: url(#edgeGlow); }
+    .ncp-well              { fill: url(#ncpWell); stroke: #111827; stroke-width: 1.1; }
+    .ncp-min-lane          { fill: none; stroke-linecap: round; }
+    .ncp-min-lane-action   { stroke: #fbbf24; stroke-width: 1.8; }
+    .ncp-min-lane-sense    { stroke: #67e8f9; stroke-width: 1.25; stroke-dasharray: 2.5 2.3; }
+    .ncp-min-brace         { fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+    .ncp-min-brace-action  { stroke: url(#ncpBrace); }
+    .ncp-min-brace-sense   { stroke: url(#ncpCyan); }
+    .ncp-plane-top         { fill: #fde68a; }
+    .ncp-plane-right       { fill: #67e8f9; }
+    .ncp-plane-bottom      { fill: #0e7490; }
+    .ncp-plane-left        { fill: #f59e0b; }
+    .ncp-min-knot          { fill: none; stroke: #fff7d6; stroke-width: 0.85; stroke-linejoin: round; }
+    .ncp-min-void          { fill: #050912; stroke: #ffffff; stroke-width: 0.45; }
+    .ncp-min-proposal      { fill: #fbbf24; stroke: #fff7d6; stroke-width: 0.5; }
+    .ncp-min-signal        { fill: #083344; stroke: #cffafe; stroke-width: 0.8; }
+    .ncp-min-bind          { fill: none; stroke: #fff7d6; stroke-width: 0.85; filter: url(#edgeGlow); }
+    .ncp-min-receipt       { fill: #07111d; stroke: #ffffff; stroke-width: 1.05; stroke-linejoin: round; filter: url(#edgeGlow); }
     .gate-label     { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; text-anchor: middle; }
     .flag-k     { fill: #181818; }
     .flag-r     { fill: #d8001d; }
     .flag-g     { fill: #ffcc00; }
     .flag-edge  { fill: none; stroke: #ffffff; stroke-opacity: 0.16; stroke-width: 0.6; }
     .vox-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #f0abfc; }
-    .ctx-well       { fill: url(#ctxWell); stroke: #1f1227; stroke-width: 1.1; }
-    .ctx-declared-lane { fill: none; stroke: #c4b5fd; stroke-width: 0.85; stroke-opacity: 0.58; stroke-dasharray: 2.1 2.3; stroke-linecap: round; }
-    .ctx-neuron     { fill: #e9d5ff; stroke: #ffffff; stroke-width: 0.8; }
-    .ctx-voxel-top  { fill: #e879f9; stroke: #fdf4ff; stroke-width: 0.55; stroke-linejoin: round; }
-    .ctx-voxel-left { fill: #a21caf; stroke: #f0abfc; stroke-width: 0.55; stroke-linejoin: round; }
-    .ctx-voxel-right{ fill: #701a75; stroke: #d946ef; stroke-width: 0.55; stroke-linejoin: round; }
-    .ctx-boundary   { fill: none; stroke: #fdf4ff; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; }
-    .ctx-lattice    { fill: none; stroke: #e879f9; stroke-width: 0.75; stroke-opacity: 0.72; stroke-linecap: round; }
-    .ctx-sheet-shadow { fill: #000000; fill-opacity: 0.62; }
-    .ctx-sheet      { fill: url(#ctxSheet); stroke: url(#ctxSheetEdge); stroke-width: 1.45; stroke-linejoin: round; }
-    .ctx-fold       { fill: none; stroke: #f5d0fe; stroke-width: 0.8; stroke-opacity: 0.72; stroke-linejoin: round; }
-    .ctx-figure-field { fill: #070a11; stroke: #e879f9; stroke-width: 0.55; stroke-opacity: 0.58; }
-    .ctx-figure-trace { fill: none; stroke: #f8fafc; stroke-width: 1.35; stroke-linecap: round; stroke-linejoin: round; }
-    .ctx-figure-point { fill: #ffffff; stroke: #e879f9; stroke-width: 0.45; }
-    .ctx-disclosure { fill: #220b2a; stroke: #f0abfc; stroke-width: 0.55; stroke-opacity: 0.82; }
-    .ctx-table-grid { fill: none; stroke: #f0abfc; stroke-width: 0.45; stroke-opacity: 0.5; }
-    .ctx-table-cell { fill: #f5d0fe; fill-opacity: 0.86; }
-    .ctx-digest     { fill: #ffffff; stroke: #e879f9; stroke-width: 0.55; }
-    .ctx-digest-ring{ fill: none; stroke: #fdf4ff; stroke-width: 0.8; filter: url(#edgeGlow); }
-    .ctx-intake     { fill: #fdf4ff; stroke: #e879f9; stroke-width: 0.45; filter: url(#edgeGlow); }
+    .ctx-well              { fill: url(#ctxWell); stroke: #1f1227; stroke-width: 1.1; }
+    .ctx-min-voxel-top     { fill: #e879f9; stroke: #fdf4ff; stroke-width: 0.65; stroke-linejoin: round; }
+    .ctx-min-voxel-left    { fill: #a21caf; stroke: #f0abfc; stroke-width: 0.65; stroke-linejoin: round; }
+    .ctx-min-voxel-right   { fill: #701a75; stroke: #d946ef; stroke-width: 0.65; stroke-linejoin: round; }
+    .ctx-min-neuron        { fill: #ffffff; stroke: #e879f9; stroke-width: 0.45; }
+    .ctx-min-intake-lane   { fill: none; stroke: #c4b5fd; stroke-width: 0.8; stroke-opacity: 0.55; stroke-dasharray: 2 2.2; stroke-linecap: round; }
+    .ctx-min-boundary      { fill: none; stroke: #fdf4ff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .ctx-min-artifact      { fill: none; stroke: url(#ctxArtifactEdge); stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; }
+    .ctx-min-trace         { fill: none; stroke: #ffffff; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; }
+    .ctx-min-digest        { fill: #ffffff; stroke: #e879f9; stroke-width: 0.55; }
+    .ctx-min-token         { fill: #fdf4ff; stroke: #e879f9; stroke-width: 0.45; filter: url(#edgeGlow); }
+    .ctx-min-scan          { stroke: #ffffff; stroke-width: 1.2; stroke-linecap: round; filter: url(#edgeGlow); }
+    .ctx-min-digest-ring   { fill: none; stroke: #fdf4ff; stroke-width: 0.8; filter: url(#edgeGlow); }
     .seat-creb     { fill: url(#crebGrad); }
     .creb-signal   { fill: none; stroke: #b6cf86; stroke-opacity: 0.7; stroke-width: 1.2; }
     .creb-xhair    { fill: none; stroke: #a8c07a; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linecap: round; }
