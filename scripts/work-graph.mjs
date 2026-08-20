@@ -1492,13 +1492,17 @@ export function nodeMark(n) {
     // neuroscience evidence, not a generic chart UI, brain icon, simulator claim,
     // or scientific-certification seal.
     const X = (x) => f1(n.x + x), Y = (y) => f1(n.y + y);
+    // The trace's steep right-hand recovery carries more visual weight than its
+    // resting lead-in. A small optical offset centers the waveform in the open C.
+    const AP_DX = -0.8;
+    const AX = (x) => X(x + AP_DX);
     const CYC = "8.4s";
     return `<g class="ctx-mark">
     ${seat(n.x, n.y, "vox", ["#f5d0fe", "#e879f9", "#86198f"])}
     <defs>
       <radialGradient id="ctxWell" cx="42%" cy="36%" r="74%"><stop offset="0%" stop-color="#291132"/><stop offset="68%" stop-color="#110a1a"/><stop offset="100%" stop-color="#05070c"/></radialGradient>
       <linearGradient id="ctxArtifactEdge" x1="0" y1="${Y(-18)}" x2="0" y2="${Y(18)}" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fdf4ff"/><stop offset="38%" stop-color="#e879f9"/><stop offset="100%" stop-color="#86198f"/></linearGradient>
-      <clipPath id="ctxActionPotentialClip"><rect x="${X(3.5)}" y="${Y(-14)}" width="15.5" height="29">
+      <clipPath id="ctxActionPotentialClip"><rect x="${AX(3.5)}" y="${Y(-14)}" width="15.5" height="29">
         <animate attributeName="width" values="15.5;15.5;0;0;15.5;15.5" keyTimes="0;0.02;0.05;0.43;0.61;1" dur="${CYC}" repeatCount="indefinite"/>
       </rect></clipPath>
     </defs>
@@ -1514,13 +1518,13 @@ export function nodeMark(n) {
     <path d="M${X(-3)} ${Y(-18)}H${X(-7)}V${Y(18)}H${X(-3)}" class="ctx-min-boundary"/>
 
     <path d="M${X(1)} ${Y(-16)}H${X(20)}V${Y(16)}H${X(1)}" class="ctx-min-artifact"/>
-    <path d="M${X(4)} ${Y(7)}
-             C${X(5.6)} ${Y(7)} ${X(6.7)} ${Y(7)} ${X(7.4)} ${Y(6.7)}
-             C${X(8.1)} ${Y(6.2)} ${X(8.55)} ${Y(-8.8)} ${X(9.45)} ${Y(-11.5)}
-             C${X(9.85)} ${Y(-12.7)} ${X(10.35)} ${Y(-12.1)} ${X(10.75)} ${Y(-9.4)}
-             C${X(11.45)} ${Y(-4.2)} ${X(11.75)} ${Y(4.4)} ${X(12.9)} ${Y(9.4)}
-             C${X(13.55)} ${Y(12.3)} ${X(14.45)} ${Y(13.1)} ${X(15.2)} ${Y(10.5)}
-             C${X(16)} ${Y(7.9)} ${X(17)} ${Y(7)} ${X(18.5)} ${Y(7)}"
+    <path d="M${AX(4)} ${Y(7)}
+             C${AX(5.6)} ${Y(7)} ${AX(6.7)} ${Y(7)} ${AX(7.4)} ${Y(6.7)}
+             C${AX(8.1)} ${Y(6.2)} ${AX(8.55)} ${Y(-8.8)} ${AX(9.45)} ${Y(-11.5)}
+             C${AX(9.85)} ${Y(-12.7)} ${AX(10.35)} ${Y(-12.1)} ${AX(10.75)} ${Y(-9.4)}
+             C${AX(11.45)} ${Y(-4.2)} ${AX(11.75)} ${Y(4.4)} ${AX(12.9)} ${Y(9.4)}
+             C${AX(13.55)} ${Y(12.3)} ${AX(14.45)} ${Y(13.1)} ${AX(15.2)} ${Y(10.5)}
+             C${AX(16)} ${Y(7.9)} ${AX(17)} ${Y(7)} ${AX(18.5)} ${Y(7)}"
           class="ctx-min-action-potential" clip-path="url(#ctxActionPotentialClip)"/>
 
     <polygon points="${X(-22)},${Y(2)} ${X(-19)},${Y(0)} ${X(-16)},${Y(2)} ${X(-19)},${Y(4)}" class="ctx-min-token" opacity="0">
