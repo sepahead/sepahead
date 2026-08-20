@@ -21,8 +21,10 @@
 // into the three PID components; melkor an obsidian forge plate whose black
 // massif wears an uneven tactical survey mesh; manwe a lens barrel whose six-blade
 // iris frames a quadcopter caught in lock-on brackets; cobot-atlas a blue-chrome
-// kinematic cell whose articulated arm inspects a mesh voxel; galadriel the
-// sentinel shield; pid-rs a crisp instrument dial. The whole panel is wrapped in a
+// kinematic cell whose articulated arm inspects a mesh voxel; relief-atlas a
+// rose-metal manifest engine turning contour-indexed inputs into one released
+// mesh; galadriel the sentinel shield; pid-rs a crisp instrument dial. The whole
+// panel is wrapped in a
 // "provenance instrument" frame (amber corner brackets).
 // Theme-adaptive (prefers-color-scheme), reduced-motion safe. Zero deps.
 // Run: `node scripts/work-graph.mjs`.
@@ -50,7 +52,7 @@ const VSHIFT = 26; // push the graph body down so the taller canvas is balanced 
 // ---------------------------------------------------------------------------
 // Spec. Positions are node centres; colours are per-project accents.
 //   large: cube · hub (circle) · triangle · logo (image)
-//   bespoke logos: gate (NCP) · voxel-net (cortexel) · raven (crebain) | chip
+//   bespoke logos: gate · voxel-net · raven · cobot cell · relief engine | chip
 // ---------------------------------------------------------------------------
 const nodes = {
   engram:      { x: 110, y: 230, color: "#bcc6d1", kind: "logo" },
@@ -60,7 +62,7 @@ const nodes = {
   crebain:     { x: 458, y: 366, color: "#9caf88", kind: "raven" },
   cobotatlas:  { x: 690, y: 140, color: "#60a5fa", kind: "cobot", label: "cobot-atlas", dataset: true },
   melkor:      { x: 690, y: 250, color: "#fb923c", kind: "cube" },
-  reliefatlas: { x: 690, y: 350, color: "#fb7185", kind: "chip", label: "relief-atlas", dataset: true },
+  reliefatlas: { x: 690, y: 374, color: "#fb7185", kind: "relief", label: "relief-atlas", dataset: true },
   cortexel:    { x: 110, y: 360, color: "#e879f9", kind: "voxel" },
   manwe:       { x: 298, y: 386, color: "#38bdf8", kind: "radar", label: "manwe" },
   galadriel:   { x: 495, y: 253, color: "#ef4444", kind: "sentinel", label: "galadriel" },
@@ -156,6 +158,7 @@ function halfExtents(n) {
   if (n.kind === "haldir") return { hw: SEAT_R, hh: SEAT_R, circle: true };
   if (n.kind === "logo") return { hw: 46, hh: 46, circle: true };
   if (n.kind === "cobot") return { hw: 40, hh: 40, circle: true };
+  if (n.kind === "relief") return { hw: 40, hh: 40, circle: false };
   if (n.kind === "cube") return { hw: 48, hh: 48, circle: true };
   return { hw: nodeWidth(n) / 2, hh: CHIP_H / 2, circle: false };
 }
@@ -167,6 +170,12 @@ function nodePolygon(n) {
   if (n.kind === "triangle") {
     const dx = (TRI_CIRCUM * Math.sqrt(3)) / 2;
     return [{ x: 0, y: -TRI_CIRCUM }, { x: dx, y: TRI_CIRCUM / 2 }, { x: -dx, y: TRI_CIRCUM / 2 }];
+  }
+  if (n.kind === "relief") {
+    return [
+      { x: -24, y: -40 }, { x: 24, y: -40 }, { x: 40, y: -24 }, { x: 40, y: 24 },
+      { x: 24, y: 40 }, { x: -24, y: 40 }, { x: -40, y: 24 }, { x: -40, y: -24 },
+    ];
   }
   return null;
 }
@@ -2039,6 +2048,94 @@ export function nodeMark(n) {
   </g>`;
   }
 
+  if (n.kind === "relief") {
+    // relief-atlas: THE MANIFEST RELIEF ENGINE — a rose-metal cartographic
+    // instrument for a prompt/catalog-to-3D-asset pipeline, not an aid-agency
+    // badge and not a completion meter. Four neutral west-side inlet ports stand
+    // for the four geography manifests; engraved terrain contours converge on an
+    // intentionally irregular six-face mesh; one east-side rhombus is the public
+    // output subset. The mark avoids protected Red Cross / Red Crescent symbols,
+    // flags, victims, alarms, seals and certification cues. Motion is one calm,
+    // causal 7.2s pass: index the inputs, trace the contour route, resolve the mesh,
+    // release one token, then rest. Base geometry is already complete, so static
+    // renderers and reduced-motion users see the finished, truthful instrument.
+    const cx = n.x, cy = n.y;
+    const CYC = "7.2s";
+    const X = (dx) => f1(cx + dx);
+    const Y = (dy) => f1(cy + dy);
+    const P = (dx, dy) => `${X(dx)},${Y(dy)}`;
+    const platePath = (s = 1) =>
+      `M${P(-24*s,-40*s)} L${P(24*s,-40*s)} L${P(40*s,-24*s)} L${P(40*s,24*s)} ` +
+      `L${P(24*s,40*s)} L${P(-24*s,40*s)} L${P(-40*s,24*s)} L${P(-40*s,-24*s)} Z`;
+    const ports = [[-31,-20],[-34,-7],[-34,7],[-31,20]];
+    const targets = [[-9,-10],[-11,-3],[-11,5],[-8,12]];
+    const inletEls = ports.map(([px, py], i) =>
+      `<path class="rfa-inlet" d="M${P(px,py)} C${P(-23,py)} ${P(-17,targets[i][1])} ${P(...targets[i])}"/>` +
+      `<circle class="rfa-port" cx="${X(px)}" cy="${Y(py)}" r="3"/>` +
+      `<circle class="rfa-port-core" cx="${X(px)}" cy="${Y(py)}" r="1"/>`
+    ).join("");
+    // The center is deliberately off-axis and the perimeter non-radial: this
+    // should read as resolved terrain, never as a symmetric gemstone.
+    const A=[-13,-12], B=[4,-18], C=[18,-7], D=[11,13], E=[-5,19], F=[-17,5], O=[-2,4];
+    const verts=[A,B,C,D,E,F];
+    const faces=verts.map((v,i)=>
+      `<polygon class="rfa-face rfa-face-${i}" points="${P(...O)} ${P(...v)} ${P(...verts[(i+1)%verts.length])}"/>`
+    ).join("");
+    const meshPath = `M${P(...A)} L${P(...B)} L${P(...C)} L${P(...D)} L${P(...E)} L${P(...F)} Z ` +
+      verts.map(v=>`M${P(...O)} L${P(...v)}`).join(" ");
+    const route = `M${P(-31,-20)} C${P(-19,-20)} ${P(-16,-10)} ${P(-9,-10)} ` +
+      `C${P(-3,-8)} ${P(-5,-1)} ${P(...O)} L${P(...C)} H${X(31)}`;
+    const scanX = [-31,-34,-34,-31,O[0],31,31].map(X).join(";");
+    const scanY = [-20,-7,7,20,O[1],-2,-2].map(Y).join(";");
+    const scanTimes = "0;0.1;0.2;0.3;0.5;0.7;1";
+    return `<g>
+    <defs>
+      <linearGradient id="rfaPlate" x1="0" y1="${Y(-40)}" x2="0" y2="${Y(40)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#500724"/><stop offset="48%" stop-color="#2a0a12"/><stop offset="100%" stop-color="#12070b"/>
+      </linearGradient>
+      <linearGradient id="rfaBezel" x1="${X(-40)}" y1="${Y(-40)}" x2="${X(40)}" y2="${Y(40)}" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#fff1f2"/><stop offset="25%" stop-color="#fda4af"/><stop offset="58%" stop-color="#fb7185"/><stop offset="100%" stop-color="#9f1239"/>
+      </linearGradient>
+      <clipPath id="rfaClip"><path d="${platePath(0.97)}"/></clipPath>
+    </defs>
+    <path class="rfa-glow" d="${platePath(1.025)}"/>
+    <g filter="url(#nodeShadow)"><path class="rfa-plate" d="${platePath()}"/></g>
+    <path class="rfa-bezel" d="${platePath()}"/>
+    <path class="rfa-groove" d="${platePath(0.925)}"/>
+    <path class="rfa-hairline" d="${platePath(1.035)}"/>
+    <g clip-path="url(#rfaClip)">
+      <path class="rfa-contour rfa-contour-a" d="M${P(-29,-10)} C${P(-21,-23)} ${P(-7,-23)} ${P(3,-13)} C${P(11,-6)} ${P(9,2)} ${P(18,7)}"/>
+      <path class="rfa-contour" d="M${P(-30,4)} C${P(-19,-6)} ${P(-8,-4)} ${P(-1,5)} C${P(6,13)} ${P(15,14)} ${P(25,8)}"/>
+      <path class="rfa-contour" d="M${P(-24,18)} C${P(-13,9)} ${P(-4,12)} ${P(2,20)} C${P(8,27)} ${P(18,26)} ${P(27,20)}"/>
+      ${inletEls}
+      <path class="rfa-route" d="${route}"/>
+      ${faces}
+      <path class="rfa-surface-contour" d="M${P(-12,1)} C${P(-6,-4)} ${P(2,-3)} ${P(8,1)} C${P(12,4)} ${P(13,7)} ${P(11,10)}"/>
+      <path class="rfa-mesh-edge" d="${meshPath}"/>
+      <path class="rfa-release" d="M${P(15,-5)} H${X(34)} M${P(16,-1)} H${X(34)}"/>
+      <polygon class="rfa-output" points="${P(31,-7)} ${P(36,-2)} ${P(31,3)} ${P(26,-2)}"/>
+      <circle class="rfa-output-core" cx="${X(31)}" cy="${Y(-2)}" r="1.25"/>
+      <path class="rfa-tracer" d="${route}" stroke-dasharray="8 80" stroke-dashoffset="88" opacity="0">
+        <animate attributeName="stroke-dashoffset" values="88;88;0;0" keyTimes="0;0.28;0.62;1" dur="${CYC}" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.26;0.3;0.62;0.7;1" dur="${CYC}" repeatCount="indefinite"/>
+      </path>
+      <path class="rfa-mesh-lit" d="${meshPath}" opacity="0">
+        <animate attributeName="opacity" values="0;0;0.92;0.18;0" keyTimes="0;0.44;0.58;0.72;1" dur="${CYC}" repeatCount="indefinite"/>
+      </path>
+      <circle class="rfa-scan" cx="${X(-31)}" cy="${Y(-20)}" r="1.7" opacity="0">
+        <animate attributeName="cx" values="${scanX}" keyTimes="${scanTimes}" dur="${CYC}" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="${scanY}" keyTimes="${scanTimes}" dur="${CYC}" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;1;1;1;1;0;0" keyTimes="${scanTimes}" dur="${CYC}" repeatCount="indefinite"/>
+      </circle>
+      <polygon class="rfa-token" points="${P(31,-7)} ${P(36,-2)} ${P(31,3)} ${P(26,-2)}" opacity="0">
+        <animateTransform attributeName="transform" type="translate" values="-14 0;-14 0;0 0;0 0" keyTimes="0;0.55;0.72;1" dur="${CYC}" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.54;0.66;0.78;1" dur="${CYC}" repeatCount="indefinite"/>
+      </polygon>
+    </g>
+    <text x="${cx}" y="${f1(cy + 55)}" text-anchor="middle" class="rfa-label">${escapeXML(n.label)}</text>
+  </g>`;
+  }
+
   // Small "chip" nodes. Guard the fallback explicitly so a misspelled bespoke
   // kind cannot silently degrade into a generic pill in the published graph.
   if (n.kind !== "chip") throw new Error(`work graph has no renderer for node kind: ${n.kind}`);
@@ -2074,7 +2171,7 @@ const frame = `<g class="frame">
 // Assemble.
 // ---------------------------------------------------------------------------
 const aria =
-  "Conceptual standalone-first ecosystem map. Optional NCP role paths connect Engram as separate simulation responder or direct command proposer, CREBAIN as sole body and final software actuator admission authority, Haldir as gated command proposer, and Galadriel and Prisoma as read-only observers. Every command is only a proposal until CREBAIN independently admits it under a current session and bounded body-authority lease. In gated mode Engram sends Haldir-local signed intent that carries no NCP authority; Haldir independently creates and authorizes a new NCP command. A separate default-off Galadriel-Haldir edge carries deny-only assessment and authenticated disposition; its absence can never grant authority. Separately declared out-of-band CREBAIN telemetry may feed Galadriel. pid-rs is a protocol-neutral in-process library with no wire role, used optionally by Galadriel and Prisoma; Cortexel is a one-way labelled Engram export sink with no control path. Manwe, Melkor and atlas connections are research, tooling or data inputs, not control paths. NCP 1.0 is an unreleased, release-blocked candidate; no line claims production deployment or qualification.";
+  "Conceptual standalone-first ecosystem map. Optional NCP role paths connect Engram as separate simulation responder or direct command proposer, CREBAIN as sole body and final software actuator admission authority, Haldir as gated command proposer, and Galadriel and Prisoma as read-only observers. Every command is only a proposal until CREBAIN independently admits it under a current session and bounded body-authority lease. In gated mode Engram sends Haldir-local signed intent that carries no NCP authority; Haldir independently creates and authorizes a new NCP command. A separate default-off Galadriel-Haldir edge carries deny-only assessment and authenticated disposition; its absence can never grant authority. Separately declared out-of-band CREBAIN telemetry may feed Galadriel. pid-rs is a protocol-neutral in-process library with no wire role, used optionally by Galadriel and Prisoma; Cortexel is a one-way labelled Engram export sink with no control path. Manwe, Melkor and atlas connections are research, tooling or data inputs, not control paths. The relief-atlas release token denotes a public subset, not a complete 10,079-mesh corpus or licensing approval. NCP 1.0 is an unreleased, release-blocked candidate; no line claims production deployment or qualification.";
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
   <defs>
@@ -2310,6 +2407,34 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .cba-voxel-mesh  { fill: none; stroke: #ffffff; stroke-width: 0.5; stroke-opacity: 0.78; }
     .cba-telemetry   { fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: round; filter: url(#edgeGlow); }
     .cba-commit      { fill: none; stroke: #d7fbff; stroke-width: 1.2; }
+    .rfa-label       { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fda4af; }
+    .rfa-glow        { fill: none; stroke: #fda4af; stroke-width: 2; stroke-opacity: 0.12; stroke-linejoin: round; }
+    .rfa-plate       { fill: url(#rfaPlate); }
+    .rfa-bezel       { fill: none; stroke: url(#rfaBezel); stroke-width: 2.4; stroke-linejoin: round; }
+    .rfa-groove      { fill: none; stroke: #05070b; stroke-opacity: 0.7; stroke-width: 1; stroke-linejoin: round; }
+    .rfa-hairline    { fill: none; stroke: #2b333d; stroke-opacity: 0.58; stroke-width: 1; stroke-linejoin: round; }
+    .rfa-contour     { fill: none; stroke: #fda4af; stroke-width: 0.8; stroke-opacity: 0.24; stroke-linecap: round; }
+    .rfa-contour-a   { stroke-opacity: 0.34; }
+    .rfa-inlet       { fill: none; stroke: #fb7185; stroke-width: 0.85; stroke-opacity: 0.5; stroke-linecap: round; }
+    .rfa-port        { fill: #2a0a12; stroke: #fda4af; stroke-width: 1; }
+    .rfa-port-core   { fill: #fff1f2; }
+    .rfa-route       { fill: none; stroke: #fda4af; stroke-width: 1; stroke-opacity: 0.28; stroke-linecap: round; stroke-linejoin: round; }
+    .rfa-face        { stroke: #fda4af; stroke-width: 0.45; stroke-opacity: 0.42; stroke-linejoin: round; }
+    .rfa-face-0      { fill: #6b0928; }
+    .rfa-face-1      { fill: #9f1239; }
+    .rfa-face-2      { fill: #881337; }
+    .rfa-face-3      { fill: #3b0715; }
+    .rfa-face-4      { fill: #500724; }
+    .rfa-face-5      { fill: #be123c; }
+    .rfa-surface-contour { fill: none; stroke: #fecdd3; stroke-width: 0.55; stroke-opacity: 0.35; stroke-linecap: round; }
+    .rfa-mesh-edge   { fill: none; stroke: #ffe4e6; stroke-width: 0.75; stroke-opacity: 0.68; stroke-linejoin: round; }
+    .rfa-release     { fill: none; stroke: #fda4af; stroke-width: 0.85; stroke-opacity: 0.72; stroke-linecap: round; }
+    .rfa-output      { fill: #ffe4e6; stroke: #fb7185; stroke-width: 0.8; stroke-linejoin: round; }
+    .rfa-output-core { fill: #9f1239; }
+    .rfa-tracer      { fill: none; stroke: #fff1f2; stroke-width: 1.7; stroke-linecap: round; filter: url(#edgeGlow); }
+    .rfa-mesh-lit    { fill: none; stroke: #fff1f2; stroke-width: 1.4; stroke-linejoin: round; filter: url(#edgeGlow); }
+    .rfa-scan        { fill: #fff1f2; filter: url(#edgeGlow); }
+    .rfa-token       { fill: #fff1f2; stroke: #ffffff; stroke-width: 0.8; stroke-linejoin: round; filter: url(#edgeGlow); }
     .wg-rule    { stroke: #30363d; stroke-width: 1; stroke-opacity: 0.55; }
     .wg-bracket { fill: none; stroke: #fbbf24; stroke-width: 1.5; stroke-linecap: round; stroke-opacity: 0.85; }
     .panel      { fill: #ffffff; fill-opacity: 0.022; stroke: #ffffff; stroke-opacity: 0.07; }
@@ -2336,6 +2461,9 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .cba-label { fill: #1d4ed8; }
       .cba-hairline { stroke: #334155; stroke-opacity: 0.42; }
       .cba-glow { stroke-opacity: 0.13; }
+      .rfa-label { fill: #be123c; }
+      .rfa-hairline { stroke: #4c0519; stroke-opacity: 0.38; }
+      .rfa-glow { stroke-opacity: 0.08; }
       .wg-rule { stroke: #d0d7de; stroke-opacity: 0.9; }
       .wg-bracket { stroke: #b45309; }
       .panel { fill: #0b1f2a; fill-opacity: 0.025; stroke: #0b1f2a; stroke-opacity: 0.08; }
