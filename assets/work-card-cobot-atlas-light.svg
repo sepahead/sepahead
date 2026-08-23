@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 150" width="395" height="150" role="img" aria-label="cobot-atlas (dataset, 1,849 all-time downloads): Generation pipeline for 2,023 unique robot/cobot simulation meshes; 2,024 GLBs, 33.5 GB on Hugging Face with dataset and pipeline DOIs.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 150" width="395" height="150" role="img" aria-label="cobot-atlas (dataset, 1,850 all-time downloads): Generation pipeline for 2,023 unique robot/cobot simulation meshes; 2,024 GLBs, 33.5 GB on Hugging Face with dataset and pipeline DOIs.">
   <defs>
     <radialGradient id="wash0" cx="8%" cy="0%" r="120%"><stop offset="0%" stop-color="#0b1a33" stop-opacity="0.9"/><stop offset="60%" stop-color="#0b1a33" stop-opacity="0"/></radialGradient>
   </defs>
@@ -32,6 +32,6 @@
     <text x="23" y="78" class="desc">simulation meshes; 2,024 GLBs, 33.5 GB on Hugging</text>
     <text x="23" y="96" class="desc">Face with dataset and pipeline DOIs.</text>
     <g><rect x="23" y="110" width="66" height="22" rx="6" class="chip c0"/><text x="56" y="125" text-anchor="middle" class="chip-label c0">Python</text></g>
-    <g class="glyph-stroke c0" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M365.5 124.0 h9"/><path d="M370.0 115.0 v6.5"/><path d="M367.0 119.0 L370.0 121.5 L373.0 119.0"/></g><text x="360" y="125" text-anchor="end" class="badge c0">1,849</text>
+    <g class="glyph-stroke c0" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M365.5 124.0 h9"/><path d="M370.0 115.0 v6.5"/><path d="M367.0 119.0 L370.0 121.5 L373.0 119.0"/></g><text x="360" y="125" text-anchor="end" class="badge c0">1,850</text>
   </g>
 </svg>
