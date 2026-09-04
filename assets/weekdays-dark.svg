@@ -46,7 +46,7 @@
     <text x="128.99" y="104.36" text-anchor="middle" class="slice-label">Sun</text>
     <text x="188" y="178" text-anchor="middle" class="center-num">6771</text>
     <text x="188" y="200" text-anchor="middle" class="center-sub">500 days</text>
-    <text x="188" y="232" text-anchor="middle" class="center-streak">92-day streak</text>
+
   </g>
   <g class="legend">
     <rect x="388" y="111" width="12" height="12" rx="2" style="fill:#22d3ee" class="legend-swatch"/>
