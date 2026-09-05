@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 690" width="1000" height="690" role="img" aria-labelledby="local-title local-desc">
+  <title id="local-title">NCP local simulation v1 candidate</title>
+  <desc id="local-desc">Engram coordinates one local experiment and privately owns NEST. CREBAIN owns body and fusion state. Prisoma captures exact step pairs. Galadriel records actual detector output with explicit abstention. Each owner exchanges bounded NCP requests and exact retained results through its own private process pipes. NCP is the shared contract, not another simulation engine. One Visual modality remains insufficient for Galadriel&apos;s unchanged two-modality minimum. An unavailable observation never becomes a zero residual or a nominal report. This candidate targets local Darwin simulation. Haldir gating, remote endpoints, physical actuation, and real-time guarantees are excluded. Gated requests must be rejected before endpoint preparation. Capture and monitor results grant no command authority. The tested Engram implementation is private Paper2Brain source. The public Engram repository is a placeholder, not an executable release. Installed-artifact qualification and final release gates remain open.</desc>
+  <style>
+    .panel { fill: #0d1117; stroke: #30363d; }
+    .coordinator { fill: #172333; stroke: #536071; }
+    .owner { fill: #131c27; stroke: #536071; }
+    .contract { fill: #302409; stroke: #b68a2c; }
+    .boundary { fill: #172023; stroke: #467370; }
+    text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .caption { fill: #9da7b3; font-size: 14px; letter-spacing: 1.4px; }
+    .heading { fill: #e6edf3; font-size: 25px; font-weight: 600; }
+    .name { fill: #e6edf3; font-size: 23px; font-weight: 600; }
+    .body { fill: #b9c3cf; font-size: 14px; }
+    .role { fill: #5eead4; font-size: 17px; font-weight: 600; }
+    .contract-title { fill: #fbbf24; font-size: 22px; font-weight: 600; }
+    .contract-body { fill: #f4d48d; font-size: 15px; }
+    .request, .result { fill: none; stroke-width: 2.5px; }
+    .request { stroke: #fbbf24; } .request-head { fill: #fbbf24; }
+    .result { stroke: #5eead4; } .result-head { fill: #5eead4; }
+    .panel { fill: #ffffff; stroke: #d0d7de; }
+      .coordinator { fill: #f0f4f8; stroke: #8a9bab; }
+      .owner { fill: #f5f8fa; stroke: #a8b8c7; }
+      .contract { fill: #fff7e5; stroke: #b68a2c; }
+      .boundary { fill: #eff8f6; stroke: #8aafaa; }
+      .caption { fill: #57606a; }
+      .heading, .name { fill: #17324d; }
+      .body { fill: #435365; }
+      .role { fill: #0f766e; }
+      .contract-title { fill: #8a4b08; }
+      .contract-body { fill: #795015; }
+      .request { stroke: #9a5a00; } .request-head { fill: #9a5a00; }
+      .result { stroke: #0f766e; } .result-head { fill: #0f766e; }
+    @media (prefers-reduced-motion: reduce) { animate { display: none; } }
+  </style>
+  <rect x=".5" y=".5" width="999" height="689" rx="18" class="panel"/>
+  <text x="28" y="37" class="caption" text-anchor="start">LOCAL V1 CANDIDATE // FOUR OWNERS</text>
+  <text x="972" y="37" class="caption" text-anchor="end">PRIVATE PIPES // EXACT OUTCOMES</text>
+  <rect x="24" y="64" width="952" height="98" rx="12" class="coordinator"/>
+  <text x="46" y="101" class="heading" text-anchor="start">Engram experiment coordinator</text>
+  <text x="46" y="135" class="body" text-anchor="start">Freeze the plan. Order one step. Retain outcomes. Close evidence.</text>
+  <g data-owner="engram">
+      <path d="M 125 161 V 332" class="request"/>
+      <path d="M 143 339 V 170" class="result"/>
+      <polygon points="119,328 131,328 125,339" class="request-head"/>
+      <polygon points="137,174 149,174 143,163" class="result-head"/>
+      <rect x="24" y="344" width="220" height="150" rx="12" class="owner"/>
+      <text x="40" y="377" class="name" text-anchor="start">Engram</text>
+      <text x="40" y="403" class="role" text-anchor="start">Neural owner</text>
+      <text x="40" y="433" class="body" text-anchor="start">Persistent NEST</text>
+<text x="40" y="456" class="body" text-anchor="start">Private neural state</text>
+<text x="40" y="479" class="body" text-anchor="start">Exact readout interval</text>
+    </g>
+<g data-owner="crebain">
+      <path d="M 369 161 V 332" class="request"/>
+      <path d="M 387 339 V 170" class="result"/>
+      <polygon points="363,328 375,328 369,339" class="request-head"/>
+      <polygon points="381,174 393,174 387,163" class="result-head"/>
+      <rect x="268" y="344" width="220" height="150" rx="12" class="owner"/>
+      <text x="284" y="377" class="name" text-anchor="start">CREBAIN</text>
+      <text x="284" y="403" class="role" text-anchor="start">Body owner</text>
+      <text x="284" y="433" class="body" text-anchor="start">Simulation + fusion</text>
+<text x="284" y="456" class="body" text-anchor="start">Position + velocity</text>
+<text x="284" y="479" class="body" text-anchor="start">Applied acceleration</text>
+    </g>
+<g data-owner="prisoma">
+      <path d="M 613 161 V 332" class="request"/>
+      <path d="M 631 339 V 170" class="result"/>
+      <polygon points="607,328 619,328 613,339" class="request-head"/>
+      <polygon points="625,174 637,174 631,163" class="result-head"/>
+      <rect x="512" y="344" width="220" height="150" rx="12" class="owner"/>
+      <text x="528" y="377" class="name" text-anchor="start">Prisoma</text>
+      <text x="528" y="403" class="role" text-anchor="start">Capture owner</text>
+      <text x="528" y="433" class="body" text-anchor="start">Reserve before steps</text>
+<text x="528" y="456" class="body" text-anchor="start">Join exact step pairs</text>
+<text x="528" y="479" class="body" text-anchor="start">Check terminal record</text>
+    </g>
+<g data-owner="galadriel">
+      <path d="M 857 161 V 332" class="request"/>
+      <path d="M 875 339 V 170" class="result"/>
+      <polygon points="851,328 863,328 857,339" class="request-head"/>
+      <polygon points="869,174 881,174 875,163" class="result-head"/>
+      <rect x="756" y="344" width="220" height="150" rx="12" class="owner"/>
+      <text x="772" y="377" class="name" text-anchor="start">Galadriel</text>
+      <text x="772" y="403" class="role" text-anchor="start">Monitor owner</text>
+      <text x="772" y="433" class="body" text-anchor="start">Actual NIS detector</text>
+<text x="772" y="456" class="body" text-anchor="start">Record-only output</text>
+<text x="772" y="479" class="body" text-anchor="start">Explicit insufficiency</text>
+    </g>
+  <rect x="24" y="219" width="952" height="73" rx="10" class="contract"/>
+  <text x="500" y="249" class="contract-title" text-anchor="middle">NCP is the contract on each separate channel.</text>
+  <text x="500" y="278" class="contract-body" text-anchor="middle">Request / exact result / digest-bound acknowledgement</text>
+  <text x="500" y="518" class="body" text-anchor="middle">Results return evidence. Capture and monitoring cannot command.</text>
+  <rect x="24" y="540" width="952" height="124" rx="12" class="boundary"/>
+  <text x="46" y="569" class="body" text-anchor="start">One Visual modality: Galadriel&apos;s unchanged evidence floor requires abstention.</text>
+  <text x="46" y="596" class="body" text-anchor="start">Haldir gating is excluded. Gated requests are rejected before preparation.</text>
+  <text x="46" y="623" class="body" text-anchor="start">Darwin simulation only; no remote, physical-actuation, or real-time guarantee.</text>
+  <text x="46" y="649" class="body" text-anchor="start">Candidate status: installed qualification and final release gates remain open.</text>
+  </svg>

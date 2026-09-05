@@ -7,11 +7,11 @@
 //     so a line never runs under a node;
 //   • each edge is a gentle quadratic Bézier that bows AWAY from the graph
 //     centroid (keeps the layout open and separates the bridge crossing);
-//   • each edge is stroked with a gradient from the source node's colour to the
-//     target node's colour; no arrowheads, just connections.
-// NCP connections are OPTIONAL protocol-role paths, not claims of a live or
-// qualified deployment. Commander/body paths use two counter-flowing lanes;
-// read-only observer paths use one outward lane so authority is not implied.
+//   • line patterns, arrowheads, labels, and a visible legend identify each
+//     relationship without requiring color or animation.
+// Engram routes paired-arrow local NCP requests/results to three peer projects.
+// NCP is a contract reference, not a runtime broker. Dashed library dependencies
+// and dotted research context remain outside native runtime qualification.
 // Every project node is a bespoke "real object" mark on a machined border —
 // the crebain-badge / engram-medallion tier: NCP is a contract knot — paired
 // JSON-like bounds hold a quartered four-plane identity while a receipt remains
@@ -37,6 +37,8 @@ import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { writeThemedPair } from "./theme-split.mjs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { ECOSYSTEM_EDGES, EDGE_TYPES, LOCAL_NCP, validateEcosystemEdges } from "./ecosystem.mjs";
+import { localOwnershipSvg } from "./work-graph-local.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT_PATH = resolve(__dirname, "..", "assets", "work-graph.svg");
@@ -50,7 +52,7 @@ const CREBAIN_LOGO =
 
 
 const W = 860;
-const H = 512;
+const H = 955;
 const VSHIFT = 26; // push the graph body down so the taller canvas is balanced (frame/title stay put)
 
 // ---------------------------------------------------------------------------
@@ -59,75 +61,25 @@ const VSHIFT = 26; // push the graph body down so the taller canvas is balanced 
 //   bespoke logos: gate · voxel-net · raven · cobot cell · relief engine | chip
 // ---------------------------------------------------------------------------
 const nodes = {
-  engram:      { x: 110, y: 230, color: "#bcc6d1", kind: "logo" },
-  pidrs:       { x: 166, y: 116, color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
-  ncp:         { x: 250, y: 256, color: "#fbbf24", kind: "contract", label: "NCP" },
-  prisoma:     { x: 470, y: 122, color: "#a78bfa", kind: "triangle" },
-  crebain:     { x: 458, y: 366, color: "#9caf88", kind: "raven" },
-  cobotatlas:  { x: 690, y: 140, color: "#60a5fa", kind: "cobot", label: "cobot-atlas", dataset: true },
-  melkor:      { x: 690, y: 250, color: "#fb923c", kind: "cube" },
-  reliefatlas: { x: 690, y: 374, color: "#fb7185", kind: "relief", label: "relief-atlas", dataset: true },
-  cortexel:    { x: 110, y: 360, color: "#e879f9", kind: "artifact" },
-  manwe:       { x: 298, y: 386, color: "#38bdf8", kind: "radar", label: "manwe" },
-  galadriel:   { x: 495, y: 253, color: "#ef4444", kind: "sentinel", label: "galadriel" },
-  haldir:      { x: 370, y: 254, color: "#2dd4bf", kind: "haldir", label: "haldir" },
+  engram:      { x: 110, y: 270, color: "#bcc6d1", kind: "logo" },
+  pidrs:       { x: 420, y: 87, color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
+  ncp:         { x: 110, y: 99, color: "#fbbf24", kind: "contract", label: "NCP" },
+  prisoma:     { x: 455, y: 190, color: "#a78bfa", kind: "triangle" },
+  crebain:     { x: 455, y: 474, color: "#9caf88", kind: "raven" },
+  cobotatlas:  { x: 718, y: 181, color: "#60a5fa", kind: "cobot", label: "cobot-atlas", dataset: true },
+  melkor:      { x: 718, y: 328, color: "#fb923c", kind: "cube" },
+  reliefatlas: { x: 718, y: 480, color: "#fb7185", kind: "relief", label: "relief-atlas", dataset: true },
+  cortexel:    { x: 110, y: 484, color: "#e879f9", kind: "artifact" },
+  manwe:       { x: 288, y: 565, color: "#38bdf8", kind: "radar", label: "manwe" },
+  galadriel:   { x: 455, y: 332, color: "#ef4444", kind: "sentinel", label: "galadriel" },
+  haldir:      { x: 94, y: 826, color: "#2dd4bf", kind: "haldir", label: "haldir" },
 };
 // Uppercase every label in the SOURCE (not via CSS text-transform, which
 // librsvg and other SVG renderers ignore — content-case renders everywhere).
 for (const [id, n] of Object.entries(nodes)) n.label = (n.label || id).toUpperCase();
 
-const edges = [
-  // Optional NCP roles. `duplex` means protocol exchange, never shared
-  // authority; `read` means an outward read-only observer surface.
-  { a: "engram",      b: "ncp",       protocol: "duplex" },
-  { a: "ncp",         b: "prisoma",   protocol: "read" },
-  { a: "ncp",         b: "crebain",   protocol: "duplex" },
-  { a: "ncp",         b: "haldir",    protocol: "duplex" },
-  { a: "ncp",         b: "galadriel", protocol: "read", bow: -90 },
-
-  // Application-owned optional seams outside NCP stable-core authority.
-  { a: "engram",      b: "haldir",    bow: 120 }, // signed intent / decision receipt
-  { a: "haldir",      b: "galadriel" },           // deny-only assessment / disposition
-  { a: "crebain",     b: "galadriel" },           // separately declared telemetry/extension
-  { a: "galadriel",   b: "pidrs" },                // in-process library use; no wire role
-  { a: "prisoma",     b: "pidrs" },                // in-process library use; no wire role
-
-  // Research, labelled-export, tooling and dataset relationships.
-  { a: "cobotatlas",  b: "prisoma" },
-  { a: "melkor",      b: "prisoma" },
-  { a: "reliefatlas", b: "prisoma" },
-  { a: "crebain",     b: "cobotatlas" },
-  { a: "crebain",     b: "melkor" },
-  { a: "crebain",     b: "reliefatlas" },
-  { a: "cortexel",    b: "engram" },
-  { a: "manwe",       b: "crebain" },
-];
-
-const edgeKey = (a, b) => [a, b].sort().join("--");
-const edgeKeys = new Set(edges.map(({ a, b }) => edgeKey(a, b)));
-if (edgeKeys.size !== edges.length) throw new Error("work graph contains a duplicate edge");
-for (const { a, b, protocol } of edges) {
-  if (!nodes[a] || !nodes[b]) throw new Error(`work graph edge names an unknown node: ${a}--${b}`);
-  if (protocol && a !== "ncp" && b !== "ncp") throw new Error(`protocol edge bypasses NCP: ${a}--${b}`);
-}
-for (const [a, b] of [
-  ["engram", "ncp"],
-  ["ncp", "crebain"],
-  ["ncp", "haldir"],
-  ["ncp", "galadriel"],
-  ["ncp", "prisoma"],
-  ["engram", "haldir"],
-  ["haldir", "galadriel"],
-]) {
-  if (!edgeKeys.has(edgeKey(a, b))) throw new Error(`work graph lacks required architecture edge: ${a}--${b}`);
-}
-for (const [a, b] of [
-  ["haldir", "prisoma"],
-  ["ncp", "pidrs"],
-  ["ncp", "cortexel"],
-]) {
-  if (edgeKeys.has(edgeKey(a, b))) throw new Error(`work graph contains forbidden authority edge: ${a}--${b}`);
-}
+const edges = ECOSYSTEM_EDGES;
+validateEcosystemEdges(nodes, edges);
 
 // ---------------------------------------------------------------------------
 // Geometry.
@@ -223,23 +175,28 @@ const f1 = (v) => Number(v.toFixed(1));
 // ---------------------------------------------------------------------------
 // Build edges.
 // ---------------------------------------------------------------------------
-const gradDefs = [];
 const calmEdges = [];
-const contractEdges = [];
-const contractFlows = [];
+const runtimeEdges = [];
+const edgeLabels = [];
 
-edges.forEach((e, i) => {
+edges.forEach((e) => {
   const A = nodes[e.a];
   const B = nodes[e.b];
-  const contract = Boolean(e.protocol);
+  const isRuntime = e.kind === "runtime";
   const ux0 = B.x - A.x, uy0 = B.y - A.y;
   const len = Math.hypot(ux0, uy0);
   const ux = ux0 / len, uy = uy0 / len;
 
   const dA = boundaryDist(A, ux, uy) + GAP;
   const dB = boundaryDist(B, -ux, -uy) + GAP;
-  const p0 = { x: A.x + dA * ux, y: A.y + dA * uy };
-  const p1 = { x: B.x - dB * ux, y: B.y - dB * uy };
+  const endpoint = (node, toward) => {
+    const length = Math.hypot(toward[0] - node.x, toward[1] - node.y);
+    const x = (toward[0] - node.x) / length, y = (toward[1] - node.y) / length;
+    const distance = boundaryDist(node, x, y) + GAP;
+    return { x: node.x + distance * x, y: node.y + distance * y };
+  };
+  const p0 = e.route ? endpoint(A, e.route[0]) : { x: A.x + dA * ux, y: A.y + dA * uy };
+  const p1 = e.route ? endpoint(B, e.route.at(-1)) : { x: B.x - dB * ux, y: B.y - dB * uy };
 
   const mid = { x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2 };
   let nx = -(p1.y - p0.y), ny = p1.x - p0.x;
@@ -249,41 +206,26 @@ edges.forEach((e, i) => {
   const sign = out >= 0 ? 1 : -1;
   const chord = Math.hypot(p1.x - p0.x, p1.y - p0.y);
   const bow = Number.isFinite(e.bow) ? e.bow : sign * Math.min(0.16 * chord, 26);
-  const c = { x: mid.x + bow * nx, y: mid.y + bow * ny };
-  const d = `M ${f1(p0.x)} ${f1(p0.y)} Q ${f1(c.x)} ${f1(c.y)} ${f1(p1.x)} ${f1(p1.y)}`;
+  const c = e.via ? { x: e.via[0], y: e.via[1] } : { x: mid.x + bow * nx, y: mid.y + bow * ny };
+  const d = e.route ? `M ${f1(p0.x)} ${f1(p0.y)} ${e.route.map(([x, y]) => `L ${x} ${y}`).join(" ")} L ${f1(p1.x)} ${f1(p1.y)}` : `M ${f1(p0.x)} ${f1(p0.y)} Q ${f1(c.x)} ${f1(c.y)} ${f1(p1.x)} ${f1(p1.y)}`;
 
-  const gid = `eg${i}`;
-  gradDefs.push(
-    `<linearGradient id="${gid}" gradientUnits="userSpaceOnUse" x1="${f1(p0.x)}" y1="${f1(p0.y)}" x2="${f1(p1.x)}" y2="${f1(p1.y)}">` +
-      `<stop offset="0%" stop-color="${A.color}"/><stop offset="100%" stop-color="${B.color}"/></linearGradient>`
-  );
-
-  if (contract) {
-    // Glowing NCP contract spine. This denotes an optional protocol role, not a
-    // currently deployed, qualified or authority-sharing integration.
-    contractEdges.push(
-      `<path d="${d}" fill="none" stroke="url(#${gid})" stroke-width="3" stroke-linecap="round" class="edge-contract">` +
-        `<animate attributeName="opacity" values="0.7;1;0.7" dur="2.8s" begin="${(i * 0.3).toFixed(2)}s" repeatCount="indefinite"/></path>`
-    );
-    // Duplex commander/body roles get two counter-flowing lanes. Read-only
-    // observers get exactly one NCP→observer lane so the graph cannot suggest
-    // command, lifecycle or authority flow from the observer.
-    const off = 2.4;
-    const dF = `M ${f1(p0.x + off * nx)} ${f1(p0.y + off * ny)} Q ${f1(c.x + off * nx)} ${f1(c.y + off * ny)} ${f1(p1.x + off * nx)} ${f1(p1.y + off * ny)}`;
-    const dR = `M ${f1(p0.x - off * nx)} ${f1(p0.y - off * ny)} Q ${f1(c.x - off * nx)} ${f1(c.y - off * ny)} ${f1(p1.x - off * nx)} ${f1(p1.y - off * ny)}`;
-    contractFlows.push(
-      `<path d="${dF}" class="contract-flow"><animate attributeName="stroke-dashoffset" from="21" to="0" dur="1.7s" repeatCount="indefinite"/></path>`
-    );
-    if (e.protocol === "duplex") {
-      contractFlows.push(
-        `<path d="${dR}" class="contract-flow contract-flow-rev"><animate attributeName="stroke-dashoffset" from="0" to="21" dur="1.7s" repeatCount="indefinite"/></path>`
-      );
-    }
+  const arrow = (tip, from, css) => {
+    const angle = Math.atan2(tip.y - from.y, tip.x - from.x);
+    const dx = Math.cos(angle), dy = Math.sin(angle);
+    return `<polygon class="${css}" points="${f1(tip.x)},${f1(tip.y)} ${f1(tip.x - 8 * dx + 3.5 * dy)},${f1(tip.y - 8 * dy - 3.5 * dx)} ${f1(tip.x - 8 * dx - 3.5 * dy)},${f1(tip.y - 8 * dy + 3.5 * dx)}"/>`;
+  };
+  const title = `<title>${escapeXML(`${e.a} to ${e.b}: ${e.label}. ${EDGE_TYPES[e.kind].pattern}.`)}</title>`;
+  if (isRuntime) {
+    const off = 3.2;
+    const lane = (offset) => `M ${f1(p0.x + offset * nx)} ${f1(p0.y + offset * ny)} Q ${f1(c.x + offset * nx)} ${f1(c.y + offset * ny)} ${f1(p1.x + offset * nx)} ${f1(p1.y + offset * ny)}`;
+    const forwardTip = { x: p1.x + off * nx, y: p1.y + off * ny };
+    const reverseTip = { x: p0.x - off * nx, y: p0.y - off * ny };
+    runtimeEdges.push(`<g data-edge-kind="runtime" data-from="${e.a}" data-to="${e.b}">${title}<path d="${lane(off)}" class="edge-runtime"/><path d="${lane(-off)}" class="edge-runtime"/>${arrow(forwardTip, c, "edge-runtime-head")}${arrow(reverseTip, c, "edge-runtime-head")}</g>`);
   } else {
-    calmEdges.push(
-      `<path d="${d}" fill="none" stroke="url(#${gid})" stroke-width="2" stroke-linecap="round" class="edge"/>`
-    );
+    const endpoint = e.kind === "library" ? arrow(p1, c, "edge-library-head") : e.kind === "contract" ? `<rect x="${f1(p1.x - 3.5)}" y="${f1(p1.y - 3.5)}" width="7" height="7" class="edge-contract-end"/>` : "";
+    calmEdges.push(`<g data-edge-kind="${e.kind}" data-from="${e.a}" data-to="${e.b}">${title}<path d="${d}" class="edge-${e.kind}"/>${endpoint}</g>`);
   }
+  edgeLabels.push(`<text x="${e.labelAt[0]}" y="${e.labelAt[1]}" text-anchor="middle" class="edge-label edge-label-${e.kind}">${escapeXML(e.label)}</text>`);
 });
 
 // ---------------------------------------------------------------------------
@@ -2217,10 +2159,11 @@ const frame = `<g class="frame">
 // ---------------------------------------------------------------------------
 // Assemble.
 // ---------------------------------------------------------------------------
-const aria =
-  "Conceptual standalone-first ecosystem map. Optional NCP role paths connect Engram as separate simulation responder or direct command proposer, CREBAIN as sole body and final software actuator admission authority, Haldir as gated command proposer, and Galadriel and Prisoma as read-only observers. Every command is only a proposal until CREBAIN independently admits it under a current session and bounded body-authority lease. In gated mode Engram sends Haldir-local signed intent that carries no NCP authority; Haldir independently creates and authorizes a new NCP command. A separate default-off Galadriel-Haldir edge carries deny-only assessment and authenticated disposition; its absence can never grant authority. Separately declared out-of-band CREBAIN telemetry may feed Galadriel. pid-rs is a protocol-neutral in-process library with no wire role, used optionally by Galadriel and Prisoma. Cortexel is a one-way labelled Engram export sink with no control path; its evidence-fold mark shows a caller-owned neuron-seeded population voxel crossing a fail-closed authorship and validation bracket into one Cortexel-authored deterministic neuronal action-potential figure artifact. Manwe, Melkor and atlas connections are research, tooling or data inputs, not control paths. The NCP contract-knot mark uses paired JSON-like bounds and a quartered diamond for one canonical four-plane identity; an amber action proposal stops at the bound and a separate hollow receipt returns. It is not a broker, actuator, release badge or certification mark. Stacked-layer badges outside COBOT-ATLAS and RELIEF-ATLAS identify them as datasets. COBOT-ATLAS shows a conserved robotic pick, desk placement and return loop. RELIEF-ATLAS shows an indexed contact sheet of varied 3-D mesh records over terrain contours. It represents a 10,079-item manifest and prompt catalog with 125 public GLBs; it does not imply a complete 10,079-mesh corpus, publication completion or asset-level licensing approval. NCP 1.0 is an unreleased, release-blocked candidate; no line claims production deployment or qualification.";
+const aria = [LOCAL_NCP.title, LOCAL_NCP.summary, LOCAL_NCP.transport, LOCAL_NCP.boundary, LOCAL_NCP.monitor, LOCAL_NCP.availability, LOCAL_NCP.research, LOCAL_NCP.status].join(" ");
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
+  <title>NCP local candidate and separate research relationships</title>
+  <desc>${escapeXML(aria)}</desc>
   <defs>
     <radialGradient id="hubGrad" cx="50%" cy="42%" r="65%">
       <stop offset="0%" stop-color="#06281d"/>
@@ -2266,15 +2209,26 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       <feGaussianBlur stdDeviation="1.4" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    ${gradDefs.join("\n    ")}
   </defs>
   <style>
     :root { color-scheme: light dark; }
     .cap        { font: 400 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
-    .edge       { opacity: 0.55; }
-    .edge-contract  { filter: url(#edgeGlow); }
-    .contract-flow  { fill: none; stroke: #e2faff; stroke-width: 2.4; stroke-dasharray: 1.5 9; stroke-linecap: round; opacity: 0.9; }
-    .contract-flow-rev { stroke-width: 2; opacity: 0.78; }
+    .boundary-note { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #9da7b3; }
+    .edge-runtime, .edge-library, .edge-research, .edge-contract { fill: none; stroke-linecap: round; }
+    .edge-runtime { stroke: #fbbf24; stroke-width: 2.1; }
+    .edge-runtime-head { fill: #fbbf24; }
+    .edge-library { stroke: #6ee7b7; stroke-width: 2.1; stroke-dasharray: 8 5; }
+    .edge-library-head { fill: #6ee7b7; }
+    .edge-research { stroke: #8291a6; stroke-width: 1.9; stroke-dasharray: 1 6; }
+    .edge-contract { stroke: #c4b5fd; stroke-width: 2; stroke-dasharray: 10 4 2 4; }
+    .edge-contract-end { fill: #c4b5fd; }
+    .edge-label, .legend-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; letter-spacing: 0 !important; text-transform: none !important; }
+    .edge-label { stroke-width: 5px !important; }
+    .edge-label-runtime { fill: #fcd34d; }
+    .edge-label-library { fill: #a7f3d0; }
+    .edge-label-contract { fill: #ddd6fe; }
+    .legend-label { font-size: 13px; }
+    .scope-box { fill: none; stroke: #8291a6; stroke-width: 1; stroke-dasharray: 5 5; }
     .chip       { fill: #0d1117; stroke-width: 1.5; }
     .chip-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; }
     .hub-fill   { fill: url(#hubGrad); }
@@ -2497,9 +2451,17 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .panel      { fill: #ffffff; fill-opacity: 0.022; stroke: #ffffff; stroke-opacity: 0.07; }
     text { paint-order: stroke; stroke: #0d1117; stroke-width: 2.6; stroke-linejoin: round; text-transform: uppercase; letter-spacing: 2.5px; }
     @media (prefers-color-scheme: light) {
+      .boundary-note { fill: #57606a; }
       text { stroke: #ffffff; }
       .cap { fill: #57606a; }
-      .contract-flow { stroke: #22d3ee; }
+      .edge-runtime { stroke: #985700; } .edge-runtime-head { fill: #985700; }
+      .edge-library { stroke: #087859; } .edge-library-head { fill: #087859; }
+      .edge-research { stroke: #607086; }
+      .edge-contract { stroke: #7353a6; } .edge-contract-end { fill: #7353a6; }
+      .edge-label, .legend-label { fill: #435365; }
+      .edge-label-runtime { fill: #805000; }
+      .edge-label-library { fill: #08664d; }
+      .edge-label-contract { fill: #63428d; }
       .chip { fill: #ffffff; }
       .chip-label { fill: #1f2328; }
       .hub-glow { stroke: #059669; stroke-opacity: 0.12; }
@@ -2530,19 +2492,41 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
 
   <rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="16" class="panel"/>
   <text x="40" y="40" class="cap">THE&#160;SYSTEM&#160;//&#160;HOW&#160;THE&#160;WORK&#160;CONNECTS</text>
-  <text x="820" y="40" text-anchor="end" class="cap">STANDALONE&#160;CORES&#160;//&#160;OPTIONAL&#160;EDGES</text>
+  <text x="820" y="40" text-anchor="end" class="cap">LOCAL&#160;V1&#160;CANDIDATE&#160;//&#160;RESEARCH</text>
 
+  <text x="40" y="379" class="edge-label">Run owner</text>
+  <text x="40" y="397" class="edge-label">Private NEST</text>
+  <text x="40" y="75" class="edge-label edge-label-contract">NCP: shared contract for all four owners</text>
+  <line x1="40" y1="650" x2="820" y2="650" class="wg-rule"/>
+  <text x="40" y="680" class="cap">CONNECTION TYPES</text>
+  <path d="M 42 704 H 105 M 42 711 H 105" class="edge-runtime"/>
+  <polygon points="105,704 97,700 97,708 105,704" class="edge-runtime-head"/>
+  <polygon points="42,711 50,707 50,715 42,711" class="edge-runtime-head"/>
+  <text x="121" y="713" class="legend-label">NCP private request / result</text>
+  <path d="M 450 707 H 511" class="edge-library"/>
+  <polygon points="515,707 507,703 507,711" class="edge-library-head"/>
+  <text x="531" y="713" class="legend-label">Research library dependency</text>
+  <path d="M 42 742 H 105" class="edge-research"/>
+  <text x="121" y="748" class="legend-label">Research / export context</text>
+  <path d="M 450 742 H 511" class="edge-contract"/>
+  <rect x="508" y="738.5" width="7" height="7" class="edge-contract-end"/>
+  <text x="531" y="748" class="legend-label">Shared contract reference</text>
+  <rect x="35" y="777" width="790" height="148" rx="10" class="scope-box"/>
+  <text x="172" y="811" class="edge-label">HALDIR · POLICY RESEARCH · OUTSIDE LOCAL V1</text>
+  <text x="172" y="838" class="edge-label">Gated requests are rejected before preparation.</text>
+  <text x="172" y="862" class="edge-label">Capture and monitor results grant no command authority.</text>
+  <text x="172" y="886" class="edge-label">Local Darwin simulation; no remote or physical control.</text>
+  <text x="172" y="910" class="edge-label">Candidate: installed qualification remains open.</text>
   <g transform="translate(0 ${VSHIFT})">
     <g class="edges">
       ${calmEdges.join("\n    ")}
-      ${contractEdges.join("\n    ")}
+      ${runtimeEdges.join("\n    ")}
     </g>
-    <g class="contract-flows">
-      ${contractFlows.join("\n    ")}
-    </g>
+
     <g class="nodes">
       ${nodeEls.join("\n  ")}
     </g>
+    <g class="edge-labels">${edgeLabels.join("\n")}</g>
   </g>
   ${frame}
 </svg>
@@ -2561,5 +2545,6 @@ export { nodes };
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   mkdirSync(dirname(OUT_PATH), { recursive: true });
   writeThemedPair(OUT_PATH, svg);
+  writeThemedPair(resolve(__dirname, "..", "assets", "work-graph-local.svg"), localOwnershipSvg());
   console.log(`[work-graph] wrote ${OUT_PATH} (${svg.length} bytes)`);
 }

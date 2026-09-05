@@ -12,6 +12,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PROJECTS, REPOS, SOCIALS } from "./data.mjs";
+import { LOCAL_NCP } from "./ecosystem.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -149,6 +150,28 @@ function renderVisibleWork() {
     return `    <li class="proj" id="work-${project.slug}"><a href="${repoUrl(project)}"><b>${html(project.name)}</b></a> <span>: ${html(project.summary)}${suffix}</span></li>`;
   });
   return `<ul aria-label="Selected work">\n${items.join("\n")}\n  </ul>`;
+}
+
+function renderEcosystem() {
+  const figure = (stem, height, alt) => {
+    const base = `https://raw.githubusercontent.com/sepahead/sepahead/main/assets/${stem}`;
+    return `<p class="ecosystem-figure" align="center"><a href="${base}-light.svg" title="Open the scalable SVG to zoom"><picture><source media="(prefers-color-scheme: dark)" srcset="${base}-dark.svg"><source media="(prefers-color-scheme: light)" srcset="${base}-light.svg"><img src="${base}-light.svg" width="820" height="${height}" decoding="async" loading="lazy" alt="${html(alt)}"></picture></a></p>
+<p><a href="${base}-light.svg">Zoom SVG · light</a> · <a href="${base}-dark.svg">Zoom SVG · dark</a></p>`;
+  };
+  return `<h3>How the work relates</h3>
+<p>${html(LOCAL_NCP.research)}</p>
+${figure("work-graph", 911, "Typed project map: solid paired arrows are Engram-routed NCP requests and results; dashed arrows are research libraries; dotted lines are research and export context; a dash-dot reference identifies NCP. Haldir is outside local v1.")}
+<p><strong>Read the connections:</strong> solid paired arrows = local NCP requests and results; dashed arrows = research library dependencies; dotted lines = research or export context; dash-dot line with a square end = shared contract reference.</p>
+<p><strong>${html(LOCAL_NCP.title)}.</strong> ${html(LOCAL_NCP.status)}</p>
+<p>${html(LOCAL_NCP.summary)}</p>
+<p>${html(LOCAL_NCP.transport)}</p>
+<p>${html(LOCAL_NCP.monitor)}</p>
+<p><strong>Supported boundary:</strong> ${html(LOCAL_NCP.boundary)}</p>
+<p>${html(LOCAL_NCP.availability)} <a href="${LOCAL_NCP.guide}">Read the NCP repository and release status</a>.</p>
+<details>
+<summary>Local v1: four owners and their private channels</summary>
+${figure("work-graph-local", 566, LOCAL_NCP.summary + " " + LOCAL_NCP.boundary)}
+</details>`;
 }
 
 function licenseUrls(project) {
@@ -326,6 +349,16 @@ profile and Pages homepage. Its complete archive remains directly accessible:
 ## Selected work
 ${selected.join("\n")}
 
+## NCP local simulation candidate
+${LOCAL_NCP.summary}
+${LOCAL_NCP.transport}
+${LOCAL_NCP.monitor}
+${LOCAL_NCP.boundary}
+${LOCAL_NCP.availability}
+${LOCAL_NCP.research}
+${LOCAL_NCP.status}
+NCP repository and release status: ${LOCAL_NCP.guide}
+
 ## More repositories
 ${more.join("\n")}
 
@@ -379,13 +412,16 @@ function renderSitemap() {
 
 const outputs = new Map();
 const readmePath = resolve(ROOT, "README.md");
-const readme = readFileSync(readmePath, "utf8");
-outputs.set(readmePath, replaceRegion(readme, "selected-work:readme", renderReadmeCards(), "README.md"));
+let readme = readFileSync(readmePath, "utf8");
+readme = replaceRegion(readme, "selected-work:readme", renderReadmeCards(), "README.md");
+readme = replaceRegion(readme, "ecosystem:readme", renderEcosystem(), "README.md");
+outputs.set(readmePath, readme);
 
 const indexPath = resolve(ROOT, "docs", "index.html");
 let index = readFileSync(indexPath, "utf8");
 index = replaceRegion(index, "selected-work:jsonld", renderJsonLd(), "docs/index.html");
 index = replaceRegion(index, "selected-work:html", renderVisibleWork(), "docs/index.html");
+index = replaceRegion(index, "ecosystem:html", renderEcosystem(), "docs/index.html");
 outputs.set(indexPath, index);
 outputs.set(resolve(ROOT, "docs", "llms.txt"), renderLlms());
 outputs.set(resolve(ROOT, "docs", "sitemap.xml"), renderSitemap());

@@ -13,6 +13,7 @@
 // public repo's stargazerCount is refreshed. Without one, the last published
 // card is the fallback, then data.mjs for a first generation. Phase and dataset
 // cards keep their truthful status badge. Run: `node scripts/work-cards.mjs`.
+// Use `--offline` to preserve published counters without any network request.
 
 import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { writeThemedPair } from "./theme-split.mjs";
@@ -22,6 +23,10 @@ import { PROJECTS } from "./data.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ASSETS_DIR = resolve(__dirname, "..", "assets");
+if (process.argv.slice(2).some((argument) => argument !== "--offline")) {
+  throw new Error("usage: node scripts/work-cards.mjs [--offline]");
+}
+const OFFLINE = process.argv.includes("--offline");
 
 const projects = PROJECTS;
 // each public repo's current stargazerCount so the badges auto-update; the
@@ -49,6 +54,7 @@ async function hydrateStars(list) {
     }
   }
 
+  if (OFFLINE) return;
   const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN || "";
   if (!token) {
     console.warn("[work-cards] no token; using published/baked-in star counts.");
@@ -111,6 +117,7 @@ async function hydrateDownloads(list) {
     } catch {
       // First generation: no committed SVG yet; the data.mjs fallback stands.
     }
+    if (OFFLINE) continue;
     try {
       const res = await fetch(
         `https://huggingface.co/api/datasets/${encodeURIComponent(p.hf).replace(/%2F/g, "/")}?expand[]=downloadsAllTime`,
