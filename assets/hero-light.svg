@@ -1,106 +1,95 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 176" width="860" height="176" role="img" aria-label="Sepehr Mahmoudian: Senior AI Engineer in Berlin building domain-specific AI agents and custom harnesses, with work spanning LLM/VLM evaluation and AI traceability, knowledge graphs, Graph RAG, data provenance, model validation, Partial Information Decomposition, computational neuroscience, robotics and multimodal 3D perception.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 176" width="860" height="176" role="img" aria-label="Sepehr Mahmoudian is a Senior AI Engineer in Berlin, Germany, building domain-specific AI agents and custom harnesses, with work spanning LLM/VLM evaluation and AI traceability, knowledge graphs, Graph RAG, data provenance, model validation, Partial Information Decomposition, computational neuroscience, robotics and multimodal 3D perception. Primary languages: Rust and Python. Building on GitHub since 2014.">
   <title>Sepehr Mahmoudian — Senior AI Engineer, Berlin</title>
   <desc>Sepehr Mahmoudian is a Senior AI Engineer in Berlin, Germany, building domain-specific AI agents and custom harnesses, with work spanning LLM/VLM evaluation and AI traceability, knowledge graphs, Graph RAG, data provenance, model validation, Partial Information Decomposition, computational neuroscience, robotics and multimodal 3D perception. Primary languages: Rust and Python. Building on GitHub since 2014.</desc>
   <style>
-    /* Theme colors mirror assets/weekdays.svg so the page reads as one system. */
-    .wordmark { font: 700 40px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #22d3ee; letter-spacing: -1px; }
-    .role     { font: 500 19px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; }
-    .meta     { font: 400 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #6e7681; }
-    .underline-base { stroke: #30363d; stroke-width: 2; fill: none; }
+    .wordmark { font: 700 40px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #0891b2; letter-spacing: -1px; }
+    .role { font: 500 19px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #1f2328; }
+    .meta { font: 400 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #57606a; }
+    .role-cur { visibility: hidden; fill: #1f2328; }
+    .sweep { transform: translateX(0); animation: sweep 3.2s linear infinite; }
+    @keyframes sweep { from { transform: translateX(-100px); } to { transform: translateX(620px); } }
+    @keyframes blink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
 
-    /* All three rotating lines share one 15s/3-slot clock and the SAME
-       transition, a terminal "decrypt" type-on reveal (left-to-right) with a
-       clean fade-out, each windowed to its own slot. Every line carries its own
-       blinking block cursor (same colour as the text) at its end. Inline opacity
-       attrs are the no-anim fallback. */
     .seq1 { animation: seq1 15s linear infinite; }
-    .seq2 { animation: seq2 15s linear infinite; }
-    .seq3 { animation: seq3 15s linear infinite; }
-    .role-cur { visibility: hidden; fill: #c9d1d9; }
-    .cur1 { animation: cur1 15s linear infinite, curblink 1s steps(1) infinite; }
-    .cur2 { animation: cur2 15s linear infinite, curblink 1s steps(1) infinite; }
-    .cur3 { animation: cur3 15s linear infinite, curblink 1s steps(1) infinite; }
-
+    .type1 { animation: type1 15s steps(65, end) infinite; }
+    .cur1 { animation: cursor1 15s steps(65, end) infinite, blink 1s steps(1) infinite; }
     @keyframes seq1 {
-      0%    { opacity: 0; clip-path: inset(0 100% 0 0); }
-      0.8%  { opacity: 1; clip-path: inset(0 100% 0 0); }
-      3%    { opacity: 0.7; clip-path: inset(0 55% 0 0); }
-      6%    { opacity: 1; clip-path: inset(0 22% 0 0); }
-      8.5%  { opacity: 0.9; clip-path: inset(0 0 0 0); }
-      10%, 29% { opacity: 1; clip-path: inset(0 0 0 0); }
-      33.3%, 100% { opacity: 0; clip-path: inset(0 0 0 0); }
+      0%, 0% { opacity: 0; }
+      0.0667%, 30.6667% { opacity: 1; }
+      32.6667%, 100% { opacity: 0; }
     }
-    @keyframes seq2 {
-      0%, 33.3% { opacity: 0; clip-path: inset(0 100% 0 0); }
-      34.1% { opacity: 1; clip-path: inset(0 100% 0 0); }
-      36.3% { opacity: 0.7; clip-path: inset(0 55% 0 0); }
-      39.3% { opacity: 1; clip-path: inset(0 22% 0 0); }
-      41.8% { opacity: 0.9; clip-path: inset(0 0 0 0); }
-      43.3%, 62.7% { opacity: 1; clip-path: inset(0 0 0 0); }
-      66.7%, 100% { opacity: 0; clip-path: inset(0 0 0 0); }
+    @keyframes type1 {
+      0%, 0% { width: 0; }
+      12%, 32.6667% { width: 715px; }
+      33.2667%, 100% { width: 0; }
     }
-    @keyframes seq3 {
-      0%, 66.7% { opacity: 0; clip-path: inset(0 100% 0 0); }
-      67.5% { opacity: 1; clip-path: inset(0 100% 0 0); }
-      69.7% { opacity: 0.7; clip-path: inset(0 55% 0 0); }
-      72.7% { opacity: 1; clip-path: inset(0 22% 0 0); }
-      75.2% { opacity: 0.9; clip-path: inset(0 0 0 0); }
-      76.7%, 96% { opacity: 1; clip-path: inset(0 0 0 0); }
-      100%  { opacity: 0; clip-path: inset(0 0 0 0); }
+    @keyframes cursor1 {
+      0%, 0% { visibility: hidden; transform: translateX(-715px); }
+      0.0667% { visibility: visible; transform: translateX(-715px); }
+      12%, 30.6667% { visibility: visible; transform: translateX(0); }
+      32.6667%, 100% { visibility: hidden; transform: translateX(0); }
     }
-    @keyframes cur1 { 0%, 10% { visibility: hidden; } 10.01%, 29% { visibility: visible; } 29.01%, 100% { visibility: hidden; } }
-    @keyframes cur2 { 0%, 43% { visibility: hidden; } 43.01%, 62% { visibility: visible; } 62.01%, 100% { visibility: hidden; } }
-    @keyframes cur3 { 0%, 77% { visibility: hidden; } 77.01%, 95% { visibility: visible; } 95.01%, 100% { visibility: hidden; } }
-    @keyframes curblink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
 
-    .wordmark { fill: #0891b2; }
-      .role     { fill: #1f2328; }
-      .meta     { fill: #57606a; }
-      .underline-base { stroke: #d0d7de; }
-      .role-cur { fill: #1f2328; }
-    /* Reduced-motion: drop all animation; inline opacity attrs leave the first
-       line visible and the rest hidden, and all cursors stay hidden. */
+    .seq2 { animation: seq2 15s linear infinite; }
+    .type2 { animation: type2 15s steps(65, end) infinite; }
+    .cur2 { animation: cursor2 15s steps(65, end) infinite, blink 1s steps(1) infinite; }
+    @keyframes seq2 {
+      0%, 33.3333% { opacity: 0; }
+      33.4%, 64% { opacity: 1; }
+      66%, 100% { opacity: 0; }
+    }
+    @keyframes type2 {
+      0%, 33.3333% { width: 0; }
+      45.3333%, 66% { width: 715px; }
+      66.6%, 100% { width: 0; }
+    }
+    @keyframes cursor2 {
+      0%, 33.3333% { visibility: hidden; transform: translateX(-715px); }
+      33.4% { visibility: visible; transform: translateX(-715px); }
+      45.3333%, 64% { visibility: visible; transform: translateX(0); }
+      66%, 100% { visibility: hidden; transform: translateX(0); }
+    }
+
+    .seq3 { animation: seq3 15s linear infinite; }
+    .type3 { animation: type3 15s steps(70, end) infinite; }
+    .cur3 { animation: cursor3 15s steps(70, end) infinite, blink 1s steps(1) infinite; }
+    @keyframes seq3 {
+      0%, 66.6667% { opacity: 0; }
+      66.7333%, 97.3333% { opacity: 1; }
+      99.3333%, 100% { opacity: 0; }
+    }
+    @keyframes type3 {
+      0%, 66.6667% { width: 0; }
+      78.6667%, 99.3333% { width: 770px; }
+      99.9333%, 100% { width: 0; }
+    }
+    @keyframes cursor3 {
+      0%, 66.6667% { visibility: hidden; transform: translateX(-770px); }
+      66.7333% { visibility: visible; transform: translateX(-770px); }
+      78.6667%, 97.3333% { visibility: visible; transform: translateX(0); }
+      99.3333%, 100% { visibility: hidden; transform: translateX(0); }
+    }
     @media (prefers-reduced-motion: reduce) {
-      animate, animateTransform { display: none; }
       .seq1, .seq2, .seq3, .cur1, .cur2, .cur3 { animation: none; }
-      .cur1, .cur2, .cur3 { visibility: hidden; }
+      .type-window, .sweep { animation: none; }
+      .cur1, .cur2, .cur3, .sweep { visibility: hidden; }
     }
   </style>
-
-  <!-- Wordmark = the name (searchable, matches the publication byline).
-       textLength locks rendered width so cursor + underline are stable
-       regardless of the host's monospace font metrics. -->
-  <text x="40" y="68" class="wordmark" textLength="500" lengthAdjust="spacingAndGlyphs">Sepehr Mahmoudian</text>
-
-  <!-- Animated underline: a static muted base + a bright cyan band sweeping
-       left→right along it, drawn via an animated linearGradient. -->
-  <line x1="40" y1="86" x2="540" y2="86" class="underline-base"/>
-  <rect x="40" y="83" width="500" height="6" rx="3" fill="url(#sweep)">
-    <title>Sepehr Mahmoudian</title>
-  </rect>
   <defs>
-    <linearGradient id="sweep" gradientUnits="userSpaceOnUse" x1="-60" y1="0" x2="60" y2="0">
-      <stop offset="0"   stop-color="#22d3ee" stop-opacity="0"/>
-      <stop offset="0.5" stop-color="#22d3ee" stop-opacity="0.9"/>
-      <stop offset="1"   stop-color="#22d3ee" stop-opacity="0"/>
-      <animate attributeName="x1" from="-60" to="560" dur="3.2s" repeatCount="indefinite"/>
-      <animate attributeName="x2" from="60"  to="680" dur="3.2s" repeatCount="indefinite"/>
-    </linearGradient>
+    <clipPath id="typing-1" clipPathUnits="userSpaceOnUse"><rect x="40" y="96" width="715" height="36" class="type-window type1"/></clipPath>
+    <clipPath id="typing-2" clipPathUnits="userSpaceOnUse"><rect x="40" y="96" width="715" height="36" class="type-window type2"/></clipPath>
+    <clipPath id="typing-3" clipPathUnits="userSpaceOnUse"><rect x="40" y="96" width="770" height="36" class="type-window type3"/></clipPath>
+    <clipPath id="underline"><rect x="40" y="83" width="500" height="6" rx="3"/></clipPath>
+    <linearGradient id="sweep"><stop offset="0" stop-color="#0891b2" stop-opacity="0"/><stop offset=".5" stop-color="#0891b2"/><stop offset="1" stop-color="#0891b2" stop-opacity="0"/></linearGradient>
   </defs>
-
-  <!-- Rotating role line: three pillars sharing one 15s/3-slot clock. All use
-       the SAME transition: a decrypt-style type-on reveal with a clean fade-out
-       (see the style block), each with its own blinking block cursor in the text
-       colour. Inline opacity = the no-animation fallback (first line visible). -->
-  <g>
-    <text x="40" y="124" class="role seq1" opacity="1">Domain-specific AI Agents · Custom Harnesses · LLM/VLM Evaluation</text>
-    <text x="40" y="124" class="role seq2" opacity="0">Knowledge Graphs · Graph RAG · Data Provenance · Model Validation</text>
-    <text x="40" y="124" class="role seq3" opacity="0">PID · Computational Neuroscience · Robotics · Multimodal 3D Perception</text>
-    <!-- per-line blinking block cursors, placed at each line's measured end -->
-    <rect x="792" y="109" width="11" height="20" rx="1" class="role-cur cur1"/>
-    <rect x="792" y="109" width="11" height="20" rx="1" class="role-cur cur2"/>
-    <rect x="848" y="109" width="11" height="20" rx="1" class="role-cur cur3"/>
-  </g>
-
+  <text x="40" y="68" class="wordmark" textLength="500" lengthAdjust="spacingAndGlyphs">Sepehr Mahmoudian</text>
+  <line x1="40" y1="86" x2="540" y2="86" stroke="#d0d7de" stroke-width="2"/>
+  <g clip-path="url(#underline)"><rect x="0" y="83" width="120" height="6" fill="url(#sweep)" class="sweep"/></g>
+  <text x="40" y="124" textLength="715" lengthAdjust="spacingAndGlyphs" clip-path="url(#typing-1)" class="role seq1" opacity="1">Domain-specific AI Agents · Custom Harnesses · LLM/VLM Evaluation</text>
+  <rect x="755" y="108" width="9" height="20" rx="1" visibility="hidden" class="role-cur cur1"/>
+  <text x="40" y="124" textLength="715" lengthAdjust="spacingAndGlyphs" clip-path="url(#typing-2)" class="role seq2" opacity="0">Knowledge Graphs · Graph RAG · Data Provenance · Model Validation</text>
+  <rect x="755" y="108" width="9" height="20" rx="1" visibility="hidden" class="role-cur cur2"/>
+  <text x="40" y="124" textLength="770" lengthAdjust="spacingAndGlyphs" clip-path="url(#typing-3)" class="role seq3" opacity="0">PID · Computational Neuroscience · Robotics · Multimodal 3D Perception</text>
+  <rect x="810" y="108" width="9" height="20" rx="1" visibility="hidden" class="role-cur cur3"/>
   <text x="40" y="158" class="meta">High Energy  ·  High Agency  ·  Takes Initiative  ·  Consistent</text>
 </svg>

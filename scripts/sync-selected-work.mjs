@@ -155,8 +155,9 @@ function renderVisibleWork() {
 function renderEcosystem() {
   const figure = (stem, height, alt) => {
     const base = `https://raw.githubusercontent.com/sepahead/sepahead/main/assets/${stem}`;
-    return `<p class="ecosystem-figure" align="center"><a href="${base}-light.svg" title="Open the scalable SVG to zoom"><picture><source media="(prefers-color-scheme: dark)" srcset="${base}-dark.svg"><source media="(prefers-color-scheme: light)" srcset="${base}-light.svg"><img src="${base}-light.svg" width="820" height="${height}" decoding="async" loading="lazy" alt="${html(alt)}"></picture></a></p>
-<p><a href="${base}-light.svg">Zoom SVG · light</a> · <a href="${base}-dark.svg">Zoom SVG · dark</a></p>`;
+    const viewer = `${SITE_URL}diagrams/${stem === "work-graph-local" ? "?view=local" : ""}`;
+    return `<p class="ecosystem-figure" align="center"><a href="${viewer}" title="Open the diagram viewer with zoom controls"><picture><source media="(prefers-reduced-motion: reduce) and (prefers-color-scheme: dark)" srcset="${base}-still-dark.svg"><source media="(prefers-reduced-motion: reduce)" srcset="${base}-still-light.svg"><source media="(prefers-color-scheme: dark)" srcset="${base}-dark.svg"><source media="(prefers-color-scheme: light)" srcset="${base}-light.svg"><img src="${base}-light.svg" width="820" height="${height}" decoding="async" loading="lazy" alt="${html(alt)}"></picture></a></p>
+<p><a href="${viewer}"><strong>Open diagram · zoom and explore</strong></a> · Original SVG: <a href="${base}-light.svg">light</a> · <a href="${base}-dark.svg">dark</a></p>`;
   };
   return `<h3>How the work relates</h3>
 <p>${html(LOCAL_NCP.research)}</p>
@@ -395,6 +396,9 @@ function renderSitemap() {
     <loc>${CV_URL}</loc>
   </url>
   <url>
+    <loc>${SITE_URL}diagrams/</loc>
+  </url>
+  <url>
     <loc>${MURAL_URL}</loc>
   </url>
   <url>
@@ -429,6 +433,12 @@ index = replaceRegion(index, "ecosystem:html", renderEcosystem(), "docs/index.ht
 outputs.set(indexPath, index);
 outputs.set(resolve(ROOT, "docs", "llms.txt"), renderLlms());
 outputs.set(resolve(ROOT, "docs", "sitemap.xml"), renderSitemap());
+for (const stem of ["work-graph", "work-graph-local", "work-graph-still", "work-graph-local-still"]) {
+  for (const theme of ["light", "dark"]) {
+    const filename = `${stem}-${theme}.svg`;
+    outputs.set(resolve(ROOT, "docs", "diagrams", filename), readFileSync(resolve(ROOT, "assets", filename), "utf8"));
+  }
+}
 
 let drift = false;
 for (const [path, expected] of outputs) {

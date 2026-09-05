@@ -62,8 +62,30 @@ test("visible and plain-text profile surfaces preserve scope, abstention, and pr
       assert.ok(source.includes(LOCAL_NCP[field]), `${file} omits ${field}`);
     }
     if (file.endsWith(".txt")) continue;
+    assert.ok(source.includes('href="https://sepahead.github.io/sepahead/diagrams/"'));
+    assert.ok(source.includes('href="https://sepahead.github.io/sepahead/diagrams/?view=local"'));
     for (const view of ["work-graph", "work-graph-local"]) {
       for (const theme of ["light", "dark"]) assert.ok(source.includes(`href="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/${view}-${theme}.svg"`));
+    }
+  }
+});
+
+test("viewer SVG copies preserve the exact generated diagrams", () => {
+  for (const stem of ["work-graph", "work-graph-local", "work-graph-still", "work-graph-local-still"]) {
+    for (const theme of ["light", "dark"]) {
+      const filename = `${stem}-${theme}.svg`;
+      assert.deepEqual(readFileSync(new URL(`../docs/diagrams/${filename}`, import.meta.url)),
+        readFileSync(new URL(`../assets/${filename}`, import.meta.url)));
+    }
+  }
+});
+
+test("static diagrams remove SMIL instructions and suppress CSS motion", () => {
+  for (const stem of ["work-graph", "work-graph-local"]) {
+    for (const theme of ["light", "dark"]) {
+      const svg = readFileSync(new URL(`../assets/${stem}-still-${theme}.svg`, import.meta.url), "utf8");
+      assert.doesNotMatch(svg, /<(?:animate|animateMotion|animateTransform|set)\b/);
+      assert.match(svg, /\* \{ animation: none !important; transition: none !important; \}/);
     }
   }
 });

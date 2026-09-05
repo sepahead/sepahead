@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Explore how NCP, CREBAIN, Prisoma, Galadriel, Engram, and related projects connect. Zoom the vector diagrams and read their separate roles.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'none'">
+  <link rel="canonical" href="https://sepahead.github.io/sepahead/diagrams/">
+  <link rel="stylesheet" href="viewer.css">
+  <title>How the work relates · Sepehr Mahmoudian</title>
+  <script type="module" src="viewer.mjs"></script>
+</head>
+<body>
+  <main>
+    <header>
+      <a class="back" href="../#work-ncp">← Sepehr Mahmoudian / selected work</a>
+      <h1>How the work relates</h1>
+      <p>Explore the connections. Each project keeps its own job and state.</p>
+    </header>
+    <nav class="views" aria-label="Diagram">
+      <a href="./" data-view="ecosystem" aria-current="page">Project map</a>
+      <a href="?view=local" data-view="local">One local experiment</a>
+    </nav>
+    <section class="workspace" aria-label="Vector diagram viewer">
+      <div class="toolbar" aria-label="Diagram controls">
+        <div class="zoom-controls">
+          <button id="zoom-out" type="button" aria-label="Zoom out" disabled>−</button>
+          <output id="zoom-value" aria-live="polite" aria-atomic="true">100%</output>
+          <button id="zoom-in" type="button" aria-label="Zoom in" disabled>+</button>
+          <button id="fit" type="button" disabled>Fit</button>
+        </div>
+        <label class="theme">Theme
+          <select id="theme" disabled>
+            <option value="auto">System</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
+        <button id="motion" type="button" aria-pressed="false" disabled>Pause motion</button>
+      </div>
+      <p class="hint" id="instructions">Use + to enlarge, then scroll across the diagram. Browser pinch zoom stays available.</p>
+      <p class="hint" id="load-error" role="status" hidden>The diagram could not load. <a id="raw-fallback" href="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/work-graph-light.svg">Open the SVG from GitHub</a>.</p>
+      <div id="viewport" tabindex="0" role="region" aria-label="Scrollable diagram" aria-describedby="instructions keyboard-help">
+        <picture id="diagram-picture">
+          <source id="still-dark-source" media="(prefers-reduced-motion: reduce) and (prefers-color-scheme: dark)" srcset="work-graph-still-dark.svg">
+          <source id="still-source" media="(prefers-reduced-motion: reduce)" srcset="work-graph-still-light.svg">
+          <source id="dark-source" media="(prefers-color-scheme: dark)" srcset="work-graph-dark.svg">
+          <img id="diagram" src="work-graph-light.svg" width="820" height="977" draggable="false" alt="NCP connects Engram, CREBAIN, Prisoma, and Galadriel through separate local interfaces. Haldir has a separate pinned interface. Libraries, assets, and perception tools use distinct line patterns. The projects are not a required bundle.">
+        </picture>
+      </div>
+      <p class="keyboard" id="keyboard-help">Keyboard: focus the diagram, use arrows to scroll, + or − to zoom, and 0 to fit.</p>
+    </section>
+    <div class="source-links">
+      <a id="open-svg" href="work-graph-light.svg">Open original SVG</a>
+      <a id="download-svg" href="work-graph-light.svg" download>Download SVG</a>
+      <a href="https://github.com/sepahead/sepahead#how-the-work-relates">Read the project roles</a>
+    </div>
+    <noscript><p>Zoom controls need JavaScript. Open an original SVG: <a href="work-graph-light.svg">project map, light</a> · <a href="work-graph-dark.svg">dark</a> · <a href="work-graph-local-light.svg">local experiment, light</a> · <a href="work-graph-local-dark.svg">dark</a>.</p></noscript>
+    <aside class="reading-guide" aria-label="Reading the connections">
+      <h2>Follow the line pattern</h2>
+      <dl>
+        <div><dt><span class="line protocol" aria-hidden="true"></span>Solid paired arrows</dt><dd>Local NCP interfaces: neural state, simulation, monitoring, and capture.</dd></div>
+        <div><dt><span class="line library" aria-hidden="true"></span>Dashed arrows</dt><dd>Library dependencies.</dd></div>
+        <div><dt><span class="line asset" aria-hidden="true"></span>Dotted lines</dt><dd>Assets or exports.</dd></div>
+        <div><dt><span class="line tool" aria-hidden="true"></span>Moving dashes on a line</dt><dd>Perception tools. Motion is decorative.</dd></div>
+        <div><dt><span class="line contract" aria-hidden="true"></span>Dash-dot with a square end</dt><dd>Haldir's separate pinned NCP interface.</dd></div>
+      </dl>
+      <p>NCP defines shared messages. It does not require every connected project to run together.</p>
+      <p>The local v1 candidate still needs installed-artifact qualification and final release gates. It grants no physical command authority.</p>
+    </aside>
+  </main>
+</body>
+</html>

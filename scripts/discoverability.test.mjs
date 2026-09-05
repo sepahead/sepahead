@@ -23,7 +23,7 @@ const HERO_LINES = [
   "Knowledge Graphs · Graph RAG · Data Provenance · Model Validation",
   "PID · Computational Neuroscience · Robotics · Multimodal 3D Perception",
 ];
-const HERO_CURSOR_X = [792, 792, 848];
+const HERO_CURSOR_X = HERO_LINES.map((line) => 40 + line.length * 11);
 
 const read = (relativePath) => readFileSync(new URL(`../${relativePath}`, import.meta.url), "utf8");
 const homeHtml = read("docs/index.html");
@@ -159,7 +159,7 @@ test("sitemap lists the canonical profile, mural galleries, chooser and reciproc
     return match[1];
   });
 
-  assert.deepEqual(locations, [SITE_URL, CV_URL, MURAL_URL, MURAL_ATLAS_URL, CV_EN_URL, CV_DE_URL]);
+  assert.deepEqual(locations, [SITE_URL, CV_URL, `${SITE_URL}diagrams/`, MURAL_URL, MURAL_ATLAS_URL, CV_EN_URL, CV_DE_URL]);
 
   for (const block of blocks) {
     const location = block.match(/<loc>([^<]+)<\/loc>/)[1];

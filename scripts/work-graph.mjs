@@ -39,6 +39,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ECOSYSTEM_EDGES, EDGE_TYPES, LOCAL_NCP, validateEcosystemEdges } from "./ecosystem.mjs";
 import { localOwnershipSvg } from "./work-graph-local.mjs";
+import { staticSvg } from "./svg-motion.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT_PATH = resolve(__dirname, "..", "assets", "work-graph.svg");
@@ -2546,5 +2547,7 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   mkdirSync(dirname(OUT_PATH), { recursive: true });
   writeThemedPair(OUT_PATH, svg);
   writeThemedPair(resolve(__dirname, "..", "assets", "work-graph-local.svg"), localOwnershipSvg());
+  writeThemedPair(resolve(__dirname, "..", "assets", "work-graph-still.svg"), staticSvg(svg));
+  writeThemedPair(resolve(__dirname, "..", "assets", "work-graph-local-still.svg"), staticSvg(localOwnershipSvg()));
   console.log(`[work-graph] wrote ${OUT_PATH} (${svg.length} bytes)`);
 }

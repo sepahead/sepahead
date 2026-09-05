@@ -8,6 +8,7 @@ on:
       - "docs/**"
       - "scripts/**"
       - "assets/crebain-mark.svg"
+      - "assets/hero-*.svg"
       - "assets/agents-*.svg"
       - "assets/connect-*.svg"
       - "assets/rail-*.svg"
@@ -36,17 +37,19 @@ jobs:
       - name: Check source syntax and synchronized content
         run: |
           for script in scripts/*.mjs; do node --check "$script"; done
+          node --check docs/diagrams/viewer.mjs
           node --test scripts/*.test.mjs
           node scripts/sync-selected-work.mjs --check
 
       - name: Check deterministic generated SVGs
         run: |
           node scripts/agents.mjs
+          node scripts/hero.mjs
           node scripts/connect.mjs
           node scripts/repo-tree.mjs
           node scripts/socials.mjs
           node scripts/toolbox-rails.mjs
           node scripts/work-graph.mjs
           node scripts/section-titles.mjs
-          git add --intent-to-add assets/agents-*.svg assets/connect-*.svg assets/rail-*.svg assets/repo-tree-*.svg assets/social-*.svg assets/work-graph-*.svg assets/title-*.svg
-          git diff --exit-code -- assets/agents-*.svg assets/connect-*.svg assets/rail-*.svg assets/repo-tree-*.svg assets/social-*.svg assets/work-graph-*.svg assets/title-*.svg
+          git add --intent-to-add assets/agents-*.svg assets/hero-*.svg assets/connect-*.svg assets/rail-*.svg assets/repo-tree-*.svg assets/social-*.svg assets/work-graph-*.svg assets/title-*.svg
+          git diff --exit-code -- assets/agents-*.svg assets/hero-*.svg assets/connect-*.svg assets/rail-*.svg assets/repo-tree-*.svg assets/social-*.svg assets/work-graph-*.svg assets/title-*.svg

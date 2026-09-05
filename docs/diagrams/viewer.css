@@ -1,0 +1,45 @@
+:root { color-scheme: light dark; --page: #f6f8fa; --panel: #fff; --ink: #1f2328; --muted: #59636e; --border: #d0d7de; --accent: #086f83; --wash: #e7f5f7; }
+@media (prefers-color-scheme: dark) { :root { --page: #0d1117; --panel: #111820; --ink: #e6edf3; --muted: #9daab7; --border: #33404d; --accent: #67dbe9; --wash: #15303a; } }
+:root[data-theme="light"] { color-scheme: light; --page: #f6f8fa; --panel: #fff; --ink: #1f2328; --muted: #59636e; --border: #d0d7de; --accent: #086f83; --wash: #e7f5f7; }
+:root[data-theme="dark"] { color-scheme: dark; --page: #0d1117; --panel: #111820; --ink: #e6edf3; --muted: #9daab7; --border: #33404d; --accent: #67dbe9; --wash: #15303a; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 16px/1.55 system-ui, -apple-system, sans-serif; }
+main { max-width: 1160px; margin: auto; padding: 32px 24px 56px; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+.back { font-size: .85rem; }
+h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.15; letter-spacing: -.04em; margin: 24px 0 10px; }
+header p { margin: 0 0 24px; color: var(--muted); }
+.views { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.views a { border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; text-decoration: none; min-height: 44px; }
+.views a[aria-current="page"] { background: var(--wash); border-color: var(--accent); font-weight: 600; }
+.workspace { border: 1px solid var(--border); border-radius: 12px; background: var(--panel); overflow: hidden; }
+.toolbar { display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.zoom-controls { display: flex; align-items: center; gap: 6px; }
+button, select { min-width: 44px; min-height: 44px; border: 1px solid var(--border); border-radius: 6px; background: var(--panel); color: var(--ink); font: inherit; padding: 7px 12px; }
+button { cursor: pointer; }
+button:hover:enabled { background: var(--wash); }
+button:disabled { opacity: .4; cursor: default; }
+#zoom-in, #zoom-out { font-size: 1.4rem; line-height: 1; }
+output { min-width: 58px; text-align: center; font-variant-numeric: tabular-nums; font-size: .9rem; }
+.theme { display: flex; align-items: center; gap: 8px; font-size: .9rem; }
+.hint, .keyboard { color: var(--muted); font-size: .8rem; margin: 10px 16px; }
+#viewport { overflow: auto; height: min(72vh, 920px); min-height: 320px; scrollbar-gutter: stable; background: var(--panel); }
+#diagram-picture { display: block; width: 100%; }
+#diagram { display: block; width: 100%; height: auto; max-width: none; user-select: none; }
+.source-links { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 18px 0 32px; font-size: .9rem; }
+.source-links a { display: inline-flex; align-items: center; min-height: 44px; }
+.reading-guide { border-top: 1px solid var(--border); padding-top: 20px; }
+h2 { margin: 0 0 18px; font-size: 1.1rem; }
+dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 32px; }
+dt { display: flex; align-items: center; gap: 12px; font-size: .9rem; font-weight: 600; }
+dd { margin: 6px 0 0 54px; font-size: .85rem; color: var(--muted); }
+.reading-guide p { font-size: .9rem; max-width: 80ch; }
+.line { display: inline-block; flex-shrink: 0; width: 42px; height: 0; border-top: 2px solid var(--accent); position: relative; }
+.library { border-top-style: dashed; }
+.asset { border-top-style: dotted; }
+.tool { height: 5px; border-bottom: 2px dashed var(--accent); }
+.contract { border: 0; height: 2px; background: repeating-linear-gradient(to right, var(--accent) 0 12px, transparent 12px 17px, var(--accent) 17px 20px, transparent 20px 25px); }
+.contract::after { content: ""; position: absolute; right: 0; top: -2px; width: 6px; height: 6px; background: var(--accent); }
+@media (max-width: 560px) { main { padding: 20px 12px 32px; } .toolbar { padding: 10px; gap: 10px; } dl { grid-template-columns: 1fr; } .views a { flex: 1; text-align: center; padding: 10px; font-size: .9rem; } #viewport { height: 62vh; } }
