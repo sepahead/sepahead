@@ -45,6 +45,7 @@ profile and Pages homepage. Its complete archive remains directly accessible:
 
 ## NCP local simulation candidate
 Engram runs neural models. CREBAIN runs a standalone 3D environment and sensor fusion. Galadriel monitors possible sensor tampering. Prisoma organizes experiments and evidence for embodied agents. NCP defines their shared messages.
+CREBAIN consumes scenes. Melkor converts splat assets; the atlas projects provide mesh assets. Prisoma records and analyzes experiments that use an environment. These asset links describe intended inputs, not a qualified import pipeline.
 In the current integrated test, CREBAIN sends observations to Engram, which returns action proposals. Engram also sends sensor diagnostics to Galadriel and complete exchanges to Prisoma. NCP carries these messages. Independent adapter qualification remains open.
 Engram coordinates one local experiment and privately owns neural state. CREBAIN owns body and fusion state. Prisoma captures exact step pairs. Galadriel records actual detector output with explicit abstention.
 Each owner exchanges bounded NCP requests and exact retained results through its own private process pipes. NCP is the shared contract, not another simulation engine.

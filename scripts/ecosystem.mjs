@@ -12,6 +12,7 @@ export const LOCAL_NCP = {
   availability: "The tested Engram implementation is private Paper2Brain source. The public Engram repository is a placeholder, not an executable release.",
   research: "NCP sits at the center as a shared interface. Solid connections identify local v1 adapters; the dash-dot connection identifies Haldir's pinned v0.8 adapter. Dashed arrows show library dependencies. Dotted lines show assets or exports. Moving dashes on a continuous line identify perception tools. Motion is decorative; each connection retains its meaning when still. These connections do not require every project to run together or depict a runtime broker.",
   monitor: "One Visual modality remains insufficient for Galadriel's unchanged two-modality minimum. An unavailable observation never becomes a zero residual or a nominal report.",
+  assets: "CREBAIN consumes scenes. Melkor converts splat assets; the atlas projects provide mesh assets. Prisoma records and analyzes experiments that use an environment. These asset links describe intended inputs, not a qualified import pipeline.",
   guide: "https://github.com/sepahead/NCP",
   roles: [
     { id: "engram", name: "Engram", role: "Neural owner", lines: ["Persistent network", "Private neural state", "Exact readout interval"] },
@@ -37,13 +38,10 @@ export const ECOSYSTEM_EDGES = [
   { a: "ncp", b: "haldir", kind: "contract", label: "Pinned Haldir interface", bow: 0 },
   { a: "galadriel", b: "pidrs", kind: "library", label: "PID library dependency", bow: -8 },
   { a: "prisoma", b: "pidrs", kind: "library", label: "PID and runlog dependency", bow: 8 },
-  { a: "cobotatlas", b: "prisoma", kind: "research", label: "Dataset context" },
-  { a: "melkor", b: "prisoma", kind: "research", label: "Scenario context" },
-  { a: "reliefatlas", b: "prisoma", kind: "research", label: "Dataset context", route: [[816, 596], [816, 340], [661, 340]] },
   { a: "crebain", b: "cobotatlas", kind: "research", label: "Simulation assets", route: [[693, 534], [693, 274]] },
   { a: "crebain", b: "melkor", kind: "research", label: "Simulation scenarios", bow: 12 },
   { a: "crebain", b: "reliefatlas", kind: "research", label: "Simulation assets", bow: 8 },
-  { a: "cortexel", b: "engram", kind: "research", label: "Figure export", labelAt: [90, 435], bow: 24 },
+  { a: "cortexel", b: "engram", kind: "research", label: "Figure export", labelAt: [109, 448], labelAngle: -82, bow: 24 },
   { a: "manwe", b: "crebain", kind: "tool", label: "Perception tools", labelAt: [335, 590], labelAngle: -33, bow: 8 },
 ];
 
@@ -71,6 +69,10 @@ export function validateEcosystemEdges(nodes, edges) {
       }
       if (edge.kind === "library" && (!new Set(["prisoma", "galadriel"]).has(edge.a) || edge.b !== "pidrs")) {
         throw new Error(`Unverified library dependency: ${identity}`);
+      }
+      const sceneProviders = new Set(["cobotatlas", "reliefatlas", "melkor"]);
+      if ([edge.a, edge.b].some((id) => sceneProviders.has(id)) && !(edge.a === "crebain" && sceneProviders.has(edge.b) && edge.kind === "research")) {
+        throw new Error(`Scene assets require the environment owner: ${identity}`);
       }
     }
   }

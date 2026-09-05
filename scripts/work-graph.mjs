@@ -1510,7 +1510,6 @@ export function nodeMark(n) {
     const baseY = cy + SE + 8, curY = cy + SE - 1, flagTop = cy + SE + 16;
     // Place the vector raven over the field-green seat. The outer instrument
     // rings and eye highlight share the same geometry as the source mark.
-    const ex = f1(cx - 2 * S / 180), ey = f1(cy - 22 * S / 180);
     // Four cardinal ticks cross the tactical-green scope ring.
     const sTick = (deg) => {
       const a = (deg * Math.PI) / 180, c = Math.cos(a), s = Math.sin(a);
@@ -1519,16 +1518,12 @@ export function nodeMark(n) {
     return `<g>
     <defs>
       <linearGradient id="crebBezel" x1="0" y1="${f1(cy - 34)}" x2="0" y2="${f1(cy + 34)}" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#8ba458"/><stop offset="50%" stop-color="#728a49"/><stop offset="100%" stop-color="#4f612e"/>
+        <stop offset="0%" stop-color="#657747"/><stop offset="50%" stop-color="#4d5f36"/><stop offset="100%" stop-color="#354323"/>
       </linearGradient>
     </defs>
     <g transform="translate(${cx} ${cy}) scale(${f1(Z)}) translate(${-cx} ${-cy})">
       <g filter="url(#nodeShadow)"><circle cx="${cx}" cy="${cy}" r="34" class="seat-creb"/></g>
       <g transform="translate(${f1(cx - S / 2)} ${f1(cy - S / 2)}) scale(${S / 180})">${CREBAIN_LOGO}</g>
-      <g filter="url(#hdBloom)">
-        <circle cx="${ex}" cy="${ey}" r="1.4" class="creb-eye-core"/>
-        <circle cx="${ex}" cy="${ey}" r="0.55" class="creb-eye-hot"/>
-      </g>
       ${sTick(0)}${sTick(90)}${sTick(180)}${sTick(270)}
       <circle cx="${cx}" cy="${cy}" r="34" class="seat-ring" stroke="url(#crebBezel)"/>
       <circle cx="${cx}" cy="${cy}" r="31.8" class="seat-groove"/>
@@ -2339,8 +2334,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .seat-creb     { fill: url(#crebGrad); }
     .creb-signal   { fill: none; stroke: #b6cf86; stroke-opacity: 0.7; stroke-width: 1.2; }
     .creb-xhair    { fill: none; stroke: #a8c07a; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linecap: round; }
-    .creb-eye-core { fill: #ff6b5e; }
-    .creb-eye-hot  { fill: #fff1f0; }
     .raven-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #9caf88; }
     .raven-cursor { fill: #9caf88; }
     .radar-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #38bdf8; }

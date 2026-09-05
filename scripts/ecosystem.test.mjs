@@ -58,7 +58,7 @@ test("visible and plain-text profile surfaces preserve scope, abstention, and pr
   for (const file of ["README.md", "docs/index.html", "docs/llms.txt"]) {
     const source = readFileSync(new URL(`../${file}`, import.meta.url), "utf8")
       .replaceAll("&#39;", "'").replaceAll("&quot;", '"').replaceAll("&amp;", "&");
-    for (const field of ["status", "boundary", "availability", "monitor", "overview", "example"]) {
+    for (const field of ["status", "boundary", "availability", "monitor", "overview", "example", "assets"]) {
       assert.ok(source.includes(LOCAL_NCP[field]), `${file} omits ${field}`);
     }
     if (file.endsWith(".txt")) continue;
@@ -67,6 +67,13 @@ test("visible and plain-text profile surfaces preserve scope, abstention, and pr
     for (const view of ["work-graph", "work-graph-local"]) {
       for (const theme of ["light", "dark"]) assert.ok(source.includes(`href="https://raw.githubusercontent.com/sepahead/sepahead/main/assets/${view}-${theme}.svg"`));
     }
+  }
+});
+
+test("scene providers connect to the environment instead of the experiment recorder", () => {
+  for (const provider of ["cobotatlas", "reliefatlas", "melkor"]) {
+    assert.ok(ECOSYSTEM_EDGES.some((edge) => edge.a === "crebain" && edge.b === provider && edge.kind === "research"));
+    assert.throws(() => validateEcosystemEdges(nodes, [...copy(), { a: provider, b: "prisoma", kind: "research", label: "Scene inputs" }]), /environment owner/);
   }
 });
 
