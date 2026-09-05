@@ -20,7 +20,7 @@ const f1 = (v) => Number(v.toFixed(1));
 const SPEC = {
   pidrs:    { half: 50 },
   ncp:      { half: 46, aria: "NCP logo: paired contract bounds hold one quartered four-plane knot while proposal and receipt remain distinct" },
-  crebain:  { half: 64 }, // raven raster scaled to ~118 wide (radius ~59)
+  crebain:  { half: 64 }, // vector raven and instrument reticle
   melkor:   { half: 57 }, // hexagon + bezel
   cortexel: { half: 46, aria: "Cortexel logo: a neuron-seeded population voxel crosses a validation bracket into one deterministic neuronal action-potential figure artifact" },
   manwe:    { half: 44 },
@@ -47,7 +47,7 @@ function stripGroup(s, cls) {
 // Strip the name label / wordmark so the logo is a clean badge.
 function stripChrome(mark) {
   let s = mark.replace(/<text\b[^>]*class="[^"]*label[^"]*"[^>]*>[\s\S]*?<\/text>/g, "");
-  s = stripGroup(s, "raven-typeline"); // crebain: typed wordmark + cursor + flag
+  s = stripGroup(s, "raven-typeline"); // crebain: wordmark + cursor + flag
   return s;
 }
 

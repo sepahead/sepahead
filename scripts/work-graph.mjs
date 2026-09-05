@@ -43,16 +43,15 @@ import { localOwnershipSvg } from "./work-graph-local.mjs";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT_PATH = resolve(__dirname, "..", "assets", "work-graph.svg");
 
-// crebain's brand mark (raven-in-crosshair) embedded as a base64 data-URI, so
-// the self-contained SVG renders the real logo with zero external requests
-// (an <img>-embedded SVG can't fetch external URLs, but data: URIs are fine).
+// Inline the authored vector mark so every facet stays sharp at any zoom.
+// Its gradients and named groups use a crebain-specific ID prefix.
 const CREBAIN_LOGO =
-  "data:image/png;base64," +
-  readFileSync(resolve(__dirname, "..", "pics", "crebain-logo.png")).toString("base64");
+  readFileSync(resolve(__dirname, "..", "assets", "crebain-mark.svg"), "utf8")
+    .replace(/^<svg\b[^>]*>/, "").replace(/<\/svg>\s*$/, "");
 
 
 const W = 860;
-const H = 990;
+const H = 1025;
 const VSHIFT = 26; // push the graph body down so the taller canvas is balanced (frame/title stay put)
 
 // ---------------------------------------------------------------------------
@@ -238,9 +237,13 @@ edges.forEach((e) => {
     runtimeEdges.push(`<g data-edge-kind="protocol" data-from="${e.a}" data-to="${e.b}">${title}<path d="${d}" class="edge-clearance edge-clearance-protocol"/><path d="${lane(off)}" class="edge-runtime"/><path d="${lane(-off)}" class="edge-runtime"/>${arrow(forwardTip, c, "edge-runtime-head")}${arrow(reverseTip, c, "edge-runtime-head")}</g>`);
   } else {
     const endpoint = e.kind === "library" ? arrow(p1, c, "edge-library-head") : e.kind === "contract" ? `<rect x="${f1(p1.x - 3.5)}" y="${f1(p1.y - 3.5)}" width="7" height="7" class="edge-contract-end"/>` : "";
-    calmEdges.push(`<g data-edge-kind="${e.kind}" data-from="${e.a}" data-to="${e.b}">${title}<path d="${d}" class="edge-clearance"/><path d="${d}" class="edge-${e.kind}"/>${endpoint}</g>`);
+    const rail = e.kind === "tool" ? `<path d="${d}" class="edge-tool-rail"/>` : "";
+    calmEdges.push(`<g data-edge-kind="${e.kind}" data-from="${e.a}" data-to="${e.b}">${title}<path d="${d}" class="edge-clearance"/>${rail}<path d="${d}" class="edge-${e.kind}"/>${endpoint}</g>`);
   }
-  if (e.labelAt) edgeLabels.push(`<text x="${e.labelAt[0]}" y="${e.labelAt[1]}" text-anchor="middle" class="edge-label edge-label-${e.kind}">${escapeXML(e.label)}</text>`);
+  if (e.labelAt) {
+    const rotation = e.labelAngle ? ` transform="rotate(${e.labelAngle} ${e.labelAt[0]} ${e.labelAt[1]})"` : "";
+    edgeLabels.push(`<text x="${e.labelAt[0]}" y="${e.labelAt[1]}"${rotation} text-anchor="middle" class="edge-label edge-label-${e.kind}">${escapeXML(e.label)}</text>`);
+  }
 });
 
 // ---------------------------------------------------------------------------
@@ -1496,36 +1499,18 @@ export function nodeMark(n) {
   </g>`;
   }
   if (n.kind === "raven") {
-    // crebain: its real brand mark (raven head + red eye in a crosshair reticle)
-    // over a faint field-green seat. Below it the wordmark is TYPED OUT by a block
-    // cursor, holds ~10 s with a German flag fading in beneath it, then the line is
-    // "entered" (fades + drops away) and the cycle retypes. The static attribute
-    // values hold the fully-typed state, so reduced-motion shows it complete.
+    // Vector raven and scope over a field-green seat. Keep the name readable
+    // throughout the cursor animation and under reduced motion.
     const cx = n.x, cy = n.y, S = 90;
     const Z = 44 / 34; // scale the badge up to prisoma/melkor size (graph only)
-    const word = n.label;                          // CSS upper-cases it
-    const NN = word.length, CH = 9.7;              // 12px mono: 0.6em glyph + 2.5 track
-    const Wt = NN * CH, leftX = cx - Wt / 2;        // ~centred typed line
+    const word = n.label;
+    const Wt = word.length * 9.7, leftX = cx - Wt / 2;
     const SE = (S / 2) * Z;                          // scaled badge half-extent (wordmark sits below it)
     const baseY = cy + SE + 8, curY = cy + SE - 1, flagTop = cy + SE + 16;
-    const pause = 0.5, step = 0.13, hold = 10, enterDur = 0.4, tail = 0.1;
-    const typeDone = pause + NN * step, holdEnd = typeDone + hold, enterEnd = holdEnd + enterDur;
-    const CYCLE = Number((enterEnd + tail).toFixed(2));
-    const kt = (ts) => ts.map((t) => Number((t / CYCLE).toFixed(4))).join(";");
-    const wt = [0, pause], wv = [0, 0];
-    for (let i = 1; i <= NN; i++) { wt.push(Number((pause + i * step).toFixed(3))); wv.push(Number((i * CH).toFixed(2))); }
-    wt.push(enterEnd, CYCLE); wv.push(0, 0);
-    const xv = wv.map((v) => f1(leftX + v));
-    const ot = [0, holdEnd, enterEnd, CYCLE], dur = `${CYCLE}s`;
-    // The family machined GREEN seat, interleaved with the raster: disc → raven png
-    // → a white-hot pinpoint drawn over the baked red eye (the family focal move) →
-    // bezel/groove/signal-ring/hairline (they cross only the png's transparent gaps
-    // and replace its muddy baked grey ring) → four green corner-bracket ticks (the
-    // crosshair identity, kept). The r34 machining lands on the raven's own baked
-    // reticle; the png (S=90) is byte-untouched, as is the typewriter wordmark.
-    const ex = f1(cx - 1.9), ey = f1(cy - 12.1); // baked raven-eye centroid
-    // crosshair reticle BAKED into the tactical-green border: four cardinal ticks
-    // crossing the ring (a matte tactical scope).
+    // Place the vector raven over the field-green seat. The outer instrument
+    // rings and eye highlight share the same geometry as the source mark.
+    const ex = f1(cx - 2 * S / 180), ey = f1(cy - 22 * S / 180);
+    // Four cardinal ticks cross the tactical-green scope ring.
     const sTick = (deg) => {
       const a = (deg * Math.PI) / 180, c = Math.cos(a), s = Math.sin(a);
       return `<line class="creb-xhair" x1="${f1(cx + 30 * c)}" y1="${f1(cy + 30 * s)}" x2="${f1(cx + 38 * c)}" y2="${f1(cy + 38 * s)}"/>`;
@@ -1535,15 +1520,10 @@ export function nodeMark(n) {
       <linearGradient id="crebBezel" x1="0" y1="${f1(cy - 34)}" x2="0" y2="${f1(cy + 34)}" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#8ba458"/><stop offset="50%" stop-color="#728a49"/><stop offset="100%" stop-color="#4f612e"/>
       </linearGradient>
-      <clipPath id="crebainType" clipPathUnits="userSpaceOnUse">
-        <rect x="${f1(leftX)}" y="${f1(baseY - 12)}" width="${f1(Wt)}" height="16">
-          <animate attributeName="width" values="${wv.join(";")}" keyTimes="${kt(wt)}" dur="${dur}" calcMode="discrete" repeatCount="indefinite"/>
-        </rect>
-      </clipPath>
     </defs>
     <g transform="translate(${cx} ${cy}) scale(${f1(Z)}) translate(${-cx} ${-cy})">
       <g filter="url(#nodeShadow)"><circle cx="${cx}" cy="${cy}" r="34" class="seat-creb"/></g>
-      <image href="${CREBAIN_LOGO}" x="${f1(cx - S / 2)}" y="${f1(cy - S / 2)}" width="${S}" height="${S}" preserveAspectRatio="xMidYMid meet"/>
+      <g transform="translate(${f1(cx - S / 2)} ${f1(cy - S / 2)}) scale(${S / 180})">${CREBAIN_LOGO}</g>
       <g filter="url(#hdBloom)">
         <circle cx="${ex}" cy="${ey}" r="1.4" class="creb-eye-core"/>
         <circle cx="${ex}" cy="${ey}" r="0.55" class="creb-eye-hot"/>
@@ -1555,17 +1535,13 @@ export function nodeMark(n) {
       <circle cx="${cx}" cy="${cy}" r="35.4" class="seat-hairline"/>
     </g>
     <g class="raven-typeline">
-      <text x="${f1(leftX)}" y="${f1(baseY)}" text-anchor="start" class="raven-label" clip-path="url(#crebainType)">${escapeXML(word)}</text>
-      <rect x="${f1(leftX + Wt)}" y="${f1(curY)}" width="5" height="10" rx="1" class="raven-cursor">
-        <animate attributeName="x" values="${xv.join(";")}" keyTimes="${kt(wt)}" dur="${dur}" calcMode="discrete" repeatCount="indefinite"/>
+      <text x="${f1(leftX)}" y="${f1(baseY)}" text-anchor="start" class="raven-label">${escapeXML(word)}</text>
+      <rect x="${f1(leftX + Wt + 3)}" y="${f1(curY)}" width="5" height="10" rx="1" class="raven-cursor">
         <animate attributeName="opacity" values="1;0" dur="1.06s" calcMode="discrete" repeatCount="indefinite"/>
       </rect>
       <g class="deflag">
         ${germanFlag(cx, flagTop, 26)}
-        <animate attributeName="opacity" values="0;0;1;1" keyTimes="${kt([0, typeDone, Number((typeDone + 0.4).toFixed(2)), CYCLE])}" dur="${dur}" repeatCount="indefinite"/>
       </g>
-      <animate attributeName="opacity" values="1;1;0;0" keyTimes="${kt(ot)}" dur="${dur}" repeatCount="indefinite"/>
-      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 3;0 3" keyTimes="${kt(ot)}" dur="${dur}" repeatCount="indefinite"/>
     </g>
   </g>`;
   }
@@ -2229,7 +2205,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     :root { color-scheme: light dark; }
     .cap        { font: 400 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
     .boundary-note { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #9da7b3; }
-    .edge-runtime, .edge-library, .edge-research, .edge-contract { fill: none; stroke-linecap: round; }
+    .edge-runtime, .edge-library, .edge-research, .edge-contract, .edge-tool, .edge-tool-rail { fill: none; stroke-linecap: round; }
     .edge-clearance { fill: none; stroke: #0d1117; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
     .edge-clearance-protocol { stroke-width: 12; }
     .edge-runtime { stroke: #fbbf24; stroke-width: 2.1; }
@@ -2237,12 +2213,16 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .edge-library { stroke: #6ee7b7; stroke-width: 2.1; stroke-dasharray: 8 5; }
     .edge-library-head { fill: #6ee7b7; }
     .edge-research { stroke: #8291a6; stroke-width: 1.9; stroke-dasharray: 1 6; }
+    .edge-tool-rail { stroke: #38bdf8; stroke-width: 1; opacity: .5; }
+    .edge-tool { stroke: #7dd3fc; stroke-width: 2.8; stroke-dasharray: 7 13; animation: tool-flow 2.4s linear infinite; }
+    @keyframes tool-flow { to { stroke-dashoffset: -20; } }
     .edge-contract { stroke: #c4b5fd; stroke-width: 2; stroke-dasharray: 10 4 2 4; }
     .edge-contract-end { fill: #c4b5fd; }
     .edge-label, .legend-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; letter-spacing: 0 !important; text-transform: none !important; }
     .edge-label { stroke-width: 5px !important; }
     .edge-label-protocol { fill: #fcd34d; }
     .edge-label-library { fill: #a7f3d0; }
+    .edge-label-tool { fill: #bae6fd; }
     .edge-label-contract { fill: #ddd6fe; }
     .legend-label { font-size: 13px; }
     .scope-box { fill: none; stroke: #8291a6; stroke-width: 1; stroke-dasharray: 5 5; }
@@ -2474,6 +2454,9 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .edge-runtime { stroke: #985700; } .edge-runtime-head { fill: #985700; }
       .edge-library { stroke: #087859; } .edge-library-head { fill: #087859; }
       .edge-research { stroke: #607086; }
+      .edge-tool-rail { stroke: #0369a1; }
+      .edge-tool { stroke: #0369a1; }
+      .edge-label-tool { fill: #075985; }
       .edge-clearance { stroke: #f7f8f9; }
       .edge-contract { stroke: #7353a6; } .edge-contract-end { fill: #7353a6; }
       .edge-label, .legend-label { fill: #435365; }
@@ -2505,7 +2488,10 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .wg-bracket { stroke: #b45309; }
       .panel { fill: #0b1f2a; fill-opacity: 0.025; stroke: #0b1f2a; stroke-opacity: 0.08; }
     }
-    @media (prefers-reduced-motion: reduce) { animate, animateMotion, animateTransform { display: none; } }
+    @media (prefers-reduced-motion: reduce) {
+      animate, animateMotion, animateTransform { display: none; }
+      .edge-tool { animation: none; stroke-dashoffset: 0; }
+    }
   </style>
 
   <rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="16" class="panel"/>
@@ -2521,13 +2507,16 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
   <polygon points="515,812 507,808 507,816" class="edge-library-head"/>
   <text x="531" y="818" class="legend-label">Library dependency</text>
   <path d="M 42 847 H 105" class="edge-research"/>
-  <text x="121" y="853" class="legend-label">Assets / tools / exports</text>
+  <text x="121" y="853" class="legend-label">Assets / exports</text>
   <path d="M 450 847 H 511" class="edge-contract"/>
   <rect x="508" y="843.5" width="7" height="7" class="edge-contract-end"/>
   <text x="531" y="853" class="legend-label">Pinned NCP v0.8 interface</text>
-  <text x="40" y="897" class="edge-label">Connections show interfaces, not a required all-project deployment.</text>
-  <text x="40" y="921" class="edge-label">Haldir stays on v0.8. Local v1 gated requests are rejected before preparation.</text>
-  <text x="40" y="945" class="edge-label">Local v1 candidate: installed qualification and final release gates remain open.</text>
+  <path d="M 42 882 H 105" class="edge-tool-rail"/>
+  <path d="M 42 882 H 105" class="edge-tool"/>
+  <text x="121" y="888" class="legend-label">Perception tools</text>
+  <text x="40" y="932" class="edge-label">Connections show interfaces, not a required all-project deployment.</text>
+  <text x="40" y="956" class="edge-label">Haldir stays on v0.8. Local v1 gated requests are rejected before preparation.</text>
+  <text x="40" y="980" class="edge-label">Local v1 candidate: installed qualification and final release gates remain open.</text>
   <g transform="translate(0 ${VSHIFT})">
     <g class="edges">
       ${calmEdges.join("\n    ")}

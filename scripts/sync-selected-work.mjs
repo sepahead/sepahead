@@ -160,8 +160,8 @@ function renderEcosystem() {
   };
   return `<h3>How the work relates</h3>
 <p>${html(LOCAL_NCP.research)}</p>
-${figure("work-graph", 944, "NCP at the center connects Engram, CREBAIN, Prisoma, and Galadriel through local interfaces. Haldir has a separate pinned v0.8 interface. Dashed arrows show libraries; dotted lines show assets, tools, or exports. Projects are separate components, not a required bundle.")}
-<p><strong>Read the connections:</strong> solid paired arrows = local NCP interfaces; dashed arrows = library dependencies; dotted lines = assets, tools, or exports; dash-dot line with a square end = Haldir's pinned NCP v0.8 interface.</p>
+${figure("work-graph", 977, "NCP at the center connects Engram, CREBAIN, Prisoma, and Galadriel through local interfaces. Haldir has a separate pinned v0.8 interface. Dashed arrows show libraries; dotted lines show assets or exports; moving dashes on a continuous line show perception tools. Projects are separate components, not a required bundle.")}
+<p><strong>Read the connections:</strong> solid paired arrows = local NCP interfaces; dashed arrows = library dependencies; dotted lines = assets or exports; moving dashes on a continuous line = perception tools; dash-dot line with a square end = Haldir's pinned NCP v0.8 interface.</p>
 <p><strong>Different jobs:</strong> ${html(LOCAL_NCP.overview)}</p>
 <p><strong>One integrated example:</strong> ${html(LOCAL_NCP.example)}</p>
 <p><strong>${html(LOCAL_NCP.title)}.</strong> ${html(LOCAL_NCP.status)}</p>

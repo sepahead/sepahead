@@ -7,7 +7,7 @@ on:
       - "README.md"
       - "docs/**"
       - "scripts/**"
-      - "pics/crebain-logo.png"
+      - "assets/crebain-mark.svg"
       - "assets/agents-*.svg"
       - "assets/connect-*.svg"
       - "assets/rail-*.svg"

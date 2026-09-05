@@ -79,8 +79,9 @@ test("connection meaning survives without color or motion", () => {
     assert.equal((svg.match(/data-edge-kind="protocol"/g) || []).length, 4);
     assert.equal((svg.match(/data-edge-kind="protocol" data-from="ncp"/g) || []).length, 4);
     assert.match(svg, /not a required all-project deployment/);
-    assert.match(svg, /Optional PID library/);
-    assert.match(svg, /PID \/ runlog/);
+    assert.match(svg, /\.edge-tool\s*\{[^}]*stroke-dasharray: 7 13/);
+    assert.match(svg, /\.edge-tool\s*\{[^}]*animation: none/);
+    assert.doesNotMatch(svg, /<text[^>]*>(?:v0\.8|Optional PID library|PID \/ runlog)<\/text>/i);
     assert.doesNotMatch(svg, /<text[^>]*>[^<]*research/i);
   }
 });

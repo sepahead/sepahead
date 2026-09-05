@@ -51,7 +51,7 @@ Each owner exchanges bounded NCP requests and exact retained results through its
 One Visual modality remains insufficient for Galadriel's unchanged two-modality minimum. An unavailable observation never becomes a zero residual or a nominal report.
 This candidate targets local Darwin simulation. Haldir gating, remote endpoints, physical actuation, and real-time guarantees are excluded. Gated requests must be rejected before endpoint preparation. Capture and monitor results grant no command authority.
 The tested Engram implementation is private Paper2Brain source. The public Engram repository is a placeholder, not an executable release.
-NCP sits at the center as a shared interface. Solid connections identify local v1 adapters; the dash-dot connection identifies Haldir's pinned v0.8 adapter. Dashed arrows show library dependencies. Dotted lines show asset, tool, or export relationships. These connections do not require every project to run together or depict a runtime broker.
+NCP sits at the center as a shared interface. Solid connections identify local v1 adapters; the dash-dot connection identifies Haldir's pinned v0.8 adapter. Dashed arrows show library dependencies. Dotted lines show assets or exports. Moving dashes on a continuous line identify perception tools. Motion is decorative; each connection retains its meaning when still. These connections do not require every project to run together or depict a runtime broker.
 Installed-artifact qualification and final release gates remain open.
 NCP repository and release status: https://github.com/sepahead/NCP
 
