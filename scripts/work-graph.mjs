@@ -9,9 +9,9 @@
 //     centroid (keeps the layout open and separates the bridge crossing);
 //   • line patterns, arrowheads, labels, and a visible legend identify each
 //     relationship without requiring color or animation.
-// Engram routes paired-arrow local NCP requests/results to three peer projects.
-// NCP is a contract reference, not a runtime broker. Dashed library dependencies
-// and dotted research context remain outside native runtime qualification.
+// NCP is the central shared interface, not a runtime broker or required bundle.
+// The overview separates local adapters, Haldir's pinned v0.8 interface,
+// library dependencies, and asset/tool/export context.
 // Every project node is a bespoke "real object" mark on a machined border —
 // the crebain-badge / engram-medallion tier: NCP is a contract knot — paired
 // JSON-like bounds hold a quartered four-plane identity while a receipt remains
@@ -52,7 +52,7 @@ const CREBAIN_LOGO =
 
 
 const W = 860;
-const H = 955;
+const H = 990;
 const VSHIFT = 26; // push the graph body down so the taller canvas is balanced (frame/title stay put)
 
 // ---------------------------------------------------------------------------
@@ -61,18 +61,18 @@ const VSHIFT = 26; // push the graph body down so the taller canvas is balanced 
 //   bespoke logos: gate · voxel-net · raven · cobot cell · relief engine | chip
 // ---------------------------------------------------------------------------
 const nodes = {
-  engram:      { x: 110, y: 270, color: "#bcc6d1", kind: "logo" },
-  pidrs:       { x: 420, y: 87, color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
-  ncp:         { x: 110, y: 99, color: "#fbbf24", kind: "contract", label: "NCP" },
-  prisoma:     { x: 455, y: 190, color: "#a78bfa", kind: "triangle" },
-  crebain:     { x: 455, y: 474, color: "#9caf88", kind: "raven" },
-  cobotatlas:  { x: 718, y: 181, color: "#60a5fa", kind: "cobot", label: "cobot-atlas", dataset: true },
-  melkor:      { x: 718, y: 328, color: "#fb923c", kind: "cube" },
-  reliefatlas: { x: 718, y: 480, color: "#fb7185", kind: "relief", label: "relief-atlas", dataset: true },
-  cortexel:    { x: 110, y: 484, color: "#e879f9", kind: "artifact" },
-  manwe:       { x: 288, y: 565, color: "#38bdf8", kind: "radar", label: "manwe" },
-  galadriel:   { x: 455, y: 332, color: "#ef4444", kind: "sentinel", label: "galadriel" },
-  haldir:      { x: 94, y: 826, color: "#2dd4bf", kind: "haldir", label: "haldir" },
+  engram:      { x: 135, y: 320, color: "#bcc6d1", kind: "logo" },
+  pidrs:       { x: 565, y: 90, color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
+  ncp:         { x: 360, y: 340, color: "#fbbf24", kind: "contract", label: "NCP" },
+  prisoma:     { x: 600, y: 350, color: "#a78bfa", kind: "triangle" },
+  crebain:     { x: 450, y: 540, color: "#9caf88", kind: "raven" },
+  cobotatlas:  { x: 760, y: 190, color: "#60a5fa", kind: "cobot", label: "cobot-atlas", dataset: true },
+  melkor:      { x: 760, y: 400, color: "#fb923c", kind: "cube" },
+  reliefatlas: { x: 760, y: 600, color: "#fb7185", kind: "relief", label: "relief-atlas", dataset: true },
+  cortexel:    { x: 100, y: 560, color: "#e879f9", kind: "artifact" },
+  manwe:       { x: 250, y: 670, color: "#38bdf8", kind: "radar", label: "manwe" },
+  galadriel:   { x: 400, y: 170, color: "#ef4444", kind: "sentinel", label: "galadriel" },
+  haldir:      { x: 150, y: 100, color: "#2dd4bf", kind: "haldir", label: "haldir" },
 };
 // Uppercase every label in the SOURCE (not via CSS text-transform, which
 // librsvg and other SVG renderers ignore — content-case renders everywhere).
@@ -179,10 +179,25 @@ const calmEdges = [];
 const runtimeEdges = [];
 const edgeLabels = [];
 
+function roundedRoute(points, radius = 22) {
+  let path = `M ${f1(points[0].x)} ${f1(points[0].y)}`;
+  for (let index = 1; index < points.length - 1; index++) {
+    const previous = points[index - 1], corner = points[index], next = points[index + 1];
+    const incoming = Math.hypot(corner.x - previous.x, corner.y - previous.y);
+    const outgoing = Math.hypot(next.x - corner.x, next.y - corner.y);
+    const trim = Math.min(radius, incoming / 2, outgoing / 2);
+    const before = { x: corner.x + (previous.x - corner.x) * trim / incoming, y: corner.y + (previous.y - corner.y) * trim / incoming };
+    const after = { x: corner.x + (next.x - corner.x) * trim / outgoing, y: corner.y + (next.y - corner.y) * trim / outgoing };
+    path += ` L ${f1(before.x)} ${f1(before.y)} Q ${f1(corner.x)} ${f1(corner.y)} ${f1(after.x)} ${f1(after.y)}`;
+  }
+  const end = points.at(-1);
+  return `${path} L ${f1(end.x)} ${f1(end.y)}`;
+}
+
 edges.forEach((e) => {
   const A = nodes[e.a];
   const B = nodes[e.b];
-  const isRuntime = e.kind === "runtime";
+  const isRuntime = e.kind === "protocol";
   const ux0 = B.x - A.x, uy0 = B.y - A.y;
   const len = Math.hypot(ux0, uy0);
   const ux = ux0 / len, uy = uy0 / len;
@@ -207,7 +222,7 @@ edges.forEach((e) => {
   const chord = Math.hypot(p1.x - p0.x, p1.y - p0.y);
   const bow = Number.isFinite(e.bow) ? e.bow : sign * Math.min(0.16 * chord, 26);
   const c = e.via ? { x: e.via[0], y: e.via[1] } : { x: mid.x + bow * nx, y: mid.y + bow * ny };
-  const d = e.route ? `M ${f1(p0.x)} ${f1(p0.y)} ${e.route.map(([x, y]) => `L ${x} ${y}`).join(" ")} L ${f1(p1.x)} ${f1(p1.y)}` : `M ${f1(p0.x)} ${f1(p0.y)} Q ${f1(c.x)} ${f1(c.y)} ${f1(p1.x)} ${f1(p1.y)}`;
+  const d = e.route ? roundedRoute([p0, ...e.route.map(([x, y]) => ({ x, y })), p1]) : `M ${f1(p0.x)} ${f1(p0.y)} Q ${f1(c.x)} ${f1(c.y)} ${f1(p1.x)} ${f1(p1.y)}`;
 
   const arrow = (tip, from, css) => {
     const angle = Math.atan2(tip.y - from.y, tip.x - from.x);
@@ -220,12 +235,12 @@ edges.forEach((e) => {
     const lane = (offset) => `M ${f1(p0.x + offset * nx)} ${f1(p0.y + offset * ny)} Q ${f1(c.x + offset * nx)} ${f1(c.y + offset * ny)} ${f1(p1.x + offset * nx)} ${f1(p1.y + offset * ny)}`;
     const forwardTip = { x: p1.x + off * nx, y: p1.y + off * ny };
     const reverseTip = { x: p0.x - off * nx, y: p0.y - off * ny };
-    runtimeEdges.push(`<g data-edge-kind="runtime" data-from="${e.a}" data-to="${e.b}">${title}<path d="${lane(off)}" class="edge-runtime"/><path d="${lane(-off)}" class="edge-runtime"/>${arrow(forwardTip, c, "edge-runtime-head")}${arrow(reverseTip, c, "edge-runtime-head")}</g>`);
+    runtimeEdges.push(`<g data-edge-kind="protocol" data-from="${e.a}" data-to="${e.b}">${title}<path d="${d}" class="edge-clearance edge-clearance-protocol"/><path d="${lane(off)}" class="edge-runtime"/><path d="${lane(-off)}" class="edge-runtime"/>${arrow(forwardTip, c, "edge-runtime-head")}${arrow(reverseTip, c, "edge-runtime-head")}</g>`);
   } else {
     const endpoint = e.kind === "library" ? arrow(p1, c, "edge-library-head") : e.kind === "contract" ? `<rect x="${f1(p1.x - 3.5)}" y="${f1(p1.y - 3.5)}" width="7" height="7" class="edge-contract-end"/>` : "";
-    calmEdges.push(`<g data-edge-kind="${e.kind}" data-from="${e.a}" data-to="${e.b}">${title}<path d="${d}" class="edge-${e.kind}"/>${endpoint}</g>`);
+    calmEdges.push(`<g data-edge-kind="${e.kind}" data-from="${e.a}" data-to="${e.b}">${title}<path d="${d}" class="edge-clearance"/><path d="${d}" class="edge-${e.kind}"/>${endpoint}</g>`);
   }
-  edgeLabels.push(`<text x="${e.labelAt[0]}" y="${e.labelAt[1]}" text-anchor="middle" class="edge-label edge-label-${e.kind}">${escapeXML(e.label)}</text>`);
+  if (e.labelAt) edgeLabels.push(`<text x="${e.labelAt[0]}" y="${e.labelAt[1]}" text-anchor="middle" class="edge-label edge-label-${e.kind}">${escapeXML(e.label)}</text>`);
 });
 
 // ---------------------------------------------------------------------------
@@ -2162,7 +2177,7 @@ const frame = `<g class="frame">
 const aria = [LOCAL_NCP.title, LOCAL_NCP.summary, LOCAL_NCP.transport, LOCAL_NCP.boundary, LOCAL_NCP.monitor, LOCAL_NCP.availability, LOCAL_NCP.research, LOCAL_NCP.status].join(" ");
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXML(aria)}">
-  <title>NCP local candidate and separate research relationships</title>
+  <title>NCP interfaces and project relationships</title>
   <desc>${escapeXML(aria)}</desc>
   <defs>
     <radialGradient id="hubGrad" cx="50%" cy="42%" r="65%">
@@ -2215,6 +2230,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .cap        { font: 400 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
     .boundary-note { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #9da7b3; }
     .edge-runtime, .edge-library, .edge-research, .edge-contract { fill: none; stroke-linecap: round; }
+    .edge-clearance { fill: none; stroke: #0d1117; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+    .edge-clearance-protocol { stroke-width: 12; }
     .edge-runtime { stroke: #fbbf24; stroke-width: 2.1; }
     .edge-runtime-head { fill: #fbbf24; }
     .edge-library { stroke: #6ee7b7; stroke-width: 2.1; stroke-dasharray: 8 5; }
@@ -2224,7 +2241,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .edge-contract-end { fill: #c4b5fd; }
     .edge-label, .legend-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; letter-spacing: 0 !important; text-transform: none !important; }
     .edge-label { stroke-width: 5px !important; }
-    .edge-label-runtime { fill: #fcd34d; }
+    .edge-label-protocol { fill: #fcd34d; }
     .edge-label-library { fill: #a7f3d0; }
     .edge-label-contract { fill: #ddd6fe; }
     .legend-label { font-size: 13px; }
@@ -2457,9 +2474,10 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .edge-runtime { stroke: #985700; } .edge-runtime-head { fill: #985700; }
       .edge-library { stroke: #087859; } .edge-library-head { fill: #087859; }
       .edge-research { stroke: #607086; }
+      .edge-clearance { stroke: #f7f8f9; }
       .edge-contract { stroke: #7353a6; } .edge-contract-end { fill: #7353a6; }
       .edge-label, .legend-label { fill: #435365; }
-      .edge-label-runtime { fill: #805000; }
+      .edge-label-protocol { fill: #805000; }
       .edge-label-library { fill: #08664d; }
       .edge-label-contract { fill: #63428d; }
       .chip { fill: #ffffff; }
@@ -2492,31 +2510,24 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
 
   <rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="16" class="panel"/>
   <text x="40" y="40" class="cap">THE&#160;SYSTEM&#160;//&#160;HOW&#160;THE&#160;WORK&#160;CONNECTS</text>
-  <text x="820" y="40" text-anchor="end" class="cap">LOCAL&#160;V1&#160;CANDIDATE&#160;//&#160;RESEARCH</text>
-
-  <text x="40" y="379" class="edge-label">Run owner</text>
-  <text x="40" y="397" class="edge-label">Private NEST</text>
-  <text x="40" y="75" class="edge-label edge-label-contract">NCP: shared contract for all four owners</text>
-  <line x1="40" y1="650" x2="820" y2="650" class="wg-rule"/>
-  <text x="40" y="680" class="cap">CONNECTION TYPES</text>
-  <path d="M 42 704 H 105 M 42 711 H 105" class="edge-runtime"/>
-  <polygon points="105,704 97,700 97,708 105,704" class="edge-runtime-head"/>
-  <polygon points="42,711 50,707 50,715 42,711" class="edge-runtime-head"/>
-  <text x="121" y="713" class="legend-label">NCP private request / result</text>
-  <path d="M 450 707 H 511" class="edge-library"/>
-  <polygon points="515,707 507,703 507,711" class="edge-library-head"/>
-  <text x="531" y="713" class="legend-label">Research library dependency</text>
-  <path d="M 42 742 H 105" class="edge-research"/>
-  <text x="121" y="748" class="legend-label">Research / export context</text>
-  <path d="M 450 742 H 511" class="edge-contract"/>
-  <rect x="508" y="738.5" width="7" height="7" class="edge-contract-end"/>
-  <text x="531" y="748" class="legend-label">Shared contract reference</text>
-  <rect x="35" y="777" width="790" height="148" rx="10" class="scope-box"/>
-  <text x="172" y="811" class="edge-label">HALDIR · POLICY RESEARCH · OUTSIDE LOCAL V1</text>
-  <text x="172" y="838" class="edge-label">Gated requests are rejected before preparation.</text>
-  <text x="172" y="862" class="edge-label">Capture and monitor results grant no command authority.</text>
-  <text x="172" y="886" class="edge-label">Local Darwin simulation; no remote or physical control.</text>
-  <text x="172" y="910" class="edge-label">Candidate: installed qualification remains open.</text>
+  <text x="820" y="40" text-anchor="end" class="cap">INTERFACES&#160;//&#160;DEPENDENCIES</text>
+  <line x1="40" y1="760" x2="820" y2="760" class="wg-rule"/>
+  <text x="40" y="787" class="cap">CONNECTION TYPES</text>
+  <path d="M 42 809 H 105 M 42 816 H 105" class="edge-runtime"/>
+  <polygon points="105,809 97,805 97,813 105,809" class="edge-runtime-head"/>
+  <polygon points="42,816 50,812 50,820 42,816" class="edge-runtime-head"/>
+  <text x="121" y="818" class="legend-label">Local NCP interface</text>
+  <path d="M 450 812 H 511" class="edge-library"/>
+  <polygon points="515,812 507,808 507,816" class="edge-library-head"/>
+  <text x="531" y="818" class="legend-label">Library dependency</text>
+  <path d="M 42 847 H 105" class="edge-research"/>
+  <text x="121" y="853" class="legend-label">Assets / tools / exports</text>
+  <path d="M 450 847 H 511" class="edge-contract"/>
+  <rect x="508" y="843.5" width="7" height="7" class="edge-contract-end"/>
+  <text x="531" y="853" class="legend-label">Pinned NCP v0.8 interface</text>
+  <text x="40" y="897" class="edge-label">Connections show interfaces, not a required all-project deployment.</text>
+  <text x="40" y="921" class="edge-label">Haldir stays on v0.8. Local v1 gated requests are rejected before preparation.</text>
+  <text x="40" y="945" class="edge-label">Local v1 candidate: installed qualification and final release gates remain open.</text>
   <g transform="translate(0 ${VSHIFT})">
     <g class="edges">
       ${calmEdges.join("\n    ")}

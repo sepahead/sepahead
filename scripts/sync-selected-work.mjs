@@ -160,8 +160,10 @@ function renderEcosystem() {
   };
   return `<h3>How the work relates</h3>
 <p>${html(LOCAL_NCP.research)}</p>
-${figure("work-graph", 911, "Typed project map: solid paired arrows are Engram-routed NCP requests and results; dashed arrows are research libraries; dotted lines are research and export context; a dash-dot reference identifies NCP. Haldir is outside local v1.")}
-<p><strong>Read the connections:</strong> solid paired arrows = local NCP requests and results; dashed arrows = research library dependencies; dotted lines = research or export context; dash-dot line with a square end = shared contract reference.</p>
+${figure("work-graph", 944, "NCP at the center connects Engram, CREBAIN, Prisoma, and Galadriel through local interfaces. Haldir has a separate pinned v0.8 interface. Dashed arrows show libraries; dotted lines show assets, tools, or exports. Projects are separate components, not a required bundle.")}
+<p><strong>Read the connections:</strong> solid paired arrows = local NCP interfaces; dashed arrows = library dependencies; dotted lines = assets, tools, or exports; dash-dot line with a square end = Haldir's pinned NCP v0.8 interface.</p>
+<p><strong>Different jobs:</strong> ${html(LOCAL_NCP.overview)}</p>
+<p><strong>One integrated example:</strong> ${html(LOCAL_NCP.example)}</p>
 <p><strong>${html(LOCAL_NCP.title)}.</strong> ${html(LOCAL_NCP.status)}</p>
 <p>${html(LOCAL_NCP.summary)}</p>
 <p>${html(LOCAL_NCP.transport)}</p>
@@ -169,7 +171,7 @@ ${figure("work-graph", 911, "Typed project map: solid paired arrows are Engram-r
 <p><strong>Supported boundary:</strong> ${html(LOCAL_NCP.boundary)}</p>
 <p>${html(LOCAL_NCP.availability)} <a href="${LOCAL_NCP.guide}">Read the NCP repository and release status</a>.</p>
 <details>
-<summary>Local v1: four owners and their private channels</summary>
+<summary>One local v1 composition: four owners and their private channels</summary>
 ${figure("work-graph-local", 566, LOCAL_NCP.summary + " " + LOCAL_NCP.boundary)}
 </details>`;
 }
@@ -350,6 +352,8 @@ profile and Pages homepage. Its complete archive remains directly accessible:
 ${selected.join("\n")}
 
 ## NCP local simulation candidate
+${LOCAL_NCP.overview}
+${LOCAL_NCP.example}
 ${LOCAL_NCP.summary}
 ${LOCAL_NCP.transport}
 ${LOCAL_NCP.monitor}

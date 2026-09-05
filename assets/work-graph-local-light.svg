@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 690" width="1000" height="690" role="img" aria-labelledby="local-title local-desc">
   <title id="local-title">NCP local simulation v1 candidate</title>
-  <desc id="local-desc">Engram coordinates one local experiment and privately owns NEST. CREBAIN owns body and fusion state. Prisoma captures exact step pairs. Galadriel records actual detector output with explicit abstention. Each owner exchanges bounded NCP requests and exact retained results through its own private process pipes. NCP is the shared contract, not another simulation engine. One Visual modality remains insufficient for Galadriel&apos;s unchanged two-modality minimum. An unavailable observation never becomes a zero residual or a nominal report. This candidate targets local Darwin simulation. Haldir gating, remote endpoints, physical actuation, and real-time guarantees are excluded. Gated requests must be rejected before endpoint preparation. Capture and monitor results grant no command authority. The tested Engram implementation is private Paper2Brain source. The public Engram repository is a placeholder, not an executable release. Installed-artifact qualification and final release gates remain open.</desc>
+  <desc id="local-desc">Engram coordinates one local experiment and privately owns neural state. CREBAIN owns body and fusion state. Prisoma captures exact step pairs. Galadriel records actual detector output with explicit abstention. Each owner exchanges bounded NCP requests and exact retained results through its own private process pipes. NCP is the shared contract, not another simulation engine. One Visual modality remains insufficient for Galadriel&apos;s unchanged two-modality minimum. An unavailable observation never becomes a zero residual or a nominal report. This candidate targets local Darwin simulation. Haldir gating, remote endpoints, physical actuation, and real-time guarantees are excluded. Gated requests must be rejected before endpoint preparation. Capture and monitor results grant no command authority. The tested Engram implementation is private Paper2Brain source. The public Engram repository is a placeholder, not an executable release. Installed-artifact qualification and final release gates remain open.</desc>
   <style>
     .panel { fill: #0d1117; stroke: #30363d; }
     .coordinator { fill: #172333; stroke: #536071; }
@@ -47,7 +47,7 @@
       <rect x="24" y="344" width="220" height="150" rx="12" class="owner"/>
       <text x="40" y="377" class="name" text-anchor="start">Engram</text>
       <text x="40" y="403" class="role" text-anchor="start">Neural owner</text>
-      <text x="40" y="433" class="body" text-anchor="start">Persistent NEST</text>
+      <text x="40" y="433" class="body" text-anchor="start">Persistent network</text>
 <text x="40" y="456" class="body" text-anchor="start">Private neural state</text>
 <text x="40" y="479" class="body" text-anchor="start">Exact readout interval</text>
     </g>
@@ -82,8 +82,8 @@
       <polygon points="869,174 881,174 875,163" class="result-head"/>
       <rect x="756" y="344" width="220" height="150" rx="12" class="owner"/>
       <text x="772" y="377" class="name" text-anchor="start">Galadriel</text>
-      <text x="772" y="403" class="role" text-anchor="start">Monitor owner</text>
-      <text x="772" y="433" class="body" text-anchor="start">Actual NIS detector</text>
+      <text x="772" y="403" class="role" text-anchor="start">Tampering monitor</text>
+      <text x="772" y="433" class="body" text-anchor="start">Sensor consistency</text>
 <text x="772" y="456" class="body" text-anchor="start">Record-only output</text>
 <text x="772" y="479" class="body" text-anchor="start">Explicit insufficiency</text>
     </g>

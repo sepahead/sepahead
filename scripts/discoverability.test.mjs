@@ -384,10 +384,10 @@ test("Engram card exposes research and pending-publication boundaries without st
   assert.equal(engram.phase, "research");
   assert.equal(engram.stars, undefined);
   assert.match(engram.desc, /Public source pending\./);
-  assert.match(engram.summary, /research-stage, domain-specific AI agent with a custom harness/i);
+  assert.match(engram.summary, /AI agent and custom harness/i);
   assert.match(engram.summary, /biophysical and functional neural models/i);
-  assert.match(engram.summary, /provenance-aware, closed-loop computational-neuroscience simulations/i);
-  assert.match(engram.summary, /reproducible R&D/i);
+  assert.match(engram.summary, /model sources, simulation inputs, and results/i);
+  assert.match(engram.summary, /optional NCP controller/i);
   assert.match(engram.summary, /public repository remains a placeholder pending source publication/i);
   assert.match(engram.summary, /does not claim general paper reproduction or validated scientific results/i);
 

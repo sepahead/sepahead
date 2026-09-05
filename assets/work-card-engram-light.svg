@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 150" width="395" height="150" role="img" aria-label="engram (research): Domain-specific AI agent with custom harness: provenance-aware closed-loop biophysical and functional models. Public source pending.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 150" width="395" height="150" role="img" aria-label="engram (research): Builds and runs neural-model experiments with an AI agent and custom harness. Optional NCP controller. Public source pending.">
   <defs>
     <radialGradient id="wash0" cx="100%" cy="100%" r="120%"><stop offset="0%" stop-color="#1c2530" stop-opacity="0.9"/><stop offset="60%" stop-color="#1c2530" stop-opacity="0"/></radialGradient><linearGradient id="spine0" gradientUnits="userSpaceOnUse" x1="2.5" y1="14" x2="2.5" y2="136"><stop offset="0%" stop-color="#aeb8c4"/><stop offset="100%" stop-color="#dfe7ee"/></linearGradient><linearGradient id="spine0L" gradientUnits="userSpaceOnUse" x1="2.5" y1="14" x2="2.5" y2="136"><stop offset="0%" stop-color="#5b6672"/><stop offset="100%" stop-color="#5b6672"/></linearGradient><radialGradient id="wash1" cx="8%" cy="0%" r="120%"><stop offset="0%" stop-color="#dfe7ee" stop-opacity="0.16"/><stop offset="55%" stop-color="#dfe7ee" stop-opacity="0"/></radialGradient>
   </defs>
@@ -30,9 +30,9 @@
     <text x="23" y="38" class="title c0" textLength="78" lengthAdjust="spacingAndGlyphs">engram</text>
     <rect x="23" y="46" width="34" height="2.5" rx="1.25" class="rule c0"/>
     <circle cx="366" cy="22" r="5" fill="none" stroke-width="1.4" class="glyph-stroke c0"/><circle cx="366" cy="22" r="1.6" class="glyph-fill c0"/><text x="355" y="27" text-anchor="end" class="badge c0">research</text>
-    <text x="23" y="60" class="desc">Domain-specific AI agent with custom harness:</text>
-    <text x="23" y="78" class="desc">provenance-aware closed-loop biophysical and</text>
-    <text x="23" y="96" class="desc">functional models. Public source pending.</text>
+    <text x="23" y="60" class="desc">Builds and runs neural-model experiments with an</text>
+    <text x="23" y="78" class="desc">AI agent and custom harness. Optional NCP</text>
+    <text x="23" y="96" class="desc">controller. Public source pending.</text>
     <g><rect x="23" y="110" width="82" height="22" rx="6" class="chip c0"/><text x="64" y="125" text-anchor="middle" class="chip-label c0">AI Agent</text></g>
     <g><rect x="113" y="110" width="50" height="22" rx="6" class="chip c0"/><text x="138" y="125" text-anchor="middle" class="chip-label c0">NEST</text></g>
   </g>
