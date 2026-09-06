@@ -16,6 +16,31 @@ test("project map centers NCP interfaces and keeps library dependencies distinct
   assert.deepEqual(ECOSYSTEM_EDGES.filter((edge) => edge.kind === "library").map((edge) => [edge.a, edge.b]), [["galadriel", "pidrs"], ["prisoma", "pidrs"]]);
 });
 
+test("environment relation is directional, qualified, and separate from runtime channels", () => {
+  assert.doesNotThrow(() => validateEcosystemEdges(nodes, copy()));
+  const without = copy().filter((edge) => edge.kind !== "environment");
+  const environment = copy().find((edge) => edge.kind === "environment");
+  assert.deepEqual([environment.a, environment.b], ["crebain", "prisoma"]);
+  assert.throws(() => validateEcosystemEdges(nodes, without), /Missing/);
+  for (const change of [
+    { a: "prisoma", b: "crebain" },
+    { a: "engram" },
+    { b: "galadriel" },
+    { status: "qualified" },
+    { status: undefined },
+    { kind: "protocol" },
+    { kind: "research" },
+  ]) assert.throws(() => validateEcosystemEdges(nodes, [...without, { ...environment, ...change }]));
+  for (const theme of ["light", "dark"]) {
+    const svg = readFileSync(new URL(`../assets/work-graph-${theme}.svg`, import.meta.url), "utf8");
+    assert.equal((svg.match(/data-edge-kind="environment"/g) || []).length, 1);
+    assert.match(svg, /data-edge-kind="environment" data-from="crebain" data-to="prisoma"/);
+    assert.match(svg, /Environment \+ sensors/);
+    assert.match(svg, /class="edge-status">under qualification/);
+    assert.match(svg, /\.edge-environment\s*\{[^}]*stroke-dasharray: 16 7/);
+  }
+});
+
 test("policy, direct telemetry, and observer command routes fail graph admission", () => {
   for (const edge of [
     { a: "ncp", b: "haldir", kind: "protocol", label: "NCP" },
@@ -58,7 +83,7 @@ test("visible and plain-text profile surfaces preserve scope, abstention, and pr
   for (const file of ["README.md", "docs/index.html", "docs/llms.txt"]) {
     const source = readFileSync(new URL(`../${file}`, import.meta.url), "utf8")
       .replaceAll("&#39;", "'").replaceAll("&quot;", '"').replaceAll("&amp;", "&");
-    for (const field of ["status", "boundary", "availability", "monitor", "overview", "example", "assets"]) {
+    for (const field of ["status", "boundary", "availability", "monitor", "overview", "example", "assets", "environment"]) {
       assert.ok(source.includes(LOCAL_NCP[field]), `${file} omits ${field}`);
     }
     if (file.endsWith(".txt")) continue;

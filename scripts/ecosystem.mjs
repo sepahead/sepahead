@@ -10,8 +10,9 @@ export const LOCAL_NCP = {
   transport: "Each owner exchanges bounded NCP requests and exact retained results through its own private process pipes. NCP is the shared contract, not another simulation engine.",
   boundary: "This candidate targets local Darwin simulation. Haldir gating, remote endpoints, physical actuation, and real-time guarantees are excluded. Gated requests must be rejected before endpoint preparation. Capture and monitor results grant no command authority.",
   availability: "The tested Engram implementation is private Paper2Brain source. The public Engram repository is a placeholder, not an executable release.",
-  research: "NCP sits at the center as a shared interface. Solid connections identify local v1 adapters; the dash-dot connection identifies Haldir's pinned v0.8 adapter. Dashed arrows show library dependencies. Dotted lines show assets or exports. Moving dashes on a continuous line identify perception tools. Motion is decorative; each connection retains its meaning when still. These connections do not require every project to run together or depict a runtime broker.",
+  research: "NCP sits at the center as a shared interface. Solid connections identify local v1 adapters; the dash-dot connection identifies Haldir's pinned v0.8 adapter. Short dashed arrows show library dependencies. A long dashed open arrow connects CREBAIN to Prisoma for environment and sensor data; that integration remains under qualification. Dotted lines show assets or exports. Moving dashes on a continuous line identify perception tools. Motion is decorative; each connection retains its meaning when still. These connections do not require every project to run together or depict a runtime broker.",
   monitor: "One Visual modality remains insufficient for Galadriel's unchanged two-modality minimum. An unavailable observation never becomes a zero residual or a nominal report.",
+  environment: "CREBAIN is Prisoma's selected environment for embodied-agent experiments. CREBAIN owns world dynamics and sensor observations; Prisoma owns experiment design and evidence. CREBAIN runs without Prisoma. Their complete environment adapter remains under qualification.",
   assets: "CREBAIN consumes scenes. Melkor converts splat assets; the atlas projects provide mesh assets. Prisoma records and analyzes experiments that use an environment. These asset links describe intended inputs, not a qualified import pipeline.",
   guide: "https://github.com/sepahead/NCP",
   roles: [
@@ -24,6 +25,7 @@ export const LOCAL_NCP = {
 
 export const EDGE_TYPES = {
   protocol: { label: "Local NCP interface", pattern: "solid paired arrows" },
+  environment: { label: "Environment integration", pattern: "long dashed line, open arrow", status: "under qualification" },
   library: { label: "Library dependency", pattern: "dashed arrow" },
   research: { label: "Assets / exports", pattern: "dotted line, no arrow" },
   tool: { label: "Perception tools", pattern: "moving dashes on a continuous line" },
@@ -38,6 +40,7 @@ export const ECOSYSTEM_EDGES = [
   { a: "ncp", b: "haldir", kind: "contract", label: "Pinned Haldir interface", bow: 0 },
   { a: "galadriel", b: "pidrs", kind: "library", label: "PID library dependency", bow: -8 },
   { a: "prisoma", b: "pidrs", kind: "library", label: "PID and runlog dependency", bow: 8 },
+  { a: "crebain", b: "prisoma", kind: "environment", label: "Environment + sensors", status: "under qualification", labelAt: [548, 458], labelAngle: -52, route: [[528, 400]] },
   { a: "crebain", b: "cobotatlas", kind: "research", label: "Simulation assets", route: [[693, 534], [693, 274]] },
   { a: "crebain", b: "melkor", kind: "research", label: "Simulation scenarios", bow: 12 },
   { a: "crebain", b: "reliefatlas", kind: "research", label: "Simulation assets", bow: 8 },
@@ -50,6 +53,7 @@ export function validateEcosystemEdges(nodes, edges) {
   const seen = new Set();
   const runtimeRoles = new Map(LOCAL_NCP.roles.map(({ id }) => [id, ({ engram: "neural", prisoma: "capture", galadriel: "monitor", crebain: "body" })[id]]));
   const required = new Set([...runtimeRoles.keys(), "haldir"].map((id) => key("ncp", id)));
+  required.add(key("crebain", "prisoma"));
   for (const edge of edges) {
     const identity = key(edge.a, edge.b);
     if (!nodes[edge.a] || !nodes[edge.b]) throw new Error(`Unknown graph endpoint: ${identity}`);
@@ -62,6 +66,10 @@ export function validateEcosystemEdges(nodes, edges) {
       if (edge.role !== runtimeRoles.get(edge.b)) throw new Error(`Wrong runtime role: ${identity}`);
     } else if (edge.kind === "contract") {
       if (edge.a !== "ncp" || edge.b !== "haldir") throw new Error(`Invalid pinned interface: ${identity}`);
+    } else if (edge.kind === "environment") {
+      if (edge.a !== "crebain" || edge.b !== "prisoma" || edge.status !== EDGE_TYPES.environment.status) {
+        throw new Error(`Invalid environment integration: ${identity}`);
+      }
     } else {
       if (edge.a === "ncp" || edge.b === "ncp") throw new Error(`Unclassified NCP route: ${identity}`);
       if ([edge.a, edge.b].every((id) => LOCAL_NCP.roles.some((role) => role.id === id))) {

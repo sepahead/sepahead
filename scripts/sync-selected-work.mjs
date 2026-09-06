@@ -161,9 +161,10 @@ function renderEcosystem() {
   };
   return `<h3>How the work relates</h3>
 <p>${html(LOCAL_NCP.research)}</p>
-${figure("work-graph", 977, "NCP at the center connects Engram, CREBAIN, Prisoma, and Galadriel through local interfaces. Haldir has a separate pinned v0.8 interface. Dashed arrows show libraries; dotted lines show assets or exports; moving dashes on a continuous line show perception tools. Projects are separate components, not a required bundle.")}
-<p><strong>Read the connections:</strong> solid paired arrows = local NCP interfaces; dashed arrows = library dependencies; dotted lines = assets or exports; moving dashes on a continuous line = perception tools; dash-dot line with a square end = Haldir's pinned NCP v0.8 interface.</p>
+${figure("work-graph", 977, "NCP at the center connects Engram, CREBAIN, Prisoma, and Galadriel through local interfaces. Haldir has a separate pinned v0.8 interface. A long dashed open arrow shows the CREBAIN-to-Prisoma environment integration under qualification. Short dashed arrows show libraries; dotted lines show assets or exports; moving dashes on a continuous line show perception tools. Projects are separate components, not a required bundle.")}
+<p><strong>Read the connections:</strong> solid paired arrows = local NCP interfaces; short dashed arrows = library dependencies; long dashed open arrow = environment integration under qualification; dotted lines = assets or exports; moving dashes on a continuous line = perception tools; dash-dot line with a square end = Haldir's pinned NCP v0.8 interface.</p>
 <p><strong>Different jobs:</strong> ${html(LOCAL_NCP.overview)}</p>
+<p><strong>CREBAIN and Prisoma:</strong> ${html(LOCAL_NCP.environment)}</p>
 <p><strong>Scene ownership:</strong> ${html(LOCAL_NCP.assets)}</p>
 <p><strong>One integrated example:</strong> ${html(LOCAL_NCP.example)}</p>
 <p><strong>${html(LOCAL_NCP.title)}.</strong> ${html(LOCAL_NCP.status)}</p>
@@ -356,6 +357,7 @@ ${selected.join("\n")}
 ## NCP local simulation candidate
 ${LOCAL_NCP.overview}
 ${LOCAL_NCP.assets}
+${LOCAL_NCP.environment}
 ${LOCAL_NCP.example}
 ${LOCAL_NCP.summary}
 ${LOCAL_NCP.transport}

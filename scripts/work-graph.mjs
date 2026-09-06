@@ -229,7 +229,7 @@ edges.forEach((e) => {
     const dx = Math.cos(angle), dy = Math.sin(angle);
     return `<polygon class="${css}" points="${f1(tip.x)},${f1(tip.y)} ${f1(tip.x - 8 * dx + 3.5 * dy)},${f1(tip.y - 8 * dy - 3.5 * dx)} ${f1(tip.x - 8 * dx - 3.5 * dy)},${f1(tip.y - 8 * dy + 3.5 * dx)}"/>`;
   };
-  const title = `<title>${escapeXML(`${e.a} to ${e.b}: ${e.label}. ${EDGE_TYPES[e.kind].pattern}.`)}</title>`;
+  const title = `<title>${escapeXML(`${e.a} to ${e.b}: ${e.label}. ${e.status ? e.status + ". " : ""}${EDGE_TYPES[e.kind].pattern}.`)}</title>`;
   if (isRuntime) {
     const off = 3.2;
     const lane = (offset) => `M ${f1(p0.x + offset * nx)} ${f1(p0.y + offset * ny)} Q ${f1(c.x + offset * nx)} ${f1(c.y + offset * ny)} ${f1(p1.x + offset * nx)} ${f1(p1.y + offset * ny)}`;
@@ -237,13 +237,18 @@ edges.forEach((e) => {
     const reverseTip = { x: p0.x - off * nx, y: p0.y - off * ny };
     runtimeEdges.push(`<g data-edge-kind="protocol" data-from="${e.a}" data-to="${e.b}">${title}<path d="${d}" class="edge-clearance edge-clearance-protocol"/><path d="${lane(off)}" class="edge-runtime"/><path d="${lane(-off)}" class="edge-runtime"/>${arrow(forwardTip, c, "edge-runtime-head")}${arrow(reverseTip, c, "edge-runtime-head")}</g>`);
   } else {
-    const endpoint = e.kind === "library" ? arrow(p1, c, "edge-library-head") : e.kind === "contract" ? `<rect x="${f1(p1.x - 3.5)}" y="${f1(p1.y - 3.5)}" width="7" height="7" class="edge-contract-end"/>` : "";
+    const openArrow = (tip, from) => {
+      const angle = Math.atan2(tip.y - from.y, tip.x - from.x);
+      const dx = Math.cos(angle), dy = Math.sin(angle);
+      return `<path class="edge-environment-head" d="M ${f1(tip.x - 9 * dx + 4 * dy)} ${f1(tip.y - 9 * dy - 4 * dx)} L ${f1(tip.x)} ${f1(tip.y)} L ${f1(tip.x - 9 * dx - 4 * dy)} ${f1(tip.y - 9 * dy + 4 * dx)}"/>`;
+    };
+    const endpoint = e.kind === "environment" ? openArrow(p1, e.route ? { x: e.route.at(-1)[0], y: e.route.at(-1)[1] } : c) : e.kind === "library" ? arrow(p1, c, "edge-library-head") : e.kind === "contract" ? `<rect x="${f1(p1.x - 3.5)}" y="${f1(p1.y - 3.5)}" width="7" height="7" class="edge-contract-end"/>` : "";
     const rail = e.kind === "tool" ? `<path d="${d}" class="edge-tool-rail"/>` : "";
     calmEdges.push(`<g data-edge-kind="${e.kind}" data-from="${e.a}" data-to="${e.b}">${title}<path d="${d}" class="edge-clearance"/>${rail}<path d="${d}" class="edge-${e.kind}"/>${endpoint}</g>`);
   }
   if (e.labelAt) {
     const rotation = e.labelAngle ? ` transform="rotate(${e.labelAngle} ${e.labelAt[0]} ${e.labelAt[1]})"` : "";
-    edgeLabels.push(`<text x="${e.labelAt[0]}" y="${e.labelAt[1]}"${rotation} text-anchor="middle" class="edge-label edge-label-${e.kind}">${escapeXML(e.label)}</text>`);
+    edgeLabels.push(`<text x="${e.labelAt[0]}" y="${e.labelAt[1]}"${rotation} text-anchor="middle" class="edge-label edge-label-${e.kind}">${escapeXML(e.label)}${e.status ? `<tspan x="${e.labelAt[0]}" dy="15" class="edge-status">${escapeXML(e.status)}</tspan>` : ""}</text>`);
   }
 });
 
@@ -1500,35 +1505,16 @@ export function nodeMark(n) {
   </g>`;
   }
   if (n.kind === "raven") {
-    // Vector raven and scope over a field-green seat. Keep the name readable
-    // throughout the cursor animation and under reduced motion.
+    // The canonical vector includes its graphite seat and bronze rim.
     const cx = n.x, cy = n.y, S = 90;
-    const Z = 44 / 34; // scale the badge up to prisoma/melkor size (graph only)
+    const Z = 44 / 34;
     const word = n.label;
     const Wt = word.length * 9.7, leftX = cx - Wt / 2;
-    const SE = (S / 2) * Z;                          // scaled badge half-extent (wordmark sits below it)
+    const SE = (S / 2) * Z;
     const baseY = cy + SE + 8, curY = cy + SE - 1, flagTop = cy + SE + 16;
-    // Place the vector raven over the field-green seat. The outer instrument
-    // rings and eye highlight share the same geometry as the source mark.
-    // Four cardinal ticks cross the tactical-green scope ring.
-    const sTick = (deg) => {
-      const a = (deg * Math.PI) / 180, c = Math.cos(a), s = Math.sin(a);
-      return `<line class="creb-xhair" x1="${f1(cx + 30 * c)}" y1="${f1(cy + 30 * s)}" x2="${f1(cx + 38 * c)}" y2="${f1(cy + 38 * s)}"/>`;
-    };
     return `<g>
-    <defs>
-      <linearGradient id="crebBezel" x1="0" y1="${f1(cy - 34)}" x2="0" y2="${f1(cy + 34)}" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#657747"/><stop offset="50%" stop-color="#4d5f36"/><stop offset="100%" stop-color="#354323"/>
-      </linearGradient>
-    </defs>
     <g transform="translate(${cx} ${cy}) scale(${f1(Z)}) translate(${-cx} ${-cy})">
-      <g filter="url(#nodeShadow)"><circle cx="${cx}" cy="${cy}" r="34" class="seat-creb"/></g>
-      <g transform="translate(${f1(cx - S / 2)} ${f1(cy - S / 2)}) scale(${S / 180})">${CREBAIN_LOGO}</g>
-      ${sTick(0)}${sTick(90)}${sTick(180)}${sTick(270)}
-      <circle cx="${cx}" cy="${cy}" r="34" class="seat-ring" stroke="url(#crebBezel)"/>
-      <circle cx="${cx}" cy="${cy}" r="31.8" class="seat-groove"/>
-      <circle cx="${cx}" cy="${cy}" r="32.5" class="creb-signal"/>
-      <circle cx="${cx}" cy="${cy}" r="35.4" class="seat-hairline"/>
+      <g filter="url(#nodeShadow)" transform="translate(${f1(cx - S / 2)} ${f1(cy - S / 2)}) scale(${S / 180})">${CREBAIN_LOGO}</g>
     </g>
     <g class="raven-typeline">
       <text x="${f1(leftX)}" y="${f1(baseY)}" text-anchor="start" class="raven-label">${escapeXML(word)}</text>
@@ -2172,11 +2158,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       <stop offset="0%" stop-color="#042f2a"/>
       <stop offset="100%" stop-color="#10131a"/>
     </radialGradient>
-    <radialGradient id="crebGrad" cx="50%" cy="40%" r="70%">
-      <stop offset="0%" stop-color="#293716"/>
-      <stop offset="62%" stop-color="#19230f"/>
-      <stop offset="100%" stop-color="#0d1208"/>
-    </radialGradient>
     <filter id="nodeShadow" x="-40%" y="-40%" width="180%" height="180%">
       <feDropShadow dx="0" dy="1.5" stdDeviation="2.4" flood-color="#000000" flood-opacity="0.38"/>
     </filter>
@@ -2201,13 +2182,16 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     :root { color-scheme: light dark; }
     .cap        { font: 400 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
     .boundary-note { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #9da7b3; }
-    .edge-runtime, .edge-library, .edge-research, .edge-contract, .edge-tool, .edge-tool-rail { fill: none; stroke-linecap: round; }
+    .edge-runtime, .edge-library, .edge-environment, .edge-environment-head, .edge-research, .edge-contract, .edge-tool, .edge-tool-rail { fill: none; stroke-linecap: round; }
     .edge-clearance { fill: none; stroke: #0d1117; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
     .edge-clearance-protocol { stroke-width: 12; }
     .edge-runtime { stroke: #fbbf24; stroke-width: 2.1; }
     .edge-runtime-head { fill: #fbbf24; }
     .edge-library { stroke: #6ee7b7; stroke-width: 2.1; stroke-dasharray: 8 5; }
     .edge-library-head { fill: #6ee7b7; }
+    .edge-environment { stroke: #d1c0a2; stroke-width: 2.3; stroke-dasharray: 16 7; }
+    .edge-environment-head { stroke: #d1c0a2; stroke-width: 2.3; }
+    .edge-status { font-size: 9.5px; fill: #9da7b3; }
     .edge-research { stroke: #8291a6; stroke-width: 1.9; stroke-dasharray: 1 6; }
     .edge-tool-rail { stroke: #38bdf8; stroke-width: 1; opacity: .5; }
     .edge-tool { stroke: #7dd3fc; stroke-width: 2.8; stroke-dasharray: 7 13; animation: tool-flow 2.4s linear infinite; }
@@ -2216,6 +2200,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .edge-contract-end { fill: #c4b5fd; }
     .edge-label, .legend-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; letter-spacing: 0 !important; text-transform: none !important; }
     .edge-label { stroke-width: 5px !important; }
+    .edge-label-environment { font-size: 10.5px; }
     .edge-label-protocol { fill: #fcd34d; }
     .edge-label-library { fill: #a7f3d0; }
     .edge-label-tool { fill: #bae6fd; }
@@ -2331,9 +2316,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .ctx-min-action-potential { fill: none; stroke: #ffffff; stroke-width: 1.45; stroke-linecap: round; stroke-linejoin: round; }
     .ctx-min-token         { fill: #fdf4ff; stroke: #e879f9; stroke-width: 0.45; filter: url(#edgeGlow); }
     .ctx-min-scan          { stroke: #ffffff; stroke-width: 1.2; stroke-linecap: round; filter: url(#edgeGlow); }
-    .seat-creb     { fill: url(#crebGrad); }
-    .creb-signal   { fill: none; stroke: #b6cf86; stroke-opacity: 0.7; stroke-width: 1.2; }
-    .creb-xhair    { fill: none; stroke: #a8c07a; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linecap: round; }
     .raven-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #9caf88; }
     .raven-cursor { fill: #9caf88; }
     .radar-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #38bdf8; }
@@ -2448,6 +2430,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .edge-runtime { stroke: #985700; } .edge-runtime-head { fill: #985700; }
       .edge-library { stroke: #087859; } .edge-library-head { fill: #087859; }
       .edge-research { stroke: #607086; }
+      .edge-environment, .edge-environment-head { stroke: #786044; }
+      .edge-status { fill: #607086; }
       .edge-tool-rail { stroke: #0369a1; }
       .edge-tool { stroke: #0369a1; }
       .edge-label-tool { fill: #075985; }
@@ -2508,6 +2492,9 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
   <path d="M 42 882 H 105" class="edge-tool-rail"/>
   <path d="M 42 882 H 105" class="edge-tool"/>
   <text x="121" y="888" class="legend-label">Perception tools</text>
+  <path d="M 450 882 H 511" class="edge-environment"/>
+  <path d="M 504 878 L 513 882 L 504 886" class="edge-environment-head"/>
+  <text x="531" y="888" class="legend-label">Environment integration</text>
   <text x="40" y="932" class="edge-label">Connections show interfaces, not a required all-project deployment.</text>
   <text x="40" y="956" class="edge-label">Haldir stays on v0.8. Local v1 gated requests are rejected before preparation.</text>
   <text x="40" y="980" class="edge-label">Local v1 candidate: installed qualification and final release gates remain open.</text>
