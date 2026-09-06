@@ -59,7 +59,7 @@ export const PROJECTS = [
     name: "crebain", slug: "crebain",
     alternateName: "Adaptive Response & Awareness System (ARAS)",
     headline: "Standalone 3D simulation and sensor fusion",
-    accent: "#9caf88", light: "#4b5320", grad: "#1f2913",
+    accent: "#8ac4c3", light: "#24566b", grad: "#112333",
     stars: 20, repo: "sepahead/crebain",
     desc: "Standalone drone simulation, Gaussian-splat views, and sensor fusion. Optional NCP interfaces connect controllers, monitors, and capture.",
     stack: ["TS", "Rust", "Nix"],

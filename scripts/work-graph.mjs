@@ -65,7 +65,7 @@ const nodes = {
   pidrs:       { x: 565, y: 90, color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
   ncp:         { x: 360, y: 340, color: "#fbbf24", kind: "contract", label: "NCP" },
   prisoma:     { x: 600, y: 350, color: "#a78bfa", kind: "triangle" },
-  crebain:     { x: 450, y: 540, color: "#9caf88", kind: "raven" },
+  crebain:     { x: 450, y: 540, color: "#8ac4c3", kind: "raven" },
   cobotatlas:  { x: 760, y: 190, color: "#60a5fa", kind: "cobot", label: "cobot-atlas", dataset: true },
   melkor:      { x: 760, y: 400, color: "#fb923c", kind: "cube" },
   reliefatlas: { x: 760, y: 600, color: "#fb7185", kind: "relief", label: "relief-atlas", dataset: true },
@@ -2316,8 +2316,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .ctx-min-action-potential { fill: none; stroke: #ffffff; stroke-width: 1.45; stroke-linecap: round; stroke-linejoin: round; }
     .ctx-min-token         { fill: #fdf4ff; stroke: #e879f9; stroke-width: 0.45; filter: url(#edgeGlow); }
     .ctx-min-scan          { stroke: #ffffff; stroke-width: 1.2; stroke-linecap: round; filter: url(#edgeGlow); }
-    .raven-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #9caf88; }
-    .raven-cursor { fill: #9caf88; }
+    .raven-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8ac4c3; }
+    .raven-cursor { fill: #8ac4c3; }
     .radar-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #38bdf8; }
     .mw-iris      { fill: #101a26; stroke: #38bdf8; stroke-opacity: 0.25; stroke-width: 1; }
     .mw-well      { fill: url(#mwWell); }
@@ -2451,8 +2451,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .cube-label { fill: #c2410c; }
       .flag-edge { stroke: #000000; stroke-opacity: 0.25; }
       .vox-label { fill: #c026d3; }
-      .raven-label { fill: #4b5320; }
-      .raven-cursor { fill: #4b5320; }
+      .raven-label { fill: #24566b; }
+      .raven-cursor { fill: #24566b; }
       .radar-label { fill: #0284c7; }
       .gal-label { fill: #dc2626; }
       .haldir-label { fill: #0d9488; }
