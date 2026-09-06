@@ -65,7 +65,7 @@ const nodes = {
   pidrs:       { x: 565, y: 90, color: "#34d399", kind: "hub", label: "pid-rs", r: 36 },
   ncp:         { x: 360, y: 340, color: "#fbbf24", kind: "contract", label: "NCP" },
   prisoma:     { x: 600, y: 350, color: "#a78bfa", kind: "triangle" },
-  crebain:     { x: 450, y: 540, color: "#8ac4c3", kind: "raven" },
+  crebain:     { x: 450, y: 540, color: "#a1b39a", kind: "raven" },
   cobotatlas:  { x: 760, y: 190, color: "#60a5fa", kind: "cobot", label: "cobot-atlas", dataset: true },
   melkor:      { x: 760, y: 400, color: "#fb923c", kind: "cube" },
   reliefatlas: { x: 760, y: 600, color: "#fb7185", kind: "relief", label: "relief-atlas", dataset: true },
@@ -1505,7 +1505,7 @@ export function nodeMark(n) {
   </g>`;
   }
   if (n.kind === "raven") {
-    // The canonical vector includes its graphite seat and bronze rim.
+    // The canonical vector includes its dark disc and gradient instrument rim.
     const cx = n.x, cy = n.y, S = 90;
     const Z = 44 / 34;
     const word = n.label;
@@ -1513,14 +1513,29 @@ export function nodeMark(n) {
     const SE = (S / 2) * Z;
     const baseY = cy + SE + 8, curY = cy + SE - 1, flagTop = cy + SE + 16;
     return `<g>
+    <defs>
+      <clipPath id="crebain-word-reveal" clipPathUnits="userSpaceOnUse"><rect x="${f1(leftX)}" y="${f1(baseY - 16)}" width="${f1(Wt)}" height="21" class="raven-reveal"/></clipPath>
+    </defs>
+    <style>
+      .raven-cycle { animation: raven-word-fade 8s linear infinite; }
+      .raven-reveal { animation: raven-word-reveal 8s steps(${word.length}, end) infinite; }
+      .raven-cursor { visibility: hidden; animation: raven-cursor-position 8s steps(${word.length}, end) infinite, raven-cursor-blink 1.06s steps(1) infinite; }
+      @keyframes raven-word-fade { 0%, 84% { opacity: 1; } 94%, 100% { opacity: 0; } }
+      @keyframes raven-word-reveal { 0%, 4% { width: 0; } 24%, 100% { width: ${f1(Wt)}px; } }
+      @keyframes raven-cursor-position { 0%, 4% { visibility: visible; transform: translateX(-${f1(Wt)}px); } 24%, 100% { visibility: visible; transform: translateX(0); } }
+      @keyframes raven-cursor-blink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
+      @media (prefers-reduced-motion: reduce) {
+        .raven-cycle, .raven-reveal, .raven-cursor { animation: none; }
+      }
+    </style>
     <g transform="translate(${cx} ${cy}) scale(${f1(Z)}) translate(${-cx} ${-cy})">
       <g filter="url(#nodeShadow)" transform="translate(${f1(cx - S / 2)} ${f1(cy - S / 2)}) scale(${S / 180})">${CREBAIN_LOGO}</g>
     </g>
     <g class="raven-typeline">
-      <text x="${f1(leftX)}" y="${f1(baseY)}" text-anchor="start" class="raven-label">${escapeXML(word)}</text>
-      <rect x="${f1(leftX + Wt + 3)}" y="${f1(curY)}" width="5" height="10" rx="1" class="raven-cursor">
-        <animate attributeName="opacity" values="1;0" dur="1.06s" calcMode="discrete" repeatCount="indefinite"/>
-      </rect>
+      <g class="raven-cycle">
+        <text x="${f1(leftX)}" y="${f1(baseY)}" text-anchor="start" textLength="${f1(Wt)}" lengthAdjust="spacingAndGlyphs" clip-path="url(#crebain-word-reveal)" class="raven-label">${escapeXML(word)}</text>
+        <rect x="${f1(leftX + Wt + 3)}" y="${f1(curY)}" width="5" height="10" rx="1" class="raven-cursor" aria-hidden="true"/>
+      </g>
       <g class="deflag">
         ${germanFlag(cx, flagTop, 26)}
       </g>
@@ -2316,8 +2331,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .ctx-min-action-potential { fill: none; stroke: #ffffff; stroke-width: 1.45; stroke-linecap: round; stroke-linejoin: round; }
     .ctx-min-token         { fill: #fdf4ff; stroke: #e879f9; stroke-width: 0.45; filter: url(#edgeGlow); }
     .ctx-min-scan          { stroke: #ffffff; stroke-width: 1.2; stroke-linecap: round; filter: url(#edgeGlow); }
-    .raven-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8ac4c3; }
-    .raven-cursor { fill: #8ac4c3; }
+    .raven-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #a1b39a; }
+    .raven-cursor { fill: #a1b39a; }
     .radar-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #38bdf8; }
     .mw-iris      { fill: #101a26; stroke: #38bdf8; stroke-opacity: 0.25; stroke-width: 1; }
     .mw-well      { fill: url(#mwWell); }
@@ -2451,8 +2466,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .cube-label { fill: #c2410c; }
       .flag-edge { stroke: #000000; stroke-opacity: 0.25; }
       .vox-label { fill: #c026d3; }
-      .raven-label { fill: #24566b; }
-      .raven-cursor { fill: #24566b; }
+      .raven-label { fill: #425c47; }
+      .raven-cursor { fill: #425c47; }
       .radar-label { fill: #0284c7; }
       .gal-label { fill: #dc2626; }
       .haldir-label { fill: #0d9488; }

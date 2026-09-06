@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 150" width="395" height="150" role="img" aria-label="crebain (21 stars): Standalone drone simulation, Gaussian-splat views, and sensor fusion. Optional NCP interfaces connect controllers, monitors, and capture.">
   <defs>
-    <radialGradient id="wash0" cx="8%" cy="0%" r="120%"><stop offset="0%" stop-color="#112333" stop-opacity="0.9"/><stop offset="60%" stop-color="#112333" stop-opacity="0"/></radialGradient>
+    <radialGradient id="wash0" cx="8%" cy="0%" r="120%"><stop offset="0%" stop-color="#15231e" stop-opacity="0.9"/><stop offset="60%" stop-color="#15231e" stop-opacity="0"/></radialGradient>
   </defs>
   <style>
     .card       { fill: #0d1117; fill-opacity: 1; stroke: #ffffff; stroke-opacity: 0.09; stroke-width: 1; }
@@ -9,7 +9,7 @@
     .badge      { font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; }
     .chip       { fill: #0d1117; fill-opacity: 0.6; stroke-width: 1.3; }
     .chip-label { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; }
-    .c0.title { fill: #8ac4c3; } .c0.rule { fill: #8ac4c3; } .c0.spine { stroke: #8ac4c3; } .c0.badge { fill: #8ac4c3; } .c0.chip { stroke: #8ac4c3; } .c0.chip-label { fill: #8ac4c3; } .c0.glyph-fill { fill: #8ac4c3; } .c0.glyph-stroke { stroke: #8ac4c3; }
+    .c0.title { fill: #a1b39a; } .c0.rule { fill: #a1b39a; } .c0.spine { stroke: #a1b39a; } .c0.badge { fill: #a1b39a; } .c0.chip { stroke: #a1b39a; } .c0.chip-label { fill: #a1b39a; } .c0.glyph-fill { fill: #a1b39a; } .c0.glyph-stroke { stroke: #a1b39a; }
     text { paint-order: stroke; stroke: #0d1117; stroke-width: 2.6; stroke-linejoin: round; }
     text { stroke: #ffffff; }
       .card { fill: #ffffff; fill-opacity: 1; stroke: #0b1f2a; stroke-opacity: 0.1; }
@@ -19,7 +19,7 @@
       .wash { display: none; }
       .desc { fill: #57606a; }
       .chip { fill: #ffffff; fill-opacity: 0.7; }
-      .c0.title { fill: #24566b; } .c0.rule { fill: #24566b; } .c0.spine { stroke: #24566b; } .c0.badge { fill: #24566b; } .c0.chip { stroke: #24566b; } .c0.chip-label { fill: #24566b; } .c0.glyph-fill { fill: #24566b; } .c0.glyph-stroke { stroke: #24566b; }
+      .c0.title { fill: #425c47; } .c0.rule { fill: #425c47; } .c0.spine { stroke: #425c47; } .c0.badge { fill: #425c47; } .c0.chip { stroke: #425c47; } .c0.chip-label { fill: #425c47; } .c0.glyph-fill { fill: #425c47; } .c0.glyph-stroke { stroke: #425c47; }
   </style>
   <g class="card-group">
     <rect x="1" y="0" width="393" height="150" rx="14" class="card"/>
