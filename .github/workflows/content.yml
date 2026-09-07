@@ -10,6 +10,7 @@ on:
       - "assets/crebain-mark.svg"
       - "assets/ncp-mark.svg"
       - "assets/haldir-mark.svg"
+      - "assets/galadriel-mark.svg"
       - "assets/hero-*.svg"
       - "assets/agents-*.svg"
       - "assets/connect-*.svg"

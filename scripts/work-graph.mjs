@@ -49,6 +49,7 @@ const vectorMark = (key) =>
 const CREBAIN_LOGO = vectorMark("crebain");
 const NCP_LOGO = vectorMark("ncp");
 const HALDIR_LOGO = vectorMark("haldir");
+const GALADRIEL_LOGO = vectorMark("galadriel");
 
 
 const W = 860;
@@ -97,8 +98,7 @@ const escapeXML = (s) =>
 function nodeWidth(n) {
   if (n.kind === "hub") return (n.r || HUB_R) * 2;
   if (n.kind === "cube") return CUBE;
-  // contract (NCP): the four-plane glyph is hand-tuned at fixed coords and its label
-  // floats below it, so size to the glyph (~7.8px/char), not the tracked label.
+  // The NCP label sits outside the fixed-size interface mark.
   if (n.kind === "contract") return Math.round(n.label.length * 7.8 + 28);
   // chips: the label sits INSIDE the rect, now bold + 2.5px tracked (10.3px/char)
   // so widen to keep it clear of the right edge.
@@ -123,6 +123,12 @@ function halfExtents(n) {
 // to the rect/circle box in halfExtents). Kept in lockstep with the render
 // geometry so edges trim to the TRUE outline.
 function nodePolygon(n) {
+  if (n.kind === "contract") {
+    return [[-14,-34],[14,-34],[34,-14],[34,14],[14,34],[-14,34],[-34,14],[-34,-14]].map(([x,y]) => ({x,y}));
+  }
+  if (n.kind === "haldir") {
+    return [[-18,-34],[18,-34],[31.5,-20.5],[31.5,20.5],[18,34],[-18,34],[-31.5,20.5],[-31.5,-20.5]].map(([x,y]) => ({x,y}));
+  }
   if (n.kind === "triangle") {
     const dx = (TRI_CIRCUM * Math.sqrt(3)) / 2;
     return [{ x: 0, y: -TRI_CIRCUM }, { x: dx, y: TRI_CIRCUM / 2 }, { x: -dx, y: TRI_CIRCUM / 2 }];
@@ -1642,80 +1648,10 @@ export function nodeMark(n) {
   </g>`;
   }
   if (n.kind === "sentinel") {
-    // galadriel: its real brand mark in miniature — the SENTINEL SHIELD. An
-    // angular chamfered crest whose visor slit carries a red scanning eye that
-    // sweeps side to side (the watcher that looks for the channel that lies),
-    // seated with clear air on a machined badge at manwe's border grade
-    // (theme-FIXED): a GUNMETAL steel bezel matching the shield's armor — red
-    // reads as plastic at bezel scale, so the project hue lives in a thin red
-    // SIGNAL RING inlaid in the groove (grey armor, red light, like the eye).
-    // FIBER-OPTIC sensor feeds below the visor: three light-guides in a
-    // SYMMETRIC harness sweep up from connector ports at the shield's foot
-    // and jack into the visor's underside, each carrying a cool light pulse
-    // toward the eye — the sensor channels streaming into the watcher. Above
-    // the visor, the ORIGINAL logo's top section (assets/galadriel-logo.svg
-    // in the galadriel repo, same 240×240 coordinate space): the CROWN PANEL
-    // and the crest ridge descending to the visor, on the original's TEAL-
-    // rimmed navy plate. The light is cold white-blue so the red verdict
-    // stays the eye's alone. Reduced-motion parks the eye centred and holds
-    // a lit pulse at each port. One instance -> unique ids.
-    const cx = n.x, cy = n.y, s = 0.23;
-    const m = (px, py) => `${f1(cx + (px - 120) * s)} ${f1(cy + (py - 122) * s)}`;
-    const poly = (pts) => `M${pts.map(([px, py]) => m(px, py)).join(" L")} Z`;
-    const shield = poly([[36, 44], [68, 18], [172, 18], [204, 44], [204, 122], [188, 164], [120, 226], [52, 164], [36, 122]]);
-    const slit = poly([[46, 89], [60, 76], [180, 76], [194, 89], [180, 102], [60, 102]]);
-    // Fiber runs (real-px offsets from the node centre; visor slit bottom
-    // sits at −4.6). Ports sit at the shield's LOWER CORNERS + bottom point
-    // (echoing its taper); jacks SPREAD across the visor's width; each fibre
-    // is one monotonic inward sweep that leaves its port and enters the
-    // visor vertically — plugged in, no outward wander.
-    const p = (x, y) => `${f1(cx + x)} ${f1(cy + y)}`;
-    const FIBERS = [
-      { d: `M${p(-10.5, 9.5)} C${p(-10.5, 4)} ${p(-7.5, 1)} ${p(-7.5, -4.2)}`, port: [-10.5, 9.5], jack: [-7.5, -4.2], beg: "0.9s" },
-      { d: `M${p(0, 18.5)} C${p(0, 11)} ${p(0, 3)} ${p(0, -4.2)}`, port: [0, 18.5], jack: [0, -4.2], beg: "0s" },
-      { d: `M${p(10.5, 9.5)} C${p(10.5, 4)} ${p(7.5, 1)} ${p(7.5, -4.2)}`, port: [10.5, 9.5], jack: [7.5, -4.2], beg: "0.9s" },
-    ];
-    const circuit = FIBERS.map(({ d, port, jack, beg }) =>
-      `<path class="gal-fiber" d="${d}"/>` +
-      `<path class="gal-pulse" d="${d}"><animate attributeName="stroke-dashoffset" from="43" to="0" dur="2.6s" begin="${beg}" repeatCount="indefinite"/></path>` +
-      `<circle class="gal-port" cx="${f1(cx + port[0])}" cy="${f1(cy + port[1])}" r="1.4"/>` +
-      `<circle class="gal-jack" cx="${f1(cx + jack[0])}" cy="${f1(cy + jack[1])}" r="0.9"/>`
-    ).join("");
-    const crown =
-      `<path d="${poly([[44, 48], [71, 26], [169, 26], [196, 48], [196, 70], [44, 70]])}" fill="url(#galCrownG)" opacity="0.65"/>` +
-      `<path d="${poly([[112, 18], [128, 18], [124, 74], [116, 74]])}" fill="url(#galCrownG)" opacity="0.9" class="gal-crest"/>`;
-    const [ex, ey] = [cx + (120 - 120) * s, cy + (89 - 122) * s];
-    const amp = f1(42 * s);
-    return `<g class="gal">
-    ${seat(cx, cy, "gal", ["#e8eef4", "#8d99a6", "#2b3542"])}
-    <circle cx="${cx}" cy="${cy}" r="${f1(SEAT_R - 2.2)}" class="gal-signal"/>
-    <defs>
-      <radialGradient id="galEye" gradientUnits="userSpaceOnUse" cx="${f1(ex)}" cy="${f1(ey)}" r="8">
-        <stop offset="0%" stop-color="#ff6b5e" stop-opacity="0.9"/>
-        <stop offset="55%" stop-color="#ef4444" stop-opacity="0.45"/>
-        <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
-      </radialGradient>
-      <linearGradient id="galPlateG" x1="0" y1="${f1(cy - 23.9)}" x2="0" y2="${f1(cy + 23.9)}" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#10202f"/><stop offset="45%" stop-color="#0a1420"/><stop offset="100%" stop-color="#050a11"/>
-      </linearGradient>
-      <linearGradient id="galCrownG" x1="0" y1="${f1(cy - 22.1)}" x2="0" y2="${f1(cy - 12)}" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#2a3a4d"/><stop offset="100%" stop-color="#101a26"/>
-      </linearGradient>
-      <clipPath id="galSlit" clipPathUnits="userSpaceOnUse"><path d="${slit}"/></clipPath>
-    </defs>
-    <path d="${shield}" class="gal-plate"/>
-    ${crown}
-    ${circuit}
-    <path d="${slit}" class="gal-slit"/>
-    <g clip-path="url(#galSlit)">
-      <g>
-        <ellipse cx="${f1(ex)}" cy="${f1(ey)}" rx="8" ry="3" fill="url(#galEye)"/>
-        <rect x="${f1(ex - 3.6)}" y="${f1(ey - 1.2)}" width="7.2" height="2.4" rx="1.2" class="gal-hotf"/>
-        <animateTransform attributeName="transform" type="translate" values="0 0;${amp} 0;-${amp} 0;0 0" keyTimes="0;0.25;0.75;1" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1" dur="3.6s" repeatCount="indefinite"/>
-      </g>
-    </g>
-    <text x="${cx}" y="${f1(cy - 46)}" text-anchor="middle" class="gal-label">${escapeXML(n.label)}</text>
-  </g>`;
+    return `<g>
+      <g filter="url(#nodeShadow)" transform="translate(${f1(n.x - 45)} ${f1(n.y - 45)}) scale(.5)">${GALADRIEL_LOGO}</g>
+      <text x="${n.x}" y="${f1(n.y - 46)}" text-anchor="middle" class="gal-label">${escapeXML(n.label)}</text>
+    </g>`;
   }
   if (n.kind === "haldir") {
     return `<g>
@@ -2020,10 +1956,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       <stop offset="0%" stop-color="#2a0a2e"/>
       <stop offset="100%" stop-color="#10131a"/>
     </radialGradient>
-    <radialGradient id="galGrad" cx="50%" cy="40%" r="68%">
-      <stop offset="0%" stop-color="#2a0a0a"/>
-      <stop offset="100%" stop-color="#10131a"/>
-    </radialGradient>
     <filter id="nodeShadow" x="-40%" y="-40%" width="180%" height="180%">
       <feDropShadow dx="0" dy="1.5" stdDeviation="2.4" flood-color="#000000" flood-opacity="0.38"/>
     </filter>
@@ -2188,16 +2120,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .mw-ring      { fill: none; stroke: url(#mwBezel); stroke-width: 2.2; }
     .mw-groove    { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .mw-hairline  { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
-    .seat-gal   { fill: url(#galGrad); }
-    .gal-signal { fill: none; stroke: #ef4444; stroke-opacity: 0.7; stroke-width: 1.1; }
-    .gal-fiber  { fill: none; stroke: #22d3ee; stroke-opacity: 0.75; stroke-width: 1.4; stroke-linecap: round; }
-    .gal-pulse  { fill: none; stroke: #a5f3fc; stroke-opacity: 0.95; stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 3 40; }
-    .gal-port   { fill: #0a121c; stroke: #22d3ee; stroke-opacity: 0.9; stroke-width: 1; }
-    .gal-jack   { fill: #a5f3fc; fill-opacity: 0.85; }
-    .gal-plate  { fill: url(#galPlateG); stroke: #22d3ee; stroke-opacity: 0.9; stroke-width: 1.2; stroke-linejoin: miter; }
-    .gal-crest  { stroke: #22d3ee; stroke-opacity: 0.28; stroke-width: 0.6; stroke-linejoin: miter; }
-    .gal-slit   { fill: #05070b; stroke: #22d3ee; stroke-opacity: 0.55; stroke-width: 0.8; stroke-linejoin: miter; }
-    .gal-hotf   { fill: #ef4444; }
     .gal-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #ef4444; }
     .haldir-label    { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #2dd4bf; }
     .cba-label       { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #93c5fd; }

@@ -14,10 +14,6 @@
       <stop offset="0%" stop-color="#2a0a2e"/>
       <stop offset="100%" stop-color="#10131a"/>
     </radialGradient>
-    <radialGradient id="galGrad" cx="50%" cy="40%" r="68%">
-      <stop offset="0%" stop-color="#2a0a0a"/>
-      <stop offset="100%" stop-color="#10131a"/>
-    </radialGradient>
     <filter id="nodeShadow" x="-40%" y="-40%" width="180%" height="180%">
       <feDropShadow dx="0" dy="1.5" stdDeviation="2.4" flood-color="#000000" flood-opacity="0.38"/>
     </filter>
@@ -181,16 +177,6 @@
     .mw-ring      { fill: none; stroke: url(#mwBezel); stroke-width: 2.2; }
     .mw-groove    { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
     .mw-hairline  { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
-    .seat-gal   { fill: url(#galGrad); }
-    .gal-signal { fill: none; stroke: #ef4444; stroke-opacity: 0.7; stroke-width: 1.1; }
-    .gal-fiber  { fill: none; stroke: #22d3ee; stroke-opacity: 0.75; stroke-width: 1.4; stroke-linecap: round; }
-    .gal-pulse  { fill: none; stroke: #a5f3fc; stroke-opacity: 0.95; stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 3 40; }
-    .gal-port   { fill: #0a121c; stroke: #22d3ee; stroke-opacity: 0.9; stroke-width: 1; }
-    .gal-jack   { fill: #a5f3fc; fill-opacity: 0.85; }
-    .gal-plate  { fill: url(#galPlateG); stroke: #22d3ee; stroke-opacity: 0.9; stroke-width: 1.2; stroke-linejoin: miter; }
-    .gal-crest  { stroke: #22d3ee; stroke-opacity: 0.28; stroke-width: 0.6; stroke-linejoin: miter; }
-    .gal-slit   { fill: #05070b; stroke: #22d3ee; stroke-opacity: 0.55; stroke-width: 0.8; stroke-linejoin: miter; }
-    .gal-hotf   { fill: #ef4444; }
     .gal-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #ef4444; }
     .haldir-label    { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #2dd4bf; }
     .cba-label       { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #93c5fd; }
@@ -278,7 +264,7 @@
   <text x="40" y="980" class="edge-label">Local v1 candidate: installed qualification and final release gates remain open.</text>
   <g transform="translate(0 26)">
     <g class="edges">
-      <g data-edge-kind="contract" data-from="ncp" data-to="haldir"><title>ncp to haldir: Pinned Haldir interface. dash-dot line, square end.</title><path d="M 333 309.1 Q 255 220 177 130.9" class="edge-clearance"/><path d="M 333 309.1 Q 255 220 177 130.9" class="edge-contract"/><rect x="173.5" y="127.4" width="7" height="7" class="edge-contract-end"/></g>
+      <g data-edge-kind="contract" data-from="ncp" data-to="haldir"><title>ncp to haldir: Pinned Haldir interface. dash-dot line, square end.</title><path d="M 333 309.1 Q 255.9 221.1 178.9 133" class="edge-clearance"/><path d="M 333 309.1 Q 255.9 221.1 178.9 133" class="edge-contract"/><rect x="175.4" y="129.5" width="7" height="7" class="edge-contract-end"/></g>
     <g data-edge-kind="library" data-from="galadriel" data-to="pidrs"><title>galadriel to pidrs: PID library dependency. dashed arrow.</title><path d="M 436.9 152.1 Q 478.1 123.2 526.3 108.8" class="edge-clearance"/><path d="M 436.9 152.1 Q 478.1 123.2 526.3 108.8" class="edge-library"/><polygon class="edge-library-head" points="526.3,108.8 517.6,107.7 519.7,114.4"/></g>
     <g data-edge-kind="library" data-from="prisoma" data-to="pidrs"><title>prisoma to pidrs: PID and runlog dependency. dashed arrow.</title><path d="M 593.3 300.1 Q 589.9 215.3 570.7 132.6" class="edge-clearance"/><path d="M 593.3 300.1 Q 589.9 215.3 570.7 132.6" class="edge-library"/><polygon class="edge-library-head" points="570.7,132.6 569.1,141.2 576,139.6"/></g>
     <g data-edge-kind="environment" data-from="crebain" data-to="prisoma"><title>crebain to prisoma: Environment + sensors. under qualification. long dashed line, open arrow.</title><path d="M 474.8 495.4 L 519.7 414.9 Q 528 400 542 390.2 L 556.1 380.5" class="edge-clearance"/><path d="M 474.8 495.4 L 519.7 414.9 Q 528 400 542 390.2 L 556.1 380.5" class="edge-environment"/><path class="edge-environment-head" d="M 546.4 382.3 L 556.1 380.5 L 551 388.9"/></g>
@@ -287,10 +273,10 @@
     <g data-edge-kind="research" data-from="crebain" data-to="reliefatlas"><title>crebain to reliefatlas: Simulation assets. dotted line, no arrow.</title><path d="M 500.1 549.7 Q 605.1 578.2 713.1 590.9" class="edge-clearance"/><path d="M 500.1 549.7 Q 605.1 578.2 713.1 590.9" class="edge-research"/></g>
     <g data-edge-kind="research" data-from="cortexel" data-to="engram"><title>cortexel to engram: Figure export. dotted line, no arrow.</title><path d="M 105.9 519.4 Q 140.4 449.4 127.4 372.4" class="edge-clearance"/><path d="M 105.9 519.4 Q 140.4 449.4 127.4 372.4" class="edge-research"/></g>
     <g data-edge-kind="tool" data-from="manwe" data-to="crebain"><title>manwe to crebain: Perception tools. moving dashes on a continuous line.</title><path d="M 284.4 647.7 Q 350.2 614.4 407.2 567.8" class="edge-clearance"/><path d="M 284.4 647.7 Q 350.2 614.4 407.2 567.8" class="edge-tool-rail"/><path d="M 284.4 647.7 Q 350.2 614.4 407.2 567.8" class="edge-tool"/></g>
-      <g data-edge-kind="protocol" data-from="ncp" data-to="engram"><title>ncp to engram: Neural. solid paired arrows.</title><path d="M 319.2 336.4 Q 253.5 330.5 187.8 324.7" class="edge-clearance edge-clearance-protocol"/><path d="M 319.4 333.2 Q 253.8 327.3 188.1 321.5" class="edge-runtime"/><path d="M 318.9 339.6 Q 253.2 333.7 187.5 327.9" class="edge-runtime"/><polygon class="edge-runtime-head" points="188.1,321.5 195.5,326.1 196.5,319.1"/><polygon class="edge-runtime-head" points="318.9,339.6 311.4,335 310.5,341.9"/></g>
-    <g data-edge-kind="protocol" data-from="ncp" data-to="galadriel"><title>ncp to galadriel: Monitor. solid paired arrows.</title><path d="M 369.4 300.1 Q 380 255 390.6 209.9" class="edge-clearance edge-clearance-protocol"/><path d="M 372.5 300.8 Q 383.1 255.7 393.7 210.6" class="edge-runtime"/><path d="M 366.3 299.4 Q 376.9 254.3 387.5 209.2" class="edge-runtime"/><polygon class="edge-runtime-head" points="393.7,210.6 388,217.3 394.7,219.3"/><polygon class="edge-runtime-head" points="366.3,299.4 372,292.7 365.3,290.7"/></g>
-    <g data-edge-kind="protocol" data-from="ncp" data-to="prisoma"><title>ncp to prisoma: Capture. solid paired arrows.</title><path d="M 401 341.7 Q 482 345.1 563.1 348.5" class="edge-clearance edge-clearance-protocol"/><path d="M 400.8 344.9 Q 481.9 348.3 563 351.7" class="edge-runtime"/><path d="M 401.1 338.5 Q 482.2 341.9 563.3 345.3" class="edge-runtime"/><polygon class="edge-runtime-head" points="563,351.7 555.3,347.5 554.7,354.5"/><polygon class="edge-runtime-head" points="401.1,338.5 408.8,342.6 409.4,335.7"/></g>
-    <g data-edge-kind="protocol" data-from="ncp" data-to="crebain"><title>ncp to crebain: Body. solid paired arrows.</title><path d="M 376.8 377.4 Q 402.9 435.4 429.1 493.5" class="edge-clearance edge-clearance-protocol"/><path d="M 373.9 378.7 Q 400 436.8 426.2 494.8" class="edge-runtime"/><path d="M 379.7 376.1 Q 405.9 434.1 432 492.2" class="edge-runtime"/><polygon class="edge-runtime-head" points="426.2,494.8 426.5,486.1 420,488.6"/><polygon class="edge-runtime-head" points="379.7,376.1 379.4,384.8 385.9,382.3"/></g>
+      <g data-edge-kind="protocol" data-from="ncp" data-to="engram"><title>ncp to engram: Neural. solid paired arrows.</title><path d="M 319 336.4 Q 253.4 330.5 187.8 324.7" class="edge-clearance edge-clearance-protocol"/><path d="M 319.3 333.2 Q 253.7 327.3 188.1 321.5" class="edge-runtime"/><path d="M 318.7 339.5 Q 253.1 333.7 187.5 327.9" class="edge-runtime"/><polygon class="edge-runtime-head" points="188.1,321.5 195.5,326.1 196.5,319.1"/><polygon class="edge-runtime-head" points="318.7,339.5 311.3,335 310.3,341.9"/></g>
+    <g data-edge-kind="protocol" data-from="ncp" data-to="galadriel"><title>ncp to galadriel: Monitor. solid paired arrows.</title><path d="M 369.6 299.2 Q 380.1 254.5 390.6 209.9" class="edge-clearance edge-clearance-protocol"/><path d="M 372.7 299.9 Q 383.2 255.3 393.7 210.6" class="edge-runtime"/><path d="M 366.5 298.5 Q 377 253.8 387.5 209.2" class="edge-runtime"/><polygon class="edge-runtime-head" points="393.7,210.6 388,217.2 394.7,219.3"/><polygon class="edge-runtime-head" points="366.5,298.5 372.2,291.8 365.5,289.8"/></g>
+    <g data-edge-kind="protocol" data-from="ncp" data-to="prisoma"><title>ncp to prisoma: Capture. solid paired arrows.</title><path d="M 401 341.7 Q 482.1 345.1 563.1 348.5" class="edge-clearance edge-clearance-protocol"/><path d="M 400.9 344.9 Q 481.9 348.3 563 351.7" class="edge-runtime"/><path d="M 401.1 338.5 Q 482.2 341.9 563.3 345.3" class="edge-runtime"/><polygon class="edge-runtime-head" points="563,351.7 555.3,347.5 554.7,354.5"/><polygon class="edge-runtime-head" points="401.1,338.5 408.8,342.6 409.4,335.7"/></g>
+    <g data-edge-kind="protocol" data-from="ncp" data-to="crebain"><title>ncp to crebain: Body. solid paired arrows.</title><path d="M 377.8 379.5 Q 403.4 436.5 429.1 493.5" class="edge-clearance edge-clearance-protocol"/><path d="M 374.9 380.8 Q 400.5 437.8 426.2 494.8" class="edge-runtime"/><path d="M 380.7 378.2 Q 406.3 435.2 432 492.2" class="edge-runtime"/><polygon class="edge-runtime-head" points="426.2,494.8 426.5,486.1 420,488.6"/><polygon class="edge-runtime-head" points="380.7,378.2 380.3,386.9 386.9,384.4"/></g>
     </g>
 
     <g class="nodes">
@@ -699,7 +685,7 @@
   <g>
       <g filter="url(#nodeShadow)" transform="translate(315 295) scale(.5)">
   <title id="ncp-mark-title">NCP paired contract rails</title>
-  <desc id="ncp-mark-desc">Two independent, opposed contract rails frame separate amber request and blue outcome paths. The open center represents an interface, not a central runtime. A graphite disc and brushed metal rim match the project family.</desc>
+  <desc id="ncp-mark-desc">Opposed contract rails carry an amber request and a distinct blue outcome. Two separated metal rim halves represent independent peers. The open center is an interface, not a central runtime. The exchange repeats slowly; reduced motion keeps the full mark still.</desc>
   <defs>
     <radialGradient id="ncp-seat" cx="36%" cy="28%" r="82%">
       <stop stop-color="#22313c"/><stop offset=".5" stop-color="#111d27"/><stop offset="1" stop-color="#060c13"/>
@@ -720,19 +706,25 @@
   <style>
     .ncp-request-light { animation: ncp-request-light 8s ease-in-out infinite; }
     .ncp-outcome-light { animation: ncp-outcome-light 8s ease-in-out infinite; }
+    .ncp-request-trace, .ncp-outcome-trace { fill: none; stroke-linecap: round; stroke-dasharray: 10 90; opacity: 0; }
+    .ncp-request-trace { animation: ncp-request-travel 8s linear infinite; }
+    .ncp-outcome-trace { animation: ncp-outcome-travel 8s linear infinite; }
+    @keyframes ncp-request-travel { 0%, 7% { stroke-dashoffset: 10; opacity: 0; } 10% { opacity: .9; } 38% { stroke-dashoffset: -70; opacity: .9; } 43%, 100% { stroke-dashoffset: -70; opacity: 0; } }
+    @keyframes ncp-outcome-travel { 0%, 48% { stroke-dashoffset: 10; opacity: 0; } 51% { opacity: .9; } 79% { stroke-dashoffset: -70; opacity: .9; } 84%, 100% { stroke-dashoffset: -70; opacity: 0; } }
     @keyframes ncp-request-light { 0%, 48%, 100% { opacity: .4; } 20%, 30% { opacity: 1; } }
     @keyframes ncp-outcome-light { 0%, 42%, 100% { opacity: .4; } 66%, 76% { opacity: 1; } }
     @media (prefers-reduced-motion: reduce) {
-      .ncp-request-light, .ncp-outcome-light { animation: none; }
+      .ncp-request-light, .ncp-outcome-light, .ncp-request-trace, .ncp-outcome-trace { animation: none; }
     }
   </style>
   <g id="ncp-housing" fill="none">
-    <circle cx="90" cy="90" r="68" fill="url(#ncp-seat)" stroke="#070c12" stroke-width="5"/>
-    <circle cx="90" cy="90" r="68" stroke="url(#ncp-rim)" stroke-width="3.2"/>
-    <circle cx="90" cy="90" r="63.8" stroke="#8cabb7" stroke-opacity=".18" stroke-width=".65"/>
-    <path d="M76 22H104 M76 158H104" stroke="#080f16" stroke-width="5.4"/>
-    <path d="M82 22H98 M82 158H98" stroke="url(#ncp-rim)" stroke-width="1.2"/>
-    <path d="M27 63 30 64 M24 72 28 73 M24 108 28 107 M27 117 30 116 M153 63 150 64 M156 72 152 73 M156 108 152 107 M153 117 150 116" stroke="#6c8590" stroke-width="1.1" stroke-opacity=".6"/>
+    <path d="M62 22H118L158 62V118L118 158H62L22 118V62Z" fill="url(#ncp-seat)" stroke="#080f16" stroke-width="5"/>
+    <path d="M83 22H62L22 62V118L62 158H83 M97 22H118L158 62V118L118 158H97" stroke="url(#ncp-rim)" stroke-width="4.2" stroke-linejoin="bevel"/>
+    <path d="M82 27H64L27 64V116L64 153H82 M98 27H116L153 64V116L116 153H98" stroke="#8cabb7" stroke-opacity=".25" stroke-width=".8"/>
+    <path d="M84 19V25 M96 19V25 M84 155V161 M96 155V161" stroke="#1a2a34" stroke-width="2"/>
+    <path d="M18 78H26V102H18Z M154 78H162V102H154Z" fill="#10202b" stroke="url(#ncp-rim)" stroke-width="1"/>
+    <path d="M20 83H24 M20 90H24 M20 97H24" stroke="#b79961" stroke-width="1.8"/>
+    <path d="M156 83H160 M156 90H160 M156 97H160" stroke="#729dac" stroke-width="1.8"/>
   </g>
   <g id="ncp-contract-rails" stroke-linejoin="bevel">
     <path d="M81 48H64L43 69V111L64 132H81V121H69L55 107V73L69 59H81Z" fill="#070e16" stroke="#070e16" stroke-width="5" transform="translate(0 2)"/>
@@ -741,10 +733,13 @@
     <path d="M99 48H116L137 69V111L116 132H99V121H111L125 107V73L111 59H99Z" fill="url(#ncp-blue)" stroke="url(#ncp-edge)" stroke-width=".85"/>
     <path d="M78 51H65L47 70V109" fill="none" stroke="#ead8ab" stroke-opacity=".48" stroke-width="1"/>
     <path d="M102 51H115L133 70V109" fill="none" stroke="#c2e1e7" stroke-opacity=".55" stroke-width="1"/>
+    <path d="M49 72V110L65 126H78 M131 72V110L115 126H102" fill="none" stroke="#16252c" stroke-opacity=".6" stroke-width="1.4"/>
     <path d="M59 76H82L92 66H112" fill="none" stroke="#151a1e" stroke-width="5"/>
     <path d="M59 76H82L92 66H112" fill="none" stroke="url(#ncp-amber)" stroke-width="2.8"/>
     <path d="M121 104H98L88 114H68" fill="none" stroke="#101b24" stroke-width="5"/>
     <path d="M121 104H98L88 114H68" fill="none" stroke="url(#ncp-blue)" stroke-width="2.8"/>
+    <path d="M59 76H82L92 66H112" stroke="#ffe5b4" stroke-width="2.2" class="ncp-request-trace"/>
+    <path d="M121 104H98L88 114H68" stroke="#cbf3f7" stroke-width="2.2" class="ncp-outcome-trace"/>
   </g>
   <g id="ncp-path-identities">
     <path d="M104 62 108 66 104 70" fill="none" stroke="#eccea0" stroke-width="1.6"/>
@@ -899,6 +894,12 @@
       <stop offset=".72" stop-color="#263b46"/>
       <stop offset="1" stop-color="#13232d"/>
     </linearGradient>
+    <linearGradient id="crebain-reticle-shadow" x1="78" y1="76" x2="153" y2="153" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#030910" stop-opacity="0"/>
+      <stop offset=".3" stop-color="#030910" stop-opacity=".12"/>
+      <stop offset=".7" stop-color="#030910" stop-opacity=".48"/>
+      <stop offset="1" stop-color="#030910" stop-opacity=".72"/>
+    </linearGradient>
     <radialGradient id="crebain-optic-halo">
       <stop stop-color="#ff4437" stop-opacity=".72"/>
       <stop offset=".48" stop-color="#e12520" stop-opacity=".28"/>
@@ -939,6 +940,7 @@
     <circle cx="90" cy="90" r="68" stroke="url(#crebain-ring-metal)" stroke-width="3.2"/>
     <circle cx="90" cy="90" r="65.9" stroke="url(#crebain-ring-metal)" stroke-opacity=".3" stroke-width=".6"/>
     <path d="M26 76A66 66 0 0 1 78 25 M102 25A66 66 0 0 1 155 80 M155 104A66 66 0 0 1 102 155" stroke="url(#crebain-ring-metal)" stroke-opacity=".5" stroke-width=".9"/>
+    <path d="M90 15V28 M90 152V165 M15 90H28 M152 90H165" stroke="#030910" stroke-width="5.4" transform="translate(.8 1.1)"/>
     <path d="M90 15V28 M90 152V165 M15 90H28 M152 90H165" stroke="#161d20" stroke-width="4.5"/>
     <path d="M90 15V28 M90 152V165 M15 90H28 M152 90H165" stroke="url(#crebain-ring-metal)" stroke-width="1.8"/>
     <path d="M31 38V31H38 M142 31H149V38 M31 142V149H38 M142 149H149V142" stroke="#070e14" stroke-width="3.8" transform="translate(.55 .75)"/>
@@ -948,6 +950,8 @@
       <path d="M31 142V149H38"/>
       <path d="M142 149H149V142"/>
     </g>
+    <path d="M158 90A68 68 0 0 1 90 158" stroke="url(#crebain-reticle-shadow)" stroke-width="4.6"/>
+    <path d="M90 152V165 M152 90H165 M142 149H149V142" stroke="url(#crebain-reticle-shadow)" stroke-width="2.3"/>
     <circle cx="53" cy="147" r="4.8" fill="#526b62" stroke="#0b1621" stroke-width="1.8"/>
   </g>
 
@@ -1264,48 +1268,149 @@
     <circle cx="250" cy="670" r="35.4" class="mw-hairline"/>
     <text x="250" y="718" text-anchor="middle" class="radar-label">MANWE</text>
   </g>
-  <g class="gal">
-    <defs>
-      <linearGradient id="galBezel" x1="0" y1="136" x2="0" y2="204" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#e8eef4"/><stop offset="45%" stop-color="#8d99a6"/><stop offset="100%" stop-color="#2b3542"/>
-      </linearGradient>
-    </defs>
-    <g filter="url(#nodeShadow)"><circle cx="400" cy="170" r="34" class="seat-gal"/></g>
-    <circle cx="400" cy="170" r="34" stroke="url(#galBezel)" class="seat-ring"/>
-    <circle cx="400" cy="170" r="31.8" class="seat-groove"/>
-    <circle cx="400" cy="170" r="35.4" class="seat-hairline"/>
-    <circle cx="400" cy="170" r="31.8" class="gal-signal"/>
-    <defs>
-      <radialGradient id="galEye" gradientUnits="userSpaceOnUse" cx="400" cy="162.4" r="8">
-        <stop offset="0%" stop-color="#ff6b5e" stop-opacity="0.9"/>
-        <stop offset="55%" stop-color="#ef4444" stop-opacity="0.45"/>
-        <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
-      </radialGradient>
-      <linearGradient id="galPlateG" x1="0" y1="146.1" x2="0" y2="193.9" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#10202f"/><stop offset="45%" stop-color="#0a1420"/><stop offset="100%" stop-color="#050a11"/>
-      </linearGradient>
-      <linearGradient id="galCrownG" x1="0" y1="147.9" x2="0" y2="158" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#2a3a4d"/><stop offset="100%" stop-color="#101a26"/>
-      </linearGradient>
-      <clipPath id="galSlit" clipPathUnits="userSpaceOnUse"><path d="M383 162.4 L386.2 159.4 L413.8 159.4 L417 162.4 L413.8 165.4 L386.2 165.4 Z"/></clipPath>
-    </defs>
-    <path d="M380.7 152.1 L388 146.1 L412 146.1 L419.3 152.1 L419.3 170 L415.6 179.7 L400 193.9 L384.4 179.7 L380.7 170 Z" class="gal-plate"/>
-    <path d="M382.5 153 L388.7 147.9 L411.3 147.9 L417.5 153 L417.5 158 L382.5 158 Z" fill="url(#galCrownG)" opacity="0.65"/><path d="M398.2 146.1 L401.8 146.1 L400.9 159 L399.1 159 Z" fill="url(#galCrownG)" opacity="0.9" class="gal-crest"/>
-    <path class="gal-fiber" d="M389.5 179.5 C389.5 174 392.5 171 392.5 165.8"/><path class="gal-pulse" d="M389.5 179.5 C389.5 174 392.5 171 392.5 165.8"></path><circle class="gal-port" cx="389.5" cy="179.5" r="1.4"/><circle class="gal-jack" cx="392.5" cy="165.8" r="0.9"/><path class="gal-fiber" d="M400 188.5 C400 181 400 173 400 165.8"/><path class="gal-pulse" d="M400 188.5 C400 181 400 173 400 165.8"></path><circle class="gal-port" cx="400" cy="188.5" r="1.4"/><circle class="gal-jack" cx="400" cy="165.8" r="0.9"/><path class="gal-fiber" d="M410.5 179.5 C410.5 174 407.5 171 407.5 165.8"/><path class="gal-pulse" d="M410.5 179.5 C410.5 174 407.5 171 407.5 165.8"></path><circle class="gal-port" cx="410.5" cy="179.5" r="1.4"/><circle class="gal-jack" cx="407.5" cy="165.8" r="0.9"/>
-    <path d="M383 162.4 L386.2 159.4 L413.8 159.4 L417 162.4 L413.8 165.4 L386.2 165.4 Z" class="gal-slit"/>
-    <g clip-path="url(#galSlit)">
-      <g>
-        <ellipse cx="400" cy="162.4" rx="8" ry="3" fill="url(#galEye)"/>
-        <rect x="396.4" y="161.2" width="7.2" height="2.4" rx="1.2" class="gal-hotf"/>
+  <g>
+      <g filter="url(#nodeShadow)" transform="translate(355 125) scale(.5)">
+<title id="galadriel-mark-title">Galadriel sensor monitor</title>
+<desc id="galadriel-mark-desc">A scanning red eye watches three incoming sensor channels inside an angular shield. A brushed gunmetal rim and restrained red inset frame the advisory monitor. The eye and feed pulses repeat; reduced motion keeps the full mark still.</desc>
+<defs>
+ <radialGradient id="galadriel-seat" cx="36%" cy="28%" r="82%"><stop stop-color="#24313b"/><stop offset=".5" stop-color="#131b25"/><stop offset="1" stop-color="#080d15"/></radialGradient>
+ <linearGradient id="galadriel-rim" x1="40" y1="29" x2="144" y2="151" gradientUnits="userSpaceOnUse"><stop stop-color="#354653"/><stop offset=".18" stop-color="#bbc5ca"/><stop offset=".36" stop-color="#647f8c"/><stop offset=".54" stop-color="#283c48"/><stop offset=".73" stop-color="#738c92"/><stop offset="1" stop-color="#1b2c39"/></linearGradient>
+ <linearGradient id="galadriel-shield-edge" x1="44" y1="28" x2="184" y2="202" gradientUnits="userSpaceOnUse"><stop stop-color="#b3e2e4"/><stop offset=".3" stop-color="#43bacb"/><stop offset=".7" stop-color="#227386"/><stop offset="1" stop-color="#466a77"/></linearGradient>
+ <linearGradient id="galadriel-inset" x1="38" y1="36" x2="141" y2="146" gradientUnits="userSpaceOnUse"><stop stop-color="#b57978"/><stop offset=".35" stop-color="#883d48"/><stop offset="1" stop-color="#341f2d"/></linearGradient>
+</defs>
+<g fill="none">
+ <circle cx="90" cy="90" r="68" fill="url(#galadriel-seat)" stroke="#070b11" stroke-width="5"/>
+ <circle cx="90" cy="90" r="68" stroke="url(#galadriel-rim)" stroke-width="3.2"/>
+ <circle cx="90" cy="90" r="63.6" stroke="url(#galadriel-inset)" stroke-width="1.1"/>
+ <circle cx="90" cy="90" r="61.9" stroke="#293743" stroke-width=".5"/>
+ <path d="M42 42 45 45 M135 135 138 138" stroke="#7e8e96" stroke-opacity=".45" stroke-width="1"/>
+</g>
+<g transform="translate(34.8 33.88) scale(.46)">
 
-      </g>
-    </g>
-    <text x="400" y="124" text-anchor="middle" class="gal-label">GALADRIEL</text>
+  <defs>
+    <linearGradient id="galadriel-plate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#10202f"/>
+      <stop offset="45%" stop-color="#0a1420"/>
+      <stop offset="100%" stop-color="#050a11"/>
+    </linearGradient>
+    <linearGradient id="galadriel-crown" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2a3a4d"/>
+      <stop offset="100%" stop-color="#101a26"/>
+    </linearGradient>
+    <linearGradient id="galadriel-slitwell" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#020304"/>
+      <stop offset="100%" stop-color="#12060a"/>
+    </linearGradient>
+    <linearGradient id="galadriel-trail" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#ef4444" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="galadriel-eyeglow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff6b5e" stop-opacity="0.9"/>
+      <stop offset="45%" stop-color="#ef4444" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="galadriel-eyecore" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffd7cf"/>
+      <stop offset="35%" stop-color="#ff5a4d"/>
+      <stop offset="100%" stop-color="#c81e1e"/>
+    </linearGradient>
+    <filter id="galadriel-glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="2.6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .galadriel-rim{fill:none;stroke:url(#galadriel-shield-edge);stroke-width:2.4;stroke-linejoin:miter;stroke-opacity:.9}
+      .galadriel-rimdark{fill:none;stroke:#0a1a24;stroke-width:5.6;stroke-linejoin:miter}
+      .galadriel-rimglow{fill:none;stroke:#22d3ee;stroke-width:7;stroke-linejoin:miter;stroke-opacity:.2;filter:url(#galadriel-glow)}
+      .galadriel-vtick{stroke:#22d3ee;stroke-width:2.2;stroke-linecap:round;stroke-opacity:.9}
+      .galadriel-bevel{fill:none;stroke:#3b82a0;stroke-width:1.2;stroke-opacity:.5;stroke-linejoin:miter}
+      .galadriel-facet{stroke:#22d3ee;stroke-width:1;stroke-opacity:.14}
+      .galadriel-slitedge{fill:none;stroke:#22d3ee;stroke-width:1.4;stroke-opacity:.55;stroke-linejoin:miter}
+      .galadriel-fiber{fill:none;stroke:#22d3ee;stroke-width:3;stroke-linecap:round;stroke-opacity:.75}
+      .galadriel-fiberglow{fill:none;stroke:#22d3ee;stroke-width:7;stroke-linecap:round;stroke-opacity:.16;filter:url(#galadriel-glow)}
+      .galadriel-pulse{fill:none;stroke:#a5f3fc;stroke-width:3.4;stroke-linecap:round;stroke-opacity:.95;stroke-dasharray:13 174}
+      .galadriel-fport{fill:#0a121c;stroke:#22d3ee;stroke-width:2.4}
+      .galadriel-fjack{fill:#a5f3fc}
+      .galadriel-eye{animation:galadriel-scan 3.6s ease-in-out infinite}
+      .galadriel-pulse{animation:galadriel-feed 2.6s linear infinite}
+      .galadriel-side-feed{animation-delay:.9s}
+      @keyframes galadriel-feed{from{stroke-dashoffset:187}to{stroke-dashoffset:0}}
+      @keyframes galadriel-scan{0%{transform:translateX(0)}25%{transform:translateX(42px)}75%{transform:translateX(-42px)}100%{transform:translateX(0)}}
+      @media (prefers-reduced-motion:reduce){.galadriel-eye,.galadriel-pulse{animation:none}}
+      @media (prefers-color-scheme:light){.galadriel-rimglow{stroke-opacity:.28}.galadriel-rim{stroke-opacity:1}.galadriel-rimdark{stroke:#123240}.galadriel-vtick{stroke-opacity:1}}
+    </style>
+  </defs>
+
+  <!-- shield body: angular chamfered crest -->
+  <path d="M36 44 L68 18 L172 18 L204 44 L204 122 L188 164 L120 226 L52 164 L36 122 Z" fill="url(#galadriel-plate)"/>
+  <!-- crown panel above the visor -->
+  <path d="M44 48 L71 26 L169 26 L196 48 L196 70 L44 70 Z" fill="url(#galadriel-crown)" opacity="0.65"/>
+  <!-- crest ridge descending to the visor -->
+  <path d="M112 18 L128 18 L124 74 L116 74 Z" fill="url(#galadriel-crown)" opacity="0.9" stroke="#22d3ee" stroke-opacity="0.28" stroke-width="1"/>
+  <!-- specular sheen -->
+  <path d="M74 18 L104 18 L58 118 L46 92 Z" fill="#9fdcec" opacity="0.045"/>
+  <!-- inner bevel -->
+  <path class="galadriel-bevel" d="M44 48 L71 26 L169 26 L196 48 L196 119 L181 158 L120 215 L59 158 L44 119 Z"/>
+
+  <!-- lower facet lines -->
+  <path class="galadriel-facet" d="M52 132 L120 172 L188 132" fill="none"/>
+  <path class="galadriel-facet" d="M68 160 L120 190 L172 160" fill="none"/>
+
+  <!-- three fiber-optic sensor channels streaming into the visor: a symmetric
+       harness of light-guides from connector ports at the shield's foot,
+       each carrying a pulse toward the eye (matches the sepahead profile mark) -->
+  <g>
+    <path class="galadriel-fiberglow" d="M74 163 C74 139 87 126 87 104"/>
+    <path class="galadriel-fiber" d="M74 163 C74 139 87 126 87 104"/>
+    <path class="galadriel-pulse galadriel-side-feed" d="M74 163 C74 139 87 126 87 104"></path>
+    <path class="galadriel-fiberglow" d="M120 202 C120 170 120 135 120 104"/>
+    <path class="galadriel-fiber" d="M120 202 C120 170 120 135 120 104"/>
+    <path class="galadriel-pulse" d="M120 202 C120 170 120 135 120 104"></path>
+    <path class="galadriel-fiberglow" d="M166 163 C166 139 153 126 153 104"/>
+    <path class="galadriel-fiber" d="M166 163 C166 139 153 126 153 104"/>
+    <path class="galadriel-pulse galadriel-side-feed" d="M166 163 C166 139 153 126 153 104"></path>
+    <circle class="galadriel-fport" cx="74" cy="163" r="5"/>
+    <circle class="galadriel-fport" cx="120" cy="202" r="5"/>
+    <circle class="galadriel-fport" cx="166" cy="163" r="5"/>
+    <circle class="galadriel-fjack" cx="87" cy="104" r="3"/>
+    <circle class="galadriel-fjack" cx="120" cy="104" r="3"/>
+    <circle class="galadriel-fjack" cx="153" cy="104" r="3"/>
   </g>
+
+  <!-- visor slit: hexagonal, pointed ends -->
+  <path d="M46 89 L60 76 L180 76 L194 89 L180 102 L60 102 Z" fill="url(#galadriel-slitwell)"/>
+  <path class="galadriel-slitedge" d="M46 89 L60 76 L180 76 L194 89 L180 102 L60 102 Z"/>
+
+  <!-- scanning eye (clipped to the slit) -->
+  <clipPath id="galadriel-slitclip"><path d="M46 89 L60 76 L180 76 L194 89 L180 102 L60 102 Z"/></clipPath>
+  <g clip-path="url(#galadriel-slitclip)">
+    <rect x="52" y="76" width="136" height="26" fill="url(#galadriel-trail)"/>
+    <g class="galadriel-eye">
+      <ellipse cx="120" cy="89" rx="30" ry="11" fill="url(#galadriel-eyeglow)"/>
+      <rect x="106" y="84.5" width="28" height="9" rx="4.5" fill="url(#galadriel-eyecore)" filter="url(#galadriel-glow)"/>
+    </g>
+  </g>
+
+  <!-- rim: halo, dark under-stroke, bright core (crisp on white and dark) -->
+  <path class="galadriel-rimglow" d="M36 44 L68 18 L172 18 L204 44 L204 122 L188 164 L120 226 L52 164 L36 122 Z"/>
+  <path class="galadriel-rimdark" d="M36 44 L68 18 L172 18 L204 44 L204 122 L188 164 L120 226 L52 164 L36 122 Z"/>
+  <path class="galadriel-rim" d="M36 44 L68 18 L172 18 L204 44 L204 122 L188 164 L120 226 L52 164 L36 122 Z"/>
+  <!-- cardinal vertex ticks (instrument dial accents) -->
+  <line class="galadriel-vtick" x1="28" y1="122" x2="34" y2="122"/>
+  <line class="galadriel-vtick" x1="206" y1="122" x2="212" y2="122"/>
+  <line class="galadriel-vtick" x1="120" y1="229" x2="120" y2="235"/>
+  <line class="galadriel-vtick" x1="68" y1="9" x2="68" y2="15"/>
+  <line class="galadriel-vtick" x1="172" y1="9" x2="172" y2="15"/>
+</g>
+</g>
+      <text x="400" y="124" text-anchor="middle" class="gal-label">GALADRIEL</text>
+    </g>
   <g>
       <g filter="url(#nodeShadow)" transform="translate(105 55) scale(.5)">
   <title id="haldir-mark-title">Haldir command gate</title>
-  <desc id="haldir-mark-desc">Two teal metal pylons form an H around a closed red command threshold. A separate amber authority input enters from above. The emblem represents experimental authorization policy, not certification or a sensor verdict.</desc>
+  <desc id="haldir-mark-desc">Two teal pylons and a chamfered frame surround a command threshold. The repeating sequence consumes an intent, checks separate authority, and constructs a different command. The gate rests closed. Reduced motion keeps the closed mark still. This is experimental authorization policy, not certification.</desc>
   <defs>
     <radialGradient id="haldir-seat" cx="36%" cy="28%" r="82%">
       <stop stop-color="#20333b"/><stop offset=".52" stop-color="#101e27"/><stop offset="1" stop-color="#060c13"/>
@@ -1328,17 +1433,30 @@
     <radialGradient id="haldir-threshold-glow"><stop stop-color="#e35443" stop-opacity=".22"/><stop offset="1" stop-color="#d84235" stop-opacity="0"/></radialGradient>
   </defs>
   <style>
-    .haldir-threshold-light { animation: haldir-threshold-light 6.4s ease-in-out infinite; }
+    .haldir-threshold-light { animation: haldir-threshold-light 10s ease-in-out infinite; }
     @keyframes haldir-threshold-light { 0%, 100% { opacity: .45; } 50% { opacity: .85; } }
-    @media (prefers-reduced-motion: reduce) { .haldir-threshold-light { animation: none; } }
+    .haldir-intent, .haldir-command, .haldir-authority-check { opacity: 0; }
+    .haldir-intent { animation: haldir-intent 10s ease-in-out infinite; }
+    .haldir-command { animation: haldir-command 10s ease-in-out infinite; }
+    .haldir-authority-check { animation: haldir-authority-check 10s ease-in-out infinite; }
+    .haldir-gate-left { animation: haldir-gate-left 10s ease-in-out infinite; }
+    .haldir-gate-right { animation: haldir-gate-right 10s ease-in-out infinite; }
+    @keyframes haldir-intent { 0%, 8% { transform: translateY(0); opacity: 0; } 12% { opacity: 1; } 30% { transform: translateY(-22px); opacity: 1; } 36%, 100% { transform: translateY(-22px); opacity: 0; } }
+    @keyframes haldir-authority-check { 0%, 30%, 57%, 100% { opacity: 0; } 40%, 47% { opacity: .9; } }
+    @keyframes haldir-command { 0%, 59% { transform: translateY(0); opacity: 0; } 64% { opacity: 1; } 79% { transform: translateY(-12px); opacity: 1; } 85%, 100% { transform: translateY(-12px); opacity: 0; } }
+    @keyframes haldir-gate-left { 0%, 50%, 85%, 100% { transform: translateX(0); } 59%, 78% { transform: translateX(-6px); } }
+    @keyframes haldir-gate-right { 0%, 50%, 85%, 100% { transform: translateX(0); } 59%, 78% { transform: translateX(6px); } }
+    @media (prefers-reduced-motion: reduce) {
+      .haldir-threshold-light, .haldir-intent, .haldir-command, .haldir-authority-check, .haldir-gate-left, .haldir-gate-right { animation: none; }
+    }
   </style>
   <g id="haldir-housing" fill="none">
-    <circle cx="90" cy="90" r="68" fill="url(#haldir-seat)" stroke="#070c12" stroke-width="5"/>
-    <circle cx="90" cy="90" r="68" stroke="url(#haldir-rim)" stroke-width="3.2"/>
-    <circle cx="90" cy="90" r="63.8" stroke="#8cabb7" stroke-opacity=".18" stroke-width=".65"/>
-    <path d="M22 76V104 M158 76V104" stroke="#080f16" stroke-width="5.4"/>
-    <path d="M22 82V98 M158 82V98" stroke="url(#haldir-rim)" stroke-width="1.2"/>
-    <path d="M54 35 56 38 M63 30 64 33 M117 30 116 33 M126 35 124 38 M54 145 56 142 M63 150 64 147 M117 150 116 147 M126 145 124 142" stroke="#6c8590" stroke-width="1.1" stroke-opacity=".6"/>
+    <path d="M54 22H126L153 49V131L126 158H54L27 131V49Z" fill="url(#haldir-seat)" stroke="#070c12" stroke-width="6" stroke-linejoin="bevel"/>
+    <path d="M54 22H126L153 49V131L126 158H54L27 131V49Z" stroke="url(#haldir-rim)" stroke-width="3.8" stroke-linejoin="bevel"/>
+    <path d="M56 28H124L147 51V129L124 152H56L33 129V51Z" stroke="#7caaa4" stroke-opacity=".3" stroke-width=".8"/>
+    <path d="M23 72H31V108H23Z M149 72H157V108H149Z" fill="#0b161e" stroke="#4c6c73" stroke-width=".7"/>
+    <path d="M26 80H28 M26 90H28 M26 100H28 M152 80H154 M152 90H154 M152 100H154" stroke="#6b918e" stroke-width="1.8"/>
+    <path d="M66 22H80 M100 22H114 M66 158H80 M100 158H114" stroke="#afc6bf" stroke-opacity=".3" stroke-width=".9"/>
   </g>
   <g id="haldir-gate" stroke-linejoin="bevel">
     <path d="M49 63 62 50H76V130H60L49 119Z M131 63 118 50H104V130H120L131 119Z" fill="#070e16" stroke="#070e16" stroke-width="5" transform="translate(0 2)"/>
@@ -1349,9 +1467,8 @@
     <path d="M57 78V91 M123 78V91" fill="none" stroke="#8cb8a9" stroke-opacity=".55" stroke-width=".75"/>
     <rect x="71" y="84" width="38" height="16" rx="1.5" fill="#071119" stroke="#223b42" stroke-width="1"/>
     <ellipse cx="90" cy="92" rx="27" ry="16" fill="url(#haldir-threshold-glow)" class="haldir-threshold-light"/>
-    <path d="M74 87H89V97H74Z M91 87H106V97H91Z" fill="url(#haldir-threshold)"/>
-    <path d="M76 87.8H87 M93 87.8H104" fill="none" stroke="#f0ac90" stroke-opacity=".5" stroke-width=".6"/>
-    <path d="M89.3 87H90.7V97H89.3Z" fill="#ef8063" class="haldir-threshold-light"/>
+    <g class="haldir-gate-left"><path d="M74 87H90V97H74Z" fill="url(#haldir-threshold)"/><path d="M76 87.8H88" fill="none" stroke="#f0ac90" stroke-opacity=".5" stroke-width=".6"/><path d="M89.1 87V97" stroke="#ef8063" stroke-width=".9"/></g>
+    <g class="haldir-gate-right"><path d="M90 87H106V97H90Z" fill="url(#haldir-threshold)"/><path d="M92 87.8H104" fill="none" stroke="#f0ac90" stroke-opacity=".5" stroke-width=".6"/><path d="M90.9 87V97" stroke="#ef8063" stroke-width=".9"/></g>
     <path d="M60 134H120" fill="none" stroke="#7f9e97" stroke-opacity=".42" stroke-width="1"/>
   </g>
   <g id="haldir-authority-input">
@@ -1360,6 +1477,9 @@
     <path d="M90 38 97 42V50L90 54 83 50V42Z" fill="#17242b" stroke="url(#haldir-authority)" stroke-width="1.6"/>
     <path d="M87 44H93V48H87Z" fill="url(#haldir-authority)"/>
   </g>
+  <path d="M90 123 94 127 90 131 86 127Z" fill="#d6b579" stroke="#f1d8a8" stroke-width=".8" class="haldir-intent"/>
+  <path d="M90 67 94 69V74L90 76 86 74V69Z" fill="#b9ddd4" stroke="#e0eee5" stroke-width=".8" class="haldir-command"/>
+  <path d="M90 56V80" stroke="#efd5a5" stroke-width="2" stroke-dasharray="3 3" class="haldir-authority-check"/>
 </g>
       <text x="150" y="54" text-anchor="middle" class="haldir-label">HALDIR</text>
     </g>

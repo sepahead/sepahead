@@ -49,7 +49,7 @@ function stripChrome(mark) {
 }
 
 export function logoSVG(key) {
-  if (["ncp", "haldir", "crebain"].includes(key)) {
+  if (["ncp", "haldir", "crebain", "galadriel"].includes(key)) {
     return readFileSync(resolve(__dirname, "..", "assets", `${key}-mark.svg`), "utf8");
   }
   const n = nodes[key];
