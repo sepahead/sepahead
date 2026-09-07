@@ -685,7 +685,7 @@
   <g>
       <g filter="url(#nodeShadow)" transform="translate(315 295) scale(.5)">
   <title id="ncp-mark-title">NCP paired contract rails</title>
-  <desc id="ncp-mark-desc">Opposed contract rails carry an amber request and a distinct blue outcome. Two separated metal rim halves represent independent peers. The open center is an interface, not a central runtime. The exchange repeats slowly; reduced motion keeps the full mark still.</desc>
+  <desc id="ncp-mark-desc">UNRELEASED NCP protocol candidate. Opposed rails carry an amber request and a distinct blue outcome between independent peers. The open center represents an interface. The exchange repeats slowly; reduced motion keeps the mark still. This artwork provides no certification.</desc>
   <defs>
     <radialGradient id="ncp-seat" cx="38%" cy="24%" r="85%">
       <stop stop-color="#1e2945"/><stop offset=".48" stop-color="#0c192b"/><stop offset="1" stop-color="#040812"/>
