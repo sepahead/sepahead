@@ -12,14 +12,11 @@
 // NCP is the central shared interface, not a runtime broker or required bundle.
 // The overview separates local adapters, Haldir's pinned v0.8 interface,
 // library dependencies, and asset/tool/export context.
-// Every project node is a bespoke "real object" mark on a machined border —
-// the crebain-badge / engram-medallion tier: NCP is a contract knot — paired
-// JSON-like bounds hold a quartered four-plane identity while a receipt remains
-// distinct from its action proposal — on a machined amber seal; cortexel is an
-// evidence fold: a neuron-seeded population voxel crosses a fail-closed bracket
-// into one deterministic action-potential figure artifact;
-// crebain is its
-// own raven-in-crosshair brand mark; engram a machined silver medallion;
+// The project marks share dark surfaces, faceted geometry, and metal rims.
+// NCP has opposed contract rails and separate request/outcome paths.
+// Haldir has a closed command threshold with a separate authority input.
+// Cortexel represents an evidence fold; CREBAIN uses a raven and reticle.
+// Engram retains its silver medallion;
 // prisoma a smoked-glass prism with liquid-silver edges dispersing one beam
 // into the three PID components; melkor an obsidian forge plate whose black
 // massif wears an uneven tactical survey mesh; manwe a lens barrel whose six-blade
@@ -46,9 +43,12 @@ const OUT_PATH = resolve(__dirname, "..", "assets", "work-graph.svg");
 
 // Inline the authored vector mark so every facet stays sharp at any zoom.
 // Its gradients and named groups use a crebain-specific ID prefix.
-const CREBAIN_LOGO =
-  readFileSync(resolve(__dirname, "..", "assets", "crebain-mark.svg"), "utf8")
+const vectorMark = (key) =>
+  readFileSync(resolve(__dirname, "..", "assets", `${key}-mark.svg`), "utf8")
     .replace(/^<svg\b[^>]*>/, "").replace(/<\/svg>\s*$/, "");
+const CREBAIN_LOGO = vectorMark("crebain");
+const NCP_LOGO = vectorMark("ncp");
+const HALDIR_LOGO = vectorMark("haldir");
 
 
 const W = 860;
@@ -1399,53 +1399,10 @@ export function nodeMark(n) {
   </g>`;
   }
   if (n.kind === "contract") {
-    // NCP, THE CONTRACT KNOT. Two domains meet inside canonical JSON-like
-    // bounds without collapsing into a broker: amber is the action-proposal
-    // side, cyan is perception/observation, and the quartered diamond is the
-    // four-plane wire contract. A proposal enters and stops; a different,
-    // hollow receipt returns. The whole static identity is just { ◈ }.
-    const X = (x) => f1(n.x + x), Y = (y) => f1(n.y + y);
-    const diamond = (x, y, r) => `${X(x)},${Y(y-r)} ${X(x+r)},${Y(y)} ${X(x)},${Y(y+r)} ${X(x-r)},${Y(y)}`;
-    const CYC = "8s";
     return `<g>
-    <defs>
-      <radialGradient id="ncpWell" cx="44%" cy="36%" r="74%"><stop offset="0%" stop-color="#182434"/><stop offset="68%" stop-color="#08111c"/><stop offset="100%" stop-color="#03070c"/></radialGradient>
-      <linearGradient id="ncpBrace" x1="0" y1="${Y(-18)}" x2="0" y2="${Y(18)}" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fff3bd"/><stop offset="44%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#92400e"/></linearGradient>
-      <linearGradient id="ncpCyan" x1="0" y1="${Y(-18)}" x2="0" y2="${Y(18)}" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#cffafe"/><stop offset="44%" stop-color="#67e8f9"/><stop offset="100%" stop-color="#0e7490"/></linearGradient>
-    </defs>
-    ${seat(n.x, n.y, "gate", ["#fde68a", "#fbbf24", "#92400e"])}
-    <circle cx="${n.x}" cy="${n.y}" r="30.2" class="ncp-well"/>
-
-    <path d="M${X(-26)} ${Y(0)}H${X(-17)}" class="ncp-min-lane ncp-min-lane-action"/>
-    <path d="M${X(26)} ${Y(0)}H${X(17)}" class="ncp-min-lane ncp-min-lane-sense"/>
-    <path d="M${X(-4)} ${Y(-17)}H${X(-9)}L${X(-13)} ${Y(-13)}V${Y(-6)}L${X(-17)} ${Y(0)}L${X(-13)} ${Y(6)}V${Y(13)}L${X(-9)} ${Y(17)}H${X(-4)}" class="ncp-min-brace ncp-min-brace-action"/>
-    <path d="M${X(4)} ${Y(-17)}H${X(9)}L${X(13)} ${Y(-13)}V${Y(-6)}L${X(17)} ${Y(0)}L${X(13)} ${Y(6)}V${Y(13)}L${X(9)} ${Y(17)}H${X(4)}" class="ncp-min-brace ncp-min-brace-sense"/>
-
-    <polygon points="${X(0)},${Y(-7)} ${X(3)},${Y(0)} ${X(-3)},${Y(0)}" class="ncp-plane-top"/>
-    <polygon points="${X(7)},${Y(0)} ${X(0)},${Y(3)} ${X(0)},${Y(-3)}" class="ncp-plane-right"/>
-    <polygon points="${X(0)},${Y(7)} ${X(-3)},${Y(0)} ${X(3)},${Y(0)}" class="ncp-plane-bottom"/>
-    <polygon points="${X(-7)},${Y(0)} ${X(0)},${Y(-3)} ${X(0)},${Y(3)}" class="ncp-plane-left"/>
-    <polygon points="${diamond(0,0,7)}" class="ncp-min-knot"/>
-    <polygon points="${diamond(0,0,1.55)}" class="ncp-min-void"/>
-
-    <polygon points="${diamond(-25,0,2.2)}" class="ncp-min-proposal" opacity="0">
-      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;16 0;16 0;0 0" keyTimes="0;0.10;0.34;0.90;1" dur="${CYC}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.08;0.11;0.42;0.47;1" dur="${CYC}" repeatCount="indefinite"/>
-    </polygon>
-    <circle cx="${X(25)}" cy="${Y(0)}" r="2" class="ncp-min-signal" opacity="0">
-      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;-16 0;-16 0;0 0" keyTimes="0;0.24;0.46;0.90;1" dur="${CYC}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.22;0.25;0.52;0.57;1" dur="${CYC}" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="${n.x}" cy="${n.y}" r="8.4" class="ncp-min-bind" opacity="0">
-      <animate attributeName="r" values="8.4;8.4;11.5;11.5" keyTimes="0;0.54;0.67;1" dur="${CYC}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;0.82;0;0" keyTimes="0;0.53;0.57;0.69;1" dur="${CYC}" repeatCount="indefinite"/>
-    </circle>
-    <polygon points="${diamond(-25,0,2.25)}" class="ncp-min-receipt" opacity="0">
-      <animateTransform attributeName="transform" type="translate" values="16 0;16 0;0 0;0 0;16 0" keyTimes="0;0.68;0.84;0.90;1" dur="${CYC}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.66;0.69;0.85;0.90;1" dur="${CYC}" repeatCount="indefinite"/>
-    </polygon>
-    <text x="${n.x}" y="${f1(n.y + 46)}" text-anchor="middle" class="gate-label">${escapeXML(n.label)}</text>
-  </g>`;
+      <g filter="url(#nodeShadow)" transform="translate(${f1(n.x - 45)} ${f1(n.y - 45)}) scale(.5)">${NCP_LOGO}</g>
+      <text x="${n.x}" y="${f1(n.y + 60)}" text-anchor="middle" class="gate-label">${escapeXML(n.label)}</text>
+    </g>`;
   }
   if (n.kind === "artifact") {
     // Cortexel, THE EVIDENCE FOLD. One population voxel with a neuron seed is
@@ -1761,112 +1718,10 @@ export function nodeMark(n) {
   </g>`;
   }
   if (n.kind === "haldir") {
-    // haldir: THE METROPOLIS PORTAL — the fail-closed authorization reference
-    // monitor as a NEO-DECO cyber GATE. A teal art-deco stepped-ziggurat skyscraper
-    // portal (clean pilaster jambs stepping inward through 3 setbacks to a stepped
-    // keystone crown, a corbelled FLAT void ceiling — deliberately un-medieval)
-    // seals its near-black void with a RED laser LATTICE: 4 horizontal ward beams
-    // woven with 2 vertical ties, 8 lit emitter diodes marching up both jambs, and
-    // a faceted red emitter CORE crowned by an art-deco sunburst. Default-DENY: the
-    // lattice stands fully drawn and SHUT. Red like galadriel's visor, but distinct
-    // by SHAPE (an OPEN portal + laser grid, not a solid shield + one eye) and by
-    // TEAL frame; and un-NCP (a VERTICAL teal archway, not an amber horizontal
-    // transport gate). Motion (browser-only) runs one authorization cycle — charge,
-    // scan, admit ONE (the lattice unweaves bilaterally into its diodes, opening a
-    // single corridor), stamp/re-originate, emit a re-minted command, then SNAP
-    // SHUT: red light races from both jamb diodes to re-weave the lattice on a
-    // shared contact keyTime (the wow beat). librsvg + reduced-motion hold the shut,
-    // lit still — every beam dashoffset 0 and every token opacity 0. Unique hd- ids.
-    const cx = n.x, cy = n.y;
-    const A = (dx, dy) => `${f1(cx + dx)} ${f1(cy + dy)}`;   // "x y" for paths
-    const P = (dx, dy) => `${f1(cx + dx)},${f1(cy + dy)}`;   // "x,y" for polygons
-    // Browser-only motion (librsvg + reduced-motion freeze t=0). One 5s authorization
-    // cycle. The dashoffset SPINE is the hero: each half-beam draws OFF into its diode
-    // to open one corridor (admit-one), then races back ON — light originating from
-    // both jambs — to re-weave the lattice on the shared contact keyTime 0.76 (slam),
-    // with a -1.5 overshoot keyframe faking spring mass. Base dashoffset 0 (shut) IS
-    // both the loop endpoint and the frozen still, so the loop is seamless.
-    const CYC = "5s";
-    const dashKT = "0;0.3;0.42;0.7;0.76;0.8;1";
-    const dashKS = "0.4 0 0.2 1;0.3 0 0.2 1;0.5 0 1 1;0.2 0 0 1;0.3 0 0.4 1;0 0 1 1";
-    const beamAnim = (h) =>
-      `<animate attributeName="stroke-dashoffset" values="0;0;${h};${h};-1.5;0;0" keyTimes="${dashKT}" calcMode="spline" keySplines="${dashKS}" dur="${CYC}" repeatCount="indefinite"/>`;
-    // L1 near-black void (corbelled stepped opening); L2 frame subtracts it (evenodd)
-    const voidPath =
-      `M${A(9.5,18)} L${A(9.5,6)} L${A(7,6)} L${A(7,-5)} L${A(5,-5)} L${A(5,-14)} L${A(3,-15.5)} L${A(0,-15.5)} ` +
-      `L${A(-3,-15.5)} L${A(-5,-14)} L${A(-5,-5)} L${A(-7,-5)} L${A(-7,6)} L${A(-9.5,6)} L${A(-9.5,18)} Z`;
-    const frameOuter =
-      `M${A(18,22)} L${A(18,7)} L${A(14.5,7)} L${A(14.5,-4)} L${A(11,-4)} L${A(11,-14)} L${A(7,-14)} L${A(7,-19)} L${A(4.5,-19)} L${A(4.5,-24)} L${A(2.5,-24)} L${A(2.5,-27)} ` +
-      `L${A(-2.5,-27)} L${A(-2.5,-24)} L${A(-4.5,-24)} L${A(-4.5,-19)} L${A(-7,-19)} L${A(-7,-14)} L${A(-11,-14)} L${A(-11,-4)} L${A(-14.5,-4)} L${A(-14.5,7)} L${A(-18,7)} L${A(-18,22)} Z`;
-    // L4 sill plinth + streamline speed-reeds + threshold hairline
-    const plinth = `<path class="hd-frame" d="M${A(-18,18)} L${A(18,18)} L${A(18,22)} L${A(-18,22)} Z"/>`;
-    const speed = [19, 20.2, 21.4].map((y) => `<path class="hd-speed" d="M${A(-16,y)} H${f1(cx+16)}"/>`).join("");
-    const thresh = `<path class="hd-thresh" d="M${A(-18,18)} H${f1(cx+18)}"/>`;
-    // L5 RED laser lattice: 4 horizontal wards (split into 8 half-beams) woven with
-    // 2 vertical ties (split into 4). Each half-beam authored FROM its emitter end so
-    // stroke-dashoffset draws it OFF into the diode; dasharray = its own length.
-    const HB = [[13, 9], [6, 8.5], [-2, 6.5], [-9, 4.5]]; // [dy, half-length]
-    const hbeams = HB.flatMap(([y, h]) => [
-      `<path class="hd-beam" d="M${A(h,y)} L${A(0,y)}" stroke-dasharray="${h} 40" stroke-dashoffset="0">${beamAnim(h)}</path>`,
-      `<path class="hd-beam" d="M${A(-h,y)} L${A(0,y)}" stroke-dasharray="${h} 40" stroke-dashoffset="0">${beamAnim(h)}</path>`,
-    ]).join("");
-    const vbeams = [3.5, -3.5].flatMap((x) => [
-      `<path class="hd-beam" d="M${A(x,-13)} L${A(x,2)}" stroke-dasharray="15 40" stroke-dashoffset="0">${beamAnim(15)}</path>`,
-      `<path class="hd-beam" d="M${A(x,17)} L${A(x,2)}" stroke-dasharray="15 40" stroke-dashoffset="0">${beamAnim(15)}</path>`,
-    ]).join("");
-    // L6 emitter diodes (8, up both jambs)
-    const DIO = [[9, 13], [8.5, 6], [6.5, -2], [4.5, -9]];
-    const diodes = DIO.flatMap(([x, y]) => [x, -x].map((sx) =>
-      `<circle class="hd-diode" cx="${f1(cx+sx)}" cy="${f1(cy+y)}" r="1.5"/><circle class="hd-diode-hot" cx="${f1(cx+sx)}" cy="${f1(cy+y)}" r="0.7"/>`)).join("");
-    // L7 emitter CORE + art-deco sunburst up-fan (crown)
-    const sun = [[0, -24], [-2.6, -23.4], [2.6, -23.4], [-4.4, -22], [4.4, -22]]
-      .map(([x, y]) => `<path class="hd-sun" d="M${A(0,-19)} L${A(x,y)}"/>`).join("");
-    const core =
-      `<polygon class="hd-core" points="${P(0,-21)} ${P(2.6,-19.7)} ${P(2.6,-17.3)} ${P(0,-16)} ${P(-2.6,-17.3)} ${P(-2.6,-19.7)}"/>` +
-      `<polygon class="hd-core-facet" points="${P(0,-21)} ${P(2.6,-19.7)} ${P(0,-18.5)} ${P(-2.6,-19.7)}"/>` +
-      `<circle class="hd-core-hot" cx="${cx}" cy="${f1(cy-18.5)}" r="0.9">` +
-        `<animate attributeName="r" values="0.9;0.9;2.6;0.9;0.9" keyTimes="0;0.52;0.56;0.62;1" dur="${CYC}" repeatCount="indefinite"/></circle>`;
-    // idle+charge hum on the whole lit lattice; core-halo breathe then stamp-expand.
-    const litHum = `<animate attributeName="opacity" values="0.9;0.9;1;0.92;0.92" keyTimes="0;0.06;0.16;0.3;1" dur="${CYC}" repeatCount="indefinite"/>`;
-    const coreGlowAnim = `<animate attributeName="r" values="7;7;7;11;7;7" keyTimes="0;0.06;0.52;0.56;0.6;1" dur="${CYC}" repeatCount="indefinite"/>`;
-    // Motion tokens — every one authored opacity/r 0 at t=0 so they are ABSENT from the
-    // frozen frame: scan bar (challenge), intake chevron (the signed intent, consumed),
-    // re-minted hex-seal (a visibly different, brighter command exiting the apex), and
-    // the full-void discharge disc that fires on the snap-shut contact keyTime.
-    const scan = `<rect class="hd-scan" x="${f1(cx-9)}" y="${f1(cy-14)}" width="18" height="1.3" opacity="0">` +
-      `<animate attributeName="opacity" values="0;0;0.85;0;0" keyTimes="0;0.16;0.23;0.3;1" dur="${CYC}" repeatCount="indefinite"/>` +
-      `<animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 30;0 30" keyTimes="0;0.16;0.3;1" calcMode="spline" keySplines="0 0 1 1;0.4 0 0.6 1;0 0 1 1" dur="${CYC}" repeatCount="indefinite"/></rect>`;
-    const tokIn = `<polygon class="hd-tok-in" opacity="0" points="${P(0,15)} ${P(2.6,17.4)} ${P(0,19.8)} ${P(-2.6,17.4)}">` +
-      `<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.16;0.24;0.48;0.52;1" dur="${CYC}" repeatCount="indefinite"/>` +
-      `<animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 -34;0 -34;0 -34" keyTimes="0;0.3;0.52;0.6;1" dur="${CYC}" repeatCount="indefinite"/></polygon>`;
-    const tokOut = `<polygon class="hd-tok-out" opacity="0" points="${P(0,-20.5)} ${P(2,-19.3)} ${P(2,-17)} ${P(0,-15.8)} ${P(-2,-17)} ${P(-2,-19.3)}">` +
-      `<animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.6;0.65;0.7;1" dur="${CYC}" repeatCount="indefinite"/>` +
-      `<animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 -9;0 -9" keyTimes="0;0.6;0.7;1" dur="${CYC}" repeatCount="indefinite"/></polygon>`;
-    const flash = `<circle class="hd-flash" cx="${cx}" cy="${f1(cy+2)}" r="0" opacity="0">` +
-      `<animate attributeName="r" values="0;0;7;0;0" keyTimes="0;0.72;0.76;0.8;1" dur="${CYC}" repeatCount="indefinite"/>` +
-      `<animate attributeName="opacity" values="0;0;0.95;0;0" keyTimes="0;0.72;0.76;0.8;1" dur="${CYC}" repeatCount="indefinite"/></circle>`;
     return `<g>
-    <defs>
-      <linearGradient id="haldirArch" x1="0" y1="${f1(cy-27)}" x2="0" y2="${f1(cy+22)}" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#99f6e4"/><stop offset="50%" stop-color="#2dd4bf"/><stop offset="100%" stop-color="#0f766e"/>
-      </linearGradient>
-      <radialGradient id="hdCoreGlow" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${f1(cy-18.5)}" r="7">
-        <stop offset="0%" stop-color="#ff6b5e" stop-opacity="0.9"/><stop offset="55%" stop-color="#ef4444" stop-opacity="0.4"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
-      </radialGradient>
-    </defs>
-    ${seat(cx, cy, "hd", ["#99f6e4", "#2dd4bf", "#0f766e"])}
-    <path class="hd-void" d="${voidPath}"/>
-    <path class="hd-frame" d="${frameOuter} ${voidPath}" fill-rule="evenodd"/>
-    ${plinth}
-    ${speed}
-    ${thresh}
-    <circle class="hd-coreglow" cx="${cx}" cy="${f1(cy-18.5)}" r="7">${coreGlowAnim}</circle>
-    <g class="hd-lit" filter="url(#hdBloom)">
-      ${litHum}${hbeams}${vbeams}${diodes}${sun}${core}
-    </g>
-    ${scan}${tokIn}${tokOut}${flash}
-    <text x="${cx}" y="${f1(cy-46)}" text-anchor="middle" class="haldir-label">${escapeXML(n.label)}</text>
-  </g>`;
+      <g filter="url(#nodeShadow)" transform="translate(${f1(n.x - 45)} ${f1(n.y - 45)}) scale(.5)">${HALDIR_LOGO}</g>
+      <text x="${n.x}" y="${f1(n.y - 46)}" text-anchor="middle" class="haldir-label">${escapeXML(n.label)}</text>
+    </g>`;
   }
   if (n.kind === "cobot") {
     // cobot-atlas: THE KINEMATIC ATLAS CELL — a compact industrial-robot workcell,
@@ -2169,10 +2024,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       <stop offset="0%" stop-color="#2a0a0a"/>
       <stop offset="100%" stop-color="#10131a"/>
     </radialGradient>
-    <radialGradient id="hdGrad" cx="50%" cy="40%" r="68%">
-      <stop offset="0%" stop-color="#042f2a"/>
-      <stop offset="100%" stop-color="#10131a"/>
-    </radialGradient>
     <filter id="nodeShadow" x="-40%" y="-40%" width="180%" height="180%">
       <feDropShadow dx="0" dy="1.5" stdDeviation="2.4" flood-color="#000000" flood-opacity="0.38"/>
     </filter>
@@ -2182,10 +2033,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     </filter>
     <filter id="edgeGlow" x="-30%" y="-30%" width="160%" height="160%">
       <feGaussianBlur stdDeviation="2.4" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <filter id="hdBloom" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="1.5" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     <filter id="mwBloom" x="-170%" y="-170%" width="440%" height="440%">
@@ -2297,23 +2144,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .prz-blade-glint { stroke: #ffffff; stroke-width: 1.3; stroke-linecap: round; stroke-dasharray: 5 44; stroke-opacity: 0.95; }
     .prz-foot-hot { fill: #ffffff; }
     .tri-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c4b5fd; }
-    .ncp-well              { fill: url(#ncpWell); stroke: #111827; stroke-width: 1.1; }
-    .ncp-min-lane          { fill: none; stroke-linecap: round; }
-    .ncp-min-lane-action   { stroke: #fbbf24; stroke-width: 1.8; }
-    .ncp-min-lane-sense    { stroke: #67e8f9; stroke-width: 1.25; stroke-dasharray: 2.5 2.3; }
-    .ncp-min-brace         { fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
-    .ncp-min-brace-action  { stroke: url(#ncpBrace); }
-    .ncp-min-brace-sense   { stroke: url(#ncpCyan); }
-    .ncp-plane-top         { fill: #fde68a; }
-    .ncp-plane-right       { fill: #67e8f9; }
-    .ncp-plane-bottom      { fill: #0e7490; }
-    .ncp-plane-left        { fill: #f59e0b; }
-    .ncp-min-knot          { fill: none; stroke: #fff7d6; stroke-width: 0.85; stroke-linejoin: round; }
-    .ncp-min-void          { fill: #050912; stroke: #ffffff; stroke-width: 0.45; }
-    .ncp-min-proposal      { fill: #fbbf24; stroke: #fff7d6; stroke-width: 0.5; }
-    .ncp-min-signal        { fill: #083344; stroke: #cffafe; stroke-width: 0.8; }
-    .ncp-min-bind          { fill: none; stroke: #fff7d6; stroke-width: 0.85; filter: url(#edgeGlow); }
-    .ncp-min-receipt       { fill: #07111d; stroke: #ffffff; stroke-width: 1.05; stroke-linejoin: round; filter: url(#edgeGlow); }
     .gate-label     { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; text-anchor: middle; }
     .flag-k     { fill: #181818; }
     .flag-r     { fill: #d8001d; }
@@ -2369,23 +2199,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .gal-slit   { fill: #05070b; stroke: #22d3ee; stroke-opacity: 0.55; stroke-width: 0.8; stroke-linejoin: miter; }
     .gal-hotf   { fill: #ef4444; }
     .gal-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #ef4444; }
-    .seat-hd         { fill: url(#hdGrad); }
-    .hd-void         { fill: #03211d; }
-    .hd-frame        { fill: url(#haldirArch); stroke: #0f766e; stroke-width: 0.5; stroke-opacity: 0.7; }
-    .hd-speed        { fill: none; stroke: #5eead4; stroke-width: 0.6; stroke-opacity: 0.4; stroke-linecap: round; }
-    .hd-thresh       { fill: none; stroke: #2dd4bf; stroke-width: 1.6; stroke-linecap: round; stroke-opacity: 0.85; }
-    .hd-beam         { fill: none; stroke: #ef4444; stroke-width: 1.4; stroke-linecap: round; stroke-opacity: 0.92; }
-    .hd-diode        { fill: #ff3b47; }
-    .hd-diode-hot    { fill: #ffe1dd; }
-    .hd-core         { fill: #ef4444; }
-    .hd-core-facet   { fill: #ff9d94; fill-opacity: 0.95; }
-    .hd-core-hot     { fill: #fff1f0; }
-    .hd-coreglow     { fill: url(#hdCoreGlow); }
-    .hd-sun          { fill: none; stroke: #ff6b5e; stroke-width: 0.8; stroke-opacity: 0.85; stroke-linecap: round; }
-    .hd-scan         { fill: #ffd9d4; }
-    .hd-tok-in       { fill: #ff6b5e; }
-    .hd-tok-out      { fill: #fff1f0; }
-    .hd-flash        { fill: #fff1f0; }
     .haldir-label    { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #2dd4bf; }
     .cba-label       { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #93c5fd; }
     .cba-glow        { fill: none; stroke: #7dd3fc; stroke-width: 3.5; stroke-opacity: 0.22; filter: url(#soft); stroke-linejoin: round; }

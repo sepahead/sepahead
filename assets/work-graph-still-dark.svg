@@ -18,10 +18,6 @@
       <stop offset="0%" stop-color="#2a0a0a"/>
       <stop offset="100%" stop-color="#10131a"/>
     </radialGradient>
-    <radialGradient id="hdGrad" cx="50%" cy="40%" r="68%">
-      <stop offset="0%" stop-color="#042f2a"/>
-      <stop offset="100%" stop-color="#10131a"/>
-    </radialGradient>
     <filter id="nodeShadow" x="-40%" y="-40%" width="180%" height="180%">
       <feDropShadow dx="0" dy="1.5" stdDeviation="2.4" flood-color="#000000" flood-opacity="0.38"/>
     </filter>
@@ -31,10 +27,6 @@
     </filter>
     <filter id="edgeGlow" x="-30%" y="-30%" width="160%" height="160%">
       <feGaussianBlur stdDeviation="2.4" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <filter id="hdBloom" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="1.5" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     <filter id="mwBloom" x="-170%" y="-170%" width="440%" height="440%">
@@ -145,23 +137,6 @@
     .prz-blade-glint { stroke: #ffffff; stroke-width: 1.3; stroke-linecap: round; stroke-dasharray: 5 44; stroke-opacity: 0.95; }
     .prz-foot-hot { fill: #ffffff; }
     .tri-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c4b5fd; }
-    .ncp-well              { fill: url(#ncpWell); stroke: #111827; stroke-width: 1.1; }
-    .ncp-min-lane          { fill: none; stroke-linecap: round; }
-    .ncp-min-lane-action   { stroke: #fbbf24; stroke-width: 1.8; }
-    .ncp-min-lane-sense    { stroke: #67e8f9; stroke-width: 1.25; stroke-dasharray: 2.5 2.3; }
-    .ncp-min-brace         { fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
-    .ncp-min-brace-action  { stroke: url(#ncpBrace); }
-    .ncp-min-brace-sense   { stroke: url(#ncpCyan); }
-    .ncp-plane-top         { fill: #fde68a; }
-    .ncp-plane-right       { fill: #67e8f9; }
-    .ncp-plane-bottom      { fill: #0e7490; }
-    .ncp-plane-left        { fill: #f59e0b; }
-    .ncp-min-knot          { fill: none; stroke: #fff7d6; stroke-width: 0.85; stroke-linejoin: round; }
-    .ncp-min-void          { fill: #050912; stroke: #ffffff; stroke-width: 0.45; }
-    .ncp-min-proposal      { fill: #fbbf24; stroke: #fff7d6; stroke-width: 0.5; }
-    .ncp-min-signal        { fill: #083344; stroke: #cffafe; stroke-width: 0.8; }
-    .ncp-min-bind          { fill: none; stroke: #fff7d6; stroke-width: 0.85; filter: url(#edgeGlow); }
-    .ncp-min-receipt       { fill: #07111d; stroke: #ffffff; stroke-width: 1.05; stroke-linejoin: round; filter: url(#edgeGlow); }
     .gate-label     { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fbbf24; text-anchor: middle; }
     .flag-k     { fill: #181818; }
     .flag-r     { fill: #d8001d; }
@@ -217,23 +192,6 @@
     .gal-slit   { fill: #05070b; stroke: #22d3ee; stroke-opacity: 0.55; stroke-width: 0.8; stroke-linejoin: miter; }
     .gal-hotf   { fill: #ef4444; }
     .gal-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #ef4444; }
-    .seat-hd         { fill: url(#hdGrad); }
-    .hd-void         { fill: #03211d; }
-    .hd-frame        { fill: url(#haldirArch); stroke: #0f766e; stroke-width: 0.5; stroke-opacity: 0.7; }
-    .hd-speed        { fill: none; stroke: #5eead4; stroke-width: 0.6; stroke-opacity: 0.4; stroke-linecap: round; }
-    .hd-thresh       { fill: none; stroke: #2dd4bf; stroke-width: 1.6; stroke-linecap: round; stroke-opacity: 0.85; }
-    .hd-beam         { fill: none; stroke: #ef4444; stroke-width: 1.4; stroke-linecap: round; stroke-opacity: 0.92; }
-    .hd-diode        { fill: #ff3b47; }
-    .hd-diode-hot    { fill: #ffe1dd; }
-    .hd-core         { fill: #ef4444; }
-    .hd-core-facet   { fill: #ff9d94; fill-opacity: 0.95; }
-    .hd-core-hot     { fill: #fff1f0; }
-    .hd-coreglow     { fill: url(#hdCoreGlow); }
-    .hd-sun          { fill: none; stroke: #ff6b5e; stroke-width: 0.8; stroke-opacity: 0.85; stroke-linecap: round; }
-    .hd-scan         { fill: #ffd9d4; }
-    .hd-tok-in       { fill: #ff6b5e; }
-    .hd-tok-out      { fill: #fff1f0; }
-    .hd-flash        { fill: #fff1f0; }
     .haldir-label    { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #2dd4bf; }
     .cba-label       { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #93c5fd; }
     .cba-glow        { fill: none; stroke: #7dd3fc; stroke-width: 3.5; stroke-opacity: 0.22; filter: url(#soft); stroke-linejoin: round; }
@@ -739,52 +697,66 @@
     <text x="565" y="42" text-anchor="middle" class="hub-label">PID-RS</text>
   </g>
   <g>
-    <defs>
-      <radialGradient id="ncpWell" cx="44%" cy="36%" r="74%"><stop offset="0%" stop-color="#182434"/><stop offset="68%" stop-color="#08111c"/><stop offset="100%" stop-color="#03070c"/></radialGradient>
-      <linearGradient id="ncpBrace" x1="0" y1="322" x2="0" y2="358" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fff3bd"/><stop offset="44%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#92400e"/></linearGradient>
-      <linearGradient id="ncpCyan" x1="0" y1="322" x2="0" y2="358" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#cffafe"/><stop offset="44%" stop-color="#67e8f9"/><stop offset="100%" stop-color="#0e7490"/></linearGradient>
-    </defs>
-    <defs>
-      <linearGradient id="gateBezel" x1="0" y1="306" x2="0" y2="374" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#fde68a"/><stop offset="45%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#92400e"/>
-      </linearGradient>
-    </defs>
-    <g filter="url(#nodeShadow)"><circle cx="360" cy="340" r="34" class="seat-gate"/></g>
-    <circle cx="360" cy="340" r="34" stroke="url(#gateBezel)" class="seat-ring"/>
-    <circle cx="360" cy="340" r="31.8" class="seat-groove"/>
-    <circle cx="360" cy="340" r="35.4" class="seat-hairline"/>
-    <circle cx="360" cy="340" r="30.2" class="ncp-well"/>
-
-    <path d="M334 340H343" class="ncp-min-lane ncp-min-lane-action"/>
-    <path d="M386 340H377" class="ncp-min-lane ncp-min-lane-sense"/>
-    <path d="M356 323H351L347 327V334L343 340L347 346V353L351 357H356" class="ncp-min-brace ncp-min-brace-action"/>
-    <path d="M364 323H369L373 327V334L377 340L373 346V353L369 357H364" class="ncp-min-brace ncp-min-brace-sense"/>
-
-    <polygon points="360,333 363,340 357,340" class="ncp-plane-top"/>
-    <polygon points="367,340 360,343 360,337" class="ncp-plane-right"/>
-    <polygon points="360,347 357,340 363,340" class="ncp-plane-bottom"/>
-    <polygon points="353,340 360,337 360,343" class="ncp-plane-left"/>
-    <polygon points="360,333 367,340 360,347 353,340" class="ncp-min-knot"/>
-    <polygon points="360,338.4 361.6,340 360,341.6 358.4,340" class="ncp-min-void"/>
-
-    <polygon points="335,337.8 337.2,340 335,342.2 332.8,340" class="ncp-min-proposal" opacity="0">
-
-
-    </polygon>
-    <circle cx="385" cy="340" r="2" class="ncp-min-signal" opacity="0">
-
-
-    </circle>
-    <circle cx="360" cy="340" r="8.4" class="ncp-min-bind" opacity="0">
-
-
-    </circle>
-    <polygon points="335,337.8 337.3,340 335,342.3 332.8,340" class="ncp-min-receipt" opacity="0">
-
-
-    </polygon>
-    <text x="360" y="386" text-anchor="middle" class="gate-label">NCP</text>
+      <g filter="url(#nodeShadow)" transform="translate(315 295) scale(.5)">
+  <title id="ncp-mark-title">NCP paired contract rails</title>
+  <desc id="ncp-mark-desc">Two independent, opposed contract rails frame separate amber request and blue outcome paths. The open center represents an interface, not a central runtime. A graphite disc and brushed metal rim match the project family.</desc>
+  <defs>
+    <radialGradient id="ncp-seat" cx="36%" cy="28%" r="82%">
+      <stop stop-color="#22313c"/><stop offset=".5" stop-color="#111d27"/><stop offset="1" stop-color="#060c13"/>
+    </radialGradient>
+    <linearGradient id="ncp-rim" x1="35" y1="26" x2="147" y2="158" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#314550"/><stop offset=".17" stop-color="#adbac0"/><stop offset=".34" stop-color="#526d79"/><stop offset=".52" stop-color="#253743"/><stop offset=".7" stop-color="#819294"/><stop offset=".86" stop-color="#354a56"/><stop offset="1" stop-color="#81918e"/>
+    </linearGradient>
+    <linearGradient id="ncp-amber" x1="42" y1="47" x2="108" y2="132" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f2dfae"/><stop offset=".28" stop-color="#c6a367"/><stop offset=".55" stop-color="#81613a"/><stop offset=".8" stop-color="#b08a4d"/><stop offset="1" stop-color="#55442d"/>
+    </linearGradient>
+    <linearGradient id="ncp-blue" x1="74" y1="46" x2="138" y2="133" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#bed4d9"/><stop offset=".25" stop-color="#83b6c4"/><stop offset=".53" stop-color="#3b778b"/><stop offset=".79" stop-color="#6799a5"/><stop offset="1" stop-color="#254653"/>
+    </linearGradient>
+    <linearGradient id="ncp-edge" x1="32" y1="39" x2="136" y2="139" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#e3e9e7" stop-opacity=".8"/><stop offset=".45" stop-color="#b0c1c5" stop-opacity=".25"/><stop offset="1" stop-color="#14242d" stop-opacity=".5"/>
+    </linearGradient>
+  </defs>
+  <style>
+    .ncp-request-light { animation: ncp-request-light 8s ease-in-out infinite; }
+    .ncp-outcome-light { animation: ncp-outcome-light 8s ease-in-out infinite; }
+    @keyframes ncp-request-light { 0%, 48%, 100% { opacity: .4; } 20%, 30% { opacity: 1; } }
+    @keyframes ncp-outcome-light { 0%, 42%, 100% { opacity: .4; } 66%, 76% { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) {
+      .ncp-request-light, .ncp-outcome-light { animation: none; }
+    }
+  </style>
+  <g id="ncp-housing" fill="none">
+    <circle cx="90" cy="90" r="68" fill="url(#ncp-seat)" stroke="#070c12" stroke-width="5"/>
+    <circle cx="90" cy="90" r="68" stroke="url(#ncp-rim)" stroke-width="3.2"/>
+    <circle cx="90" cy="90" r="63.8" stroke="#8cabb7" stroke-opacity=".18" stroke-width=".65"/>
+    <path d="M76 22H104 M76 158H104" stroke="#080f16" stroke-width="5.4"/>
+    <path d="M82 22H98 M82 158H98" stroke="url(#ncp-rim)" stroke-width="1.2"/>
+    <path d="M27 63 30 64 M24 72 28 73 M24 108 28 107 M27 117 30 116 M153 63 150 64 M156 72 152 73 M156 108 152 107 M153 117 150 116" stroke="#6c8590" stroke-width="1.1" stroke-opacity=".6"/>
   </g>
+  <g id="ncp-contract-rails" stroke-linejoin="bevel">
+    <path d="M81 48H64L43 69V111L64 132H81V121H69L55 107V73L69 59H81Z" fill="#070e16" stroke="#070e16" stroke-width="5" transform="translate(0 2)"/>
+    <path d="M99 48H116L137 69V111L116 132H99V121H111L125 107V73L111 59H99Z" fill="#070e16" stroke="#070e16" stroke-width="5" transform="translate(0 2)"/>
+    <path d="M81 48H64L43 69V111L64 132H81V121H69L55 107V73L69 59H81Z" fill="url(#ncp-amber)" stroke="url(#ncp-edge)" stroke-width=".85"/>
+    <path d="M99 48H116L137 69V111L116 132H99V121H111L125 107V73L111 59H99Z" fill="url(#ncp-blue)" stroke="url(#ncp-edge)" stroke-width=".85"/>
+    <path d="M78 51H65L47 70V109" fill="none" stroke="#ead8ab" stroke-opacity=".48" stroke-width="1"/>
+    <path d="M102 51H115L133 70V109" fill="none" stroke="#c2e1e7" stroke-opacity=".55" stroke-width="1"/>
+    <path d="M59 76H82L92 66H112" fill="none" stroke="#151a1e" stroke-width="5"/>
+    <path d="M59 76H82L92 66H112" fill="none" stroke="url(#ncp-amber)" stroke-width="2.8"/>
+    <path d="M121 104H98L88 114H68" fill="none" stroke="#101b24" stroke-width="5"/>
+    <path d="M121 104H98L88 114H68" fill="none" stroke="url(#ncp-blue)" stroke-width="2.8"/>
+  </g>
+  <g id="ncp-path-identities">
+    <path d="M104 62 108 66 104 70" fill="none" stroke="#eccea0" stroke-width="1.6"/>
+    <path d="M76 110 72 114 76 118" fill="none" stroke="#97c5d1" stroke-width="1.6"/>
+    <path d="M66 71 71 76 66 81 61 76Z" fill="#1c2326" stroke="#e4bd77" stroke-width="1.2"/>
+    <path d="M66 73 69 76 66 79 63 76Z" fill="#f1d395" class="ncp-request-light"/>
+    <rect x="108.5" y="99.5" width="9" height="9" rx="1" fill="#10212c" stroke="#8fbccc" stroke-width="1.2"/>
+    <path d="M111 106V102H115" fill="none" stroke="#c3e6ec" stroke-width="1.2" class="ncp-outcome-light"/>
+  </g>
+</g>
+      <text x="360" y="400" text-anchor="middle" class="gate-label">NCP</text>
+    </g>
   <g>
     <defs>
       <linearGradient id="przGlass" x1="0" y1="297" x2="0" y2="376.5" gradientUnits="userSpaceOnUse">
@@ -921,6 +893,12 @@
       <stop offset="0.84" stop-color="#354c59"/>
       <stop offset="1" stop-color="#869b98"/>
     </linearGradient>
+    <linearGradient id="crebain-bracket-metal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#72878c"/>
+      <stop offset=".38" stop-color="#415b65"/>
+      <stop offset=".72" stop-color="#263b46"/>
+      <stop offset="1" stop-color="#13232d"/>
+    </linearGradient>
     <radialGradient id="crebain-optic-halo">
       <stop stop-color="#ff4437" stop-opacity=".72"/>
       <stop offset=".48" stop-color="#e12520" stop-opacity=".28"/>
@@ -963,7 +941,13 @@
     <path d="M26 76A66 66 0 0 1 78 25 M102 25A66 66 0 0 1 155 80 M155 104A66 66 0 0 1 102 155" stroke="url(#crebain-ring-metal)" stroke-opacity=".5" stroke-width=".9"/>
     <path d="M90 15V28 M90 152V165 M15 90H28 M152 90H165" stroke="#161d20" stroke-width="4.5"/>
     <path d="M90 15V28 M90 152V165 M15 90H28 M152 90H165" stroke="url(#crebain-ring-metal)" stroke-width="1.8"/>
-    <path d="M31 38V31H38 M142 31H149V38 M31 142V149H38 M142 149H149V142" stroke="url(#crebain-ring-metal)" stroke-width="2.3"/>
+    <path d="M31 38V31H38 M142 31H149V38 M31 142V149H38 M142 149H149V142" stroke="#070e14" stroke-width="3.8" transform="translate(.55 .75)"/>
+    <g stroke="url(#crebain-bracket-metal)" stroke-width="2.3">
+      <path d="M31 38V31H38"/>
+      <path d="M142 31H149V38"/>
+      <path d="M31 142V149H38"/>
+      <path d="M142 149H149V142"/>
+    </g>
     <circle cx="53" cy="147" r="4.8" fill="#526b62" stroke="#0b1621" stroke-width="1.8"/>
   </g>
 
@@ -1319,35 +1303,66 @@
     <text x="400" y="124" text-anchor="middle" class="gal-label">GALADRIEL</text>
   </g>
   <g>
-    <defs>
-      <linearGradient id="haldirArch" x1="0" y1="73" x2="0" y2="122" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#99f6e4"/><stop offset="50%" stop-color="#2dd4bf"/><stop offset="100%" stop-color="#0f766e"/>
-      </linearGradient>
-      <radialGradient id="hdCoreGlow" gradientUnits="userSpaceOnUse" cx="150" cy="81.5" r="7">
-        <stop offset="0%" stop-color="#ff6b5e" stop-opacity="0.9"/><stop offset="55%" stop-color="#ef4444" stop-opacity="0.4"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
-      </radialGradient>
-    </defs>
-    <defs>
-      <linearGradient id="hdBezel" x1="0" y1="66" x2="0" y2="134" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#99f6e4"/><stop offset="45%" stop-color="#2dd4bf"/><stop offset="100%" stop-color="#0f766e"/>
-      </linearGradient>
-    </defs>
-    <g filter="url(#nodeShadow)"><circle cx="150" cy="100" r="34" class="seat-hd"/></g>
-    <circle cx="150" cy="100" r="34" stroke="url(#hdBezel)" class="seat-ring"/>
-    <circle cx="150" cy="100" r="31.8" class="seat-groove"/>
-    <circle cx="150" cy="100" r="35.4" class="seat-hairline"/>
-    <path class="hd-void" d="M159.5 118 L159.5 106 L157 106 L157 95 L155 95 L155 86 L153 84.5 L150 84.5 L147 84.5 L145 86 L145 95 L143 95 L143 106 L140.5 106 L140.5 118 Z"/>
-    <path class="hd-frame" d="M168 122 L168 107 L164.5 107 L164.5 96 L161 96 L161 86 L157 86 L157 81 L154.5 81 L154.5 76 L152.5 76 L152.5 73 L147.5 73 L147.5 76 L145.5 76 L145.5 81 L143 81 L143 86 L139 86 L139 96 L135.5 96 L135.5 107 L132 107 L132 122 Z M159.5 118 L159.5 106 L157 106 L157 95 L155 95 L155 86 L153 84.5 L150 84.5 L147 84.5 L145 86 L145 95 L143 95 L143 106 L140.5 106 L140.5 118 Z" fill-rule="evenodd"/>
-    <path class="hd-frame" d="M132 118 L168 118 L168 122 L132 122 Z"/>
-    <path class="hd-speed" d="M134 119 H166"/><path class="hd-speed" d="M134 120.2 H166"/><path class="hd-speed" d="M134 121.4 H166"/>
-    <path class="hd-thresh" d="M132 118 H168"/>
-    <circle class="hd-coreglow" cx="150" cy="81.5" r="7"></circle>
-    <g class="hd-lit" filter="url(#hdBloom)">
-      <path class="hd-beam" d="M159 113 L150 113" stroke-dasharray="9 40" stroke-dashoffset="0"></path><path class="hd-beam" d="M141 113 L150 113" stroke-dasharray="9 40" stroke-dashoffset="0"></path><path class="hd-beam" d="M158.5 106 L150 106" stroke-dasharray="8.5 40" stroke-dashoffset="0"></path><path class="hd-beam" d="M141.5 106 L150 106" stroke-dasharray="8.5 40" stroke-dashoffset="0"></path><path class="hd-beam" d="M156.5 98 L150 98" stroke-dasharray="6.5 40" stroke-dashoffset="0"></path><path class="hd-beam" d="M143.5 98 L150 98" stroke-dasharray="6.5 40" stroke-dashoffset="0"></path><path class="hd-beam" d="M154.5 91 L150 91" stroke-dasharray="4.5 40" stroke-dashoffset="0"></path><path class="hd-beam" d="M145.5 91 L150 91" stroke-dasharray="4.5 40" stroke-dashoffset="0"></path><path class="hd-beam" d="M153.5 87 L153.5 102" stroke-dasharray="15 40" stroke-dashoffset="0"></path><path class="hd-beam" d="M153.5 117 L153.5 102" stroke-dasharray="15 40" stroke-dashoffset="0"></path><path class="hd-beam" d="M146.5 87 L146.5 102" stroke-dasharray="15 40" stroke-dashoffset="0"></path><path class="hd-beam" d="M146.5 117 L146.5 102" stroke-dasharray="15 40" stroke-dashoffset="0"></path><circle class="hd-diode" cx="159" cy="113" r="1.5"/><circle class="hd-diode-hot" cx="159" cy="113" r="0.7"/><circle class="hd-diode" cx="141" cy="113" r="1.5"/><circle class="hd-diode-hot" cx="141" cy="113" r="0.7"/><circle class="hd-diode" cx="158.5" cy="106" r="1.5"/><circle class="hd-diode-hot" cx="158.5" cy="106" r="0.7"/><circle class="hd-diode" cx="141.5" cy="106" r="1.5"/><circle class="hd-diode-hot" cx="141.5" cy="106" r="0.7"/><circle class="hd-diode" cx="156.5" cy="98" r="1.5"/><circle class="hd-diode-hot" cx="156.5" cy="98" r="0.7"/><circle class="hd-diode" cx="143.5" cy="98" r="1.5"/><circle class="hd-diode-hot" cx="143.5" cy="98" r="0.7"/><circle class="hd-diode" cx="154.5" cy="91" r="1.5"/><circle class="hd-diode-hot" cx="154.5" cy="91" r="0.7"/><circle class="hd-diode" cx="145.5" cy="91" r="1.5"/><circle class="hd-diode-hot" cx="145.5" cy="91" r="0.7"/><path class="hd-sun" d="M150 81 L150 76"/><path class="hd-sun" d="M150 81 L147.4 76.6"/><path class="hd-sun" d="M150 81 L152.6 76.6"/><path class="hd-sun" d="M150 81 L145.6 78"/><path class="hd-sun" d="M150 81 L154.4 78"/><polygon class="hd-core" points="150,79 152.6,80.3 152.6,82.7 150,84 147.4,82.7 147.4,80.3"/><polygon class="hd-core-facet" points="150,79 152.6,80.3 150,81.5 147.4,80.3"/><circle class="hd-core-hot" cx="150" cy="81.5" r="0.9"></circle>
-    </g>
-    <rect class="hd-scan" x="141" y="86" width="18" height="1.3" opacity="0"></rect><polygon class="hd-tok-in" opacity="0" points="150,115 152.6,117.4 150,119.8 147.4,117.4"></polygon><polygon class="hd-tok-out" opacity="0" points="150,79.5 152,80.7 152,83 150,84.2 148,83 148,80.7"></polygon><circle class="hd-flash" cx="150" cy="102" r="0" opacity="0"></circle>
-    <text x="150" y="54" text-anchor="middle" class="haldir-label">HALDIR</text>
+      <g filter="url(#nodeShadow)" transform="translate(105 55) scale(.5)">
+  <title id="haldir-mark-title">Haldir command gate</title>
+  <desc id="haldir-mark-desc">Two teal metal pylons form an H around a closed red command threshold. A separate amber authority input enters from above. The emblem represents experimental authorization policy, not certification or a sensor verdict.</desc>
+  <defs>
+    <radialGradient id="haldir-seat" cx="36%" cy="28%" r="82%">
+      <stop stop-color="#20333b"/><stop offset=".52" stop-color="#101e27"/><stop offset="1" stop-color="#060c13"/>
+    </radialGradient>
+    <linearGradient id="haldir-rim" x1="35" y1="26" x2="147" y2="158" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#314550"/><stop offset=".17" stop-color="#adbac0"/><stop offset=".34" stop-color="#526d79"/><stop offset=".52" stop-color="#253743"/><stop offset=".7" stop-color="#819294"/><stop offset=".86" stop-color="#354a56"/><stop offset="1" stop-color="#81918e"/>
+    </linearGradient>
+    <linearGradient id="haldir-frame" x1="46" y1="45" x2="132" y2="137" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#b0d4cd"/><stop offset=".23" stop-color="#6ca69c"/><stop offset=".5" stop-color="#305f5c"/><stop offset=".74" stop-color="#5d8a7f"/><stop offset="1" stop-color="#193b3b"/>
+    </linearGradient>
+    <linearGradient id="haldir-facet" x1="57" y1="50" x2="127" y2="137" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#365750"/><stop offset=".5" stop-color="#1d3837"/><stop offset="1" stop-color="#102727"/>
+    </linearGradient>
+    <linearGradient id="haldir-threshold" x1="68" y1="84" x2="113" y2="99" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#e6a899"/><stop offset=".24" stop-color="#b55e52"/><stop offset=".62" stop-color="#762c2b"/><stop offset="1" stop-color="#bd6558"/>
+    </linearGradient>
+    <linearGradient id="haldir-authority" x1="83" y1="40" x2="98" y2="55" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ead3a4"/><stop offset=".5" stop-color="#af8b50"/><stop offset="1" stop-color="#715936"/>
+    </linearGradient>
+    <radialGradient id="haldir-threshold-glow"><stop stop-color="#e35443" stop-opacity=".22"/><stop offset="1" stop-color="#d84235" stop-opacity="0"/></radialGradient>
+  </defs>
+  <style>
+    .haldir-threshold-light { animation: haldir-threshold-light 6.4s ease-in-out infinite; }
+    @keyframes haldir-threshold-light { 0%, 100% { opacity: .45; } 50% { opacity: .85; } }
+    @media (prefers-reduced-motion: reduce) { .haldir-threshold-light { animation: none; } }
+  </style>
+  <g id="haldir-housing" fill="none">
+    <circle cx="90" cy="90" r="68" fill="url(#haldir-seat)" stroke="#070c12" stroke-width="5"/>
+    <circle cx="90" cy="90" r="68" stroke="url(#haldir-rim)" stroke-width="3.2"/>
+    <circle cx="90" cy="90" r="63.8" stroke="#8cabb7" stroke-opacity=".18" stroke-width=".65"/>
+    <path d="M22 76V104 M158 76V104" stroke="#080f16" stroke-width="5.4"/>
+    <path d="M22 82V98 M158 82V98" stroke="url(#haldir-rim)" stroke-width="1.2"/>
+    <path d="M54 35 56 38 M63 30 64 33 M117 30 116 33 M126 35 124 38 M54 145 56 142 M63 150 64 147 M117 150 116 147 M126 145 124 142" stroke="#6c8590" stroke-width="1.1" stroke-opacity=".6"/>
   </g>
+  <g id="haldir-gate" stroke-linejoin="bevel">
+    <path d="M49 63 62 50H76V130H60L49 119Z M131 63 118 50H104V130H120L131 119Z" fill="#070e16" stroke="#070e16" stroke-width="5" transform="translate(0 2)"/>
+    <path d="M49 63 62 50H76V130H60L49 119Z M131 63 118 50H104V130H120L131 119Z" fill="url(#haldir-frame)" stroke="#678c83" stroke-width=".7"/>
+    <path d="M66 59H76V130H66Z M114 59H104V130H114Z" fill="url(#haldir-facet)"/>
+    <path d="M52 65 64 53H73 M128 65 116 53H107 M52 66V117 M128 66V117" fill="none" stroke="#c0dace" stroke-opacity=".48" stroke-width="1"/>
+    <path d="M57 77V108 M123 77V108" fill="none" stroke="#152e30" stroke-width="1.4"/>
+    <path d="M57 78V91 M123 78V91" fill="none" stroke="#8cb8a9" stroke-opacity=".55" stroke-width=".75"/>
+    <rect x="71" y="84" width="38" height="16" rx="1.5" fill="#071119" stroke="#223b42" stroke-width="1"/>
+    <ellipse cx="90" cy="92" rx="27" ry="16" fill="url(#haldir-threshold-glow)" class="haldir-threshold-light"/>
+    <path d="M74 87H89V97H74Z M91 87H106V97H91Z" fill="url(#haldir-threshold)"/>
+    <path d="M76 87.8H87 M93 87.8H104" fill="none" stroke="#f0ac90" stroke-opacity=".5" stroke-width=".6"/>
+    <path d="M89.3 87H90.7V97H89.3Z" fill="#ef8063" class="haldir-threshold-light"/>
+    <path d="M60 134H120" fill="none" stroke="#7f9e97" stroke-opacity=".42" stroke-width="1"/>
+  </g>
+  <g id="haldir-authority-input">
+    <path d="M90 54V76" fill="none" stroke="#aa8b55" stroke-width="1.4" stroke-dasharray="3 3"/>
+    <path d="M86 73 90 77 94 73" fill="none" stroke="#b89b6a" stroke-width="1.3"/>
+    <path d="M90 38 97 42V50L90 54 83 50V42Z" fill="#17242b" stroke="url(#haldir-authority)" stroke-width="1.6"/>
+    <path d="M87 44H93V48H87Z" fill="url(#haldir-authority)"/>
+  </g>
+</g>
+      <text x="150" y="54" text-anchor="middle" class="haldir-label">HALDIR</text>
+    </g>
     </g>
     <g class="edge-labels"><text x="240" y="303" text-anchor="middle" class="edge-label edge-label-protocol">Neural</text>
 <text x="323" y="239" text-anchor="middle" class="edge-label edge-label-protocol">Monitor</text>

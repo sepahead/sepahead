@@ -8,7 +8,7 @@
 // is transparent so the badge floats on any README. Zero deps beyond the generator.
 import { nodeMark, SHARED_DEFS, SHARED_STYLE, nodes } from "./work-graph.mjs";
 import { splitThemes } from "./theme-split.mjs";
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { resolve, dirname } from "node:path";
 
@@ -19,13 +19,10 @@ const f1 = (v) => Number(v.toFixed(1));
 // glow/shadow bleed (the label is stripped, so no need to clip tightly).
 const SPEC = {
   pidrs:    { half: 50 },
-  ncp:      { half: 46, aria: "NCP logo: paired contract bounds hold one quartered four-plane knot while proposal and receipt remain distinct" },
-  crebain:  { half: 64 }, // vector raven and instrument reticle
   melkor:   { half: 57 }, // hexagon + bezel
   cortexel: { half: 46, aria: "Cortexel logo: a neuron-seeded population voxel crosses a validation bracket into one deterministic neuronal action-potential figure artifact" },
   manwe:    { half: 44 },
   engram:   { half: 54 }, // medallion scaled to radius ~46 + bezel/shadow
-  haldir:   { half: 46 },
   prisoma:  { half: 52, dy: -9 }, // apex-heavy triangle (hairline -55.8, base+shadow ~+38): recentre on the visual midpoint
   cobotatlas: { half: 54, dx: -7, dy: -2 }, // cell + external top-left dataset badge
   reliefatlas: { half: 54, dx: -7, dy: -2 }, // corpus + external top-left dataset badge
@@ -52,6 +49,9 @@ function stripChrome(mark) {
 }
 
 export function logoSVG(key) {
+  if (["ncp", "haldir", "crebain"].includes(key)) {
+    return readFileSync(resolve(__dirname, "..", "assets", `${key}-mark.svg`), "utf8");
+  }
   const n = nodes[key];
   if (!n) throw new Error(`no node ${key}`);
   const { half: H, dx = 0, dy = 0, aria = `${key} logo` } = SPEC[key];
