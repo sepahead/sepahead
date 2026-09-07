@@ -76,7 +76,7 @@ export function writeLogo(key, outDir, base) {
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const [key, outDir, base] = process.argv.slice(2);
   if (!key) {
-    console.log("keys:", Object.keys(SPEC).join(", "));
+    console.log("keys:", ["ncp", "haldir", "crebain", "galadriel", ...Object.keys(SPEC)].join(", "));
   } else {
     writeLogo(key, outDir || resolve(__dirname, "..", "assets", "logos"), base || key);
     console.log(`[logo] wrote ${base || key}-{dark,light}.svg for ${key}`);
