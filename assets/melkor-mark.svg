@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180" role="img" aria-labelledby="melkor-title melkor-desc">
+  <title id="melkor-title">Melkor faceted twin peaks</title>
+  <desc id="melkor-desc">A copper-edged twin-peak M sits inside a graphite hexagonal frame. A slow inspection sweep crosses the solid facets, followed by a ridge glint. The eight-second loop keeps the full shape visible. Reduced motion shows the complete still mark.</desc>
+  <defs>
+    <radialGradient id="melkor-seat" cx="36%" cy="24%" r="84%">
+      <stop stop-color="#263239"/><stop offset=".5" stop-color="#111b23"/><stop offset="1" stop-color="#060d14"/>
+    </radialGradient>
+    <linearGradient id="melkor-rim" x1="34" y1="25" x2="148" y2="154" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#616361"/><stop offset=".18" stop-color="#b3b3a7"/><stop offset=".36" stop-color="#777c79"/><stop offset=".52" stop-color="#34434c"/><stop offset=".72" stop-color="#8b7963"/><stop offset=".86" stop-color="#36434a"/><stop offset="1" stop-color="#7d817c"/>
+    </linearGradient>
+    <linearGradient id="melkor-bevel" x1="37" y1="24" x2="143" y2="155" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#e0d5b9"/><stop offset=".4" stop-color="#8a938d"/><stop offset=".72" stop-color="#263642"/><stop offset="1" stop-color="#a18c72"/>
+    </linearGradient>
+    <linearGradient id="melkor-copper" x1="52" y1="50" x2="125" y2="130" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffe6be"/><stop offset=".22" stop-color="#d9a574"/><stop offset=".48" stop-color="#97674a"/><stop offset=".7" stop-color="#e2a16b"/><stop offset="1" stop-color="#75503c"/>
+    </linearGradient>
+    <linearGradient id="melkor-lit-face" x1="54" y1="62" x2="88" y2="126" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#a2957c"/><stop offset=".38" stop-color="#756b59"/><stop offset="1" stop-color="#484641"/>
+    </linearGradient>
+    <linearGradient id="melkor-tall-face" x1="108" y1="44" x2="90" y2="127" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#b5a085"/><stop offset=".35" stop-color="#8b7560"/><stop offset="1" stop-color="#51483e"/>
+    </linearGradient>
+    <linearGradient id="melkor-shadow-face" x1="102" y1="65" x2="130" y2="129" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#393f42"/><stop offset=".45" stop-color="#222b31"/><stop offset="1" stop-color="#131d25"/>
+    </linearGradient>
+    <radialGradient id="melkor-ember" cx="50%" cy="50%" r="50%">
+      <stop stop-color="#eb8a41" stop-opacity=".25"/><stop offset="1" stop-color="#d37435" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="melkor-scan-fill" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#ffd9a2" stop-opacity="0"/><stop offset=".78" stop-color="#eaa671" stop-opacity=".08"/><stop offset="1" stop-color="#ffe9c7" stop-opacity=".58"/>
+    </linearGradient>
+    <clipPath id="melkor-massif-clip"><path d="M39 126 69 60 88 88 111 43 141 126Z"/></clipPath>
+    <filter id="melkor-glow" x="-40%" y="-40%" width="180%" height="180%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="1.1"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <style>
+    .melkor-ember { animation: melkor-breathe 8s ease-in-out infinite; }
+    .melkor-scan { opacity: 0; animation: melkor-inspect 8s linear infinite; }
+    .melkor-glint { opacity: 0; stroke-dasharray: 9 311; animation: melkor-ridge-glint 8s linear infinite; }
+    @keyframes melkor-breathe { 0%, 100% { opacity: .5; } 48% { opacity: .9; } }
+    @keyframes melkor-inspect { 0%, 12% { transform: translateY(0); opacity: 0; } 16% { opacity: .8; } 48% { transform: translateY(-91px); opacity: .8; } 52%, 100% { transform: translateY(-91px); opacity: 0; } }
+    @keyframes melkor-ridge-glint { 0%, 59% { stroke-dashoffset: 9; opacity: 0; } 63% { opacity: .8; } 86% { stroke-dashoffset: -217; opacity: .8; } 90%, 100% { stroke-dashoffset: -217; opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .melkor-ember, .melkor-scan, .melkor-glint { animation: none; }
+    }
+  </style>
+  <g id="melkor-housing" fill="none" stroke-linejoin="bevel">
+    <path d="M90 17 153 53V127L90 163 27 127V53Z" fill="url(#melkor-seat)" stroke="#060c12" stroke-width="7"/>
+    <path d="M90 17 153 53V127L90 163 27 127V53Z" stroke="url(#melkor-rim)" stroke-width="5.5"/>
+    <path d="M90 14 156 51.5V128.5L90 166 24 128.5V51.5Z" stroke="url(#melkor-bevel)" stroke-width=".8"/>
+    <path d="M90 23 147 56.5V123.5L90 157 33 123.5V56.5Z" stroke="#050e16" stroke-width="2"/>
+    <path d="M90 24 146 57V123L90 156 34 123V57Z" stroke="url(#melkor-copper)" stroke-opacity=".42" stroke-width=".85"/>
+  </g>
+  <ellipse cx="91" cy="123" rx="52" ry="29" fill="url(#melkor-ember)" class="melkor-ember"/>
+  <g id="melkor-massif" stroke-linejoin="bevel">
+    <path d="M39 126 69 60 88 88 111 43 141 126Z" fill="#070f17" stroke="#050c13" stroke-width="5" transform="translate(0 2)"/>
+    <path d="M39 126 69 60 88 88 111 43 141 126Z" fill="url(#melkor-shadow-face)" stroke="url(#melkor-copper)" stroke-width="1.25"/>
+    <path d="M39 126 69 60 79 126Z" fill="url(#melkor-lit-face)"/>
+    <path d="M69 60 88 88 79 126Z" fill="#383b39"/>
+    <path d="M88 88 87 126H79Z" fill="#222d31"/>
+    <path d="M88 88 111 43 99 126H87Z" fill="url(#melkor-tall-face)"/>
+    <path d="M111 43V126H99Z" fill="#484844"/>
+    <path d="M111 43 141 126H111Z" fill="url(#melkor-shadow-face)"/>
+    <path d="M42 124 69 64 88 92 110 48 138 124" fill="none" stroke="url(#melkor-copper)" stroke-width="1.8"/>
+    <path d="M69 64 79 124 M110 49 99 124" fill="none" stroke="#ead8b6" stroke-opacity=".23" stroke-width=".7"/>
+    <path d="M40 126H140" fill="none" stroke="url(#melkor-copper)" stroke-width="1.5"/>
+    <g clip-path="url(#melkor-massif-clip)">
+      <g class="melkor-scan"><rect x="36" y="120" width="108" height="9" fill="url(#melkor-scan-fill)"/><path d="M36 129H144" stroke="#f5d6ab" stroke-width=".7" stroke-opacity=".65"/></g>
+    </g>
+    <path d="M42 124 69 64 88 92 110 48 138 124" fill="none" stroke="#ffe6c2" stroke-width="1.4" stroke-linecap="round" filter="url(#melkor-glow)" class="melkor-glint"/>
+  </g>
+  <path d="M67 137H83 M97 137H113" stroke="#a49780" stroke-opacity=".44" stroke-width="1"/>
+  <path d="M87 137 90 134 93 137 90 140Z" fill="#d39a68" stroke="#edc49b" stroke-width=".6"/>
+</svg>

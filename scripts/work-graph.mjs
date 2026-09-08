@@ -18,8 +18,8 @@
 // Cortexel represents an evidence fold; CREBAIN uses a raven and reticle.
 // Engram retains its silver medallion;
 // prisoma a smoked-glass prism with liquid-silver edges dispersing one beam
-// into the three PID components; melkor an obsidian forge plate whose black
-// massif wears an uneven tactical survey mesh; manwe a lens barrel whose six-blade
+// into the three PID components; melkor a copper-edged twin-peak mark with
+// solid facets and a slow inspection sweep; manwe a lens barrel whose six-blade
 // iris frames a quadcopter caught in lock-on brackets; cobot-atlas a blue-chrome
 // kinematic cell whose articulated arm performs a conserved pick/place/return
 // loop; relief-atlas a rose-metal indexed contact sheet of varied 3-D relief
@@ -50,6 +50,7 @@ const CREBAIN_LOGO = vectorMark("crebain");
 const NCP_LOGO = vectorMark("ncp");
 const HALDIR_LOGO = vectorMark("haldir");
 const GALADRIEL_LOGO = vectorMark("galadriel");
+const MELKOR_LOGO = vectorMark("melkor");
 
 
 const W = 860;
@@ -518,92 +519,10 @@ export function nodeMark(n) {
   </g>`;
   }
   if (n.kind === "cube") {
-    // melkor: the OBSIDIAN FORGE PLATE — a machined dark hexagonal plate with a
-    // heated-metal bezel (lit crown → cooled base), forge light rising from
-    // below, and a black twin-peak massif being SURVEYED against it: the ridge
-    // carries an ember rim light and the front face is a low-poly TIN of
-    // irregular shaded facets with a hairline ember wireframe, while the
-    // right flank stays solid. Plate + rock are theme-FIXED (a real object, like
-    // engram's medallion); only the label ink adapts. The peak spark breathes;
-    // reduced-motion holds it lit. One instance → unique ids.
-    const cx = n.x, cy = n.y;
-    const hex = (s) =>
-      `M${f1(cx)} ${f1(cy - 48 * s)} L${f1(cx + 41.6 * s)} ${f1(cy - 24 * s)} L${f1(cx + 41.6 * s)} ${f1(cy + 24 * s)} L${f1(cx)} ${f1(cy + 48 * s)} L${f1(cx - 41.6 * s)} ${f1(cy + 24 * s)} L${f1(cx - 41.6 * s)} ${f1(cy - 24 * s)} Z`;
-    // Massif: left foot → left peak → saddle → main peak → right foot. The
-    // ember ridge light runs the FULL silhouette so the letterform reads as a
-    // complete M, final downstroke included.
-    const solid = `M${f1(cx - 30)} ${f1(cy + 24)} L${f1(cx - 12)} ${f1(cy - 22)} L${f1(cx)} ${f1(cy - 2)} L${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)} Z`;
-    const ridgeLine = `M${f1(cx - 30)} ${f1(cy + 24)} L${f1(cx - 12)} ${f1(cy - 22)} L${f1(cx)} ${f1(cy - 2)} L${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)}`;
-    // Low-poly FACETS over the front face — few and LARGE, no two alike, with
-    // strong tonal steps from the forge underlight (facets nearer the heat
-    // run warmer) and hairline dark seams; no drawn wireframe, the edges are
-    // implied by tone like proper low-poly artwork. The right flank stays one
-    // SOLID near-black facet — the split is what sells the volume.
-    const V = {
-      A: [-30, 24], B: [-12, -22], C: [0, -2], D: [12, -34],
-      E: [12, 24], K: [-6, 24], L: [2, 24],
-    };
-    const TIN = [
-      ["A", "B", "K", "#4a2712"], ["B", "C", "K", "#2a1509"], ["C", "L", "K", "#1c0e07"],
-      ["C", "D", "L", "#5c3117"], ["D", "E", "L", "#331a0c"],
-    ];
-    const pt = (k) => `${f1(cx + V[k][0])},${f1(cy + V[k][1])}`;
-    const facets = TIN.map(([a, b, c, tone]) =>
-      `<polygon class="mel-tin" points="${pt(a)} ${pt(b)} ${pt(c)}" fill="${tone}"/>`).join("\n      ");
-    // The full 3-D shaded surface (rock body + right flank + low-poly facets + the M ridge
-    // LINE) — reused for both the fog ghost and the crisp construction reveal, so the ridge
-    // is foggy while unfilled and DRAWS ON crisply as the shape fills from the base up.
-    const surface = `<path d="${solid}" class="mel-rock"/>` +
-      `<path d="M${f1(cx + 12)} ${f1(cy - 34)} L${f1(cx + 30)} ${f1(cy + 24)} L${f1(cx + 12)} ${f1(cy + 24)} Z" class="mel-facet"/>` +
-      facets +
-      `<path d="${ridgeLine}" class="mel-ridge"/>`;
-    // BEING CONSTRUCTED (3D FULL FILL): the massif's 3-D-shaded surface is REVEALED from
-    // the base UP behind a bright build-line — a solid low-poly fill materialising in one
-    // sweep, not a scatter of dots. It clears top-down, holds bare on the ridge scaffold,
-    // reconstructs bottom-up, and holds. The reveal is an animated clip; the ridge stays
-    // the always-visible frame. Base (t=0) = the finished surface, so librsvg / reduced-
-    // motion show the complete mountain. Seamless loop.
-    const MEL = "6s";
-    const KT = "0;0.12;0.2;0.32;0.72;1"; // hold-full · clear(top-down) · bare · construct(base-up) · hold
-    // Bottom-up reveal rect (fixed bottom at cy+52; its top edge rises to construct).
-    const buildRect = `<rect x="${f1(cx - 52)}" y="${f1(cy - 40)}" width="104" height="92">` +
-      `<animate attributeName="y" values="${f1(cy - 40)};${f1(cy - 40)};${f1(cy + 26)};${f1(cy + 26)};${f1(cy - 40)};${f1(cy - 40)}" keyTimes="${KT}" dur="${MEL}" repeatCount="indefinite"/>` +
-      `<animate attributeName="height" values="92;92;26;26;92;92" keyTimes="${KT}" dur="${MEL}" repeatCount="indefinite"/></rect>`;
-    // The construction FRONT: a bright build-line riding the reveal edge (base -> peak),
-    // clipped to the massif (invisible except while building; opacity 0 at rest).
-    const front = `<g clip-path="url(#melMassif)"><rect class="mel-front" x="${f1(cx - 34)}" y="${f1(cy + 24)}" width="68" height="3.4" opacity="0">` +
-      `<animate attributeName="y" values="${f1(cy + 24)};${f1(cy + 24)};${f1(cy - 35)};${f1(cy - 35)};${f1(cy + 24)}" keyTimes="0;0.32;0.72;0.74;1" dur="${MEL}" repeatCount="indefinite"/>` +
-      `<animate attributeName="opacity" values="0;0;0.9;0.9;0;0" keyTimes="0;0.32;0.37;0.67;0.72;1" dur="${MEL}" repeatCount="indefinite"/></rect></g>`;
     return `<g>
-    <defs>
-      <linearGradient id="melPlate" x1="0" y1="${f1(cy - 48)}" x2="0" y2="${f1(cy + 48)}" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#2b1a10"/><stop offset="55%" stop-color="#170d07"/><stop offset="100%" stop-color="#0b0604"/>
-      </linearGradient>
-      <linearGradient id="melRock" x1="0" y1="${f1(cy - 36)}" x2="0" y2="${f1(cy + 24)}" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#241209"/><stop offset="55%" stop-color="#3a1e0e"/><stop offset="100%" stop-color="#582d15"/>
-      </linearGradient>
-      <radialGradient id="melHeat" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${f1(cy + 22)}" r="62">
-        <stop offset="0%" stop-color="#c2410c" stop-opacity="0.72"/><stop offset="45%" stop-color="#9a3412" stop-opacity="0.38"/><stop offset="100%" stop-color="#7c2d12" stop-opacity="0"/>
-      </radialGradient>
-      <linearGradient id="melBezel" x1="0" y1="${f1(cy - 48)}" x2="0" y2="${f1(cy + 48)}" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#fed7aa"/><stop offset="45%" stop-color="#b45309"/><stop offset="100%" stop-color="#571c07"/>
-      </linearGradient>
-      <clipPath id="melClip"><path d="${hex(1)}"/></clipPath>
-      <clipPath id="melMassif"><path d="${solid}"/></clipPath>
-      <clipPath id="melBuild">${buildRect}</clipPath>
-    </defs>
-    <g filter="url(#nodeShadow)"><path d="${hex(1)}" class="mel-plate"/></g>
-    <g clip-path="url(#melClip)">
-      <path d="${hex(1)}" fill="url(#melHeat)"/>
-      <g class="mel-fog-g" filter="url(#soft)">${surface}</g>
-      <g clip-path="url(#melBuild)">${surface}</g>
-      ${front}
-    </g>
-    <path d="${hex(1)}" class="mel-edge"/>
-    <path d="${hex(0.9423)}" class="mel-groove"/>
-    <path d="${hex(1.0337)}" class="mel-hairline"/>
-    <text x="${cx}" y="${f1(cy + 62)}" text-anchor="middle" class="cube-label">${escapeXML(n.label)}</text>
-  </g>`;
+      <g filter="url(#nodeShadow)" transform="translate(${f1(n.x - 57)} ${f1(n.y - 57)}) scale(${114 / 180})">${MELKOR_LOGO}</g>
+      <text x="${n.x}" y="${f1(n.y + 62)}" text-anchor="middle" class="cube-label">${escapeXML(n.label)}</text>
+    </g>`;
   }
   if (n.kind === "logo") {
     // engram: the torus-automations brand mark suspended in a LUMINOUS
@@ -2048,16 +1967,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .seat-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
     .seat-gate     { fill: url(#gateGrad); }
     .seat-vox      { fill: url(#voxGrad); }
-    .mel-plate    { fill: url(#melPlate); }
-    .mel-rock     { fill: url(#melRock); }
-    .mel-fog-g    { opacity: 0.42; }
-    .mel-ridge    { fill: none; stroke: #fdba74; stroke-opacity: 0.7; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
-    .mel-facet    { fill: #1a0e08; }
-    .mel-tin      { stroke: #000000; stroke-opacity: 0.35; stroke-width: 0.6; stroke-linejoin: round; }
-    .mel-front    { fill: #ffedd5; filter: url(#edgeGlow); }
-    .mel-edge     { fill: none; stroke: url(#melBezel); stroke-width: 2.4; stroke-linejoin: miter; }
-    .mel-groove   { fill: none; stroke: #05070b; stroke-opacity: 0.5; stroke-width: 1; }
-    .mel-hairline { fill: none; stroke: #2b333d; stroke-opacity: 0.55; stroke-width: 1; }
     .cube-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fdba74; }
     .logo-label     { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #cdd6e0; }
     .prz-body     { fill: url(#przGlass); }

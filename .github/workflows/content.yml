@@ -11,6 +11,7 @@ on:
       - "assets/ncp-mark.svg"
       - "assets/haldir-mark.svg"
       - "assets/galadriel-mark.svg"
+      - "assets/melkor-mark.svg"
       - "assets/hero-*.svg"
       - "assets/agents-*.svg"
       - "assets/connect-*.svg"
