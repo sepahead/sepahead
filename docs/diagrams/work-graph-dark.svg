@@ -129,17 +129,6 @@
     .flag-g     { fill: #ffcc00; }
     .flag-edge  { fill: none; stroke: #ffffff; stroke-opacity: 0.16; stroke-width: 0.6; }
     .vox-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #f0abfc; }
-    .ctx-well              { fill: url(#ctxWell); stroke: #1f1227; stroke-width: 1.1; }
-    .ctx-min-voxel-top     { fill: #e879f9; stroke: #fdf4ff; stroke-width: 0.65; stroke-linejoin: round; }
-    .ctx-min-voxel-left    { fill: #a21caf; stroke: #f0abfc; stroke-width: 0.65; stroke-linejoin: round; }
-    .ctx-min-voxel-right   { fill: #701a75; stroke: #d946ef; stroke-width: 0.65; stroke-linejoin: round; }
-    .ctx-min-neuron        { fill: #ffffff; stroke: #e879f9; stroke-width: 0.45; }
-    .ctx-min-intake-lane   { fill: none; stroke: #c4b5fd; stroke-width: 0.8; stroke-opacity: 0.55; stroke-dasharray: 2 2.2; stroke-linecap: round; }
-    .ctx-min-boundary      { fill: none; stroke: #fdf4ff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-    .ctx-min-artifact      { fill: none; stroke: url(#ctxArtifactEdge); stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; }
-    .ctx-min-action-potential { fill: none; stroke: #ffffff; stroke-width: 1.45; stroke-linecap: round; stroke-linejoin: round; }
-    .ctx-min-token         { fill: #fdf4ff; stroke: #e879f9; stroke-width: 0.45; filter: url(#edgeGlow); }
-    .ctx-min-scan          { stroke: #ffffff; stroke-width: 1.2; stroke-linecap: round; filter: url(#edgeGlow); }
     .raven-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #a1b39a; }
     .raven-cursor { fill: #a1b39a; }
     .radar-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #38bdf8; }
@@ -1229,54 +1218,88 @@
     <g class="atlas-dataset-badge" aria-hidden="true"><circle class="atlas-dataset-disc" cx="714" cy="563" r="8.4" stroke="#fb7185"/><circle class="atlas-dataset-ring" cx="714" cy="563" r="6.7"/><polygon points="714,557 719,559.6 714,562.2 709,559.6" fill="#fb7185" fill-opacity="0.16" stroke="#fb7185" stroke-width="1.1" stroke-linejoin="round"/><polygon points="714,560.4 719,563 714,565.6 709,563" fill="#fb7185" fill-opacity="0.24" stroke="#fb7185" stroke-width="1.1" stroke-linejoin="round"/><polygon points="714,563.8 719,566.4 714,569 709,566.4" fill="#fb7185" fill-opacity="0.34" stroke="#fb7185" stroke-width="1.1" stroke-linejoin="round"/></g>
     <text x="760" y="655" text-anchor="middle" class="rfa-label">RELIEF-ATLAS</text>
   </g>
-  <g class="ctx-mark">
-    <defs>
-      <linearGradient id="voxBezel" x1="0" y1="526" x2="0" y2="594" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#f5d0fe"/><stop offset="45%" stop-color="#e879f9"/><stop offset="100%" stop-color="#86198f"/>
-      </linearGradient>
-    </defs>
-    <g filter="url(#nodeShadow)"><circle cx="100" cy="560" r="34" class="seat-vox"/></g>
-    <circle cx="100" cy="560" r="34" stroke="url(#voxBezel)" class="seat-ring"/>
-    <circle cx="100" cy="560" r="31.8" class="seat-groove"/>
-    <circle cx="100" cy="560" r="35.4" class="seat-hairline"/>
-    <defs>
-      <radialGradient id="ctxWell" cx="42%" cy="36%" r="74%"><stop offset="0%" stop-color="#291132"/><stop offset="68%" stop-color="#110a1a"/><stop offset="100%" stop-color="#05070c"/></radialGradient>
-      <linearGradient id="ctxArtifactEdge" x1="0" y1="542" x2="0" y2="578" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fdf4ff"/><stop offset="38%" stop-color="#e879f9"/><stop offset="100%" stop-color="#86198f"/></linearGradient>
-      <clipPath id="ctxActionPotentialClip"><rect x="102.7" y="546" width="15.5" height="29">
-        <animate attributeName="width" values="15.5;15.5;0;0;15.5;15.5" keyTimes="0;0.02;0.05;0.43;0.61;1" dur="8.4s" repeatCount="indefinite"/>
-      </rect></clipPath>
-    </defs>
-    <circle cx="100" cy="560" r="30.2" class="ctx-well"/>
-
-    <g class="ctx-min-voxel">
-      <polygon points="75,558 81,554 87,558 81,562" class="ctx-min-voxel-top"/>
-      <polygon points="75,558 81,562 81,569 75,565" class="ctx-min-voxel-left"/>
-      <polygon points="87,558 81,562 81,569 87,565" class="ctx-min-voxel-right"/>
-      <circle cx="81" cy="558" r="1.35" class="ctx-min-neuron"/>
-    </g>
-    <path d="M88 562H93" class="ctx-min-intake-lane"/>
-    <path d="M97 542H93V578H97" class="ctx-min-boundary"/>
-
-    <path d="M101 544H120V576H101" class="ctx-min-artifact"/>
-    <path d="M103.2 567
-             C104.8 567 105.9 567 106.6 566.7
-             C107.3 566.2 107.8 551.2 108.7 548.5
-             C109 547.3 109.5 547.9 110 550.6
-             C110.7 555.8 111 564.4 112.1 569.4
-             C112.8 572.3 113.7 573.1 114.4 570.5
-             C115.2 567.9 116.2 567 117.7 567"
-          class="ctx-min-action-potential" clip-path="url(#ctxActionPotentialClip)"/>
-
-    <polygon points="78,562 81,560 84,562 81,564" class="ctx-min-token" opacity="0">
-      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;12 0;12 0;0 0" keyTimes="0;0.10;0.27;0.90;1" dur="8.4s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.08;0.11;0.28;0.32;1" dur="8.4s" repeatCount="indefinite"/>
-    </polygon>
-    <line x1="93" y1="546" x2="93" y2="552" class="ctx-min-scan" opacity="0">
-      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 22;0 22;0 0" keyTimes="0;0.28;0.43;0.90;1" dur="8.4s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.26;0.29;0.41;0.44;1" dur="8.4s" repeatCount="indefinite"/>
-    </line>
-    <text x="100" y="608" text-anchor="middle" class="vox-label">CORTEXEL</text>
+  <g>
+      <g filter="url(#nodeShadow)" transform="translate(54 514) scale(0.5111111111111111)">
+  <title id="cortexel-title">Cortexel neural figure contract</title>
+  <desc id="cortexel-desc">A faceted population cube holds one spherical neuron. A separate validation bracket leads to a framed action-potential trace. An eight-second sequence highlights the input, bracket, and figure. The full symbol remains visible. Reduced motion shows a still mark. The trace is a schematic logo, not a measurement.</desc>
+  <defs>
+    <radialGradient id="cortexel-seat" cx="35%" cy="25%" r="82%">
+      <stop stop-color="#2c293d"/><stop offset=".46" stop-color="#191729"/><stop offset="1" stop-color="#080e18"/>
+    </radialGradient>
+    <linearGradient id="cortexel-rim" x1="36" y1="27" x2="144" y2="151" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#606475"/><stop offset=".2" stop-color="#b6bcc6"/><stop offset=".38" stop-color="#777386"/><stop offset=".54" stop-color="#343c51"/><stop offset=".72" stop-color="#928695"/><stop offset=".86" stop-color="#384051"/><stop offset="1" stop-color="#787788"/>
+    </linearGradient>
+    <linearGradient id="cortexel-bevel" x1="35" y1="24" x2="144" y2="155" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#dfd7e0"/><stop offset=".4" stop-color="#9197a8"/><stop offset=".72" stop-color="#2d394c"/><stop offset="1" stop-color="#ae9eac"/>
+    </linearGradient>
+    <linearGradient id="cortexel-violet" x1="63" y1="51" x2="137" y2="132" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#eddaef"/><stop offset=".27" stop-color="#bf9bd1"/><stop offset=".5" stop-color="#746389"/><stop offset=".75" stop-color="#aa80b4"/><stop offset="1" stop-color="#544761"/>
+    </linearGradient>
+    <linearGradient id="cortexel-bracket-metal" x1="70" y1="50" x2="90" y2="132" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#d6dbe2"/><stop offset=".27" stop-color="#949eaf"/><stop offset=".54" stop-color="#4d5c73"/><stop offset=".75" stop-color="#9b9bad"/><stop offset="1" stop-color="#536076"/>
+    </linearGradient>
+    <linearGradient id="cortexel-voxel-top" x1="35" y1="82" x2="62" y2="97" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ddc2e9"/><stop offset=".48" stop-color="#ac8fbb"/><stop offset="1" stop-color="#766884"/>
+    </linearGradient>
+    <linearGradient id="cortexel-voxel-left" x1="36" y1="89" x2="49" y2="113" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9576a5"/><stop offset="1" stop-color="#514463"/>
+    </linearGradient>
+    <linearGradient id="cortexel-voxel-right" x1="60" y1="89" x2="48" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#634e7b"/><stop offset="1" stop-color="#2c2e49"/>
+    </linearGradient>
+    <radialGradient id="cortexel-neuron" cx="32%" cy="26%" r="70%">
+      <stop stop-color="#fff9ff"/><stop offset=".4" stop-color="#e6c6ed"/><stop offset="1" stop-color="#8a709e"/>
+    </radialGradient>
+    <filter id="cortexel-emission" x="-40%" y="-40%" width="180%" height="180%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation=".8"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <style>
+    .cortexel-input { opacity: 0; animation: cortexel-intake 8s ease-in-out infinite; }
+    .cortexel-check { opacity: 0; animation: cortexel-validation 8s ease-in-out infinite; }
+    .cortexel-trace { opacity: 0; stroke-dasharray: 100; stroke-dashoffset: 100; animation: cortexel-figure 8s ease-in-out infinite; }
+    @keyframes cortexel-intake { 0%, 8% { opacity: 0; transform: translateX(0); } 13% { opacity: .9; } 27% { opacity: .9; transform: translateX(17px); } 32%, 100% { opacity: 0; transform: translateX(17px); } }
+    @keyframes cortexel-validation { 0%, 27% { opacity: 0; transform: translateY(0); } 31% { opacity: .8; } 43% { opacity: .8; transform: translateY(52px); } 47%, 100% { opacity: 0; transform: translateY(52px); } }
+    @keyframes cortexel-figure { 0%, 47% { opacity: 0; stroke-dashoffset: 100; } 50% { opacity: .95; } 73%, 85% { opacity: .95; stroke-dashoffset: 0; } 96%, 100% { opacity: 0; stroke-dashoffset: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .cortexel-input, .cortexel-check, .cortexel-trace { animation: none; }
+    }
+  </style>
+  <g id="cortexel-housing" fill="none">
+    <circle cx="90" cy="90" r="69" fill="url(#cortexel-seat)" stroke="#080e16" stroke-width="7"/>
+    <circle cx="90" cy="90" r="69" stroke="url(#cortexel-rim)" stroke-width="5.3"/>
+    <circle cx="90" cy="90" r="72" stroke="url(#cortexel-bevel)" stroke-width=".8"/>
+    <circle cx="90" cy="90" r="64.5" stroke="#050b15" stroke-width="1.8"/>
+    <circle cx="90" cy="90" r="63.5" stroke="url(#cortexel-violet)" stroke-opacity=".4" stroke-width=".8"/>
   </g>
+  <g id="cortexel-population" stroke-linejoin="bevel">
+    <path d="M34 89 48 81 62 89V106L48 114 34 106Z" fill="#080d18" stroke="#070c15" stroke-width="4" transform="translate(0 2)"/>
+    <path d="M34 89 48 81 62 89 48 97Z" fill="url(#cortexel-voxel-top)" stroke="#cdb2db" stroke-width=".9"/>
+    <path d="M34 89 48 97V114L34 106Z" fill="url(#cortexel-voxel-left)" stroke="#9a83b0" stroke-width=".9"/>
+    <path d="M62 89 48 97V114L62 106Z" fill="url(#cortexel-voxel-right)" stroke="#8d74a7" stroke-width=".9"/>
+    <path d="M36 89 48 83 60 89 M48 99V111" fill="none" stroke="#efdaef" stroke-opacity=".5" stroke-width=".65"/>
+    <circle cx="48" cy="89" r="3.2" fill="url(#cortexel-neuron)"/>
+  </g>
+  <path d="M63 97H72" fill="none" stroke="#b4a3c7" stroke-width="1.3" stroke-dasharray="2 2.5"/>
+  <g id="cortexel-validation-bracket" stroke-linejoin="bevel">
+    <path d="M88 51H78L72 57V125L78 131H88V122H82V60H88Z" fill="#080f1b" stroke="#080e18" stroke-width="4" transform="translate(0 2)"/>
+    <path d="M88 51H78L72 57V125L78 131H88V122H82V60H88Z" fill="url(#cortexel-bracket-metal)" stroke="#93a0b3" stroke-width=".65"/>
+    <path d="M86 53H79L75 58V124L79 128H86" fill="none" stroke="#dbe0eb" stroke-opacity=".55" stroke-width=".8"/>
+    <path d="M79 62V120" stroke="#364358" stroke-width="1.1"/>
+  </g>
+  <g id="cortexel-figure-frame" stroke-linejoin="bevel">
+    <path d="M94 54H129L138 63V119L129 128H94V119H125L129 115V67L125 63H94Z" fill="#080d18" stroke="#080c17" stroke-width="4" transform="translate(0 2)"/>
+    <path d="M94 54H129L138 63V119L129 128H94V119H125L129 115V67L125 63H94Z" fill="url(#cortexel-violet)" stroke="#a38bab" stroke-width=".7"/>
+    <path d="M96 56H128L135 64V118L128 125H96" fill="none" stroke="#ead7e8" stroke-opacity=".5" stroke-width=".7"/>
+    <path d="M132 69V113" stroke="#3b354e" stroke-width="1.1"/>
+  </g>
+  <path id="cortexel-waveform" d="M91 99H97C100 99 100 98 101 94C102 88 102 71 105 70C108 70 108 91 111 100C113 107 115 113 118 109C120 105 121 100 126 99" fill="none" stroke="#cbbfd4" stroke-width="2.1" stroke-linecap="round"/>
+  <path d="M91 99H97C100 99 100 98 101 94C102 88 102 71 105 70C108 70 108 91 111 100C113 107 115 113 118 109C120 105 121 100 126 99" pathLength="100" fill="none" stroke="#fff0ff" stroke-width="2.1" stroke-linecap="round" filter="url(#cortexel-emission)" class="cortexel-trace"/>
+  <path d="M52 97 55 95 58 97 55 99Z" fill="#ecd6f1" class="cortexel-input"/>
+  <path d="M76 61V69" stroke="#ecdeef" stroke-width="1.6" stroke-linecap="round" filter="url(#cortexel-emission)" class="cortexel-check"/>
+</g>
+      <text x="100" y="608" text-anchor="middle" class="vox-label">CORTEXEL</text>
+    </g>
   <g>
     <defs>
       <radialGradient id="mwBarrel" gradientUnits="userSpaceOnUse" cx="250" cy="664" r="40">

@@ -51,6 +51,7 @@ const NCP_LOGO = vectorMark("ncp");
 const HALDIR_LOGO = vectorMark("haldir");
 const GALADRIEL_LOGO = vectorMark("galadriel");
 const MELKOR_LOGO = vectorMark("melkor");
+const CORTEXEL_LOGO = vectorMark("cortexel");
 
 
 const W = 860;
@@ -1330,61 +1331,10 @@ export function nodeMark(n) {
     </g>`;
   }
   if (n.kind === "artifact") {
-    // Cortexel, THE EVIDENCE FOLD. One population voxel with a neuron seed is
-    // still caller-owned on the left. The white bracket is the fail-closed
-    // authorship/validation boundary. On the right, a single open C-shaped
-    // artifact contains a deterministic neuronal action-potential figure. Its
-    // resting phase, rapid depolarization, overshoot, repolarization,
-    // afterhyperpolarization and recovery make the domain legible without axes.
-    // It is declared neural data -> boundary -> inspectable computational-
-    // neuroscience evidence, not a generic chart UI, brain icon, simulator claim,
-    // or scientific-certification seal.
-    const X = (x) => f1(n.x + x), Y = (y) => f1(n.y + y);
-    // The trace's steep right-hand recovery carries more visual weight than its
-    // resting lead-in. A small optical offset centers the waveform in the open C.
-    const AP_DX = -0.8;
-    const AX = (x) => X(x + AP_DX);
-    const CYC = "8.4s";
-    return `<g class="ctx-mark">
-    ${seat(n.x, n.y, "vox", ["#f5d0fe", "#e879f9", "#86198f"])}
-    <defs>
-      <radialGradient id="ctxWell" cx="42%" cy="36%" r="74%"><stop offset="0%" stop-color="#291132"/><stop offset="68%" stop-color="#110a1a"/><stop offset="100%" stop-color="#05070c"/></radialGradient>
-      <linearGradient id="ctxArtifactEdge" x1="0" y1="${Y(-18)}" x2="0" y2="${Y(18)}" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fdf4ff"/><stop offset="38%" stop-color="#e879f9"/><stop offset="100%" stop-color="#86198f"/></linearGradient>
-      <clipPath id="ctxActionPotentialClip"><rect x="${AX(3.5)}" y="${Y(-14)}" width="15.5" height="29">
-        <animate attributeName="width" values="15.5;15.5;0;0;15.5;15.5" keyTimes="0;0.02;0.05;0.43;0.61;1" dur="${CYC}" repeatCount="indefinite"/>
-      </rect></clipPath>
-    </defs>
-    <circle cx="${n.x}" cy="${n.y}" r="30.2" class="ctx-well"/>
-
-    <g class="ctx-min-voxel">
-      <polygon points="${X(-25)},${Y(-2)} ${X(-19)},${Y(-6)} ${X(-13)},${Y(-2)} ${X(-19)},${Y(2)}" class="ctx-min-voxel-top"/>
-      <polygon points="${X(-25)},${Y(-2)} ${X(-19)},${Y(2)} ${X(-19)},${Y(9)} ${X(-25)},${Y(5)}" class="ctx-min-voxel-left"/>
-      <polygon points="${X(-13)},${Y(-2)} ${X(-19)},${Y(2)} ${X(-19)},${Y(9)} ${X(-13)},${Y(5)}" class="ctx-min-voxel-right"/>
-      <circle cx="${X(-19)}" cy="${Y(-2)}" r="1.35" class="ctx-min-neuron"/>
-    </g>
-    <path d="M${X(-12)} ${Y(2)}H${X(-7)}" class="ctx-min-intake-lane"/>
-    <path d="M${X(-3)} ${Y(-18)}H${X(-7)}V${Y(18)}H${X(-3)}" class="ctx-min-boundary"/>
-
-    <path d="M${X(1)} ${Y(-16)}H${X(20)}V${Y(16)}H${X(1)}" class="ctx-min-artifact"/>
-    <path d="M${AX(4)} ${Y(7)}
-             C${AX(5.6)} ${Y(7)} ${AX(6.7)} ${Y(7)} ${AX(7.4)} ${Y(6.7)}
-             C${AX(8.1)} ${Y(6.2)} ${AX(8.55)} ${Y(-8.8)} ${AX(9.45)} ${Y(-11.5)}
-             C${AX(9.85)} ${Y(-12.7)} ${AX(10.35)} ${Y(-12.1)} ${AX(10.75)} ${Y(-9.4)}
-             C${AX(11.45)} ${Y(-4.2)} ${AX(11.75)} ${Y(4.4)} ${AX(12.9)} ${Y(9.4)}
-             C${AX(13.55)} ${Y(12.3)} ${AX(14.45)} ${Y(13.1)} ${AX(15.2)} ${Y(10.5)}
-             C${AX(16)} ${Y(7.9)} ${AX(17)} ${Y(7)} ${AX(18.5)} ${Y(7)}"
-          class="ctx-min-action-potential" clip-path="url(#ctxActionPotentialClip)"/>
-
-    <polygon points="${X(-22)},${Y(2)} ${X(-19)},${Y(0)} ${X(-16)},${Y(2)} ${X(-19)},${Y(4)}" class="ctx-min-token" opacity="0">
-      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;12 0;12 0;0 0" keyTimes="0;0.10;0.27;0.90;1" dur="${CYC}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.08;0.11;0.28;0.32;1" dur="${CYC}" repeatCount="indefinite"/>
-    </polygon>
-    <line x1="${X(-7)}" y1="${Y(-14)}" x2="${X(-7)}" y2="${Y(-8)}" class="ctx-min-scan" opacity="0">
-      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 22;0 22;0 0" keyTimes="0;0.28;0.43;0.90;1" dur="${CYC}" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.26;0.29;0.41;0.44;1" dur="${CYC}" repeatCount="indefinite"/>
-    </line>
-    <text x="${n.x}" y="${f1(n.y + 48)}" text-anchor="middle" class="vox-label">${escapeXML(n.label)}</text>
-  </g>`;
+    return `<g>
+      <g filter="url(#nodeShadow)" transform="translate(${f1(n.x - 46)} ${f1(n.y - 46)}) scale(${92 / 180})">${CORTEXEL_LOGO}</g>
+      <text x="${n.x}" y="${f1(n.y + 48)}" text-anchor="middle" class="vox-label">${escapeXML(n.label)}</text>
+    </g>`;
   }
   if (n.kind === "raven") {
     // The canonical vector includes its dark disc and gradient instrument rim.
@@ -1991,17 +1941,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .flag-g     { fill: #ffcc00; }
     .flag-edge  { fill: none; stroke: #ffffff; stroke-opacity: 0.16; stroke-width: 0.6; }
     .vox-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #f0abfc; }
-    .ctx-well              { fill: url(#ctxWell); stroke: #1f1227; stroke-width: 1.1; }
-    .ctx-min-voxel-top     { fill: #e879f9; stroke: #fdf4ff; stroke-width: 0.65; stroke-linejoin: round; }
-    .ctx-min-voxel-left    { fill: #a21caf; stroke: #f0abfc; stroke-width: 0.65; stroke-linejoin: round; }
-    .ctx-min-voxel-right   { fill: #701a75; stroke: #d946ef; stroke-width: 0.65; stroke-linejoin: round; }
-    .ctx-min-neuron        { fill: #ffffff; stroke: #e879f9; stroke-width: 0.45; }
-    .ctx-min-intake-lane   { fill: none; stroke: #c4b5fd; stroke-width: 0.8; stroke-opacity: 0.55; stroke-dasharray: 2 2.2; stroke-linecap: round; }
-    .ctx-min-boundary      { fill: none; stroke: #fdf4ff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-    .ctx-min-artifact      { fill: none; stroke: url(#ctxArtifactEdge); stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; }
-    .ctx-min-action-potential { fill: none; stroke: #ffffff; stroke-width: 1.45; stroke-linecap: round; stroke-linejoin: round; }
-    .ctx-min-token         { fill: #fdf4ff; stroke: #e879f9; stroke-width: 0.45; filter: url(#edgeGlow); }
-    .ctx-min-scan          { stroke: #ffffff; stroke-width: 1.2; stroke-linecap: round; filter: url(#edgeGlow); }
     .raven-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #a1b39a; }
     .raven-cursor { fill: #a1b39a; }
     .radar-label  { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #38bdf8; }

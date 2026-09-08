@@ -12,6 +12,7 @@ on:
       - "assets/haldir-mark.svg"
       - "assets/galadriel-mark.svg"
       - "assets/melkor-mark.svg"
+      - "assets/cortexel-mark.svg"
       - "assets/hero-*.svg"
       - "assets/agents-*.svg"
       - "assets/connect-*.svg"

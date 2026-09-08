@@ -19,7 +19,6 @@ const f1 = (v) => Number(v.toFixed(1));
 // glow/shadow bleed (the label is stripped, so no need to clip tightly).
 const SPEC = {
   pidrs:    { half: 50 },
-  cortexel: { half: 46, aria: "Cortexel logo: a neuron-seeded population voxel crosses a validation bracket into one deterministic neuronal action-potential figure artifact" },
   manwe:    { half: 44 },
   engram:   { half: 54 }, // medallion scaled to radius ~46 + bezel/shadow
   prisoma:  { half: 52, dy: -9 }, // apex-heavy triangle (hairline -55.8, base+shadow ~+38): recentre on the visual midpoint
@@ -48,7 +47,7 @@ function stripChrome(mark) {
 }
 
 export function logoSVG(key) {
-  if (["ncp", "haldir", "crebain", "galadriel", "melkor"].includes(key)) {
+  if (["ncp", "haldir", "crebain", "galadriel", "melkor", "cortexel"].includes(key)) {
     return readFileSync(resolve(__dirname, "..", "assets", `${key}-mark.svg`), "utf8");
   }
   const n = nodes[key];
