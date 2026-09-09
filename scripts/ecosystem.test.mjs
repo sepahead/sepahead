@@ -83,7 +83,7 @@ test("visible and plain-text profile surfaces preserve scope, abstention, and pr
   for (const file of ["README.md", "docs/index.html", "docs/llms.txt"]) {
     const source = readFileSync(new URL(`../${file}`, import.meta.url), "utf8")
       .replaceAll("&#39;", "'").replaceAll("&quot;", '"').replaceAll("&amp;", "&");
-    for (const field of ["status", "boundary", "availability", "monitor", "overview", "example", "assets", "environment"]) {
+    for (const field of ["status", "boundary", "availability", "monitor", "overview", "composition", "sensors", "example", "assets", "environment"]) {
       assert.ok(source.includes(LOCAL_NCP[field]), `${file} omits ${field}`);
     }
     if (file.endsWith(".txt")) continue;
