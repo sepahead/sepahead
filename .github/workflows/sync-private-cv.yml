@@ -85,7 +85,7 @@ jobs:
             texlive-latex-extra
           python -m pip install --requirement source/final_generic/requirements-verify.txt
 
-      - name: Refresh page-3 metrics, then guard against source drift
+      - name: Refresh page-3 metrics on scheduled runs
         working-directory: source/final_generic
         env:
           # fetch_github.py reads public metadata (`gh api users/sepahead/...`)
@@ -93,27 +93,21 @@ jobs:
           # sufficient and nothing crosses repository boundaries.
           GH_TOKEN: ${{ github.token }}
         run: |
-          # Keeps the bar/pie chart numbers current even when the private
-          # repository's own daily refresh cannot run. Exact-SHA dispatch
-          # runs fail closed if the refresh moves the snapshot: the
-          # deploy_web.sh proof chain labels these bytes with a specific
-          # private revision, so a drifted snapshot must be released from
-          # the private side first (`make sync`, inspect, commit, push).
-          # Scheduled runs exist precisely to refresh numbers, so there the
-          # refreshed snapshot flows through the same full verify gate and
-          # ships; its stamp and this run's log record the exact values.
-          make sync
-          if ! git diff --quiet -- github_data.tex; then
-            echo "github_data.tex changed during the metrics refresh." >&2
-            git diff --stat -- github_data.tex >&2
-            if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
-              echo "Exact-SHA dispatch runs must publish bytes belonging to" >&2
-              echo "that revision: run 'make sync' in private_CV, inspect and" >&2
-              echo "commit the snapshot, push, then re-dispatch." >&2
-              exit 1
-            fi
-            echo "Scheduled run: publishing refreshed chart numbers via the" >&2
+          # Scheduled runs exist to keep the bar/pie chart numbers current
+          # even when the private repository's own daily refresh cannot run:
+          # the refreshed (ephemeral, never committed here) snapshot flows
+          # through the same make test freshness gate and full verify gates.
+          # Exact-SHA dispatch runs must stay byte-reproducible from the
+          # requested private revision, so they build from the committed
+          # snapshot, whose age the freshness gate bounds (30h) fail closed.
+          if [ "${GITHUB_EVENT_NAME}" = "schedule" ]; then
+            make sync
+            echo "Scheduled run: refreshed chart numbers flow through the" >&2
             echo "standard verify gates (event: ${GITHUB_EVENT_NAME})." >&2
+            git diff --stat -- github_data.tex >&2 || true
+          else
+            echo "Event ${GITHUB_EVENT_NAME}: building from the committed" >&2
+            echo "snapshot; freshness is enforced by make test." >&2
           fi
 
       - name: Force-build and verify the phone-free editions
