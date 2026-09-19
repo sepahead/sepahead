@@ -36,7 +36,7 @@ test("environment relation is directional, qualified, and separate from runtime 
     assert.equal((svg.match(/data-edge-kind="environment"/g) || []).length, 1);
     assert.match(svg, /data-edge-kind="environment" data-from="crebain" data-to="prisoma"/);
     assert.match(svg, /Environment \+ sensors/);
-    assert.match(svg, /class="edge-status">under qualification/);
+    assert.match(svg, /class="edge-status">sensor path tested/);
     assert.match(svg, /\.edge-environment\s*\{[^}]*stroke-dasharray: 16 7/);
   }
 });
@@ -83,7 +83,7 @@ test("visible and plain-text profile surfaces preserve scope, abstention, and pr
   for (const file of ["README.md", "docs/index.html", "docs/llms.txt"]) {
     const source = readFileSync(new URL(`../${file}`, import.meta.url), "utf8")
       .replaceAll("&#39;", "'").replaceAll("&quot;", '"').replaceAll("&amp;", "&");
-    for (const field of ["status", "boundary", "availability", "monitor", "overview", "composition", "sensors", "example", "assets", "environment"]) {
+    for (const field of ["status", "boundary", "availability", "monitor", "overview", "composition", "target", "sensors", "example", "assets", "environment"]) {
       assert.ok(source.includes(LOCAL_NCP[field]), `${file} omits ${field}`);
     }
     if (file.endsWith(".txt")) continue;

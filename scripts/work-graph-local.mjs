@@ -61,7 +61,7 @@ export function localOwnershipSvg() {
     @media (prefers-reduced-motion: reduce) { animate { display: none; } }
   </style>
   <rect x=".5" y=".5" width="999" height="689" rx="18" class="panel"/>
-  ${text(28, 37, "LOCAL V1 CANDIDATE // FOUR OWNERS", "caption")}
+  ${text(28, 37, "LOCAL V1 REFERENCE // FOUR OWNERS", "caption")}
   ${text(972, 37, "PRIVATE PIPES // EXACT OUTCOMES", "caption", "end")}
   <rect x="24" y="64" width="952" height="98" rx="12" class="coordinator"/>
   ${text(46, 101, "Engram experiment coordinator", "heading")}
@@ -75,6 +75,6 @@ export function localOwnershipSvg() {
   ${text(46, 569, "One Visual modality: Galadriel's unchanged evidence floor requires abstention.")}
   ${text(46, 596, "Haldir gating is excluded. Gated requests are rejected before preparation.")}
   ${text(46, 623, "Darwin simulation only; no remote, physical-actuation, or real-time guarantee.")}
-  ${text(46, 649, "Candidate status: installed qualification and final release gates remain open.")}
+  ${text(46, 649, "Reference status: broader qualification and final release gates remain open.")}
   </svg>\n`;
 }

@@ -2095,7 +2095,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
   <text x="531" y="888" class="legend-label">Environment integration</text>
   <text x="40" y="932" class="edge-label">Connections show interfaces, not a required all-project deployment.</text>
   <text x="40" y="956" class="edge-label">Haldir stays on v0.8. Local v1 gated requests are rejected before preparation.</text>
-  <text x="40" y="980" class="edge-label">Local v1 candidate: installed qualification and final release gates remain open.</text>
+  <text x="40" y="980" class="edge-label">Selected paths have native evidence; broader qualification and final release gates remain open.</text>
   <g transform="translate(0 ${VSHIFT})">
     <g class="edges">
       ${calmEdges.join("\n    ")}

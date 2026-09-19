@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 690" width="1000" height="690" role="img" aria-labelledby="local-title local-desc">
-  <title id="local-title">NCP local simulation v1 candidate</title>
-  <desc id="local-desc">Engram coordinates one local experiment and privately owns neural state. CREBAIN owns body and fusion state. Prisoma captures exact step pairs. Galadriel records actual detector output with explicit abstention. Each owner exchanges bounded NCP requests and exact retained results through its own private process pipes. NCP is the shared contract, not another simulation engine. Galadriel&apos;s current detector requires evidence from two modalities. Two RGB cameras still supply one Visual modality. That monitor requirement is not an NCP or PID-rs source-count rule. An unavailable observation never becomes a zero residual or a nominal report. This candidate targets local Darwin simulation. Haldir gating, remote endpoints, physical actuation, and real-time guarantees are excluded. Gated requests must be rejected before endpoint preparation. Capture and monitor results grant no command authority. The tested Engram implementation is private Paper2Brain source. The public Engram repository is a placeholder, not an executable release. Installed-artifact qualification and final release gates remain open.</desc>
+  <title id="local-title">Four-owner local v1 reference</title>
+  <desc id="local-desc">Engram coordinates one local experiment and privately owns neural state. CREBAIN owns body and fusion state. Prisoma captures exact step pairs. Galadriel records actual detector output with explicit abstention. Each owner exchanges bounded NCP requests and exact retained results through its own private process pipes. NCP is the shared contract, not another simulation engine. Galadriel&apos;s current detector requires evidence from two modalities. Two RGB cameras still supply one Visual modality. That monitor requirement is not an NCP or PID-rs source-count rule. An unavailable observation never becomes a zero residual or a nominal report. This candidate targets local Darwin simulation. Haldir gating, remote endpoints, physical actuation, and real-time guarantees are excluded. Gated requests must be rejected before endpoint preparation. Capture and monitor results grant no command authority. The tested Engram implementation is private Paper2Brain source. The public Engram repository is a placeholder, not an executable release. Selected installed compositions have bounded native evidence. Broader qualification and final release gates remain open.</desc>
   <style>
     .panel { fill: #0d1117; stroke: #30363d; }
     .coordinator { fill: #172333; stroke: #536071; }
@@ -21,7 +21,7 @@
     @media (prefers-reduced-motion: reduce) { animate { display: none; } }
   </style>
   <rect x=".5" y=".5" width="999" height="689" rx="18" class="panel"/>
-  <text x="28" y="37" class="caption" text-anchor="start">LOCAL V1 CANDIDATE // FOUR OWNERS</text>
+  <text x="28" y="37" class="caption" text-anchor="start">LOCAL V1 REFERENCE // FOUR OWNERS</text>
   <text x="972" y="37" class="caption" text-anchor="end">PRIVATE PIPES // EXACT OUTCOMES</text>
   <rect x="24" y="64" width="952" height="98" rx="12" class="coordinator"/>
   <text x="46" y="101" class="heading" text-anchor="start">Engram experiment coordinator</text>
@@ -69,9 +69,9 @@
       <polygon points="869,174 881,174 875,163" class="result-head"/>
       <rect x="756" y="344" width="220" height="150" rx="12" class="owner"/>
       <text x="772" y="377" class="name" text-anchor="start">Galadriel</text>
-      <text x="772" y="403" class="role" text-anchor="start">Tampering monitor</text>
+      <text x="772" y="403" class="role" text-anchor="start">Optional monitor</text>
       <text x="772" y="433" class="body" text-anchor="start">Sensor consistency</text>
-<text x="772" y="456" class="body" text-anchor="start">Record-only output</text>
+<text x="772" y="456" class="body" text-anchor="start">Advisory output</text>
 <text x="772" y="479" class="body" text-anchor="start">Explicit insufficiency</text>
     </g>
   <rect x="24" y="219" width="952" height="73" rx="10" class="contract"/>
@@ -82,6 +82,6 @@
   <text x="46" y="569" class="body" text-anchor="start">One Visual modality: Galadriel&apos;s unchanged evidence floor requires abstention.</text>
   <text x="46" y="596" class="body" text-anchor="start">Haldir gating is excluded. Gated requests are rejected before preparation.</text>
   <text x="46" y="623" class="body" text-anchor="start">Darwin simulation only; no remote, physical-actuation, or real-time guarantee.</text>
-  <text x="46" y="649" class="body" text-anchor="start">Candidate status: installed qualification and final release gates remain open.</text>
+  <text x="46" y="649" class="body" text-anchor="start">Reference status: broader qualification and final release gates remain open.</text>
   <style>* { animation: none !important; transition: none !important; }</style>
 </svg>
