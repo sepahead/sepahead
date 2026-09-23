@@ -161,23 +161,23 @@ function renderEcosystem() {
   };
   return `<h3>How the work relates</h3>
 <p>${html(LOCAL_NCP.research)}</p>
-${figure("work-graph", 977, "NCP at the center connects Engram, CREBAIN, Prisoma, and Galadriel through local interfaces. Haldir has a separate pinned v0.8 interface. A long dashed open arrow joins the CREBAIN environment and sensors to Prisoma experiments. The sensor path is tested; the full forecasting and restored-label study remains open. Short dashed arrows show libraries; dotted lines show assets or exports; moving dashes on a continuous line show perception tools. Projects are separate components, not a required bundle.")}
+${figure("work-graph", 977, "NCP connects Engram, CREBAIN, Prisoma, and Galadriel through local interfaces. Haldir retains its pinned v0.8 interface. A long dashed open arrow joins CREBAIN sensors to Prisoma experiments. The native pressure study completed with a null or inconclusive forecast result. Short dashed arrows show libraries, dotted lines show assets or exports, and moving dashes show perception tools.")}
 <p><strong>Read the connections:</strong> solid paired arrows = local NCP interfaces; short dashed arrows = library dependencies; long dashed open arrow = environment and sensor integration, with the sensor path tested; dotted lines = assets or exports; moving dashes on a continuous line = perception tools; dash-dot line with a square end = Haldir's pinned NCP v0.8 interface.</p>
 <p><strong>Different jobs:</strong> ${html(LOCAL_NCP.overview)}</p>
-<p><strong>Choose the components:</strong> ${html(LOCAL_NCP.composition)}</p>
-<p><strong>Target workflow:</strong> ${html(LOCAL_NCP.target)}</p>
-<p><strong>Choose the observations:</strong> ${html(LOCAL_NCP.sensors)}</p>
+<p><strong>Tested neural loop:</strong> ${html(LOCAL_NCP.target)}</p>
 <p><strong>CREBAIN and Prisoma:</strong> ${html(LOCAL_NCP.environment)}</p>
-<p><strong>Scene ownership:</strong> ${html(LOCAL_NCP.assets)}</p>
-<p><strong>Four-owner reference:</strong> ${html(LOCAL_NCP.example)}</p>
 <p><strong>${html(LOCAL_NCP.title)}.</strong> ${html(LOCAL_NCP.status)}</p>
+<p>${html(LOCAL_NCP.availability)} <a href="${LOCAL_NCP.guide}">Read the NCP release status</a>.</p>
+<details>
+<summary>Components, sensors, and operating limits</summary>
+<p>${html(LOCAL_NCP.composition)}</p>
+<p>${html(LOCAL_NCP.sensors)}</p>
+<p>${html(LOCAL_NCP.assets)}</p>
+<p>${html(LOCAL_NCP.example)}</p>
 <p>${html(LOCAL_NCP.summary)}</p>
 <p>${html(LOCAL_NCP.transport)}</p>
 <p>${html(LOCAL_NCP.monitor)}</p>
 <p><strong>Supported boundary:</strong> ${html(LOCAL_NCP.boundary)}</p>
-<p>${html(LOCAL_NCP.availability)} <a href="${LOCAL_NCP.guide}">Read the NCP repository and release status</a>.</p>
-<details>
-<summary>One local v1 composition: four owners and their private channels</summary>
 ${figure("work-graph-local", 566, LOCAL_NCP.summary + " " + LOCAL_NCP.boundary)}
 </details>`;
 }
