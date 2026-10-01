@@ -33,28 +33,28 @@
   <style>
     .cap        { font: 400 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
     .boundary-note { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #9da7b3; }
-    .edge-runtime, .edge-library, .edge-environment, .edge-environment-head, .edge-research, .edge-contract, .edge-tool, .edge-tool-rail { fill: none; stroke-linecap: round; }
+    .edge-runtime, .edge-library, .edge-library-head, .edge-environment, .edge-dataset, .edge-contract, .edge-tool { fill: none; stroke-linecap: round; stroke-linejoin: round; }
     .edge-clearance { fill: none; stroke: #0d1117; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
     .edge-clearance-protocol { stroke-width: 12; }
     .edge-runtime { stroke: #fbbf24; stroke-width: 2.1; }
     .edge-runtime-head { fill: #fbbf24; }
     .edge-library { stroke: #6ee7b7; stroke-width: 2.1; stroke-dasharray: 8 5; }
-    .edge-library-head { fill: #6ee7b7; }
+    .edge-library-head { stroke: #6ee7b7; stroke-width: 2.1; }
     .edge-environment { stroke: #d1c0a2; stroke-width: 2.3; stroke-dasharray: 16 7; }
-    .edge-environment-head { stroke: #d1c0a2; stroke-width: 2.3; }
+    .edge-environment-head { fill: #d1c0a2; }
     .edge-status { font-size: 9.5px; fill: #9da7b3; }
-    .edge-research { stroke: #8291a6; stroke-width: 1.9; stroke-dasharray: 1 6; }
-    .edge-tool-rail { stroke: #38bdf8; stroke-width: 1; opacity: .5; }
-    .edge-tool { stroke: #7dd3fc; stroke-width: 2.8; stroke-dasharray: 7 13; animation: tool-flow 2.4s linear infinite; }
-    @keyframes tool-flow { to { stroke-dashoffset: -20; } }
+    .edge-dataset { stroke: #8291a6; stroke-width: 1.9; stroke-dasharray: 1 6; }
+    .edge-tool { stroke: #8291a6; stroke-width: 1.9; stroke-dasharray: 6 5; }
+    .edge-candidate-head { fill: #8291a6; }
     .edge-contract { stroke: #c4b5fd; stroke-width: 2; stroke-dasharray: 10 4 2 4; }
     .edge-contract-end { fill: #c4b5fd; }
-    .edge-label, .legend-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; letter-spacing: 0 !important; text-transform: none !important; }
+    .edge-label, .legend-label, .legend-key { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; letter-spacing: 0 !important; text-transform: none !important; }
+    .legend-key { font-size: 10.5px; fill: #9da7b3; }
     .edge-label { stroke-width: 5px !important; }
     .edge-label-environment { font-size: 10.5px; }
     .edge-label-protocol { fill: #fcd34d; }
     .edge-label-library { fill: #a7f3d0; }
-    .edge-label-tool { fill: #bae6fd; }
+    .edge-label-dataset, .edge-label-tool { fill: #9da7b3; font-size: 10.5px; }
     .edge-label-contract { fill: #ddd6fe; }
     .legend-label { font-size: 13px; }
     .scope-box { fill: none; stroke: #8291a6; stroke-width: 1; stroke-dasharray: 5 5; }
@@ -213,16 +213,14 @@
       text { stroke: #ffffff; }
       .cap { fill: #57606a; }
       .edge-runtime { stroke: #985700; } .edge-runtime-head { fill: #985700; }
-      .edge-library { stroke: #087859; } .edge-library-head { fill: #087859; }
-      .edge-research { stroke: #607086; }
-      .edge-environment, .edge-environment-head { stroke: #786044; }
+      .edge-library, .edge-library-head { stroke: #087859; }
+      .edge-dataset, .edge-tool { stroke: #607086; } .edge-candidate-head { fill: #607086; }
+      .edge-environment { stroke: #786044; } .edge-environment-head { fill: #786044; }
       .edge-status { fill: #607086; }
-      .edge-tool-rail { stroke: #0369a1; }
-      .edge-tool { stroke: #0369a1; }
-      .edge-label-tool { fill: #075985; }
+      .edge-label-dataset, .edge-label-tool { fill: #607086; }
       .edge-clearance { stroke: #f7f8f9; }
       .edge-contract { stroke: #7353a6; } .edge-contract-end { fill: #7353a6; }
-      .edge-label, .legend-label { fill: #435365; }
+      .edge-label, .legend-label { fill: #435365; } .legend-key { fill: #607086; }
       .edge-label-protocol { fill: #805000; }
       .edge-label-library { fill: #08664d; }
       .edge-label-contract { fill: #63428d; }
@@ -252,7 +250,6 @@
       .panel { fill: #0b1f2a; fill-opacity: 0.025; stroke: #0b1f2a; stroke-opacity: 0.08; }
     @media (prefers-reduced-motion: reduce) {
       animate, animateMotion, animateTransform { display: none; }
-      .edge-tool { animation: none; stroke-dashoffset: 0; }
     }
   </style>
 
@@ -261,42 +258,45 @@
   <text x="820" y="40" text-anchor="end" class="cap">INTERFACES&#160;//&#160;DEPENDENCIES</text>
   <line x1="40" y1="760" x2="820" y2="760" class="wg-rule"/>
   <text x="40" y="787" class="cap">CONNECTION TYPES</text>
+  <text x="820" y="787" text-anchor="end" class="legend-key">filled head = data or messages flow · open head = library in use · grey = candidate</text>
   <path d="M 42 809 H 105 M 42 816 H 105" class="edge-runtime"/>
   <polygon points="105,809 97,805 97,813 105,809" class="edge-runtime-head"/>
   <polygon points="42,816 50,812 50,820 42,816" class="edge-runtime-head"/>
   <text x="121" y="818" class="legend-label">Local NCP interface</text>
   <path d="M 450 812 H 511" class="edge-library"/>
-  <polygon points="515,812 507,808 507,816" class="edge-library-head"/>
-  <text x="531" y="818" class="legend-label">Library dependency</text>
-  <path d="M 42 847 H 105" class="edge-research"/>
-  <text x="121" y="853" class="legend-label">Assets / exports</text>
+  <path d="M 505 807.5 L 514 812 L 505 816.5" class="edge-library-head"/>
+  <text x="531" y="818" class="legend-label">Uses a library</text>
+  <path d="M 42 847 H 105" class="edge-environment"/>
+  <polygon points="113,847 104,842.5 104,851.5" class="edge-environment-head"/>
+  <text x="121" y="853" class="legend-label">Sensor data path</text>
   <path d="M 450 847 H 511" class="edge-contract"/>
   <rect x="508" y="843.5" width="7" height="7" class="edge-contract-end"/>
-  <text x="531" y="853" class="legend-label">Pinned NCP v0.8 interface</text>
-  <path d="M 42 882 H 105" class="edge-tool-rail"/>
-  <path d="M 42 882 H 105" class="edge-tool"/>
-  <text x="121" y="888" class="legend-label">Perception tools</text>
-  <path d="M 450 882 H 511" class="edge-environment"/>
-  <path d="M 504 878 L 513 882 L 504 886" class="edge-environment-head"/>
-  <text x="531" y="888" class="legend-label">Environment integration</text>
-  <text x="40" y="932" class="edge-label">Connections show interfaces, not a required all-project deployment.</text>
-  <text x="40" y="956" class="edge-label">Haldir stays on v0.8. Local v1 gated requests are rejected before preparation.</text>
-  <text x="40" y="980" class="edge-label">Selected paths have native evidence; broader qualification and final release gates remain open.</text>
+  <text x="531" y="853" class="legend-label">Haldir: NCP v0.8 interface</text>
+  <path d="M 42 882 H 105" class="edge-dataset"/>
+  <polygon points="113,882 104,877.5 104,886.5" class="edge-candidate-head"/>
+  <text x="121" y="888" class="legend-label">Candidate dataset</text>
+  <path d="M 450 882 H 511" class="edge-tool"/>
+  <polygon points="519,882 510,877.5 510,886.5" class="edge-candidate-head"/>
+  <text x="531" y="888" class="legend-label">Candidate tool</text>
+  <text x="40" y="926" class="edge-label">Connections show interfaces, not a required all-project deployment.</text>
+  <text x="40" y="948" class="edge-label">CREBAIN has no pid-rs dependency; its recordings reach pid-rs through Prisoma.</text>
+  <text x="40" y="970" class="edge-label">Haldir stays on NCP v0.8. Local v1 gated requests are rejected before preparation.</text>
+  <text x="40" y="992" class="edge-label">Selected paths have native evidence; broader qualification and final release gates remain open.</text>
   <g transform="translate(0 26)">
     <g class="edges">
-      <g data-edge-kind="contract" data-from="ncp" data-to="haldir"><title>ncp to haldir: Pinned Haldir interface. dash-dot line, square end.</title><path d="M 333 309.1 Q 255.9 221.1 178.9 133" class="edge-clearance"/><path d="M 333 309.1 Q 255.9 221.1 178.9 133" class="edge-contract"/><rect x="175.4" y="129.5" width="7" height="7" class="edge-contract-end"/></g>
-    <g data-edge-kind="library" data-from="galadriel" data-to="pidrs"><title>galadriel to pidrs: PID library dependency. dashed arrow.</title><path d="M 436.9 152.1 Q 478.1 123.2 526.3 108.8" class="edge-clearance"/><path d="M 436.9 152.1 Q 478.1 123.2 526.3 108.8" class="edge-library"/><polygon class="edge-library-head" points="526.3,108.8 517.6,107.7 519.7,114.4"/></g>
-    <g data-edge-kind="library" data-from="prisoma" data-to="pidrs"><title>prisoma to pidrs: PID and runlog dependency. dashed arrow.</title><path d="M 593.3 300.1 Q 589.9 215.3 570.7 132.6" class="edge-clearance"/><path d="M 593.3 300.1 Q 589.9 215.3 570.7 132.6" class="edge-library"/><polygon class="edge-library-head" points="570.7,132.6 569.1,141.2 576,139.6"/></g>
-    <g data-edge-kind="environment" data-from="crebain" data-to="prisoma"><title>crebain to prisoma: Environment + sensors. sensor path tested. long dashed line, open arrow.</title><path d="M 474.8 495.4 L 519.7 414.9 Q 528 400 542 390.2 L 556.1 380.5" class="edge-clearance"/><path d="M 474.8 495.4 L 519.7 414.9 Q 528 400 542 390.2 L 556.1 380.5" class="edge-environment"/><path class="edge-environment-head" d="M 546.4 382.3 L 556.1 380.5 L 551 388.9"/></g>
-    <g data-edge-kind="research" data-from="crebain" data-to="cobotatlas"><title>crebain to cobotatlas: Simulation assets. dotted line, no arrow.</title><path d="M 501 538.7 L 671 534.5 Q 693 534 693 512 L 693 296 Q 693 274 706.7 256.8 L 730.7 226.7" class="edge-clearance"/><path d="M 501 538.7 L 671 534.5 Q 693 534 693 512 L 693 296 Q 693 274 706.7 256.8 L 730.7 226.7" class="edge-research"/></g>
-    <g data-edge-kind="research" data-from="crebain" data-to="melkor"><title>crebain to melkor: Simulation scenarios. dotted line, no arrow.</title><path d="M 496.5 519 Q 608.1 481.8 709.9 422.6" class="edge-clearance"/><path d="M 496.5 519 Q 608.1 481.8 709.9 422.6" class="edge-research"/></g>
-    <g data-edge-kind="research" data-from="crebain" data-to="reliefatlas"><title>crebain to reliefatlas: Simulation assets. dotted line, no arrow.</title><path d="M 500.1 549.7 Q 605.1 578.2 713.1 590.9" class="edge-clearance"/><path d="M 500.1 549.7 Q 605.1 578.2 713.1 590.9" class="edge-research"/></g>
-    <g data-edge-kind="research" data-from="cortexel" data-to="engram"><title>cortexel to engram: Figure export. dotted line, no arrow.</title><path d="M 105.9 519.4 Q 140.4 449.4 127.4 372.4" class="edge-clearance"/><path d="M 105.9 519.4 Q 140.4 449.4 127.4 372.4" class="edge-research"/></g>
-    <g data-edge-kind="tool" data-from="manwe" data-to="crebain"><title>manwe to crebain: Perception tools. moving dashes on a continuous line.</title><path d="M 284.4 647.7 Q 350.2 614.4 407.2 567.8" class="edge-clearance"/><path d="M 284.4 647.7 Q 350.2 614.4 407.2 567.8" class="edge-tool-rail"/><path d="M 284.4 647.7 Q 350.2 614.4 407.2 567.8" class="edge-tool"/></g>
-      <g data-edge-kind="protocol" data-from="ncp" data-to="engram"><title>ncp to engram: Neural. solid paired arrows.</title><path d="M 319 336.4 Q 253.4 330.5 187.8 324.7" class="edge-clearance edge-clearance-protocol"/><path d="M 319.3 333.2 Q 253.7 327.3 188.1 321.5" class="edge-runtime"/><path d="M 318.7 339.5 Q 253.1 333.7 187.5 327.9" class="edge-runtime"/><polygon class="edge-runtime-head" points="188.1,321.5 195.5,326.1 196.5,319.1"/><polygon class="edge-runtime-head" points="318.7,339.5 311.3,335 310.3,341.9"/></g>
-    <g data-edge-kind="protocol" data-from="ncp" data-to="galadriel"><title>ncp to galadriel: Monitor. solid paired arrows.</title><path d="M 369.6 299.2 Q 380.1 254.5 390.6 209.9" class="edge-clearance edge-clearance-protocol"/><path d="M 372.7 299.9 Q 383.2 255.3 393.7 210.6" class="edge-runtime"/><path d="M 366.5 298.5 Q 377 253.8 387.5 209.2" class="edge-runtime"/><polygon class="edge-runtime-head" points="393.7,210.6 388,217.2 394.7,219.3"/><polygon class="edge-runtime-head" points="366.5,298.5 372.2,291.8 365.5,289.8"/></g>
-    <g data-edge-kind="protocol" data-from="ncp" data-to="prisoma"><title>ncp to prisoma: Capture. solid paired arrows.</title><path d="M 401 341.7 Q 482.1 345.1 563.1 348.5" class="edge-clearance edge-clearance-protocol"/><path d="M 400.9 344.9 Q 481.9 348.3 563 351.7" class="edge-runtime"/><path d="M 401.1 338.5 Q 482.2 341.9 563.3 345.3" class="edge-runtime"/><polygon class="edge-runtime-head" points="563,351.7 555.3,347.5 554.7,354.5"/><polygon class="edge-runtime-head" points="401.1,338.5 408.8,342.6 409.4,335.7"/></g>
-    <g data-edge-kind="protocol" data-from="ncp" data-to="crebain"><title>ncp to crebain: Body. solid paired arrows.</title><path d="M 377.8 379.5 Q 403.4 436.5 429.1 493.5" class="edge-clearance edge-clearance-protocol"/><path d="M 374.9 380.8 Q 400.5 437.8 426.2 494.8" class="edge-runtime"/><path d="M 380.7 378.2 Q 406.3 435.2 432 492.2" class="edge-runtime"/><polygon class="edge-runtime-head" points="426.2,494.8 426.5,486.1 420,488.6"/><polygon class="edge-runtime-head" points="380.7,378.2 380.3,386.9 386.9,384.4"/></g>
+      <g data-edge-kind="contract" data-from="ncp" data-to="haldir"><title>ncp to haldir: Haldir NCP v0.8. dash-dot line with a square end, outside the local v1 profile.</title><path d="M 333 309.1 Q 255.9 221.1 178.9 133" class="edge-clearance"/><path d="M 333 309.1 Q 255.9 221.1 178.9 133" class="edge-contract"/><rect x="175.4" y="129.5" width="7" height="7" class="edge-contract-end"/></g>
+    <g data-edge-kind="library" data-from="galadriel" data-to="pidrs"><title>galadriel to pidrs: PID library. dashed line with an open arrowhead at the library.</title><path d="M 436.9 152.1 Q 478.1 123.2 526.3 108.8" class="edge-clearance"/><path d="M 436.9 152.1 Q 478.1 123.2 526.3 108.8" class="edge-library"/><path class="edge-library-head" d="M 516.5 107.5 L 526.3 108.8 L 518.8 115.2"/></g>
+    <g data-edge-kind="library" data-from="prisoma" data-to="pidrs"><title>prisoma to pidrs: PID library. dashed line with an open arrowhead at the library.</title><path d="M 593.3 300.1 Q 589.9 215.3 570.7 132.6" class="edge-clearance"/><path d="M 593.3 300.1 Q 589.9 215.3 570.7 132.6" class="edge-library"/><path class="edge-library-head" d="M 568.9 142.3 L 570.7 132.6 L 576.7 140.5"/></g>
+    <g data-edge-kind="library" data-from="engram" data-to="cortexel"><title>engram to cortexel: Figure contracts. dashed line with an open arrowhead at the library.</title><path d="M 127.4 372.4 Q 140.4 449.4 105.9 519.4" class="edge-clearance"/><path d="M 127.4 372.4 Q 140.4 449.4 105.9 519.4" class="edge-library"/><path class="edge-library-head" d="M 113.5 513.1 L 105.9 519.4 L 106.3 509.6"/></g>
+    <g data-edge-kind="environment" data-from="crebain" data-to="prisoma"><title>crebain to prisoma: Sensor data. sensor path tested. long dashed line with a filled arrowhead toward the recorder.</title><path d="M 474.8 495.4 L 519.7 414.9 Q 528 400 542 390.2 L 556.1 380.5" class="edge-clearance"/><path d="M 474.8 495.4 L 519.7 414.9 Q 528 400 542 390.2 L 556.1 380.5" class="edge-environment"/><polygon class="edge-environment-head" points="556.1,380.5 547.5,382.2 551.5,387.9"/></g>
+    <g data-edge-kind="dataset" data-from="cobotatlas" data-to="crebain"><title>cobotatlas to crebain: Candidate meshes. grey dotted line with a filled arrowhead toward the consumer, no importer yet.</title><path d="M 718.8 392.6 Q 606.8 454 494.7 515.5" class="edge-clearance"/><path d="M 718.8 392.6 Q 606.8 454 494.7 515.5" class="edge-dataset"/><polygon class="edge-candidate-head" points="494.7,515.5 503.4,514.7 500,508.6"/></g>
+    <g data-edge-kind="dataset" data-from="reliefatlas" data-to="crebain"><title>reliefatlas to crebain: Candidate meshes. grey dotted line with a filled arrowhead toward the consumer, no importer yet.</title><path d="M 713.3 624.9 Q 605.9 590.3 498.5 555.7" class="edge-clearance"/><path d="M 713.3 624.9 Q 605.9 590.3 498.5 555.7" class="edge-dataset"/><polygon class="edge-candidate-head" points="498.5,555.7 505.1,561.4 507.2,554.8"/></g>
+    <g data-edge-kind="tool" data-from="melkor" data-to="crebain"><title>melkor to crebain: Candidate splat conversion. grey dashed line with a filled arrowhead toward the consumer, no adapter yet.</title><path d="M 705.3 511.2 Q 603 522.7 500.7 534.3" class="edge-clearance"/><path d="M 705.3 511.2 Q 603 522.7 500.7 534.3" class="edge-tool"/><polygon class="edge-candidate-head" points="500.7,534.3 509,536.9 508.2,529.9"/></g>
+    <g data-edge-kind="tool" data-from="manwe" data-to="crebain"><title>manwe to crebain: Candidate perception. grey dashed line with a filled arrowhead toward the consumer, no adapter yet.</title><path d="M 284.4 647.7 Q 341.4 601 407.2 567.8" class="edge-clearance"/><path d="M 284.4 647.7 Q 341.4 601 407.2 567.8" class="edge-tool"/><polygon class="edge-candidate-head" points="407.2,567.8 398.5,568.3 401.7,574.5"/></g>
+      <g data-edge-kind="protocol" data-from="ncp" data-to="engram"><title>ncp to engram: Neural. solid paired arrows for requests and results on each owner&apos;s own process channel.</title><path d="M 319 336.4 Q 253.4 330.5 187.8 324.7" class="edge-clearance edge-clearance-protocol"/><path d="M 319.3 333.2 Q 253.7 327.3 188.1 321.5" class="edge-runtime"/><path d="M 318.7 339.5 Q 253.1 333.7 187.5 327.9" class="edge-runtime"/><polygon class="edge-runtime-head" points="188.1,321.5 195.5,326.1 196.5,319.1"/><polygon class="edge-runtime-head" points="318.7,339.5 311.3,335 310.3,341.9"/></g>
+    <g data-edge-kind="protocol" data-from="ncp" data-to="galadriel"><title>ncp to galadriel: Monitor. solid paired arrows for requests and results on each owner&apos;s own process channel.</title><path d="M 369.6 299.2 Q 380.1 254.5 390.6 209.9" class="edge-clearance edge-clearance-protocol"/><path d="M 372.7 299.9 Q 383.2 255.3 393.7 210.6" class="edge-runtime"/><path d="M 366.5 298.5 Q 377 253.8 387.5 209.2" class="edge-runtime"/><polygon class="edge-runtime-head" points="393.7,210.6 388,217.2 394.7,219.3"/><polygon class="edge-runtime-head" points="366.5,298.5 372.2,291.8 365.5,289.8"/></g>
+    <g data-edge-kind="protocol" data-from="ncp" data-to="prisoma"><title>ncp to prisoma: Capture. solid paired arrows for requests and results on each owner&apos;s own process channel.</title><path d="M 401 341.7 Q 482.1 345.1 563.1 348.5" class="edge-clearance edge-clearance-protocol"/><path d="M 400.9 344.9 Q 481.9 348.3 563 351.7" class="edge-runtime"/><path d="M 401.1 338.5 Q 482.2 341.9 563.3 345.3" class="edge-runtime"/><polygon class="edge-runtime-head" points="563,351.7 555.3,347.5 554.7,354.5"/><polygon class="edge-runtime-head" points="401.1,338.5 408.8,342.6 409.4,335.7"/></g>
+    <g data-edge-kind="protocol" data-from="ncp" data-to="crebain"><title>ncp to crebain: Body. solid paired arrows for requests and results on each owner&apos;s own process channel.</title><path d="M 377.8 379.5 Q 403.4 436.5 429.1 493.5" class="edge-clearance edge-clearance-protocol"/><path d="M 374.9 380.8 Q 400.5 437.8 426.2 494.8" class="edge-runtime"/><path d="M 380.7 378.2 Q 406.3 435.2 432 492.2" class="edge-runtime"/><polygon class="edge-runtime-head" points="426.2,494.8 426.5,486.1 420,488.6"/><polygon class="edge-runtime-head" points="380.7,378.2 380.3,386.9 386.9,384.4"/></g>
     </g>
 
     <g class="nodes">
@@ -1053,102 +1053,102 @@
   </g>
   <g>
     <defs>
-      <linearGradient id="cbaPlate" x1="0" y1="150" x2="0" y2="230" gradientUnits="userSpaceOnUse">
+      <linearGradient id="cbaPlate" x1="0" y1="330" x2="0" y2="410" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#173c66"/><stop offset="48%" stop-color="#0b2038"/><stop offset="100%" stop-color="#06111f"/>
       </linearGradient>
-      <linearGradient id="cbaBezel" x1="720" y1="150" x2="800" y2="230" gradientUnits="userSpaceOnUse">
+      <linearGradient id="cbaBezel" x1="720" y1="330" x2="800" y2="410" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#d7fbff"/><stop offset="24%" stop-color="#7dd3fc"/><stop offset="58%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1e3a8a"/>
       </linearGradient>
-      <linearGradient id="cbaArmA" x1="739" y1="180" x2="763" y2="209" gradientUnits="userSpaceOnUse">
+      <linearGradient id="cbaArmA" x1="739" y1="360" x2="763" y2="389" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#d7fbff"/><stop offset="22%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#173c66"/>
       </linearGradient>
-      <linearGradient id="cbaArmB" x1="758" y1="179" x2="784" y2="192" gradientUnits="userSpaceOnUse">
+      <linearGradient id="cbaArmB" x1="758" y1="359" x2="784" y2="372" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#9cecf4"/><stop offset="45%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#142f55"/>
       </linearGradient>
       <radialGradient id="cbaServo" cx="36%" cy="28%" r="76%"><stop offset="0%" stop-color="#2a5f93"/><stop offset="65%" stop-color="#0b2038"/><stop offset="100%" stop-color="#040b13"/></radialGradient>
-      <clipPath id="cbaClip"><path d="M760 151.2 L787.4 162.6 L798.8 190 L787.4 217.4 L760 228.8 L732.6 217.4 L721.2 190 L732.6 162.6 Z"/></clipPath>
+      <clipPath id="cbaClip"><path d="M760 331.2 L787.4 342.6 L798.8 370 L787.4 397.4 L760 408.8 L732.6 397.4 L721.2 370 L732.6 342.6 Z"/></clipPath>
     </defs>
-    <path class="cba-glow" d="M760 149 L789 161 L801 190 L789 219 L760 231 L731 219 L719 190 L731 161 Z"/>
-    <g filter="url(#nodeShadow)"><path d="M760 150 L788.3 161.7 L800 190 L788.3 218.3 L760 230 L731.7 218.3 L720 190 L731.7 161.7 Z" class="cba-plate"/></g>
-    <path d="M760 150 L788.3 161.7 L800 190 L788.3 218.3 L760 230 L731.7 218.3 L720 190 L731.7 161.7 Z" class="cba-bezel"/>
-    <path d="M760 153.1 L786.1 163.9 L796.9 190 L786.1 216.1 L760 226.9 L733.9 216.1 L723.1 190 L733.9 163.9 Z" class="cba-groove"/>
-    <path d="M760 148.6 L789.3 160.7 L801.4 190 L789.3 219.3 L760 231.4 L730.7 219.3 L718.6 190 L730.7 160.7 Z" class="cba-hairline"/>
+    <path class="cba-glow" d="M760 329 L789 341 L801 370 L789 399 L760 411 L731 399 L719 370 L731 341 Z"/>
+    <g filter="url(#nodeShadow)"><path d="M760 330 L788.3 341.7 L800 370 L788.3 398.3 L760 410 L731.7 398.3 L720 370 L731.7 341.7 Z" class="cba-plate"/></g>
+    <path d="M760 330 L788.3 341.7 L800 370 L788.3 398.3 L760 410 L731.7 398.3 L720 370 L731.7 341.7 Z" class="cba-bezel"/>
+    <path d="M760 333.1 L786.1 343.9 L796.9 370 L786.1 396.1 L760 406.9 L733.9 396.1 L723.1 370 L733.9 343.9 Z" class="cba-groove"/>
+    <path d="M760 328.6 L789.3 340.7 L801.4 370 L789.3 399.3 L760 411.4 L730.7 399.3 L718.6 370 L730.7 340.7 Z" class="cba-hairline"/>
     <g clip-path="url(#cbaClip)">
-      <path class="cba-grid" d="M729 175H791M729 190H791M729 205H791M745 159V221M760 159V221M775 159V221"/>
-      <path class="cba-envelope" d="M732 200 A34 34 0 0 1 786 170" stroke-dasharray="5 4"/>
-      <path class="cba-envelope cba-envelope-soft" d="M735 213 A31 31 0 0 1 791 198"/>
+      <path class="cba-grid" d="M729 355H791M729 370H791M729 385H791M745 339V401M760 339V401M775 339V401"/>
+      <path class="cba-envelope" d="M732 380 A34 34 0 0 1 786 350" stroke-dasharray="5 4"/>
+      <path class="cba-envelope cba-envelope-soft" d="M735 393 A31 31 0 0 1 791 378"/>
     </g>
-    <line class="cba-tick" x1="760" y1="156.8" x2="760" y2="151.8"/><line class="cba-tick" x1="773.5" y1="157.4" x2="774.6" y2="154.7"/><line class="cba-tick" x1="785" y1="165" x2="787" y2="163"/><line class="cba-tick" x1="792.6" y1="176.5" x2="795.3" y2="175.4"/><line class="cba-tick" x1="793.2" y1="190" x2="798.2" y2="190"/><line class="cba-tick" x1="792.6" y1="203.5" x2="795.3" y2="204.6"/><line class="cba-tick" x1="785" y1="215" x2="787" y2="217"/><line class="cba-tick" x1="773.5" y1="222.6" x2="774.6" y2="225.3"/><line class="cba-tick" x1="760" y1="223.2" x2="760" y2="228.2"/><line class="cba-tick" x1="746.5" y1="222.6" x2="745.4" y2="225.3"/><line class="cba-tick" x1="735" y1="215" x2="733" y2="217"/><line class="cba-tick" x1="727.4" y1="203.5" x2="724.7" y2="204.6"/><line class="cba-tick" x1="726.8" y1="190" x2="721.8" y2="190"/><line class="cba-tick" x1="727.4" y1="176.5" x2="724.7" y2="175.4"/><line class="cba-tick" x1="735" y1="165" x2="733" y2="163"/><line class="cba-tick" x1="746.5" y1="157.4" x2="745.4" y2="154.7"/>
-    <path class="cba-base" d="M732,220H752L749 210H735Z"/>
-    <path class="cba-desk-top" d="M754,200H772L770 203H757Z"/>
-    <path class="cba-desk-apron" d="M757,203H770.5V205H757Z"/>
-    <path class="cba-desk-leg" d="M758.5,205H761V215H758.5ZM768,205H770.5V215H768Z M758,213H771V215H758Z"/>
-    <path class="cba-source-pad" d="M776,220H788L786 223H778Z"/>
-    <circle class="cba-contact" cx="766" cy="194" r="10" opacity="0">
+    <line class="cba-tick" x1="760" y1="336.8" x2="760" y2="331.8"/><line class="cba-tick" x1="773.5" y1="337.4" x2="774.6" y2="334.7"/><line class="cba-tick" x1="785" y1="345" x2="787" y2="343"/><line class="cba-tick" x1="792.6" y1="356.5" x2="795.3" y2="355.4"/><line class="cba-tick" x1="793.2" y1="370" x2="798.2" y2="370"/><line class="cba-tick" x1="792.6" y1="383.5" x2="795.3" y2="384.6"/><line class="cba-tick" x1="785" y1="395" x2="787" y2="397"/><line class="cba-tick" x1="773.5" y1="402.6" x2="774.6" y2="405.3"/><line class="cba-tick" x1="760" y1="403.2" x2="760" y2="408.2"/><line class="cba-tick" x1="746.5" y1="402.6" x2="745.4" y2="405.3"/><line class="cba-tick" x1="735" y1="395" x2="733" y2="397"/><line class="cba-tick" x1="727.4" y1="383.5" x2="724.7" y2="384.6"/><line class="cba-tick" x1="726.8" y1="370" x2="721.8" y2="370"/><line class="cba-tick" x1="727.4" y1="356.5" x2="724.7" y2="355.4"/><line class="cba-tick" x1="735" y1="345" x2="733" y2="343"/><line class="cba-tick" x1="746.5" y1="337.4" x2="745.4" y2="334.7"/>
+    <path class="cba-base" d="M732,400H752L749 390H735Z"/>
+    <path class="cba-desk-top" d="M754,380H772L770 383H757Z"/>
+    <path class="cba-desk-apron" d="M757,383H770.5V385H757Z"/>
+    <path class="cba-desk-leg" d="M758.5,385H761V395H758.5ZM768,385H770.5V395H768Z M758,393H771V395H758Z"/>
+    <path class="cba-source-pad" d="M776,400H788L786 403H778Z"/>
+    <circle class="cba-contact" cx="766" cy="374" r="10" opacity="0">
 
     </circle>
-    <circle class="cba-contact" cx="782" cy="214" r="10" opacity="0">
+    <circle class="cba-contact" cx="782" cy="394" r="10" opacity="0">
 
     </circle>
     <g class="cba-specimen cba-specimen-source" opacity="1">
 
-      <polygon class="cba-voxel-top" points="782,208 787,211 782,214 777,211"/>
-      <polygon class="cba-voxel-left" points="777,211 782,214 782,220 777,217"/>
-      <polygon class="cba-voxel-right" points="782,214 787,211 787,217 782,220"/>
-      <path class="cba-voxel-mesh" d="M779.5,209.5L784.5,212.5M779.5,212.5L784.5,209.5M782,214V220"/>
+      <polygon class="cba-voxel-top" points="782,388 787,391 782,394 777,391"/>
+      <polygon class="cba-voxel-left" points="777,391 782,394 782,400 777,397"/>
+      <polygon class="cba-voxel-right" points="782,394 787,391 787,397 782,400"/>
+      <path class="cba-voxel-mesh" d="M779.5,389.5L784.5,392.5M779.5,392.5L784.5,389.5M782,394V400"/>
     </g>
     <g class="cba-specimen cba-specimen-desk" opacity="0" transform="translate(-16 -20)">
 
-      <polygon class="cba-voxel-top" points="782,208 787,211 782,214 777,211"/>
-      <polygon class="cba-voxel-left" points="777,211 782,214 782,220 777,217"/>
-      <polygon class="cba-voxel-right" points="782,214 787,211 787,217 782,220"/>
-      <path class="cba-voxel-mesh" d="M779.5,209.5L784.5,212.5M779.5,212.5L784.5,209.5M782,214V220"/>
+      <polygon class="cba-voxel-top" points="782,388 787,391 782,394 777,391"/>
+      <polygon class="cba-voxel-left" points="777,391 782,394 782,400 777,397"/>
+      <polygon class="cba-voxel-right" points="782,394 787,391 787,397 782,400"/>
+      <path class="cba-voxel-mesh" d="M779.5,389.5L784.5,392.5M779.5,392.5L784.5,389.5M782,394V400"/>
     </g>
     <g class="cba-arm">
-      <g class="cba-joint cba-shoulder" transform="rotate(-2.05 742 205)">
+      <g class="cba-joint cba-shoulder" transform="rotate(-2.05 742 385)">
 
-        <polygon class="cba-link-a" points="744.9,207.1 761.9,184.1 756.1,179.9 739.1,202.9"/>
-        <path class="cba-link-rail" d="M742,205L759,182"/>
-        <circle class="cba-servo" cx="742" cy="205" r="7.4"/>
-        <circle class="cba-encoder" cx="742" cy="205" r="5.2"/>
-        <circle class="cba-servo-hot" cx="742" cy="205" r="2"/>
-        <g class="cba-joint cba-elbow" transform="rotate(-12.34 759 182)">
+        <polygon class="cba-link-a" points="744.9,387.1 761.9,364.1 756.1,359.9 739.1,382.9"/>
+        <path class="cba-link-rail" d="M742,385L759,362"/>
+        <circle class="cba-servo" cx="742" cy="385" r="7.4"/>
+        <circle class="cba-encoder" cx="742" cy="385" r="5.2"/>
+        <circle class="cba-servo-hot" cx="742" cy="385" r="2"/>
+        <g class="cba-joint cba-elbow" transform="rotate(-12.34 759 362)">
 
-          <polygon class="cba-link-b" points="758.1,185.1 779.1,191.1 780.9,184.9 759.9,178.9"/>
-          <path class="cba-link-rail" d="M759,182L780,188"/>
-          <circle class="cba-servo cba-servo-small" cx="759" cy="182" r="6.2"/>
-          <circle class="cba-encoder" cx="759" cy="182" r="4.1"/>
-          <circle class="cba-servo-hot" cx="759" cy="182" r="1.65"/>
-          <g class="cba-joint cba-wrist-joint" transform="rotate(14.39 780 188)">
+          <polygon class="cba-link-b" points="758.1,365.1 779.1,371.1 780.9,364.9 759.9,358.9"/>
+          <path class="cba-link-rail" d="M759,362L780,368"/>
+          <circle class="cba-servo cba-servo-small" cx="759" cy="362" r="6.2"/>
+          <circle class="cba-encoder" cx="759" cy="362" r="4.1"/>
+          <circle class="cba-servo-hot" cx="759" cy="362" r="1.65"/>
+          <g class="cba-joint cba-wrist-joint" transform="rotate(14.39 780 368)">
 
-            <path class="cba-tool" d="M780,188L782,201"/>
-            <circle class="cba-servo cba-wrist" cx="780" cy="188" r="4.7"/>
-            <circle class="cba-servo-hot" cx="780" cy="188" r="1.4"/>
+            <path class="cba-tool" d="M780,368L782,381"/>
+            <circle class="cba-servo cba-wrist" cx="780" cy="368" r="4.7"/>
+            <circle class="cba-servo-hot" cx="780" cy="368" r="1.4"/>
             <g class="cba-specimen cba-specimen-carried" opacity="0">
 
-      <polygon class="cba-voxel-top" points="782,208 787,211 782,214 777,211"/>
-      <polygon class="cba-voxel-left" points="777,211 782,214 782,220 777,217"/>
-      <polygon class="cba-voxel-right" points="782,214 787,211 787,217 782,220"/>
-      <path class="cba-voxel-mesh" d="M779.5,209.5L784.5,212.5M779.5,212.5L784.5,209.5M782,214V220"/>
+      <polygon class="cba-voxel-top" points="782,388 787,391 782,394 777,391"/>
+      <polygon class="cba-voxel-left" points="777,391 782,394 782,400 777,397"/>
+      <polygon class="cba-voxel-right" points="782,394 787,391 787,397 782,400"/>
+      <path class="cba-voxel-mesh" d="M779.5,389.5L784.5,392.5M779.5,392.5L784.5,389.5M782,394V400"/>
     </g>
-            <path class="cba-palm" d="M777.5 200.5H786.5"/>
+            <path class="cba-palm" d="M777.5 380.5H786.5"/>
             <g class="cba-finger" transform="translate(-2 0)">
 
-              <path d="M779,200L776.5,208L779,210"/>
+              <path d="M779,380L776.5,388L779,390"/>
             </g>
             <g class="cba-finger" transform="translate(2 0)">
 
-              <path d="M785,200L787.5,208L785,210"/>
+              <path d="M785,380L787.5,388L785,390"/>
             </g>
           </g>
         </g>
       </g>
     </g>
-    <g class="atlas-dataset-badge" aria-hidden="true"><circle class="atlas-dataset-disc" cx="714" cy="153" r="8.4" stroke="#60a5fa"/><circle class="atlas-dataset-ring" cx="714" cy="153" r="6.7"/><polygon points="714,147 719,149.6 714,152.2 709,149.6" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/><polygon points="714,150.4 719,153 714,155.6 709,153" fill="#60a5fa" fill-opacity="0.24" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/><polygon points="714,153.8 719,156.4 714,159 709,156.4" fill="#60a5fa" fill-opacity="0.34" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/></g>
-    <text x="760" y="138" text-anchor="middle" class="cba-label">COBOT-ATLAS</text>
+    <g class="atlas-dataset-badge" aria-hidden="true"><circle class="atlas-dataset-disc" cx="714" cy="333" r="8.4" stroke="#60a5fa"/><circle class="atlas-dataset-ring" cx="714" cy="333" r="6.7"/><polygon points="714,327 719,329.6 714,332.2 709,329.6" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/><polygon points="714,330.4 719,333 714,335.6 709,333" fill="#60a5fa" fill-opacity="0.24" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/><polygon points="714,333.8 719,336.4 714,339 709,336.4" fill="#60a5fa" fill-opacity="0.34" stroke="#60a5fa" stroke-width="1.1" stroke-linejoin="round"/></g>
+    <text x="760" y="318" text-anchor="middle" class="cba-label">COBOT-ATLAS</text>
   </g>
   <g>
-      <g filter="url(#nodeShadow)" transform="translate(703 343) scale(0.6333333333333333)">
+      <g filter="url(#nodeShadow)" transform="translate(703 448) scale(0.6333333333333333)">
   <title id="melkor-title">Melkor faceted twin peaks</title>
   <desc id="melkor-desc">A copper-edged twin-peak M sits inside a graphite hexagonal frame. A slow inspection sweep crosses the solid facets, followed by a ridge glint. The eight-second loop keeps the full shape visible. Reduced motion shows the complete still mark.</desc>
   <defs>
@@ -1223,41 +1223,41 @@
   <path d="M67 137H83 M97 137H113" stroke="#a49780" stroke-opacity=".44" stroke-width="1"/>
   <path d="M87 137 90 134 93 137 90 140Z" fill="#d39a68" stroke="#edc49b" stroke-width=".6"/>
 </g>
-      <text x="760" y="462" text-anchor="middle" class="cube-label">MELKOR</text>
+      <text x="760" y="567" text-anchor="middle" class="cube-label">MELKOR</text>
     </g>
   <g>
     <defs>
-      <linearGradient id="rfaPlate" x1="0" y1="560" x2="0" y2="640" gradientUnits="userSpaceOnUse">
+      <linearGradient id="rfaPlate" x1="0" y1="600" x2="0" y2="680" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#500724"/><stop offset="48%" stop-color="#2a0a12"/><stop offset="100%" stop-color="#12070b"/>
       </linearGradient>
-      <linearGradient id="rfaBezel" x1="720" y1="560" x2="800" y2="640" gradientUnits="userSpaceOnUse">
+      <linearGradient id="rfaBezel" x1="720" y1="600" x2="800" y2="680" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stop-color="#fff1f2"/><stop offset="25%" stop-color="#fda4af"/><stop offset="58%" stop-color="#fb7185"/><stop offset="100%" stop-color="#9f1239"/>
       </linearGradient>
-      <clipPath id="rfaClip"><path d="M736.7,561.2 L783.3,561.2 L798.8,576.7 L798.8,623.3 L783.3,638.8 L736.7,638.8 L721.2,623.3 L721.2,576.7 Z"/></clipPath>
+      <clipPath id="rfaClip"><path d="M736.7,601.2 L783.3,601.2 L798.8,616.7 L798.8,663.3 L783.3,678.8 L736.7,678.8 L721.2,663.3 L721.2,616.7 Z"/></clipPath>
     </defs>
-    <path class="rfa-glow" d="M735.4,559 L784.6,559 L801,575.4 L801,624.6 L784.6,641 L735.4,641 L719,624.6 L719,575.4 Z"/>
-    <g filter="url(#nodeShadow)"><path class="rfa-plate" d="M736,560 L784,560 L800,576 L800,624 L784,640 L736,640 L720,624 L720,576 Z"/></g>
-    <path class="rfa-bezel" d="M736,560 L784,560 L800,576 L800,624 L784,640 L736,640 L720,624 L720,576 Z"/>
-    <path class="rfa-groove" d="M737.8,563 L782.2,563 L797,577.8 L797,622.2 L782.2,637 L737.8,637 L723,622.2 L723,577.8 Z"/>
-    <path class="rfa-hairline" d="M735.2,558.6 L784.8,558.6 L801.4,575.2 L801.4,624.8 L784.8,641.4 L735.2,641.4 L718.6,624.8 L718.6,575.2 Z"/>
+    <path class="rfa-glow" d="M735.4,599 L784.6,599 L801,615.4 L801,664.6 L784.6,681 L735.4,681 L719,664.6 L719,615.4 Z"/>
+    <g filter="url(#nodeShadow)"><path class="rfa-plate" d="M736,600 L784,600 L800,616 L800,664 L784,680 L736,680 L720,664 L720,616 Z"/></g>
+    <path class="rfa-bezel" d="M736,600 L784,600 L800,616 L800,664 L784,680 L736,680 L720,664 L720,616 Z"/>
+    <path class="rfa-groove" d="M737.8,603 L782.2,603 L797,617.8 L797,662.2 L782.2,677 L737.8,677 L723,662.2 L723,617.8 Z"/>
+    <path class="rfa-hairline" d="M735.2,598.6 L784.8,598.6 L801.4,615.2 L801.4,664.8 L784.8,681.4 L735.2,681.4 L718.6,664.8 L718.6,615.2 Z"/>
     <g clip-path="url(#rfaClip)">
-      <path class="rfa-contour rfa-contour-a" d="M729,587 C738,573 755,571 767,583 C777,592 772,601 787,608"/>
-      <path class="rfa-contour" d="M727,604 C740,592 753,594 761,605 C770,617 782,617 791,608"/>
-      <path class="rfa-contour" d="M733,622 C745,612 755,616 762,625 C770,634 783,631 791,623"/>
-      <path class="rfa-sheet-back" d="M733,583 H777 L782,588 V624 H733 Z"/>
-      <path class="rfa-sheet-mid" d="M734.5,581.5 H778.5 L783.5,586.5 V622.5 H734.5 Z"/>
-      <path class="rfa-sheet-front" d="M736,580 H780 L785,585 V621 H736 Z"/>
-      <path class="rfa-index-rail" d="M736,575H784"/>
-      <line class="rfa-index-tick" x1="736" y1="573.5" x2="736" y2="576.5"/><line class="rfa-index-tick" x1="742" y1="574" x2="742" y2="576"/><line class="rfa-index-tick" x1="748" y1="574" x2="748" y2="576"/><line class="rfa-index-tick" x1="754" y1="574" x2="754" y2="576"/><line class="rfa-index-tick" x1="760" y1="573.5" x2="760" y2="576.5"/><line class="rfa-index-tick" x1="766" y1="574" x2="766" y2="576"/><line class="rfa-index-tick" x1="772" y1="574" x2="772" y2="576"/><line class="rfa-index-tick" x1="778" y1="574" x2="778" y2="576"/><line class="rfa-index-tick" x1="784" y1="573.5" x2="784" y2="576.5"/>
-      <g class="rfa-record-group rfa-record-0" transform="translate(744 591)"><rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/><path class="rfa-sample" d="M0 -4 L4 -2 L4 3 L0 5 L-4 3 L-4 -2 Z M-4 -2 L0 0 L4 -2 M0 0 V5"/></g><g class="rfa-record-group rfa-record-1" transform="translate(760 591)"><rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/><path class="rfa-sample" d="M0 -4 L5 3 L-5 3 Z M0 -4 V1 M-5 3 L0 1 L5 3"/></g><g class="rfa-record-group rfa-record-2" transform="translate(776 591)"><rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/><path class="rfa-sample" d="M-4 -2 C-4 -4 4 -4 4 -2 V3 C4 5 -4 5 -4 3 Z M-4 -2 C-4 0 4 0 4 -2"/></g><g class="rfa-record-group rfa-record-3" transform="translate(744 610)"><rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/><path class="rfa-sample" d="M-5 4 V0 C-5 -5 5 -5 5 0 V4 H2 V0 C2 -1 -2 -1 -2 0 V4 Z"/></g><g class="rfa-record-group rfa-record-4" transform="translate(760 610)"><rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/><path class="rfa-sample" d="M-5 3 L-3 -3 L4 -2 L5 4 Z M-3 -3 L0 1 L4 -2 M0 1 L5 4 M0 1 L-5 3"/></g><g class="rfa-record-group rfa-record-5" transform="translate(776 610)"><rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/><path class="rfa-sample" d="M-5 -4 H3 V2 H-5 Z M-3 -2 H5 V4 H-3 Z M-3 -2 L1 1 L5 -2 M1 1 V4"/></g>
-      <g class="rfa-focus" transform="translate(744 591)" opacity="0.72">
+      <path class="rfa-contour rfa-contour-a" d="M729,627 C738,613 755,611 767,623 C777,632 772,641 787,648"/>
+      <path class="rfa-contour" d="M727,644 C740,632 753,634 761,645 C770,657 782,657 791,648"/>
+      <path class="rfa-contour" d="M733,662 C745,652 755,656 762,665 C770,674 783,671 791,663"/>
+      <path class="rfa-sheet-back" d="M733,623 H777 L782,628 V664 H733 Z"/>
+      <path class="rfa-sheet-mid" d="M734.5,621.5 H778.5 L783.5,626.5 V662.5 H734.5 Z"/>
+      <path class="rfa-sheet-front" d="M736,620 H780 L785,625 V661 H736 Z"/>
+      <path class="rfa-index-rail" d="M736,615H784"/>
+      <line class="rfa-index-tick" x1="736" y1="613.5" x2="736" y2="616.5"/><line class="rfa-index-tick" x1="742" y1="614" x2="742" y2="616"/><line class="rfa-index-tick" x1="748" y1="614" x2="748" y2="616"/><line class="rfa-index-tick" x1="754" y1="614" x2="754" y2="616"/><line class="rfa-index-tick" x1="760" y1="613.5" x2="760" y2="616.5"/><line class="rfa-index-tick" x1="766" y1="614" x2="766" y2="616"/><line class="rfa-index-tick" x1="772" y1="614" x2="772" y2="616"/><line class="rfa-index-tick" x1="778" y1="614" x2="778" y2="616"/><line class="rfa-index-tick" x1="784" y1="613.5" x2="784" y2="616.5"/>
+      <g class="rfa-record-group rfa-record-0" transform="translate(744 631)"><rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/><path class="rfa-sample" d="M0 -4 L4 -2 L4 3 L0 5 L-4 3 L-4 -2 Z M-4 -2 L0 0 L4 -2 M0 0 V5"/></g><g class="rfa-record-group rfa-record-1" transform="translate(760 631)"><rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/><path class="rfa-sample" d="M0 -4 L5 3 L-5 3 Z M0 -4 V1 M-5 3 L0 1 L5 3"/></g><g class="rfa-record-group rfa-record-2" transform="translate(776 631)"><rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/><path class="rfa-sample" d="M-4 -2 C-4 -4 4 -4 4 -2 V3 C4 5 -4 5 -4 3 Z M-4 -2 C-4 0 4 0 4 -2"/></g><g class="rfa-record-group rfa-record-3" transform="translate(744 650)"><rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/><path class="rfa-sample" d="M-5 4 V0 C-5 -5 5 -5 5 0 V4 H2 V0 C2 -1 -2 -1 -2 0 V4 Z"/></g><g class="rfa-record-group rfa-record-4" transform="translate(760 650)"><rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/><path class="rfa-sample" d="M-5 3 L-3 -3 L4 -2 L5 4 Z M-3 -3 L0 1 L4 -2 M0 1 L5 4 M0 1 L-5 3"/></g><g class="rfa-record-group rfa-record-5" transform="translate(776 650)"><rect class="rfa-record" x="-6.5" y="-7" width="13" height="14" rx="1.7"/><path class="rfa-sample" d="M-5 -4 H3 V2 H-5 Z M-3 -2 H5 V4 H-3 Z M-3 -2 L1 1 L5 -2 M1 1 V4"/></g>
+      <g class="rfa-focus" transform="translate(744 631)" opacity="0.72">
 
 
         <path d="M-6 -7H-3 M-6 -7V-4 M6 -7H3 M6 -7V-4 M-6 7H-3 M-6 7V4 M6 7H3 M6 7V4"/>
       </g>
     </g>
-    <g class="atlas-dataset-badge" aria-hidden="true"><circle class="atlas-dataset-disc" cx="714" cy="563" r="8.4" stroke="#fb7185"/><circle class="atlas-dataset-ring" cx="714" cy="563" r="6.7"/><polygon points="714,557 719,559.6 714,562.2 709,559.6" fill="#fb7185" fill-opacity="0.16" stroke="#fb7185" stroke-width="1.1" stroke-linejoin="round"/><polygon points="714,560.4 719,563 714,565.6 709,563" fill="#fb7185" fill-opacity="0.24" stroke="#fb7185" stroke-width="1.1" stroke-linejoin="round"/><polygon points="714,563.8 719,566.4 714,569 709,566.4" fill="#fb7185" fill-opacity="0.34" stroke="#fb7185" stroke-width="1.1" stroke-linejoin="round"/></g>
-    <text x="760" y="655" text-anchor="middle" class="rfa-label">RELIEF-ATLAS</text>
+    <g class="atlas-dataset-badge" aria-hidden="true"><circle class="atlas-dataset-disc" cx="714" cy="603" r="8.4" stroke="#fb7185"/><circle class="atlas-dataset-ring" cx="714" cy="603" r="6.7"/><polygon points="714,597 719,599.6 714,602.2 709,599.6" fill="#fb7185" fill-opacity="0.16" stroke="#fb7185" stroke-width="1.1" stroke-linejoin="round"/><polygon points="714,600.4 719,603 714,605.6 709,603" fill="#fb7185" fill-opacity="0.24" stroke="#fb7185" stroke-width="1.1" stroke-linejoin="round"/><polygon points="714,603.8 719,606.4 714,609 709,606.4" fill="#fb7185" fill-opacity="0.34" stroke="#fb7185" stroke-width="1.1" stroke-linejoin="round"/></g>
+    <text x="760" y="695" text-anchor="middle" class="rfa-label">RELIEF-ATLAS</text>
   </g>
   <g>
       <g filter="url(#nodeShadow)" transform="translate(54 514) scale(0.5111111111111111)">
@@ -1591,9 +1591,12 @@
 <text x="323" y="239" text-anchor="middle" class="edge-label edge-label-protocol">Monitor</text>
 <text x="488" y="326" text-anchor="middle" class="edge-label edge-label-protocol">Capture</text>
 <text x="447" y="435" text-anchor="middle" class="edge-label edge-label-protocol">Body</text>
-<text x="548" y="458" transform="rotate(-52 548 458)" text-anchor="middle" class="edge-label edge-label-environment">Environment + sensors<tspan x="548" dy="15" class="edge-status">sensor path tested</tspan></text>
-<text x="109" y="448" transform="rotate(-82 109 448)" text-anchor="middle" class="edge-label edge-label-research">Figure export</text>
-<text x="335" y="590" transform="rotate(-33 335 590)" text-anchor="middle" class="edge-label edge-label-tool">Perception tools</text></g>
+<text x="109" y="448" transform="rotate(-82 109 448)" text-anchor="middle" class="edge-label edge-label-library">Figure contracts</text>
+<text x="476" y="436" transform="rotate(-61 476 436)" text-anchor="middle" class="edge-label edge-label-environment">Sensor data<tspan x="476" dy="15" class="edge-status">sensor path tested</tspan></text>
+<text x="626" y="430" transform="rotate(-29 626 430)" text-anchor="middle" class="edge-label edge-label-dataset">Candidate meshes</text>
+<text x="614" y="578" transform="rotate(18 614 578)" text-anchor="middle" class="edge-label edge-label-dataset">Candidate meshes</text>
+<text x="621" y="505" transform="rotate(-4 621 505)" text-anchor="middle" class="edge-label edge-label-tool">Candidate splat conversion</text>
+<text x="327" y="596" transform="rotate(-33 327 596)" text-anchor="middle" class="edge-label edge-label-tool">Candidate perception</text></g>
   </g>
   <g class="frame">
     <line x1="27" y1="11" x2="833" y2="11" class="wg-rule"/>

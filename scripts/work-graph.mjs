@@ -34,7 +34,7 @@ import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { writeThemedPair } from "./theme-split.mjs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { ECOSYSTEM_EDGES, EDGE_TYPES, LOCAL_NCP, validateEcosystemEdges } from "./ecosystem.mjs";
+import { ECOSYSTEM_EDGES, EDGE_TYPES, HALDIR_NCP, LOCAL_NCP, validateEcosystemEdges } from "./ecosystem.mjs";
 import { localOwnershipSvg } from "./work-graph-local.mjs";
 import { staticSvg } from "./svg-motion.mjs";
 
@@ -69,9 +69,9 @@ const nodes = {
   ncp:         { x: 360, y: 340, color: "#fbbf24", kind: "contract", label: "NCP" },
   prisoma:     { x: 600, y: 350, color: "#a78bfa", kind: "triangle" },
   crebain:     { x: 450, y: 540, color: "#a1b39a", kind: "raven" },
-  cobotatlas:  { x: 760, y: 190, color: "#60a5fa", kind: "cobot", label: "cobot-atlas", dataset: true },
-  melkor:      { x: 760, y: 400, color: "#fb923c", kind: "cube" },
-  reliefatlas: { x: 760, y: 600, color: "#fb7185", kind: "relief", label: "relief-atlas", dataset: true },
+  cobotatlas:  { x: 760, y: 370, color: "#60a5fa", kind: "cobot", label: "cobot-atlas", dataset: true },
+  melkor:      { x: 760, y: 505, color: "#fb923c", kind: "cube" },
+  reliefatlas: { x: 760, y: 640, color: "#fb7185", kind: "relief", label: "relief-atlas", dataset: true },
   cortexel:    { x: 100, y: 560, color: "#e879f9", kind: "artifact" },
   manwe:       { x: 250, y: 670, color: "#38bdf8", kind: "radar", label: "manwe" },
   galadriel:   { x: 400, y: 170, color: "#ef4444", kind: "sentinel", label: "galadriel" },
@@ -245,14 +245,18 @@ edges.forEach((e) => {
     const reverseTip = { x: p0.x - off * nx, y: p0.y - off * ny };
     runtimeEdges.push(`<g data-edge-kind="protocol" data-from="${e.a}" data-to="${e.b}">${title}<path d="${d}" class="edge-clearance edge-clearance-protocol"/><path d="${lane(off)}" class="edge-runtime"/><path d="${lane(-off)}" class="edge-runtime"/>${arrow(forwardTip, c, "edge-runtime-head")}${arrow(reverseTip, c, "edge-runtime-head")}</g>`);
   } else {
-    const openArrow = (tip, from) => {
+    const openArrow = (tip, from, css) => {
       const angle = Math.atan2(tip.y - from.y, tip.x - from.x);
       const dx = Math.cos(angle), dy = Math.sin(angle);
-      return `<path class="edge-environment-head" d="M ${f1(tip.x - 9 * dx + 4 * dy)} ${f1(tip.y - 9 * dy - 4 * dx)} L ${f1(tip.x)} ${f1(tip.y)} L ${f1(tip.x - 9 * dx - 4 * dy)} ${f1(tip.y - 9 * dy + 4 * dx)}"/>`;
+      return `<path class="${css}" d="M ${f1(tip.x - 9 * dx + 4 * dy)} ${f1(tip.y - 9 * dy - 4 * dx)} L ${f1(tip.x)} ${f1(tip.y)} L ${f1(tip.x - 9 * dx - 4 * dy)} ${f1(tip.y - 9 * dy + 4 * dx)}"/>`;
     };
-    const endpoint = e.kind === "environment" ? openArrow(p1, e.route ? { x: e.route.at(-1)[0], y: e.route.at(-1)[1] } : c) : e.kind === "library" ? arrow(p1, c, "edge-library-head") : e.kind === "contract" ? `<rect x="${f1(p1.x - 3.5)}" y="${f1(p1.y - 3.5)}" width="7" height="7" class="edge-contract-end"/>` : "";
-    const rail = e.kind === "tool" ? `<path d="${d}" class="edge-tool-rail"/>` : "";
-    calmEdges.push(`<g data-edge-kind="${e.kind}" data-from="${e.a}" data-to="${e.b}">${title}<path d="${d}" class="edge-clearance"/>${rail}<path d="${d}" class="edge-${e.kind}"/>${endpoint}</g>`);
+    // Filled head: data or messages flow toward it. Open head: the library a project uses.
+    const from = e.route ? { x: e.route.at(-1)[0], y: e.route.at(-1)[1] } : c;
+    const endpoint = e.kind === "library" ? openArrow(p1, from, "edge-library-head")
+      : e.kind === "environment" ? arrow(p1, from, "edge-environment-head")
+      : e.kind === "dataset" || e.kind === "tool" ? arrow(p1, from, "edge-candidate-head")
+      : e.kind === "contract" ? `<rect x="${f1(p1.x - 3.5)}" y="${f1(p1.y - 3.5)}" width="7" height="7" class="edge-contract-end"/>` : "";
+    calmEdges.push(`<g data-edge-kind="${e.kind}" data-from="${e.a}" data-to="${e.b}">${title}<path d="${d}" class="edge-clearance"/><path d="${d}" class="edge-${e.kind}"/>${endpoint}</g>`);
   }
   if (e.labelAt) {
     const rotation = e.labelAngle ? ` transform="rotate(${e.labelAngle} ${e.labelAt[0]} ${e.labelAt[1]})"` : "";
@@ -1845,28 +1849,28 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     :root { color-scheme: light dark; }
     .cap        { font: 400 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #8b949e; }
     .boundary-note { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #9da7b3; }
-    .edge-runtime, .edge-library, .edge-environment, .edge-environment-head, .edge-research, .edge-contract, .edge-tool, .edge-tool-rail { fill: none; stroke-linecap: round; }
+    .edge-runtime, .edge-library, .edge-library-head, .edge-environment, .edge-dataset, .edge-contract, .edge-tool { fill: none; stroke-linecap: round; stroke-linejoin: round; }
     .edge-clearance { fill: none; stroke: #0d1117; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
     .edge-clearance-protocol { stroke-width: 12; }
     .edge-runtime { stroke: #fbbf24; stroke-width: 2.1; }
     .edge-runtime-head { fill: #fbbf24; }
     .edge-library { stroke: #6ee7b7; stroke-width: 2.1; stroke-dasharray: 8 5; }
-    .edge-library-head { fill: #6ee7b7; }
+    .edge-library-head { stroke: #6ee7b7; stroke-width: 2.1; }
     .edge-environment { stroke: #d1c0a2; stroke-width: 2.3; stroke-dasharray: 16 7; }
-    .edge-environment-head { stroke: #d1c0a2; stroke-width: 2.3; }
+    .edge-environment-head { fill: #d1c0a2; }
     .edge-status { font-size: 9.5px; fill: #9da7b3; }
-    .edge-research { stroke: #8291a6; stroke-width: 1.9; stroke-dasharray: 1 6; }
-    .edge-tool-rail { stroke: #38bdf8; stroke-width: 1; opacity: .5; }
-    .edge-tool { stroke: #7dd3fc; stroke-width: 2.8; stroke-dasharray: 7 13; animation: tool-flow 2.4s linear infinite; }
-    @keyframes tool-flow { to { stroke-dashoffset: -20; } }
+    .edge-dataset { stroke: #8291a6; stroke-width: 1.9; stroke-dasharray: 1 6; }
+    .edge-tool { stroke: #8291a6; stroke-width: 1.9; stroke-dasharray: 6 5; }
+    .edge-candidate-head { fill: #8291a6; }
     .edge-contract { stroke: #c4b5fd; stroke-width: 2; stroke-dasharray: 10 4 2 4; }
     .edge-contract-end { fill: #c4b5fd; }
-    .edge-label, .legend-label { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; letter-spacing: 0 !important; text-transform: none !important; }
+    .edge-label, .legend-label, .legend-key { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; letter-spacing: 0 !important; text-transform: none !important; }
+    .legend-key { font-size: 10.5px; fill: #9da7b3; }
     .edge-label { stroke-width: 5px !important; }
     .edge-label-environment { font-size: 10.5px; }
     .edge-label-protocol { fill: #fcd34d; }
     .edge-label-library { fill: #a7f3d0; }
-    .edge-label-tool { fill: #bae6fd; }
+    .edge-label-dataset, .edge-label-tool { fill: #9da7b3; font-size: 10.5px; }
     .edge-label-contract { fill: #ddd6fe; }
     .legend-label { font-size: 13px; }
     .scope-box { fill: none; stroke: #8291a6; stroke-width: 1; stroke-dasharray: 5 5; }
@@ -2026,16 +2030,14 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       text { stroke: #ffffff; }
       .cap { fill: #57606a; }
       .edge-runtime { stroke: #985700; } .edge-runtime-head { fill: #985700; }
-      .edge-library { stroke: #087859; } .edge-library-head { fill: #087859; }
-      .edge-research { stroke: #607086; }
-      .edge-environment, .edge-environment-head { stroke: #786044; }
+      .edge-library, .edge-library-head { stroke: #087859; }
+      .edge-dataset, .edge-tool { stroke: #607086; } .edge-candidate-head { fill: #607086; }
+      .edge-environment { stroke: #786044; } .edge-environment-head { fill: #786044; }
       .edge-status { fill: #607086; }
-      .edge-tool-rail { stroke: #0369a1; }
-      .edge-tool { stroke: #0369a1; }
-      .edge-label-tool { fill: #075985; }
+      .edge-label-dataset, .edge-label-tool { fill: #607086; }
       .edge-clearance { stroke: #f7f8f9; }
       .edge-contract { stroke: #7353a6; } .edge-contract-end { fill: #7353a6; }
-      .edge-label, .legend-label { fill: #435365; }
+      .edge-label, .legend-label { fill: #435365; } .legend-key { fill: #607086; }
       .edge-label-protocol { fill: #805000; }
       .edge-label-library { fill: #08664d; }
       .edge-label-contract { fill: #63428d; }
@@ -2066,7 +2068,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     }
     @media (prefers-reduced-motion: reduce) {
       animate, animateMotion, animateTransform { display: none; }
-      .edge-tool { animation: none; stroke-dashoffset: 0; }
     }
   </style>
 
@@ -2075,27 +2076,30 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
   <text x="820" y="40" text-anchor="end" class="cap">INTERFACES&#160;//&#160;DEPENDENCIES</text>
   <line x1="40" y1="760" x2="820" y2="760" class="wg-rule"/>
   <text x="40" y="787" class="cap">CONNECTION TYPES</text>
+  <text x="820" y="787" text-anchor="end" class="legend-key">filled head = data or messages flow · open head = library in use · grey = candidate</text>
   <path d="M 42 809 H 105 M 42 816 H 105" class="edge-runtime"/>
   <polygon points="105,809 97,805 97,813 105,809" class="edge-runtime-head"/>
   <polygon points="42,816 50,812 50,820 42,816" class="edge-runtime-head"/>
-  <text x="121" y="818" class="legend-label">Local NCP interface</text>
+  <text x="121" y="818" class="legend-label">${escapeXML(EDGE_TYPES.protocol.label)}</text>
   <path d="M 450 812 H 511" class="edge-library"/>
-  <polygon points="515,812 507,808 507,816" class="edge-library-head"/>
-  <text x="531" y="818" class="legend-label">Library dependency</text>
-  <path d="M 42 847 H 105" class="edge-research"/>
-  <text x="121" y="853" class="legend-label">Assets / exports</text>
+  <path d="M 505 807.5 L 514 812 L 505 816.5" class="edge-library-head"/>
+  <text x="531" y="818" class="legend-label">${escapeXML(EDGE_TYPES.library.label)}</text>
+  <path d="M 42 847 H 105" class="edge-environment"/>
+  <polygon points="113,847 104,842.5 104,851.5" class="edge-environment-head"/>
+  <text x="121" y="853" class="legend-label">${escapeXML(EDGE_TYPES.environment.label)}</text>
   <path d="M 450 847 H 511" class="edge-contract"/>
   <rect x="508" y="843.5" width="7" height="7" class="edge-contract-end"/>
-  <text x="531" y="853" class="legend-label">Pinned NCP v0.8 interface</text>
-  <path d="M 42 882 H 105" class="edge-tool-rail"/>
-  <path d="M 42 882 H 105" class="edge-tool"/>
-  <text x="121" y="888" class="legend-label">Perception tools</text>
-  <path d="M 450 882 H 511" class="edge-environment"/>
-  <path d="M 504 878 L 513 882 L 504 886" class="edge-environment-head"/>
-  <text x="531" y="888" class="legend-label">Environment integration</text>
-  <text x="40" y="932" class="edge-label">Connections show interfaces, not a required all-project deployment.</text>
-  <text x="40" y="956" class="edge-label">Haldir stays on v0.8. Local v1 gated requests are rejected before preparation.</text>
-  <text x="40" y="980" class="edge-label">Selected paths have native evidence; broader qualification and final release gates remain open.</text>
+  <text x="531" y="853" class="legend-label">${escapeXML(EDGE_TYPES.contract.label)}</text>
+  <path d="M 42 882 H 105" class="edge-dataset"/>
+  <polygon points="113,882 104,877.5 104,886.5" class="edge-candidate-head"/>
+  <text x="121" y="888" class="legend-label">${escapeXML(EDGE_TYPES.dataset.label)}</text>
+  <path d="M 450 882 H 511" class="edge-tool"/>
+  <polygon points="519,882 510,877.5 510,886.5" class="edge-candidate-head"/>
+  <text x="531" y="888" class="legend-label">${escapeXML(EDGE_TYPES.tool.label)}</text>
+  <text x="40" y="926" class="edge-label">Connections show interfaces, not a required all-project deployment.</text>
+  <text x="40" y="948" class="edge-label">CREBAIN has no pid-rs dependency; its recordings reach pid-rs through Prisoma.</text>
+  <text x="40" y="970" class="edge-label">Haldir stays on NCP ${HALDIR_NCP.wire}. Local v1 gated requests are rejected before preparation.</text>
+  <text x="40" y="992" class="edge-label">Selected paths have native evidence; broader qualification and final release gates remain open.</text>
   <g transform="translate(0 ${VSHIFT})">
     <g class="edges">
       ${calmEdges.join("\n    ")}

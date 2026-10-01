@@ -12,7 +12,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PROJECTS, REPOS, SOCIALS } from "./data.mjs";
-import { LOCAL_NCP } from "./ecosystem.mjs";
+import { EDGE_TYPES, HALDIR_NCP, LOCAL_NCP } from "./ecosystem.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -161,8 +161,12 @@ function renderEcosystem() {
   };
   return `<h3>How the work relates</h3>
 <p>${html(LOCAL_NCP.research)}</p>
-${figure("work-graph", 977, "NCP connects Engram, CREBAIN, Prisoma, and Galadriel through local interfaces. Haldir retains its pinned v0.8 interface. A long dashed open arrow joins CREBAIN sensors to Prisoma experiments. The native pressure study completed with a null or inconclusive forecast result. Short dashed arrows show libraries, dotted lines show assets or exports, and moving dashes show perception tools.")}
-<p><strong>Read the connections:</strong> solid paired arrows = local NCP interfaces; short dashed arrows = library dependencies; long dashed open arrow = environment and sensor integration, with the sensor path tested; dotted lines = assets or exports; moving dashes on a continuous line = perception tools; dash-dot line with a square end = Haldir's pinned NCP v0.8 interface.</p>
+${figure("work-graph", 977, `NCP connects Engram, CREBAIN, Prisoma, and Galadriel through local interfaces. Haldir keeps a separate NCP ${HALDIR_NCP.wire} interface. A long dashed line with a filled arrowhead carries CREBAIN sensor data to Prisoma. Dashed lines with open arrowheads point to libraries: Galadriel and Prisoma use pid-rs, and Engram uses Cortexel. Grey lines mark candidate inputs to CREBAIN without an adapter: the cobot-atlas and relief-atlas datasets and the Melkor and Manwe tools.`)}
+<p><strong>Read the connections:</strong> ${html(LOCAL_NCP.reading)}</p>
+<ul>
+${Object.values(EDGE_TYPES).map(({ label, pattern }) => `<li><strong>${html(label)}</strong>: ${html(pattern)}.</li>`).join("\n")}
+</ul>
+<p>${html(LOCAL_NCP.pidPaths)}</p>
 <p><strong>Different jobs:</strong> ${html(LOCAL_NCP.overview)}</p>
 <p><strong>Tested neural loop:</strong> ${html(LOCAL_NCP.target)}</p>
 <p><strong>CREBAIN and Prisoma:</strong> ${html(LOCAL_NCP.environment)}</p>
@@ -363,6 +367,8 @@ ${LOCAL_NCP.composition}
 Target workflow: ${LOCAL_NCP.target}
 ${LOCAL_NCP.sensors}
 ${LOCAL_NCP.assets}
+${LOCAL_NCP.reading}
+${LOCAL_NCP.pidPaths}
 ${LOCAL_NCP.environment}
 ${LOCAL_NCP.example}
 ${LOCAL_NCP.summary}

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import { ECOSYSTEM_EDGES, EDGE_TYPES, LOCAL_NCP, validateEcosystemEdges } from "./ecosystem.mjs";
+import { ECOSYSTEM_EDGES, EDGE_TYPES, HALDIR_NCP, LOCAL_NCP, validateEcosystemEdges } from "./ecosystem.mjs";
 import { nodes } from "./work-graph.mjs";
 
 const copy = () => ECOSYSTEM_EDGES.map((edge) => ({ ...edge }));
@@ -13,7 +13,15 @@ test("project map centers NCP interfaces and keeps library dependencies distinct
   assert.ok(runtime.every((edge) => edge.a === "ncp"));
   assert.deepEqual(runtime.map((edge) => edge.role).sort(), ["body", "capture", "monitor", "neural"]);
   assert.deepEqual(ECOSYSTEM_EDGES.filter((edge) => edge.kind === "contract").map((edge) => [edge.a, edge.b]), [["ncp", "haldir"]]);
-  assert.deepEqual(ECOSYSTEM_EDGES.filter((edge) => edge.kind === "library").map((edge) => [edge.a, edge.b]), [["galadriel", "pidrs"], ["prisoma", "pidrs"]]);
+  assert.deepEqual(ECOSYSTEM_EDGES.filter((edge) => edge.kind === "library").map((edge) => [edge.a, edge.b]), [["galadriel", "pidrs"], ["prisoma", "pidrs"], ["engram", "cortexel"]]);
+});
+
+test("every edge names its evidence and Haldir's interface follows its declared wire", () => {
+  for (const edge of ECOSYSTEM_EDGES) assert.ok(edge.evidence && edge.evidence.length > 10, `${edge.a}-${edge.b} lacks evidence`);
+  assert.throws(() => validateEcosystemEdges(nodes, copy().map((edge) => ({ ...edge, evidence: undefined }))), /without evidence/);
+  const haldir = ECOSYSTEM_EDGES.find((edge) => edge.b === "haldir");
+  assert.ok(haldir.label.includes(HALDIR_NCP.wire) && haldir.evidence.includes(HALDIR_NCP.crate));
+  assert.ok(EDGE_TYPES.contract.label.includes(HALDIR_NCP.wire));
 });
 
 test("environment relation is directional, qualified, and separate from runtime channels", () => {
@@ -29,13 +37,13 @@ test("environment relation is directional, qualified, and separate from runtime 
     { status: "qualified" },
     { status: undefined },
     { kind: "protocol" },
-    { kind: "research" },
+    { kind: "dataset" },
   ]) assert.throws(() => validateEcosystemEdges(nodes, [...without, { ...environment, ...change }]));
   for (const theme of ["light", "dark"]) {
     const svg = readFileSync(new URL(`../assets/work-graph-${theme}.svg`, import.meta.url), "utf8");
     assert.equal((svg.match(/data-edge-kind="environment"/g) || []).length, 1);
     assert.match(svg, /data-edge-kind="environment" data-from="crebain" data-to="prisoma"/);
-    assert.match(svg, /Environment \+ sensors/);
+    assert.match(svg, />Sensor data</);
     assert.match(svg, /class="edge-status">sensor path tested/);
     assert.match(svg, /\.edge-environment\s*\{[^}]*stroke-dasharray: 16 7/);
   }
@@ -83,7 +91,7 @@ test("visible and plain-text profile surfaces preserve scope, abstention, and pr
   for (const file of ["README.md", "docs/index.html", "docs/llms.txt"]) {
     const source = readFileSync(new URL(`../${file}`, import.meta.url), "utf8")
       .replaceAll("&#39;", "'").replaceAll("&quot;", '"').replaceAll("&amp;", "&");
-    for (const field of ["status", "boundary", "availability", "monitor", "overview", "composition", "target", "sensors", "example", "assets", "environment"]) {
+    for (const field of ["status", "boundary", "availability", "monitor", "overview", "composition", "target", "sensors", "example", "assets", "environment", "reading", "pidPaths"]) {
       assert.ok(source.includes(LOCAL_NCP[field]), `${file} omits ${field}`);
     }
     if (file.endsWith(".txt")) continue;
@@ -95,10 +103,23 @@ test("visible and plain-text profile surfaces preserve scope, abstention, and pr
   }
 });
 
-test("scene providers connect to the environment instead of the experiment recorder", () => {
-  for (const provider of ["cobotatlas", "reliefatlas", "melkor"]) {
-    assert.ok(ECOSYSTEM_EDGES.some((edge) => edge.a === "crebain" && edge.b === provider && edge.kind === "research"));
-    assert.throws(() => validateEcosystemEdges(nodes, [...copy(), { a: provider, b: "prisoma", kind: "research", label: "Scene inputs" }]), /environment owner/);
+test("candidate inputs flow into the environment owner with their own kind", () => {
+  for (const [provider, kind] of [["cobotatlas", "dataset"], ["reliefatlas", "dataset"], ["melkor", "tool"], ["manwe", "tool"]]) {
+    assert.ok(ECOSYSTEM_EDGES.some((edge) => edge.a === provider && edge.b === "crebain" && edge.kind === kind));
+    assert.throws(() => validateEcosystemEdges(nodes, [...copy(), { a: provider, b: "prisoma", kind, label: "Scene inputs", evidence: "none in code" }]), /environment owner/);
+  }
+  const flipped = copy().map((edge) => (edge.a === "melkor" ? { ...edge, kind: "dataset" } : edge));
+  assert.throws(() => validateEcosystemEdges(nodes, flipped), /environment owner/);
+});
+
+test("arrowheads carry one meaning: filled for flow, open for library use", () => {
+  for (const theme of ["light", "dark"]) {
+    const svg = readFileSync(new URL(`../assets/work-graph-${theme}.svg`, import.meta.url), "utf8");
+    assert.equal((svg.match(/<path class="edge-library-head"/g) || []).length, 3);
+    assert.equal((svg.match(/<polygon class="edge-candidate-head"/g) || []).length, 4);
+    assert.equal((svg.match(/<polygon class="edge-environment-head"/g) || []).length, 1);
+    assert.match(svg, /\.edge-library-head\s*\{[^}]*stroke:/);
+    assert.match(svg, /CREBAIN has no pid-rs dependency/);
   }
 });
 
@@ -128,13 +149,13 @@ test("connection meaning survives without color or motion", () => {
     const svg = readFileSync(new URL(`../assets/work-graph-${theme}.svg`, import.meta.url), "utf8");
     for (const { label } of Object.values(EDGE_TYPES)) assert.ok(svg.includes(label));
     assert.match(svg, /\.edge-library\s*\{[^}]*stroke-dasharray: 8 5/);
-    assert.match(svg, /\.edge-research\s*\{[^}]*stroke-dasharray: 1 6/);
+    assert.match(svg, /\.edge-dataset\s*\{[^}]*stroke-dasharray: 1 6/);
     assert.match(svg, /\.edge-contract\s*\{[^}]*stroke-dasharray: 10 4 2 4/);
     assert.equal((svg.match(/data-edge-kind="protocol"/g) || []).length, 4);
     assert.equal((svg.match(/data-edge-kind="protocol" data-from="ncp"/g) || []).length, 4);
     assert.match(svg, /not a required all-project deployment/);
-    assert.match(svg, /\.edge-tool\s*\{[^}]*stroke-dasharray: 7 13/);
-    assert.match(svg, /\.edge-tool\s*\{[^}]*animation: none/);
+    assert.match(svg, /\.edge-tool\s*\{[^}]*stroke-dasharray: 6 5/);
+    assert.doesNotMatch(svg, /\.edge-tool\s*\{[^}]*animation:/);
     assert.doesNotMatch(svg, /<text[^>]*>(?:v0\.8|Optional PID library|PID \/ runlog)<\/text>/i);
     assert.doesNotMatch(svg, /<text[^>]*>[^<]*research/i);
   }
