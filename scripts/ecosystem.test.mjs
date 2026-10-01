@@ -34,8 +34,6 @@ test("environment relation is directional, qualified, and separate from runtime 
     { a: "prisoma", b: "crebain" },
     { a: "engram" },
     { b: "galadriel" },
-    { status: "qualified" },
-    { status: undefined },
     { kind: "protocol" },
     { kind: "dataset" },
   ]) assert.throws(() => validateEcosystemEdges(nodes, [...without, { ...environment, ...change }]));
@@ -44,7 +42,8 @@ test("environment relation is directional, qualified, and separate from runtime 
     assert.equal((svg.match(/data-edge-kind="environment"/g) || []).length, 1);
     assert.match(svg, /data-edge-kind="environment" data-from="crebain" data-to="prisoma"/);
     assert.match(svg, />Sensor data</);
-    assert.match(svg, /class="edge-status">sensor path tested/);
+    assert.doesNotMatch(svg, /sensor path tested/);
+    assert.doesNotMatch(svg, /class="edge-label[^"]*">[^<]*[Cc]andidate/);
     assert.match(svg, /\.edge-environment\s*\{[^}]*stroke-dasharray: 16 7/);
   }
 });
@@ -103,7 +102,7 @@ test("visible and plain-text profile surfaces preserve scope, abstention, and pr
   }
 });
 
-test("candidate inputs flow into the environment owner with their own kind", () => {
+test("asset and model suppliers flow into the simulator with their own kind", () => {
   for (const [provider, kind] of [["cobotatlas", "dataset"], ["reliefatlas", "dataset"], ["melkor", "tool"], ["manwe", "tool"]]) {
     assert.ok(ECOSYSTEM_EDGES.some((edge) => edge.a === provider && edge.b === "crebain" && edge.kind === kind));
     assert.throws(() => validateEcosystemEdges(nodes, [...copy(), { a: provider, b: "prisoma", kind, label: "Scene inputs", evidence: "none in code" }]), /environment owner/);
@@ -116,7 +115,7 @@ test("arrowheads carry one meaning: filled for flow, open for library use", () =
   for (const theme of ["light", "dark"]) {
     const svg = readFileSync(new URL(`../assets/work-graph-${theme}.svg`, import.meta.url), "utf8");
     assert.equal((svg.match(/<path class="edge-library-head"/g) || []).length, 3);
-    assert.equal((svg.match(/<polygon class="edge-candidate-head"/g) || []).length, 4);
+    assert.equal((svg.match(/<polygon class="edge-supply-head"/g) || []).length, 4);
     assert.equal((svg.match(/<polygon class="edge-environment-head"/g) || []).length, 1);
     assert.match(svg, /\.edge-library-head\s*\{[^}]*stroke:/);
     assert.match(svg, /CREBAIN has no pid-rs dependency/);

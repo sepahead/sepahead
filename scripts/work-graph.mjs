@@ -254,7 +254,7 @@ edges.forEach((e) => {
     const from = e.route ? { x: e.route.at(-1)[0], y: e.route.at(-1)[1] } : c;
     const endpoint = e.kind === "library" ? openArrow(p1, from, "edge-library-head")
       : e.kind === "environment" ? arrow(p1, from, "edge-environment-head")
-      : e.kind === "dataset" || e.kind === "tool" ? arrow(p1, from, "edge-candidate-head")
+      : e.kind === "dataset" || e.kind === "tool" ? arrow(p1, from, "edge-supply-head")
       : e.kind === "contract" ? `<rect x="${f1(p1.x - 3.5)}" y="${f1(p1.y - 3.5)}" width="7" height="7" class="edge-contract-end"/>` : "";
     calmEdges.push(`<g data-edge-kind="${e.kind}" data-from="${e.a}" data-to="${e.b}">${title}<path d="${d}" class="edge-clearance"/><path d="${d}" class="edge-${e.kind}"/>${endpoint}</g>`);
   }
@@ -1861,7 +1861,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .edge-status { font-size: 9.5px; fill: #9da7b3; }
     .edge-dataset { stroke: #8291a6; stroke-width: 1.9; stroke-dasharray: 1 6; }
     .edge-tool { stroke: #8291a6; stroke-width: 1.9; stroke-dasharray: 6 5; }
-    .edge-candidate-head { fill: #8291a6; }
+    .edge-supply-head { fill: #8291a6; }
     .edge-contract { stroke: #c4b5fd; stroke-width: 2; stroke-dasharray: 10 4 2 4; }
     .edge-contract-end { fill: #c4b5fd; }
     .edge-label, .legend-label, .legend-key { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; letter-spacing: 0 !important; text-transform: none !important; }
@@ -2031,7 +2031,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .cap { fill: #57606a; }
       .edge-runtime { stroke: #985700; } .edge-runtime-head { fill: #985700; }
       .edge-library, .edge-library-head { stroke: #087859; }
-      .edge-dataset, .edge-tool { stroke: #607086; } .edge-candidate-head { fill: #607086; }
+      .edge-dataset, .edge-tool { stroke: #607086; } .edge-supply-head { fill: #607086; }
       .edge-environment { stroke: #786044; } .edge-environment-head { fill: #786044; }
       .edge-status { fill: #607086; }
       .edge-label-dataset, .edge-label-tool { fill: #607086; }
@@ -2076,7 +2076,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
   <text x="820" y="40" text-anchor="end" class="cap">INTERFACES&#160;//&#160;DEPENDENCIES</text>
   <line x1="40" y1="760" x2="820" y2="760" class="wg-rule"/>
   <text x="40" y="787" class="cap">CONNECTION TYPES</text>
-  <text x="820" y="787" text-anchor="end" class="legend-key">filled head = data or messages flow · open head = library in use · grey = candidate</text>
+  <text x="820" y="787" text-anchor="end" class="legend-key">filled head = data, assets or messages flow · open head = library in use</text>
   <path d="M 42 809 H 105 M 42 816 H 105" class="edge-runtime"/>
   <polygon points="105,809 97,805 97,813 105,809" class="edge-runtime-head"/>
   <polygon points="42,816 50,812 50,820 42,816" class="edge-runtime-head"/>
@@ -2091,10 +2091,10 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
   <rect x="508" y="843.5" width="7" height="7" class="edge-contract-end"/>
   <text x="531" y="853" class="legend-label">${escapeXML(EDGE_TYPES.contract.label)}</text>
   <path d="M 42 882 H 105" class="edge-dataset"/>
-  <polygon points="113,882 104,877.5 104,886.5" class="edge-candidate-head"/>
+  <polygon points="113,882 104,877.5 104,886.5" class="edge-supply-head"/>
   <text x="121" y="888" class="legend-label">${escapeXML(EDGE_TYPES.dataset.label)}</text>
   <path d="M 450 882 H 511" class="edge-tool"/>
-  <polygon points="519,882 510,877.5 510,886.5" class="edge-candidate-head"/>
+  <polygon points="519,882 510,877.5 510,886.5" class="edge-supply-head"/>
   <text x="531" y="888" class="legend-label">${escapeXML(EDGE_TYPES.tool.label)}</text>
   <text x="40" y="926" class="edge-label">Connections show interfaces, not a required all-project deployment.</text>
   <text x="40" y="948" class="edge-label">CREBAIN has no pid-rs dependency; its recordings reach pid-rs through Prisoma.</text>
