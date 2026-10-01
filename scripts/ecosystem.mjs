@@ -16,7 +16,7 @@ export const LOCAL_NCP = {
   sensors: "Each camera and microphone retains its identity and timing. Prisoma defines features, source groups, targets, and statistical assumptions. PID-rs estimates the declared quantities. The initial PID study selects two through four source variables; NCP imposes no such limit.",
   monitor: "Galadriel's current detector requires two sensor modalities. Two RGB cameras supply one Visual modality. Missing evidence produces abstention, never a nominal report.",
   environment: "Prisoma records commands before CREBAIN executes them. Installed body-only and canonical runs matched all 44 payloads, totaling 4,326,400 bytes. A 192-run timing study missed every 120-Hz deadline. The native pressure study completed 112 episodes with restored labels. Forecast improvement missed the declared useful threshold.",
-  assets: "Melkor validates and converts Gaussian-splat assets, and cobot-atlas and relief-atlas publish mesh datasets. All three are candidate CREBAIN inputs: no importer or adapter exists yet. Manwe supplies perception research tools and has no implemented adapter for any project.",
+  assets: "cobot-atlas and relief-atlas publish mesh datasets; CREBAIN's GLB loader reads that format, but their import is untested. Melkor validates and converts Gaussian-splat assets and wraps external reconstruction programs; CREBAIN has no splat renderer, so no Melkor path exists yet. Manwe supplies perception research tools and has no implemented adapter for any project.",
   reading: "Filled arrowheads show where data or messages go. Open arrowheads point to a library that a project uses. Grey lines are candidates without an adapter.",
   pidPaths: "CREBAIN has no pid-rs dependency. Its recordings reach pid-rs through Prisoma's optional information analysis. Engram renders its figures through Cortexel's figure contracts.",
   guide: "https://github.com/sepahead/NCP",
@@ -54,9 +54,9 @@ export const ECOSYSTEM_EDGES = [
   { a: "prisoma", b: "pidrs", kind: "library", label: "PID library", bow: 8, evidence: "prisoma pid-rs submodule; Cargo.lock pid-core" },
   { a: "engram", b: "cortexel", kind: "library", label: "Figure contracts", labelAt: [109, 448], labelAngle: -82, bow: -24, evidence: "Paper2Brain frontend, backend and scripts/cortexel-postimages use Cortexel" },
   { a: "crebain", b: "prisoma", kind: "environment", label: "Sensor data", status: "sensor path tested", labelAt: [476, 436], labelAngle: -61, route: [[528, 400]], evidence: "crebain integrations/ncp-force-ground-sensors: camera and microphone cases recorded by Prisoma" },
-  { a: "cobotatlas", b: "crebain", kind: "dataset", label: "Candidate meshes", labelAt: [626, 430], labelAngle: -29, bow: 0, evidence: "cobot-atlas glTF dataset; no importer in crebain" },
-  { a: "reliefatlas", b: "crebain", kind: "dataset", label: "Candidate meshes", labelAt: [614, 578], labelAngle: 18, bow: 0, evidence: "relief-atlas mesh corpus; no importer in crebain" },
-  { a: "melkor", b: "crebain", kind: "tool", label: "Candidate splat conversion", labelAt: [621, 505], labelAngle: -4, bow: 0, evidence: "melkor converts Gaussian-splat assets; no adapter in crebain" },
+  { a: "cobotatlas", b: "crebain", kind: "dataset", label: "Candidate GLB meshes", labelAt: [626, 430], labelAngle: -29, bow: 0, evidence: "cobot-atlas GLB meshes; crebain src/lib/glbSceneBudget.ts reads GLB, no atlas import test" },
+  { a: "reliefatlas", b: "crebain", kind: "dataset", label: "Candidate meshes", labelAt: [614, 578], labelAngle: 18, bow: 0, evidence: "relief-atlas mesh corpus; crebain GLB loader, no atlas import test" },
+  { a: "melkor", b: "crebain", kind: "tool", label: "Splats, no renderer yet", labelAt: [626, 505], labelAngle: -4, bow: 0, evidence: "melkor writes GLB with KHR_gaussian_splatting; crebain has no splat loader or renderer" },
   { a: "manwe", b: "crebain", kind: "tool", label: "Candidate perception", labelAt: [327, 596], labelAngle: -33, bow: -8, evidence: "manwe README: no implemented adapter for CREBAIN or any other project" },
 ];
 

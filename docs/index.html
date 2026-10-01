@@ -607,7 +607,7 @@
 <summary>Components, sensors, and operating limits</summary>
 <p>CREBAIN runs standalone. Applications can add Engram neural models, Prisoma recording, or Galadriel monitoring. One endpoint can expose several identified sensors.</p>
 <p>Each camera and microphone retains its identity and timing. Prisoma defines features, source groups, targets, and statistical assumptions. PID-rs estimates the declared quantities. The initial PID study selects two through four source variables; NCP imposes no such limit.</p>
-<p>Melkor validates and converts Gaussian-splat assets, and cobot-atlas and relief-atlas publish mesh datasets. All three are candidate CREBAIN inputs: no importer or adapter exists yet. Manwe supplies perception research tools and has no implemented adapter for any project.</p>
+<p>cobot-atlas and relief-atlas publish mesh datasets; CREBAIN&#39;s GLB loader reads that format, but their import is untested. Melkor validates and converts Gaussian-splat assets and wraps external reconstruction programs; CREBAIN has no splat renderer, so no Melkor path exists yet. Manwe supplies perception research tools and has no implemented adapter for any project.</p>
 <p>The four-owner reference routes CREBAIN observations to Engram and returns its action proposals. Galadriel records diagnostics, and Prisoma captures complete exchanges. Applications can select smaller compositions through the modular interface.</p>
 <p>Engram coordinates one local experiment and privately owns neural state. CREBAIN owns body and fusion state. Prisoma captures exact step pairs. Galadriel records actual detector output with explicit abstention.</p>
 <p>Each owner exchanges bounded requests and results through its own private process channel. NCP defines the shared contract.</p>
