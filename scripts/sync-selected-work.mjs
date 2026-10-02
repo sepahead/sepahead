@@ -168,12 +168,12 @@ ${Object.values(EDGE_TYPES).map(({ label, pattern }) => `<li><strong>${html(labe
 </ul>
 <p>${html(LOCAL_NCP.pidPaths)}</p>
 <p><strong>Different jobs:</strong> ${html(LOCAL_NCP.overview)}</p>
-<p><strong>Tested neural loop:</strong> ${html(LOCAL_NCP.target)}</p>
+<p><strong>Neural loop:</strong> ${html(LOCAL_NCP.target)}</p>
 <p><strong>CREBAIN and Prisoma:</strong> ${html(LOCAL_NCP.environment)}</p>
 <p><strong>${html(LOCAL_NCP.title)}.</strong> ${html(LOCAL_NCP.status)}</p>
-<p>${html(LOCAL_NCP.availability)} <a href="${LOCAL_NCP.guide}">Read the NCP release status</a>.</p>
+<p>${html(LOCAL_NCP.availability)} <a href="${LOCAL_NCP.guide}">Read about NCP</a>.</p>
 <details>
-<summary>Components, sensors, and operating limits</summary>
+<summary>Components and sensors</summary>
 <p>${html(LOCAL_NCP.composition)}</p>
 <p>${html(LOCAL_NCP.sensors)}</p>
 <p>${html(LOCAL_NCP.assets)}</p>
@@ -181,7 +181,7 @@ ${Object.values(EDGE_TYPES).map(({ label, pattern }) => `<li><strong>${html(labe
 <p>${html(LOCAL_NCP.summary)}</p>
 <p>${html(LOCAL_NCP.transport)}</p>
 <p>${html(LOCAL_NCP.monitor)}</p>
-<p><strong>Supported boundary:</strong> ${html(LOCAL_NCP.boundary)}</p>
+<p><strong>Scope:</strong> ${html(LOCAL_NCP.boundary)}</p>
 ${figure("work-graph-local", 566, LOCAL_NCP.summary + " " + LOCAL_NCP.boundary)}
 </details>`;
 }

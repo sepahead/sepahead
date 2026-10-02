@@ -378,7 +378,7 @@ test("animated hero themes show only current, evidence-backed focus terms", () =
   }
 });
 
-test("Engram card exposes research and pending-publication boundaries without stars", () => {
+test("Engram card describes its purpose and pending publication without stars", () => {
   const engram = PROJECTS.find((project) => project.slug === "engram");
   assert.ok(engram);
   assert.equal(engram.phase, "research");
@@ -389,7 +389,7 @@ test("Engram card exposes research and pending-publication boundaries without st
   assert.match(engram.summary, /model sources, simulation inputs, and results/i);
   assert.match(engram.summary, /optional NCP controller/i);
   assert.match(engram.summary, /public repository remains a placeholder pending source publication/i);
-  assert.match(engram.summary, /does not claim general paper reproduction or validated scientific results/i);
+  assert.match(engram.summary, /private Paper2Brain repository/i);
 
   for (const filename of ["assets/work-card-engram-dark.svg", "assets/work-card-engram-light.svg"]) {
     const card = read(filename);

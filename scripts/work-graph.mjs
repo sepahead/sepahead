@@ -2098,8 +2098,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
   <text x="531" y="888" class="legend-label">${escapeXML(EDGE_TYPES.tool.label)}</text>
   <text x="40" y="926" class="edge-label">Connections show interfaces, not a required all-project deployment.</text>
   <text x="40" y="948" class="edge-label">CREBAIN has no pid-rs dependency; its recordings reach pid-rs through Prisoma.</text>
-  <text x="40" y="970" class="edge-label">Haldir speaks NCP ${HALDIR_NCP.wire} rc.1 with a Gate-issued lease; local v1 rejects gated requests.</text>
-  <text x="40" y="992" class="edge-label">Selected paths have native evidence; broader qualification and final release gates remain open.</text>
+  <text x="40" y="970" class="edge-label">Haldir authorizes commands through its own NCP ${HALDIR_NCP.wire} interface.</text>
+  <text x="40" y="992" class="edge-label">Each program keeps its own process and state.</text>
   <g transform="translate(0 ${VSHIFT})">
     <g class="edges">
       ${calmEdges.join("\n    ")}

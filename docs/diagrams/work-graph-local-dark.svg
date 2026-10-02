@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 690" width="1000" height="690" role="img" aria-labelledby="local-title local-desc">
-  <title id="local-title">Four-owner local v1 reference</title>
-  <desc id="local-desc">Engram coordinates one local experiment and privately owns neural state. CREBAIN owns body and fusion state. Prisoma captures exact step pairs. Galadriel records actual detector output with explicit abstention. Each owner exchanges bounded requests and results through its own private process channel. NCP defines the shared contract. Galadriel&apos;s current detector requires two sensor modalities. Two RGB cameras supply one Visual modality. Missing evidence produces abstention, never a nominal report. This candidate targets local Darwin simulation. Haldir gating, remote endpoints, physical actuation, and real-time guarantees are excluded. Gated requests must be rejected before endpoint preparation. Capture and monitor results grant no command authority. The tested Engram implementation is private Paper2Brain source. The public Engram repository is a placeholder, not an executable release. Local sensor and neural loops passed their declared checks. Broader qualification and final v1 release gates remain open.</desc>
+  <title id="local-title">Local four-program composition</title>
+  <desc id="local-desc">Engram coordinates one local experiment and owns the neural state. CREBAIN owns the body and fusion state. Prisoma records the step pairs. Galadriel records the detector output. Each owner exchanges bounded requests and results through its own private process channel. NCP defines the shared contract. Galadriel compares at least two sensor modalities. It reports when the evidence is not sufficient. The composition runs in local simulation. Haldir authorizes commands through its own NCP 1.0 interface, outside this composition. Capture and monitor results never send commands. The Engram source is in the private Paper2Brain repository. The public Engram repository is a placeholder. Engram, CREBAIN, Prisoma, and Galadriel can run together as one local experiment. Each program owns its state.</desc>
   <style>
     .panel { fill: #0d1117; stroke: #30363d; }
     .coordinator { fill: #172333; stroke: #536071; }
@@ -77,10 +77,10 @@
   <rect x="24" y="219" width="952" height="73" rx="10" class="contract"/>
   <text x="500" y="249" class="contract-title" text-anchor="middle">NCP is the contract on each separate channel.</text>
   <text x="500" y="278" class="contract-body" text-anchor="middle">Request / exact result / digest-bound acknowledgement</text>
-  <text x="500" y="518" class="body" text-anchor="middle">Results return evidence. Capture and monitoring cannot command.</text>
+  <text x="500" y="518" class="body" text-anchor="middle">Results return records. Capture and monitoring never send commands.</text>
   <rect x="24" y="540" width="952" height="124" rx="12" class="boundary"/>
-  <text x="46" y="569" class="body" text-anchor="start">One Visual modality: Galadriel&apos;s unchanged evidence floor requires abstention.</text>
-  <text x="46" y="596" class="body" text-anchor="start">Haldir gating is excluded. Gated requests are rejected before preparation.</text>
-  <text x="46" y="623" class="body" text-anchor="start">Darwin simulation only; no remote, physical-actuation, or real-time guarantee.</text>
-  <text x="46" y="649" class="body" text-anchor="start">Reference status: broader qualification and final release gates remain open.</text>
+  <text x="46" y="569" class="body" text-anchor="start">Galadriel compares sensor modalities and reports insufficient evidence.</text>
+  <text x="46" y="596" class="body" text-anchor="start">Haldir authorizes commands through its own NCP 1.0 interface.</text>
+  <text x="46" y="623" class="body" text-anchor="start">This composition runs in local simulation.</text>
+  <text x="46" y="649" class="body" text-anchor="start">Each program keeps its own process and state.</text>
   </svg>

@@ -70,11 +70,11 @@ export function localOwnershipSvg() {
   <rect x="24" y="219" width="952" height="73" rx="10" class="contract"/>
   ${text(500, 249, "NCP is the contract on each separate channel.", "contract-title", "middle")}
   ${text(500, 278, "Request / exact result / digest-bound acknowledgement", "contract-body", "middle")}
-  ${text(500, 518, "Results return evidence. Capture and monitoring cannot command.", "body", "middle")}
+  ${text(500, 518, "Results return records. Capture and monitoring never send commands.", "body", "middle")}
   <rect x="24" y="540" width="952" height="124" rx="12" class="boundary"/>
-  ${text(46, 569, "One Visual modality: Galadriel's unchanged evidence floor requires abstention.")}
-  ${text(46, 596, "Haldir gating is excluded. Gated requests are rejected before preparation.")}
-  ${text(46, 623, "Darwin simulation only; no remote, physical-actuation, or real-time guarantee.")}
-  ${text(46, 649, "Reference status: broader qualification and final release gates remain open.")}
+  ${text(46, 569, "Galadriel compares sensor modalities and reports insufficient evidence.")}
+  ${text(46, 596, "Haldir authorizes commands through its own NCP 1.0 interface.")}
+  ${text(46, 623, "This composition runs in local simulation.")}
+  ${text(46, 649, "Each program keeps its own process and state.")}
   </svg>\n`;
 }

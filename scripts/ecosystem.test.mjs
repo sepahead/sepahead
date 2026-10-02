@@ -77,8 +77,8 @@ test("both SVG views retain accessible candidate and exclusion boundaries in bot
       assert.match(svg, /<title(?:\s|>)/);
       assert.match(svg, /<desc(?:\s|>)/);
       assert.match(svg, /prefers-reduced-motion:\s*reduce/);
-      assert.match(svg, /qualification.*open/);
-      assert.match(svg, /[Gg]ated requests (?:must be rejected|are rejected) before (?:endpoint )?preparation/);
+      assert.match(svg, /Haldir authorizes commands through its own NCP 1\.0 interface/);
+      assert.match(svg, /never send commands/);
       assert.doesNotMatch(svg, /\bNEST\b/);
       assert.doesNotMatch(svg, /Haldir-local signed intent|deny-only assessment|out-of-band CREBAIN telemetry/);
       assert.doesNotMatch(svg, /<script\b|javascript:|(?:href|src)=["']https?:/i);
@@ -86,7 +86,7 @@ test("both SVG views retain accessible candidate and exclusion boundaries in bot
   }
 });
 
-test("visible and plain-text profile surfaces preserve scope, abstention, and private-source limits", () => {
+test("visible and plain-text profile surfaces describe the projects and their connections", () => {
   for (const file of ["README.md", "docs/index.html", "docs/llms.txt"]) {
     const source = readFileSync(new URL(`../${file}`, import.meta.url), "utf8")
       .replaceAll("&#39;", "'").replaceAll("&quot;", '"').replaceAll("&amp;", "&");
