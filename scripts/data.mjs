@@ -36,7 +36,7 @@ export const PROJECTS = [
     stars: 15, repo: "sepahead/NCP",
     desc: "Typed messages for observations, actions, monitoring, and capture. Projects stay separate. Local v1 qualification is in progress.",
     stack: ["Rust", "Python", "JSON"],
-    summary: "NCP defines typed messages for neural controllers, simulations, sensor monitors, and experiment capture. Applications select local peers through private process channels. Installed sensor and NEST loops passed bounded checks. Broader qualification and final v1 release gates remain open. Haldir retains its separate pinned v0.8 interface.",
+    summary: "NCP defines typed messages for neural controllers, simulations, sensor monitors, and experiment capture. Applications select local peers through private process channels. Installed sensor and NEST loops passed bounded checks. Broader qualification and final v1 release gates remain open. Haldir speaks the NCP 1.0 release candidate with its own commander lease.",
     status: "Local v1 candidate. Selected native workflows passed. Final release gates remain open.",
     schemaType: "SoftwareSourceCode",
     languages: ["Rust", "TypeScript", "Python", "C", "C++"],

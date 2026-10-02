@@ -271,7 +271,7 @@
   <text x="121" y="853" class="legend-label">Sensor data path</text>
   <path d="M 450 847 H 511" class="edge-contract"/>
   <rect x="508" y="843.5" width="7" height="7" class="edge-contract-end"/>
-  <text x="531" y="853" class="legend-label">Haldir: NCP v0.8 interface</text>
+  <text x="531" y="853" class="legend-label">Haldir: NCP 1.0 interface</text>
   <path d="M 42 882 H 105" class="edge-dataset"/>
   <polygon points="113,882 104,877.5 104,886.5" class="edge-supply-head"/>
   <text x="121" y="888" class="legend-label">Mesh dataset</text>
@@ -280,11 +280,11 @@
   <text x="531" y="888" class="legend-label">Asset or model tool</text>
   <text x="40" y="926" class="edge-label">Connections show interfaces, not a required all-project deployment.</text>
   <text x="40" y="948" class="edge-label">CREBAIN has no pid-rs dependency; its recordings reach pid-rs through Prisoma.</text>
-  <text x="40" y="970" class="edge-label">Haldir stays on NCP v0.8. Local v1 gated requests are rejected before preparation.</text>
+  <text x="40" y="970" class="edge-label">Haldir speaks NCP 1.0 rc.1 with a Gate-issued lease; local v1 rejects gated requests.</text>
   <text x="40" y="992" class="edge-label">Selected paths have native evidence; broader qualification and final release gates remain open.</text>
   <g transform="translate(0 26)">
     <g class="edges">
-      <g data-edge-kind="contract" data-from="ncp" data-to="haldir"><title>ncp to haldir: Haldir NCP v0.8. dash-dot line with a square end, outside the local v1 profile.</title><path d="M 333 309.1 Q 255.9 221.1 178.9 133" class="edge-clearance"/><path d="M 333 309.1 Q 255.9 221.1 178.9 133" class="edge-contract"/><rect x="175.4" y="129.5" width="7" height="7" class="edge-contract-end"/></g>
+      <g data-edge-kind="contract" data-from="ncp" data-to="haldir"><title>ncp to haldir: Haldir NCP 1.0. dash-dot line with a square end, outside the local v1 profile.</title><path d="M 333 309.1 Q 255.9 221.1 178.9 133" class="edge-clearance"/><path d="M 333 309.1 Q 255.9 221.1 178.9 133" class="edge-contract"/><rect x="175.4" y="129.5" width="7" height="7" class="edge-contract-end"/></g>
     <g data-edge-kind="library" data-from="galadriel" data-to="pidrs"><title>galadriel to pidrs: PID library. dashed line with an open arrowhead at the library.</title><path d="M 436.9 152.1 Q 478.1 123.2 526.3 108.8" class="edge-clearance"/><path d="M 436.9 152.1 Q 478.1 123.2 526.3 108.8" class="edge-library"/><path class="edge-library-head" d="M 516.5 107.5 L 526.3 108.8 L 518.8 115.2"/></g>
     <g data-edge-kind="library" data-from="prisoma" data-to="pidrs"><title>prisoma to pidrs: PID library. dashed line with an open arrowhead at the library.</title><path d="M 593.3 300.1 Q 589.9 215.3 570.7 132.6" class="edge-clearance"/><path d="M 593.3 300.1 Q 589.9 215.3 570.7 132.6" class="edge-library"/><path class="edge-library-head" d="M 568.9 142.3 L 570.7 132.6 L 576.7 140.5"/></g>
     <g data-edge-kind="library" data-from="engram" data-to="cortexel"><title>engram to cortexel: Figure contracts. dashed line with an open arrowhead at the library.</title><path d="M 127.4 372.4 Q 140.4 449.4 105.9 519.4" class="edge-clearance"/><path d="M 127.4 372.4 Q 140.4 449.4 105.9 519.4" class="edge-library"/><path class="edge-library-head" d="M 113.5 513.1 L 105.9 519.4 L 106.3 509.6"/></g>

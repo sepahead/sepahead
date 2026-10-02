@@ -28,8 +28,8 @@ export const LOCAL_NCP = {
   ],
 };
 
-// Haldir's NCP interface. Change this only when Haldir ships a crate for the newer wire.
-export const HALDIR_NCP = { wire: "v0.8", crate: "haldir-ncp08" };
+// Haldir's NCP interface: the wire its main branch speaks and the crate that owns it.
+export const HALDIR_NCP = { wire: "1.0", crate: "haldir-ncp10" };
 
 // One meaning per visual channel: line pattern = kind of relation; filled arrowhead = direction
 // of data, assets or messages; open arrowhead = "uses this library".

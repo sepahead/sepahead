@@ -10,7 +10,7 @@
 //   • line patterns, arrowheads, labels, and a visible legend identify each
 //     relationship without requiring color or animation.
 // NCP is the central shared interface, not a runtime broker or required bundle.
-// The overview separates local adapters, Haldir's pinned v0.8 interface,
+// The overview separates local adapters, Haldir's NCP 1.0 interface,
 // library dependencies, and asset/tool/export context.
 // The project marks share dark surfaces, faceted geometry, and metal rims.
 // NCP has opposed contract rails and separate request/outcome paths.
@@ -2098,7 +2098,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
   <text x="531" y="888" class="legend-label">${escapeXML(EDGE_TYPES.tool.label)}</text>
   <text x="40" y="926" class="edge-label">Connections show interfaces, not a required all-project deployment.</text>
   <text x="40" y="948" class="edge-label">CREBAIN has no pid-rs dependency; its recordings reach pid-rs through Prisoma.</text>
-  <text x="40" y="970" class="edge-label">Haldir stays on NCP ${HALDIR_NCP.wire}. Local v1 gated requests are rejected before preparation.</text>
+  <text x="40" y="970" class="edge-label">Haldir speaks NCP ${HALDIR_NCP.wire} rc.1 with a Gate-issued lease; local v1 rejects gated requests.</text>
   <text x="40" y="992" class="edge-label">Selected paths have native evidence; broader qualification and final release gates remain open.</text>
   <g transform="translate(0 ${VSHIFT})">
     <g class="edges">
