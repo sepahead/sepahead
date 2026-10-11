@@ -1,5 +1,6 @@
 name: Sync phone-free web CVs
 run-name: Sync private CV ${{ inputs.private_sha || github.event_name }}
+# Full verification uses free standard public runners. See docs/CV_MAINTENANCE.md.
 
 on:
   push:
@@ -26,8 +27,9 @@ permissions:
 
 jobs:
   build:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - name: Check out the private CV source read-only
@@ -67,8 +69,6 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
-          cache: pip
-          cache-dependency-path: source/final_generic/requirements-verify.txt
 
       - name: Install PDF build and verification tools
         run: |
@@ -83,56 +83,45 @@ jobs:
             texlive-lang-german \
             texlive-latex-base \
             texlive-latex-extra
-          python -m pip install --requirement source/final_generic/requirements-verify.txt
+          python -m pip install --no-cache-dir --requirement source/final_generic/requirements-verify.txt
 
-      - name: Refresh page-3 metrics on scheduled runs
+      - name: Verify every CV edition without publishing private diagnostics
         working-directory: source/final_generic
         env:
-          # fetch_github.py reads public metadata (`gh api users/sepahead/...`)
-          # and one public Hugging Face endpoint; the default token is
-          # sufficient and nothing crosses repository boundaries.
           GH_TOKEN: ${{ github.token }}
-        run: |
-          # Scheduled runs exist to keep the bar/pie chart numbers current
-          # even when the private repository's own daily refresh cannot run:
-          # the refreshed (ephemeral, never committed here) snapshot flows
-          # through the same make test freshness gate and full verify gates.
-          # Exact-SHA dispatch runs must stay byte-reproducible from the
-          # requested private revision, so they build from the committed
-          # snapshot, whose age the freshness gate bounds (30h) fail closed.
-          if [ "${GITHUB_EVENT_NAME}" = "schedule" ]; then
-            make sync
-            echo "Scheduled run: refreshed chart numbers flow through the" >&2
-            echo "standard verify gates (event: ${GITHUB_EVENT_NAME})." >&2
-            git diff --stat -- github_data.tex >&2 || true
-          else
-            echo "Event ${GITHUB_EVENT_NAME}: building from the committed" >&2
-            echo "snapshot; freshness is enforced by make test." >&2
-          fi
-
-      - name: Force-build and verify the phone-free editions
-        working-directory: source/final_generic
-        run: make -B verify-web
+          # Schedules refresh once; manual/push runs verify the exact snapshot.
+          CV_REFRESH_METRICS: ${{ github.event_name == 'schedule' && '1' || '0' }}
+        # This helper captures and deletes private diagnostics on every exit.
+        # Never print Make/LaTeX output or upload diagnostic files here.
+        run: bash scripts/verify_ci.sh
 
       - name: Prepare the verified release artifact
         working-directory: source/final_generic
         run: |
-          mkdir -p release-web
-          cp main_en_web.pdf release-web/Sepehr_Mahmoudian_CV_EN.pdf
-          cp main_de_web.pdf release-web/Sepehr_Mahmoudian_CV_DE.pdf
-          cd release-web
-          sha256sum \
-            Sepehr_Mahmoudian_CV_EN.pdf \
-            Sepehr_Mahmoudian_CV_DE.pdf > SHA256SUMS
+          release_dir="${RUNNER_TEMP}/cv-release-web"
+          mkdir "$release_dir"
+          cp main_en_web.pdf "${release_dir}/Sepehr_Mahmoudian_CV_EN.pdf"
+          cp main_de_web.pdf "${release_dir}/Sepehr_Mahmoudian_CV_DE.pdf"
+          (
+            cd "$release_dir"
+            sha256sum \
+              Sepehr_Mahmoudian_CV_EN.pdf \
+              Sepehr_Mahmoudian_CV_DE.pdf > SHA256SUMS
+          )
+          python3 scripts/verify_web_artifact.py "$release_dir"
 
       - name: Upload the verified phone-free PDFs
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: phone-free-web-cvs
-          path: source/final_generic/release-web/
+          path: ${{ runner.temp }}/cv-release-web/
           if-no-files-found: error
           retention-days: 1
           compression-level: 0
+
+      - name: Remove the private source and build files
+        if: always()
+        run: rm -rf -- source
 
   publish:
     needs: build

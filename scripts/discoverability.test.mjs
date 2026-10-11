@@ -266,10 +266,11 @@ test("phone detector covers tel links, metadata and common German representation
 });
 
 test("published PDF bytes are phone-free and originate from the hardened web gate", () => {
-  assert.match(syncWorkflow, /working-directory:\s*source\/final_generic[\s\S]*?run:\s*make -B verify-web/);
-  assert.match(syncWorkflow, /cp main_en_web\.pdf release-web\/Sepehr_Mahmoudian_CV_EN\.pdf/);
-  assert.match(syncWorkflow, /cp main_de_web\.pdf release-web\/Sepehr_Mahmoudian_CV_DE\.pdf/);
-  assert.doesNotMatch(syncWorkflow, /cp\s+main_(?:en|de)\.pdf\s/);
+  assert.match(syncWorkflow, /name: Verify every CV edition without publishing private diagnostics[\s\S]*?working-directory:\s*source\/final_generic[\s\S]*?run:\s*bash scripts\/verify_ci\.sh/);
+  assert.match(syncWorkflow, /cp main_en_web\.pdf "\$\{release_dir\}\/Sepehr_Mahmoudian_CV_EN\.pdf"/);
+  assert.match(syncWorkflow, /cp main_de_web\.pdf "\$\{release_dir\}\/Sepehr_Mahmoudian_CV_DE\.pdf"/);
+  assert.match(syncWorkflow, /python3 scripts\/verify_web_artifact\.py "\$release_dir"[\s\S]*?name: Upload the verified phone-free PDFs/);
+  assert.doesNotMatch(syncWorkflow, /cp\s+main_(?:en|de)(?:_2page|_drv)?\.pdf\s/);
 
   for (const filename of CV_FILES) {
     const buffer = readFileSync(new URL(`../docs/cv/${filename}`, import.meta.url));
@@ -284,6 +285,22 @@ test("published PDF bytes are phone-free and originate from the hardened web gat
       }
     }
   }
+});
+
+test("CV automation uses free standard runners and keeps source and publishing authority isolated", () => {
+  const [build, publish] = syncWorkflow.split("\n  publish:");
+  assert.ok(publish, "the publishing job must remain separate");
+  assert.deepEqual([...syncWorkflow.matchAll(/runs-on:\s*(\S+)/g)].map((match) => match[1]), ["ubuntu-24.04", "ubuntu-24.04"]);
+  assert.match(build, /ssh-key: \$\{\{ secrets\.PRIVATE_CV_READ_KEY \}\}/);
+  assert.doesNotMatch(build, /PUBLIC_CV_WRITE_KEY/);
+  assert.match(publish, /needs:\s*build/);
+  assert.match(publish, /ssh-key: \$\{\{ secrets\.PUBLIC_CV_WRITE_KEY \}\}/);
+  assert.doesNotMatch(publish, /PRIVATE_CV_READ_KEY/);
+  assert.doesNotMatch(build, /cache:\s|run:\s*make\b|actions\/cache@/);
+  assert.match(build, /CV_REFRESH_METRICS: \$\{\{ github\.event_name == 'schedule' && '1' \|\| '0' \}\}/);
+  assert.match(build, /path: \$\{\{ runner\.temp \}\}\/cv-release-web\//);
+  assert.match(build, /retention-days:\s*1\b/);
+  assert.match(build, /name: Remove the private source and build files\n\s*if: always\(\)\n\s*run: rm -rf -- source/);
 });
 
 test("professional title and answer-engine topics remain synchronized", () => {
