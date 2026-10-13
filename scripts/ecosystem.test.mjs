@@ -77,7 +77,7 @@ test("both SVG views retain accessible candidate and exclusion boundaries in bot
       assert.match(svg, /<title(?:\s|>)/);
       assert.match(svg, /<desc(?:\s|>)/);
       assert.match(svg, /prefers-reduced-motion:\s*reduce/);
-      assert.match(svg, /Haldir authorizes commands through its own NCP 1\.0 interface/);
+      assert.match(svg, /Haldir publishes the commands it authorizes through its own NCP wire 1\.0 interface/);
       assert.match(svg, /never send commands/);
       assert.doesNotMatch(svg, /\bNEST\b/);
       assert.doesNotMatch(svg, /Haldir-local signed intent|deny-only assessment|out-of-band CREBAIN telemetry/);
@@ -149,7 +149,17 @@ test("connection meaning survives without color or motion", () => {
     for (const { label } of Object.values(EDGE_TYPES)) assert.ok(svg.includes(label));
     assert.match(svg, /\.edge-library\s*\{[^}]*stroke-dasharray: 8 5/);
     assert.match(svg, /\.edge-dataset\s*\{[^}]*stroke-dasharray: 1 6/);
-    assert.match(svg, /\.edge-contract\s*\{[^}]*stroke-dasharray: 10 4 2 4/);
+    // Both NCP surfaces are solid lines in the NCP colour. Without colour, Haldir's interface
+    // still differs by form: one rail with one head into NCP, not paired request/result rails.
+    assert.doesNotMatch(svg, /\.edge-contract\s*\{[^}]*stroke-dasharray/);
+    const contract = svg.match(/<g data-edge-kind="contract" data-from="ncp" data-to="haldir">[\s\S]*?<\/g>/g) || [];
+    assert.equal(contract.length, 1);
+    assert.equal((contract[0].match(/class="edge-contract"/g) || []).length, 1);
+    assert.equal((contract[0].match(/class="edge-contract-head"/g) || []).length, 1);
+    for (const group of svg.match(/<g data-edge-kind="protocol"[\s\S]*?<\/g>/g) || []) {
+      assert.equal((group.match(/class="edge-runtime"/g) || []).length, 2);
+      assert.equal((group.match(/class="edge-runtime-head"/g) || []).length, 2);
+    }
     assert.equal((svg.match(/data-edge-kind="protocol"/g) || []).length, 4);
     assert.equal((svg.match(/data-edge-kind="protocol" data-from="ncp"/g) || []).length, 4);
     assert.match(svg, /not a required all-project deployment/);

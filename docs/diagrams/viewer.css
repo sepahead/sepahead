@@ -1,7 +1,7 @@
-:root { color-scheme: light dark; --page: #f6f8fa; --panel: #fff; --ink: #1f2328; --muted: #59636e; --border: #d0d7de; --accent: #086f83; --wash: #e7f5f7; }
-@media (prefers-color-scheme: dark) { :root { --page: #0d1117; --panel: #111820; --ink: #e6edf3; --muted: #9daab7; --border: #33404d; --accent: #67dbe9; --wash: #15303a; } }
-:root[data-theme="light"] { color-scheme: light; --page: #f6f8fa; --panel: #fff; --ink: #1f2328; --muted: #59636e; --border: #d0d7de; --accent: #086f83; --wash: #e7f5f7; }
-:root[data-theme="dark"] { color-scheme: dark; --page: #0d1117; --panel: #111820; --ink: #e6edf3; --muted: #9daab7; --border: #33404d; --accent: #67dbe9; --wash: #15303a; }
+:root { color-scheme: light dark; --page: #f6f8fa; --panel: #fff; --ink: #1f2328; --muted: #59636e; --border: #d0d7de; --accent: #086f83; --wash: #e7f5f7; --ncp: #985700; --lib: #087859; --env: #786044; --supply: #607086; }
+@media (prefers-color-scheme: dark) { :root { --page: #0d1117; --panel: #111820; --ink: #e6edf3; --muted: #9daab7; --border: #33404d; --accent: #67dbe9; --wash: #15303a; --ncp: #fbbf24; --lib: #6ee7b7; --env: #d1c0a2; --supply: #8291a6; } }
+:root[data-theme="light"] { color-scheme: light; --page: #f6f8fa; --panel: #fff; --ink: #1f2328; --muted: #59636e; --border: #d0d7de; --accent: #086f83; --wash: #e7f5f7; --ncp: #985700; --lib: #087859; --env: #786044; --supply: #607086; }
+:root[data-theme="dark"] { color-scheme: dark; --page: #0d1117; --panel: #111820; --ink: #e6edf3; --muted: #9daab7; --border: #33404d; --accent: #67dbe9; --wash: #15303a; --ncp: #fbbf24; --lib: #6ee7b7; --env: #d1c0a2; --supply: #8291a6; }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--page); color: var(--ink); font: 16px/1.55 system-ui, -apple-system, sans-serif; }
 main { max-width: 1160px; margin: auto; padding: 32px 24px 56px; }
@@ -36,10 +36,16 @@ dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 
 dt { display: flex; align-items: center; gap: 12px; font-size: .9rem; font-weight: 600; }
 dd { margin: 6px 0 0 54px; font-size: .85rem; color: var(--muted); }
 .reading-guide p { font-size: .9rem; max-width: 80ch; }
-.line { display: inline-block; flex-shrink: 0; width: 42px; height: 0; border-top: 2px solid var(--accent); position: relative; }
-.library { border-top-style: dashed; }
-.asset { border-top-style: dotted; }
-.tool { height: 5px; border-bottom: 2px dashed var(--accent); }
-.contract { border: 0; height: 2px; background: repeating-linear-gradient(to right, var(--accent) 0 12px, transparent 12px 17px, var(--accent) 17px 20px, transparent 20px 25px); }
-.contract::after { content: ""; position: absolute; right: 0; top: -2px; width: 6px; height: 6px; background: var(--accent); }
+/* Legend samples repeat the map's edge grammar: colour family, line pattern, and arrowheads. */
+.line { display: inline-block; flex-shrink: 0; width: 42px; height: 0; margin-right: 6px; border-top: 2px solid currentColor; position: relative; color: var(--accent); }
+.line::after { content: ""; position: absolute; right: -7px; top: -5px; border-left: 8px solid currentColor; border-top: 4px solid transparent; border-bottom: 4px solid transparent; }
+.protocol { color: var(--ncp); height: 8px; border-bottom: 2px solid currentColor; }
+.protocol::before { content: ""; position: absolute; left: -7px; top: 1px; border-right: 8px solid currentColor; border-top: 4px solid transparent; border-bottom: 4px solid transparent; }
+.contract { color: var(--ncp); }
+.library { color: var(--lib); border-top-style: dashed; }
+.library::after { right: -3px; top: -5px; width: 7px; height: 7px; border: 0; border-top: 2px solid currentColor; border-right: 2px solid currentColor; transform: rotate(45deg); }
+.environment { color: var(--env); border-top: 0; height: 2px; background: repeating-linear-gradient(to right, currentColor 0 12px, transparent 12px 17px); }
+.environment::after { top: -3px; }
+.asset { color: var(--supply); border-top-style: dotted; }
+.tool { color: var(--supply); border-top-style: dashed; }
 @media (max-width: 560px) { main { padding: 20px 12px 32px; } .toolbar { padding: 10px; gap: 10px; } dl { grid-template-columns: 1fr; } .views a { flex: 1; text-align: center; padding: 10px; font-size: .9rem; } #viewport { height: 62vh; } }

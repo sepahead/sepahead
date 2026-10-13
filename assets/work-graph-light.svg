@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 1025" width="860" height="1025" role="img" aria-label="Local four-program composition Engram coordinates one local experiment and owns the neural state. CREBAIN owns the body and fusion state. Prisoma records the step pairs. Galadriel records the detector output. Each owner exchanges bounded requests and results through its own private process channel. NCP defines the shared contract. The composition runs in local simulation. Haldir authorizes commands through its own NCP 1.0 interface, outside this composition. Capture and monitor results never send commands. Galadriel compares at least two sensor modalities. It reports when the evidence is not sufficient. The Engram source is in the private Paper2Brain repository. The public Engram repository is a placeholder. The map shows protocol interfaces, libraries, tools, and assets. Applications select the components they need. Engram, CREBAIN, Prisoma, and Galadriel can run together as one local experiment. Each program owns its state.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 1025" width="860" height="1025" role="img" aria-label="Local four-program composition Engram coordinates one local experiment and owns the neural state. CREBAIN owns the body and fusion state. Prisoma records the step pairs. Galadriel records the detector output. Each owner exchanges bounded requests and results through its own private process channel. NCP defines the shared contract. The composition runs in local simulation. Haldir publishes the commands it authorizes through its own NCP wire 1.0 interface, outside this composition. Capture and monitor results never send commands. Galadriel compares at least two sensor modalities. It reports when the evidence is not sufficient. The Engram source is in the private Paper2Brain repository. The public Engram repository is a placeholder. The map shows protocol interfaces, libraries, tools, and assets. Applications select the components they need. Engram, CREBAIN, Prisoma, and Galadriel can run together as one local experiment. Each program owns its state.">
   <title>NCP interfaces and project relationships</title>
-  <desc>Local four-program composition Engram coordinates one local experiment and owns the neural state. CREBAIN owns the body and fusion state. Prisoma records the step pairs. Galadriel records the detector output. Each owner exchanges bounded requests and results through its own private process channel. NCP defines the shared contract. The composition runs in local simulation. Haldir authorizes commands through its own NCP 1.0 interface, outside this composition. Capture and monitor results never send commands. Galadriel compares at least two sensor modalities. It reports when the evidence is not sufficient. The Engram source is in the private Paper2Brain repository. The public Engram repository is a placeholder. The map shows protocol interfaces, libraries, tools, and assets. Applications select the components they need. Engram, CREBAIN, Prisoma, and Galadriel can run together as one local experiment. Each program owns its state.</desc>
+  <desc>Local four-program composition Engram coordinates one local experiment and owns the neural state. CREBAIN owns the body and fusion state. Prisoma records the step pairs. Galadriel records the detector output. Each owner exchanges bounded requests and results through its own private process channel. NCP defines the shared contract. The composition runs in local simulation. Haldir publishes the commands it authorizes through its own NCP wire 1.0 interface, outside this composition. Capture and monitor results never send commands. Galadriel compares at least two sensor modalities. It reports when the evidence is not sufficient. The Engram source is in the private Paper2Brain repository. The public Engram repository is a placeholder. The map shows protocol interfaces, libraries, tools, and assets. Applications select the components they need. Engram, CREBAIN, Prisoma, and Galadriel can run together as one local experiment. Each program owns its state.</desc>
   <defs>
     <radialGradient id="hubGrad" cx="50%" cy="42%" r="65%">
       <stop offset="0%" stop-color="#06281d"/>
@@ -46,8 +46,8 @@
     .edge-dataset { stroke: #8291a6; stroke-width: 1.9; stroke-dasharray: 1 6; }
     .edge-tool { stroke: #8291a6; stroke-width: 1.9; stroke-dasharray: 6 5; }
     .edge-supply-head { fill: #8291a6; }
-    .edge-contract { stroke: #c4b5fd; stroke-width: 2; stroke-dasharray: 10 4 2 4; }
-    .edge-contract-end { fill: #c4b5fd; }
+    .edge-contract { stroke: #fbbf24; stroke-width: 2.1; }
+    .edge-contract-head { fill: #fbbf24; }
     .edge-label, .legend-label, .legend-key { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; letter-spacing: 0 !important; text-transform: none !important; }
     .legend-key { font-size: 10.5px; fill: #9da7b3; }
     .edge-label { stroke-width: 5px !important; }
@@ -55,7 +55,7 @@
     .edge-label-protocol { fill: #fcd34d; }
     .edge-label-library { fill: #a7f3d0; }
     .edge-label-dataset, .edge-label-tool { fill: #9da7b3; font-size: 10.5px; }
-    .edge-label-contract { fill: #ddd6fe; }
+    .edge-label-contract { fill: #fcd34d; }
     .legend-label { font-size: 13px; }
     .scope-box { fill: none; stroke: #8291a6; stroke-width: 1; stroke-dasharray: 5 5; }
     .chip       { fill: #0d1117; stroke-width: 1.5; }
@@ -219,11 +219,11 @@
       .edge-status { fill: #607086; }
       .edge-label-dataset, .edge-label-tool { fill: #607086; }
       .edge-clearance { stroke: #f7f8f9; }
-      .edge-contract { stroke: #7353a6; } .edge-contract-end { fill: #7353a6; }
+      .edge-contract { stroke: #985700; } .edge-contract-head { fill: #985700; }
       .edge-label, .legend-label { fill: #435365; } .legend-key { fill: #607086; }
       .edge-label-protocol { fill: #805000; }
       .edge-label-library { fill: #08664d; }
-      .edge-label-contract { fill: #63428d; }
+      .edge-label-contract { fill: #805000; }
       .chip { fill: #ffffff; }
       .chip-label { fill: #1f2328; }
       .hub-glow { stroke: #059669; stroke-opacity: 0.12; }
@@ -262,7 +262,7 @@
   <path d="M 42 809 H 105 M 42 816 H 105" class="edge-runtime"/>
   <polygon points="105,809 97,805 97,813 105,809" class="edge-runtime-head"/>
   <polygon points="42,816 50,812 50,820 42,816" class="edge-runtime-head"/>
-  <text x="121" y="818" class="legend-label">Local NCP interface</text>
+  <text x="121" y="818" class="legend-label">Local NCP 1.0 interface</text>
   <path d="M 450 812 H 511" class="edge-library"/>
   <path d="M 505 807.5 L 514 812 L 505 816.5" class="edge-library-head"/>
   <text x="531" y="818" class="legend-label">Uses a library</text>
@@ -270,8 +270,8 @@
   <polygon points="113,847 104,842.5 104,851.5" class="edge-environment-head"/>
   <text x="121" y="853" class="legend-label">Sensor data path</text>
   <path d="M 450 847 H 511" class="edge-contract"/>
-  <rect x="508" y="843.5" width="7" height="7" class="edge-contract-end"/>
-  <text x="531" y="853" class="legend-label">Haldir: NCP 1.0 interface</text>
+  <polygon points="519,847 510,842.5 510,851.5" class="edge-contract-head"/>
+  <text x="531" y="853" class="legend-label">Haldir: NCP wire 1.0 commands</text>
   <path d="M 42 882 H 105" class="edge-dataset"/>
   <polygon points="113,882 104,877.5 104,886.5" class="edge-supply-head"/>
   <text x="121" y="888" class="legend-label">Mesh dataset</text>
@@ -280,11 +280,11 @@
   <text x="531" y="888" class="legend-label">Asset or model tool</text>
   <text x="40" y="926" class="edge-label">Connections show interfaces, not a required all-project deployment.</text>
   <text x="40" y="948" class="edge-label">CREBAIN has no pid-rs dependency; its recordings reach pid-rs through Prisoma.</text>
-  <text x="40" y="970" class="edge-label">Haldir authorizes commands through its own NCP 1.0 interface.</text>
+  <text x="40" y="970" class="edge-label">Haldir publishes the commands it authorizes through its own NCP wire 1.0 interface.</text>
   <text x="40" y="992" class="edge-label">Each program keeps its own process and state.</text>
   <g transform="translate(0 26)">
     <g class="edges">
-      <g data-edge-kind="contract" data-from="ncp" data-to="haldir"><title>ncp to haldir: Haldir NCP 1.0. dash-dot line with a square end, outside the local v1 profile.</title><path d="M 333 309.1 Q 255.9 221.1 178.9 133" class="edge-clearance"/><path d="M 333 309.1 Q 255.9 221.1 178.9 133" class="edge-contract"/><rect x="175.4" y="129.5" width="7" height="7" class="edge-contract-end"/></g>
+      <g data-edge-kind="contract" data-from="ncp" data-to="haldir"><title>ncp to haldir: Wire 1.0 commands. leased, release candidate. single solid arrow into NCP for commands that Haldir publishes with its own authority lease, on the wire 1.0 release candidate and outside the local profile.</title><path d="M 333 309.1 Q 255.9 221.1 178.9 133" class="edge-clearance"/><path d="M 333 309.1 Q 255.9 221.1 178.9 133" class="edge-contract"/><polygon class="edge-contract-head" points="333,309.1 330.4,300.8 325.1,305.4"/></g>
     <g data-edge-kind="library" data-from="galadriel" data-to="pidrs"><title>galadriel to pidrs: PID library. dashed line with an open arrowhead at the library.</title><path d="M 436.9 152.1 Q 478.1 123.2 526.3 108.8" class="edge-clearance"/><path d="M 436.9 152.1 Q 478.1 123.2 526.3 108.8" class="edge-library"/><path class="edge-library-head" d="M 516.5 107.5 L 526.3 108.8 L 518.8 115.2"/></g>
     <g data-edge-kind="library" data-from="prisoma" data-to="pidrs"><title>prisoma to pidrs: PID library. dashed line with an open arrowhead at the library.</title><path d="M 593.3 300.1 Q 589.9 215.3 570.7 132.6" class="edge-clearance"/><path d="M 593.3 300.1 Q 589.9 215.3 570.7 132.6" class="edge-library"/><path class="edge-library-head" d="M 568.9 142.3 L 570.7 132.6 L 576.7 140.5"/></g>
     <g data-edge-kind="library" data-from="engram" data-to="cortexel"><title>engram to cortexel: Figure contracts. dashed line with an open arrowhead at the library.</title><path d="M 127.4 372.4 Q 140.4 449.4 105.9 519.4" class="edge-clearance"/><path d="M 127.4 372.4 Q 140.4 449.4 105.9 519.4" class="edge-library"/><path class="edge-library-head" d="M 113.5 513.1 L 105.9 519.4 L 106.3 509.6"/></g>
@@ -293,10 +293,10 @@
     <g data-edge-kind="dataset" data-from="reliefatlas" data-to="crebain"><title>reliefatlas to crebain: Relief and defense meshes. dotted line with a filled arrowhead toward the simulator.</title><path d="M 713.3 624.9 Q 605.9 590.3 498.5 555.7" class="edge-clearance"/><path d="M 713.3 624.9 Q 605.9 590.3 498.5 555.7" class="edge-dataset"/><polygon class="edge-supply-head" points="498.5,555.7 505.1,561.4 507.2,554.8"/></g>
     <g data-edge-kind="tool" data-from="melkor" data-to="crebain"><title>melkor to crebain: Splat scenes. dashed line with a filled arrowhead toward the simulator.</title><path d="M 705.3 511.2 Q 603 522.7 500.7 534.3" class="edge-clearance"/><path d="M 705.3 511.2 Q 603 522.7 500.7 534.3" class="edge-tool"/><polygon class="edge-supply-head" points="500.7,534.3 509,536.9 508.2,529.9"/></g>
     <g data-edge-kind="tool" data-from="manwe" data-to="crebain"><title>manwe to crebain: Perception models. dashed line with a filled arrowhead toward the simulator.</title><path d="M 284.4 647.7 Q 341.4 601 407.2 567.8" class="edge-clearance"/><path d="M 284.4 647.7 Q 341.4 601 407.2 567.8" class="edge-tool"/><polygon class="edge-supply-head" points="407.2,567.8 398.5,568.3 401.7,574.5"/></g>
-      <g data-edge-kind="protocol" data-from="ncp" data-to="engram"><title>ncp to engram: Neural. solid paired arrows for requests and results on each owner&apos;s own process channel.</title><path d="M 319 336.4 Q 253.4 330.5 187.8 324.7" class="edge-clearance edge-clearance-protocol"/><path d="M 319.3 333.2 Q 253.7 327.3 188.1 321.5" class="edge-runtime"/><path d="M 318.7 339.5 Q 253.1 333.7 187.5 327.9" class="edge-runtime"/><polygon class="edge-runtime-head" points="188.1,321.5 195.5,326.1 196.5,319.1"/><polygon class="edge-runtime-head" points="318.7,339.5 311.3,335 310.3,341.9"/></g>
-    <g data-edge-kind="protocol" data-from="ncp" data-to="galadriel"><title>ncp to galadriel: Monitor. solid paired arrows for requests and results on each owner&apos;s own process channel.</title><path d="M 369.6 299.2 Q 380.1 254.5 390.6 209.9" class="edge-clearance edge-clearance-protocol"/><path d="M 372.7 299.9 Q 383.2 255.3 393.7 210.6" class="edge-runtime"/><path d="M 366.5 298.5 Q 377 253.8 387.5 209.2" class="edge-runtime"/><polygon class="edge-runtime-head" points="393.7,210.6 388,217.2 394.7,219.3"/><polygon class="edge-runtime-head" points="366.5,298.5 372.2,291.8 365.5,289.8"/></g>
-    <g data-edge-kind="protocol" data-from="ncp" data-to="prisoma"><title>ncp to prisoma: Capture. solid paired arrows for requests and results on each owner&apos;s own process channel.</title><path d="M 401 341.7 Q 482.1 345.1 563.1 348.5" class="edge-clearance edge-clearance-protocol"/><path d="M 400.9 344.9 Q 481.9 348.3 563 351.7" class="edge-runtime"/><path d="M 401.1 338.5 Q 482.2 341.9 563.3 345.3" class="edge-runtime"/><polygon class="edge-runtime-head" points="563,351.7 555.3,347.5 554.7,354.5"/><polygon class="edge-runtime-head" points="401.1,338.5 408.8,342.6 409.4,335.7"/></g>
-    <g data-edge-kind="protocol" data-from="ncp" data-to="crebain"><title>ncp to crebain: Body. solid paired arrows for requests and results on each owner&apos;s own process channel.</title><path d="M 377.8 379.5 Q 403.4 436.5 429.1 493.5" class="edge-clearance edge-clearance-protocol"/><path d="M 374.9 380.8 Q 400.5 437.8 426.2 494.8" class="edge-runtime"/><path d="M 380.7 378.2 Q 406.3 435.2 432 492.2" class="edge-runtime"/><polygon class="edge-runtime-head" points="426.2,494.8 426.5,486.1 420,488.6"/><polygon class="edge-runtime-head" points="380.7,378.2 380.3,386.9 386.9,384.4"/></g>
+      <g data-edge-kind="protocol" data-from="ncp" data-to="engram"><title>ncp to engram: Neural. solid paired arrows for requests and results on each owner&apos;s own process channel, with the released local SDK 1.0.0.</title><path d="M 319 336.4 Q 253.4 330.5 187.8 324.7" class="edge-clearance edge-clearance-protocol"/><path d="M 319.3 333.2 Q 253.7 327.3 188.1 321.5" class="edge-runtime"/><path d="M 318.7 339.5 Q 253.1 333.7 187.5 327.9" class="edge-runtime"/><polygon class="edge-runtime-head" points="188.1,321.5 195.5,326.1 196.5,319.1"/><polygon class="edge-runtime-head" points="318.7,339.5 311.3,335 310.3,341.9"/></g>
+    <g data-edge-kind="protocol" data-from="ncp" data-to="galadriel"><title>ncp to galadriel: Monitor. solid paired arrows for requests and results on each owner&apos;s own process channel, with the released local SDK 1.0.0.</title><path d="M 369.6 299.2 Q 380.1 254.5 390.6 209.9" class="edge-clearance edge-clearance-protocol"/><path d="M 372.7 299.9 Q 383.2 255.3 393.7 210.6" class="edge-runtime"/><path d="M 366.5 298.5 Q 377 253.8 387.5 209.2" class="edge-runtime"/><polygon class="edge-runtime-head" points="393.7,210.6 388,217.2 394.7,219.3"/><polygon class="edge-runtime-head" points="366.5,298.5 372.2,291.8 365.5,289.8"/></g>
+    <g data-edge-kind="protocol" data-from="ncp" data-to="prisoma"><title>ncp to prisoma: Capture. solid paired arrows for requests and results on each owner&apos;s own process channel, with the released local SDK 1.0.0.</title><path d="M 401 341.7 Q 482.1 345.1 563.1 348.5" class="edge-clearance edge-clearance-protocol"/><path d="M 400.9 344.9 Q 481.9 348.3 563 351.7" class="edge-runtime"/><path d="M 401.1 338.5 Q 482.2 341.9 563.3 345.3" class="edge-runtime"/><polygon class="edge-runtime-head" points="563,351.7 555.3,347.5 554.7,354.5"/><polygon class="edge-runtime-head" points="401.1,338.5 408.8,342.6 409.4,335.7"/></g>
+    <g data-edge-kind="protocol" data-from="ncp" data-to="crebain"><title>ncp to crebain: Body. solid paired arrows for requests and results on each owner&apos;s own process channel, with the released local SDK 1.0.0.</title><path d="M 377.8 379.5 Q 403.4 436.5 429.1 493.5" class="edge-clearance edge-clearance-protocol"/><path d="M 374.9 380.8 Q 400.5 437.8 426.2 494.8" class="edge-runtime"/><path d="M 380.7 378.2 Q 406.3 435.2 432 492.2" class="edge-runtime"/><polygon class="edge-runtime-head" points="426.2,494.8 426.5,486.1 420,488.6"/><polygon class="edge-runtime-head" points="380.7,378.2 380.3,386.9 386.9,384.4"/></g>
     </g>
 
     <g class="nodes">
@@ -1591,6 +1591,7 @@
 <text x="323" y="239" text-anchor="middle" class="edge-label edge-label-protocol">Monitor</text>
 <text x="488" y="326" text-anchor="middle" class="edge-label edge-label-protocol">Capture</text>
 <text x="447" y="435" text-anchor="middle" class="edge-label edge-label-protocol">Body</text>
+<text x="240" y="235" transform="rotate(49 240 235)" text-anchor="middle" class="edge-label edge-label-contract">Wire 1.0 commands<tspan x="240" dy="15" class="edge-status">leased, release candidate</tspan></text>
 <text x="109" y="448" transform="rotate(-82 109 448)" text-anchor="middle" class="edge-label edge-label-library">Figure contracts</text>
 <text x="488" y="443" transform="rotate(-61 488 443)" text-anchor="middle" class="edge-label edge-label-environment">Sensor data</text>
 <text x="626" y="430" transform="rotate(-29 626 430)" text-anchor="middle" class="edge-label edge-label-dataset">Robotics meshes</text>

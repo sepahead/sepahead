@@ -60,14 +60,15 @@
     <aside class="reading-guide" aria-label="Reading the connections">
       <h2>Follow the line pattern</h2>
       <dl>
-        <div><dt><span class="line protocol" aria-hidden="true"></span>Solid paired arrows</dt><dd>Local NCP interfaces: neural state, simulation, monitoring, and capture.</dd></div>
-        <div><dt><span class="line library" aria-hidden="true"></span>Dashed arrows</dt><dd>Library dependencies.</dd></div>
-        <div><dt><span class="line asset" aria-hidden="true"></span>Dotted lines</dt><dd>Assets or exports.</dd></div>
-        <div><dt><span class="line tool" aria-hidden="true"></span>Moving dashes on a line</dt><dd>Perception tools. Motion is decorative.</dd></div>
-        <div><dt><span class="line contract" aria-hidden="true"></span>Dash-dot with a square end</dt><dd>Haldir's separate pinned NCP interface.</dd></div>
+        <div><dt><span class="line protocol" aria-hidden="true"></span>Solid paired arrows</dt><dd>Local NCP 1.0 interfaces: requests and results for the neural, body, capture, and monitor owners.</dd></div>
+        <div><dt><span class="line contract" aria-hidden="true"></span>One solid arrow into NCP</dt><dd>Haldir's NCP wire 1.0 commands, each with an authority lease that Haldir issues. Release candidate, outside the local composition.</dd></div>
+        <div><dt><span class="line library" aria-hidden="true"></span>Dashes, open head</dt><dd>A project uses a library.</dd></div>
+        <div><dt><span class="line environment" aria-hidden="true"></span>Long dashes</dt><dd>Sensor data path toward the recorder.</dd></div>
+        <div><dt><span class="line asset" aria-hidden="true"></span>Dots</dt><dd>Mesh datasets for the simulator.</dd></div>
+        <div><dt><span class="line tool" aria-hidden="true"></span>Dashes, filled head</dt><dd>Asset or model tools for the simulator.</dd></div>
       </dl>
       <p>NCP defines shared messages. It does not require every connected project to run together.</p>
-      <p>The local v1 candidate still needs installed-artifact qualification and final release gates. It grants no physical command authority.</p>
+      <p>The local SDK 1.0.0 is released. The four-owner reference composition and the wire 1.0 candidate still have open release gates. The local composition grants no physical command authority.</p>
     </aside>
   </main>
 </body>

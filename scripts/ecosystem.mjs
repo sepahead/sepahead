@@ -8,7 +8,7 @@ export const LOCAL_NCP = {
   example: "The four-owner reference routes CREBAIN observations to Engram and returns its action proposals. Galadriel records diagnostics, and Prisoma captures complete exchanges. Applications can select smaller compositions through the modular interface.",
   summary: "Engram coordinates one local experiment and owns the neural state. CREBAIN owns the body and fusion state. Prisoma records the step pairs. Galadriel records the detector output.",
   transport: "Each owner exchanges bounded requests and results through its own private process channel. NCP defines the shared contract.",
-  boundary: "The composition runs in local simulation. Haldir authorizes commands through its own NCP 1.0 interface, outside this composition. Capture and monitor results never send commands.",
+  boundary: "The composition runs in local simulation. Haldir publishes the commands it authorizes through its own NCP wire 1.0 interface, outside this composition. Capture and monitor results never send commands.",
   availability: "The Engram source is in the private Paper2Brain repository. The public Engram repository is a placeholder.",
   research: "The map shows protocol interfaces, libraries, tools, and assets. Applications select the components they need.",
   composition: "CREBAIN runs standalone. Applications can add Engram neural models, Prisoma recording, or Galadriel monitoring. One endpoint can expose several identified sensors.",
@@ -28,16 +28,19 @@ export const LOCAL_NCP = {
   ],
 };
 
-// Haldir's NCP interface: the wire its main branch speaks and the crate that owns it.
-export const HALDIR_NCP = { wire: "1.0", crate: "haldir-ncp10" };
+// Haldir's NCP interface: the wire its main branch speaks, the unreleased candidate that
+// defines it, and the crate that owns it.
+export const HALDIR_NCP = { wire: "1.0", candidate: "1.0.0-rc.1", crate: "haldir-ncp10" };
 
 // One meaning per visual channel: line pattern = kind of relation; filled arrowhead = direction
-// of data, assets or messages; open arrowhead = "uses this library".
+// of data, assets or messages; open arrowhead = "uses this library". Both NCP surfaces share
+// the NCP colour: paired rails carry local requests and results, and Haldir's single rail
+// carries commands in one direction.
 export const EDGE_TYPES = {
-  protocol: { label: "Local NCP interface", pattern: "solid paired arrows for requests and results on each owner's own process channel" },
+  protocol: { label: "Local NCP 1.0 interface", pattern: "solid paired arrows for requests and results on each owner's own process channel, with the released local SDK 1.0.0" },
   library: { label: "Uses a library", pattern: "dashed line with an open arrowhead at the library" },
   environment: { label: "Sensor data path", pattern: "long dashed line with a filled arrowhead toward the recorder" },
-  contract: { label: `Haldir: NCP ${HALDIR_NCP.wire} interface`, pattern: "dash-dot line with a square end, outside the local v1 profile" },
+  contract: { label: `Haldir: NCP wire ${HALDIR_NCP.wire} commands`, pattern: `single solid arrow into NCP for commands that Haldir publishes with its own authority lease, on the wire ${HALDIR_NCP.wire} release candidate and outside the local profile` },
   dataset: { label: "Mesh dataset", pattern: "dotted line with a filled arrowhead toward the simulator" },
   tool: { label: "Asset or model tool", pattern: "dashed line with a filled arrowhead toward the simulator" },
 };
@@ -49,7 +52,7 @@ export const ECOSYSTEM_EDGES = [
   { a: "ncp", b: "galadriel", kind: "protocol", role: "monitor", label: "Monitor", labelAt: [323, 239], bow: 0, evidence: "galadriel crates/galadriel-local-adapter on ncp-local 1.0.0" },
   { a: "ncp", b: "prisoma", kind: "protocol", role: "capture", label: "Capture", labelAt: [488, 326], bow: 0, evidence: "prisoma crates/ncp-local-capture" },
   { a: "ncp", b: "crebain", kind: "protocol", role: "body", label: "Body", labelAt: [447, 435], bow: 0, evidence: "crebain docs/NATIVE_NCP_SIMULATION.md, local NCP body" },
-  { a: "ncp", b: "haldir", kind: "contract", label: `Haldir NCP ${HALDIR_NCP.wire}`, bow: 0, evidence: `haldir crates/${HALDIR_NCP.crate}` },
+  { a: "ncp", b: "haldir", kind: "contract", label: `Wire ${HALDIR_NCP.wire} commands`, status: "leased, release candidate", labelAt: [240, 235], labelAngle: 49, bow: 0, evidence: `haldir crates/${HALDIR_NCP.crate} at NCP ${HALDIR_NCP.candidate}` },
   { a: "galadriel", b: "pidrs", kind: "library", label: "PID library", bow: -8, evidence: "galadriel Cargo.toml: pid-core, optional dependence feature" },
   { a: "prisoma", b: "pidrs", kind: "library", label: "PID library", bow: 8, evidence: "prisoma pid-rs submodule; Cargo.lock pid-core" },
   { a: "engram", b: "cortexel", kind: "library", label: "Figure contracts", labelAt: [109, 448], labelAngle: -82, bow: -24, evidence: "Paper2Brain frontend, backend and scripts/cortexel-postimages use Cortexel" },

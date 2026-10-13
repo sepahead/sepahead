@@ -255,7 +255,7 @@ edges.forEach((e) => {
     const endpoint = e.kind === "library" ? openArrow(p1, from, "edge-library-head")
       : e.kind === "environment" ? arrow(p1, from, "edge-environment-head")
       : e.kind === "dataset" || e.kind === "tool" ? arrow(p1, from, "edge-supply-head")
-      : e.kind === "contract" ? `<rect x="${f1(p1.x - 3.5)}" y="${f1(p1.y - 3.5)}" width="7" height="7" class="edge-contract-end"/>` : "";
+      : e.kind === "contract" ? arrow(p0, c, "edge-contract-head") : "";
     calmEdges.push(`<g data-edge-kind="${e.kind}" data-from="${e.a}" data-to="${e.b}">${title}<path d="${d}" class="edge-clearance"/><path d="${d}" class="edge-${e.kind}"/>${endpoint}</g>`);
   }
   if (e.labelAt) {
@@ -1862,8 +1862,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .edge-dataset { stroke: #8291a6; stroke-width: 1.9; stroke-dasharray: 1 6; }
     .edge-tool { stroke: #8291a6; stroke-width: 1.9; stroke-dasharray: 6 5; }
     .edge-supply-head { fill: #8291a6; }
-    .edge-contract { stroke: #c4b5fd; stroke-width: 2; stroke-dasharray: 10 4 2 4; }
-    .edge-contract-end { fill: #c4b5fd; }
+    .edge-contract { stroke: #fbbf24; stroke-width: 2.1; }
+    .edge-contract-head { fill: #fbbf24; }
     .edge-label, .legend-label, .legend-key { font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #c9d1d9; letter-spacing: 0 !important; text-transform: none !important; }
     .legend-key { font-size: 10.5px; fill: #9da7b3; }
     .edge-label { stroke-width: 5px !important; }
@@ -1871,7 +1871,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     .edge-label-protocol { fill: #fcd34d; }
     .edge-label-library { fill: #a7f3d0; }
     .edge-label-dataset, .edge-label-tool { fill: #9da7b3; font-size: 10.5px; }
-    .edge-label-contract { fill: #ddd6fe; }
+    .edge-label-contract { fill: #fcd34d; }
     .legend-label { font-size: 13px; }
     .scope-box { fill: none; stroke: #8291a6; stroke-width: 1; stroke-dasharray: 5 5; }
     .chip       { fill: #0d1117; stroke-width: 1.5; }
@@ -2036,11 +2036,11 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
       .edge-status { fill: #607086; }
       .edge-label-dataset, .edge-label-tool { fill: #607086; }
       .edge-clearance { stroke: #f7f8f9; }
-      .edge-contract { stroke: #7353a6; } .edge-contract-end { fill: #7353a6; }
+      .edge-contract { stroke: #985700; } .edge-contract-head { fill: #985700; }
       .edge-label, .legend-label { fill: #435365; } .legend-key { fill: #607086; }
       .edge-label-protocol { fill: #805000; }
       .edge-label-library { fill: #08664d; }
-      .edge-label-contract { fill: #63428d; }
+      .edge-label-contract { fill: #805000; }
       .chip { fill: #ffffff; }
       .chip-label { fill: #1f2328; }
       .hub-glow { stroke: #059669; stroke-opacity: 0.12; }
@@ -2088,7 +2088,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
   <polygon points="113,847 104,842.5 104,851.5" class="edge-environment-head"/>
   <text x="121" y="853" class="legend-label">${escapeXML(EDGE_TYPES.environment.label)}</text>
   <path d="M 450 847 H 511" class="edge-contract"/>
-  <rect x="508" y="843.5" width="7" height="7" class="edge-contract-end"/>
+  <polygon points="519,847 510,842.5 510,851.5" class="edge-contract-head"/>
   <text x="531" y="853" class="legend-label">${escapeXML(EDGE_TYPES.contract.label)}</text>
   <path d="M 42 882 H 105" class="edge-dataset"/>
   <polygon points="113,882 104,877.5 104,886.5" class="edge-supply-head"/>
@@ -2098,7 +2098,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
   <text x="531" y="888" class="legend-label">${escapeXML(EDGE_TYPES.tool.label)}</text>
   <text x="40" y="926" class="edge-label">Connections show interfaces, not a required all-project deployment.</text>
   <text x="40" y="948" class="edge-label">CREBAIN has no pid-rs dependency; its recordings reach pid-rs through Prisoma.</text>
-  <text x="40" y="970" class="edge-label">Haldir authorizes commands through its own NCP ${HALDIR_NCP.wire} interface.</text>
+  <text x="40" y="970" class="edge-label">Haldir publishes the commands it authorizes through its own NCP wire ${HALDIR_NCP.wire} interface.</text>
   <text x="40" y="992" class="edge-label">Each program keeps its own process and state.</text>
   <g transform="translate(0 ${VSHIFT})">
     <g class="edges">
