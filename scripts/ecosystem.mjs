@@ -40,7 +40,7 @@ export const EDGE_TYPES = {
   protocol: { label: "Local NCP 1.0 interface", pattern: "solid paired arrows for requests and results on each owner's own process channel, with the released local SDK 1.0.0" },
   library: { label: "Uses a library", pattern: "dashed line with an open arrowhead at the library" },
   environment: { label: "Sensor data path", pattern: "long dashed line with a filled arrowhead toward the recorder" },
-  contract: { label: `Haldir: authorized commands, NCP wire ${HALDIR_NCP.wire}`, pattern: `single solid arrow into NCP: Haldir checks each signed controller intent and publishes only the command it authorizes, with its own authority lease, on the wire ${HALDIR_NCP.wire} release candidate and outside the local profile` },
+  contract: { label: `Haldir: authorized commands, NCP wire ${HALDIR_NCP.wire}`, pattern: `single solid arrow into NCP: Haldir checks each signed controller intent and publishes only the command it authorizes, with its own authority lease, on the wire ${HALDIR_NCP.wire} release candidate and outside the local profile. Nothing returns to Haldir over NCP: the candidate wire has no authority feedback, and intents arrive through Haldir's own admission interface` },
   dataset: { label: "Mesh dataset", pattern: "dotted line with a filled arrowhead toward the simulator" },
   tool: { label: "Asset or model tool", pattern: "dashed line with a filled arrowhead toward the simulator" },
 };
