@@ -111,7 +111,7 @@
 <li><strong>Local NCP 1.0 interface</strong>: solid paired arrows for requests and results on each owner&#39;s own process channel, with the released local SDK 1.0.0.</li>
 <li><strong>Uses a library</strong>: dashed line with an open arrowhead at the library.</li>
 <li><strong>Sensor data path</strong>: long dashed line with a filled arrowhead toward the recorder.</li>
-<li><strong>Haldir: NCP wire 1.0 commands</strong>: single solid arrow into NCP for commands that Haldir publishes with its own authority lease, on the wire 1.0 release candidate and outside the local profile.</li>
+<li><strong>Haldir: authorized commands, NCP wire 1.0</strong>: single solid arrow into NCP: Haldir checks each signed controller intent and publishes only the command it authorizes, with its own authority lease, on the wire 1.0 release candidate and outside the local profile.</li>
 <li><strong>Mesh dataset</strong>: dotted line with a filled arrowhead toward the simulator.</li>
 <li><strong>Asset or model tool</strong>: dashed line with a filled arrowhead toward the simulator.</li>
 </ul>
