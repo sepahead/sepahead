@@ -20,7 +20,9 @@ test("every edge names its evidence and Haldir's interface follows its declared 
   for (const edge of ECOSYSTEM_EDGES) assert.ok(edge.evidence && edge.evidence.length > 10, `${edge.a}-${edge.b} lacks evidence`);
   assert.throws(() => validateEcosystemEdges(nodes, copy().map((edge) => ({ ...edge, evidence: undefined }))), /without evidence/);
   const haldir = ECOSYSTEM_EDGES.find((edge) => edge.b === "haldir");
-  assert.ok(haldir.label.includes(HALDIR_NCP.wire) && haldir.evidence.includes(HALDIR_NCP.crate));
+  // The arrow carries its role like the other NCP arrows; the legend and evidence name the wire.
+  assert.equal(haldir.label, "Commands");
+  assert.ok(haldir.evidence.includes(HALDIR_NCP.wire) && haldir.evidence.includes(HALDIR_NCP.crate));
   assert.ok(EDGE_TYPES.contract.label.includes(HALDIR_NCP.wire));
 });
 

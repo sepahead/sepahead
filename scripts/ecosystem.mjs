@@ -52,7 +52,7 @@ export const ECOSYSTEM_EDGES = [
   { a: "ncp", b: "galadriel", kind: "protocol", role: "monitor", label: "Monitor", labelAt: [323, 239], bow: 0, evidence: "galadriel crates/galadriel-local-adapter on ncp-local 1.0.0" },
   { a: "ncp", b: "prisoma", kind: "protocol", role: "capture", label: "Capture", labelAt: [488, 326], bow: 0, evidence: "prisoma crates/ncp-local-capture" },
   { a: "ncp", b: "crebain", kind: "protocol", role: "body", label: "Body", labelAt: [447, 435], bow: 0, evidence: "crebain docs/NATIVE_NCP_SIMULATION.md, local NCP body" },
-  { a: "ncp", b: "haldir", kind: "contract", label: `Wire ${HALDIR_NCP.wire} commands`, status: "leased, release candidate", labelAt: [240, 235], labelAngle: 49, bow: 0, evidence: `haldir crates/${HALDIR_NCP.crate} at NCP ${HALDIR_NCP.candidate}` },
+  { a: "ncp", b: "haldir", kind: "contract", label: "Commands", labelAt: [214, 232], bow: 0, evidence: `haldir crates/${HALDIR_NCP.crate} at NCP wire ${HALDIR_NCP.wire} ${HALDIR_NCP.candidate}` },
   { a: "galadriel", b: "pidrs", kind: "library", label: "PID library", bow: -8, evidence: "galadriel Cargo.toml: pid-core, optional dependence feature" },
   { a: "prisoma", b: "pidrs", kind: "library", label: "PID library", bow: 8, evidence: "prisoma pid-rs submodule; Cargo.lock pid-core" },
   { a: "engram", b: "cortexel", kind: "library", label: "Figure contracts", labelAt: [109, 448], labelAngle: -82, bow: -24, evidence: "Paper2Brain frontend, backend and scripts/cortexel-postimages use Cortexel" },
@@ -84,7 +84,7 @@ export function validateEcosystemEdges(nodes, edges) {
       if (edge.a !== "ncp" || !runtimeRoles.has(edge.b)) throw new Error(`Invalid local interface: ${identity}`);
       if (edge.role !== runtimeRoles.get(edge.b)) throw new Error(`Wrong runtime role: ${identity}`);
     } else if (edge.kind === "contract") {
-      if (edge.a !== "ncp" || edge.b !== "haldir" || !edge.label.includes(HALDIR_NCP.wire)) throw new Error(`Invalid Haldir interface: ${identity}`);
+      if (edge.a !== "ncp" || edge.b !== "haldir" || !edge.evidence.includes(HALDIR_NCP.wire)) throw new Error(`Invalid Haldir interface: ${identity}`);
     } else if (edge.kind === "environment") {
       if (edge.a !== "crebain" || edge.b !== "prisoma") {
         throw new Error(`Invalid environment integration: ${identity}`);
