@@ -73,7 +73,7 @@ export function localOwnershipSvg() {
   ${text(500, 518, "Results return records. Capture and monitoring never send commands.", "body", "middle")}
   <rect x="24" y="540" width="952" height="124" rx="12" class="boundary"/>
   ${text(46, 569, "Galadriel compares sensor modalities and reports insufficient evidence.")}
-  ${text(46, 596, "Haldir authorizes commands through its own NCP 1.0 interface.")}
+  ${text(46, 596, "Haldir publishes the commands it authorizes through its own NCP wire 1.0 interface.")}
   ${text(46, 623, "This composition runs in local simulation.")}
   ${text(46, 649, "Each program keeps its own process and state.")}
   </svg>\n`;

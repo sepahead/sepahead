@@ -80,7 +80,7 @@
   <text x="500" y="518" class="body" text-anchor="middle">Results return records. Capture and monitoring never send commands.</text>
   <rect x="24" y="540" width="952" height="124" rx="12" class="boundary"/>
   <text x="46" y="569" class="body" text-anchor="start">Galadriel compares sensor modalities and reports insufficient evidence.</text>
-  <text x="46" y="596" class="body" text-anchor="start">Haldir authorizes commands through its own NCP 1.0 interface.</text>
+  <text x="46" y="596" class="body" text-anchor="start">Haldir publishes the commands it authorizes through its own NCP wire 1.0 interface.</text>
   <text x="46" y="623" class="body" text-anchor="start">This composition runs in local simulation.</text>
   <text x="46" y="649" class="body" text-anchor="start">Each program keeps its own process and state.</text>
   <style>* { animation: none !important; transition: none !important; }</style>
