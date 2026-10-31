@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 340" width="760" height="340" role="img" aria-label="Weekday contribution share over the last 500 days: 7646 total, peak Sat at 17.7%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 340" width="760" height="340" role="img" aria-label="Weekday contribution share over the last 500 days: 7668 total, peak Sat at 17.9%">
   <defs>
     <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="5" result="b"/>
@@ -27,24 +27,24 @@
   </style>
   <rect x="0.5" y="0.5" width="759" height="339" rx="16" class="panel"/>
   <text x="40" y="36" class="title">Where the week goes</text>
-  <text x="720" y="36" text-anchor="end" class="subtitle">7,646 contributions · last 500 days</text>
+  <text x="720" y="36" text-anchor="end" class="subtitle">7,668 contributions · last 500 days</text>
   <g class="donut">
 
-    <path d="M 189.66 60.01 A 132 132 0 0 1 303.30 127.73 L 263.12 150.13 A 86 86 0 0 0 189.08 106.01 Z" class="slice" style="transform-origin:188 192;opacity:1;fill:#22d3ee" transform="scale(1)"><title>Mon: 1308 contributions · 17.1% of the last 500 days</title><animateTransform attributeName="transform" type="scale" values="0.82;1" begin="0.15s" dur="0.6s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/><animate attributeName="opacity" values="0;1" begin="0.15s" dur="0.6s" fill="freeze"/></path>
-    <path d="M 304.88 130.65 A 132 132 0 0 1 312.10 236.99 L 268.85 221.31 A 86 86 0 0 0 264.15 152.03 Z" class="slice" style="transform-origin:188 192;opacity:1;fill:#34d399" transform="scale(1)"><title>Tue: 1042 contributions · 13.6% of the last 500 days</title><animateTransform attributeName="transform" type="scale" values="0.82;1" begin="0.25s" dur="0.6s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/><animate attributeName="opacity" values="0;1" begin="0.25s" dur="0.6s" fill="freeze"/></path>
-    <path d="M 310.93 240.09 A 132 132 0 0 1 239.56 313.52 L 221.59 271.17 A 86 86 0 0 0 268.09 223.33 Z" class="slice" style="transform-origin:188 192;opacity:1;fill:#a78bfa" transform="scale(1)"><title>Wed: 1000 contributions · 13.1% of the last 500 days</title><animateTransform attributeName="transform" type="scale" values="0.82;1" begin="0.35s" dur="0.6s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/><animate attributeName="opacity" values="0;1" begin="0.35s" dur="0.6s" fill="freeze"/></path>
-    <path d="M 236.49 314.77 A 132 132 0 0 1 159.62 320.91 L 169.51 275.99 A 86 86 0 0 0 219.59 271.99 Z" class="slice" style="transform-origin:188 192;opacity:1;fill:#60a5fa" transform="scale(1)"><title>Thu: 752 contributions · 9.8% of the last 500 days</title><animateTransform attributeName="transform" type="scale" values="0.82;1" begin="0.45s" dur="0.6s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/><animate attributeName="opacity" values="0;1" begin="0.45s" dur="0.6s" fill="freeze"/></path>
-    <path d="M 156.39 320.16 A 132 132 0 0 1 83.17 272.21 L 119.70 244.26 A 86 86 0 0 0 167.40 275.50 Z" class="slice" style="transform-origin:188 192;opacity:1;fill:#fbbf24" transform="scale(1)"><title>Fri: 853 contributions · 11.2% of the last 500 days</title><animateTransform attributeName="transform" type="scale" values="0.82;1" begin="0.55s" dur="0.6s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/><animate attributeName="opacity" values="0;1" begin="0.55s" dur="0.6s" fill="freeze"/></path>
-    <path d="M 81.18 269.55 A 132 132 0 0 1 69.79 133.26 L 110.98 153.73 A 86 86 0 0 0 118.41 242.53 Z" class="slice slice-peak" style="transform-origin:188 192;opacity:1;fill:#fb7185" transform="scale(1)"><title>Sat: 1356 contributions · 17.7% of the last 500 days</title><animate attributeName="opacity" values="1;0.68;1" dur="2.6s" begin="1.3s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="scale" values="0.82;1" begin="0.65s" dur="0.6s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/></path>
-    <path d="M 71.30 130.31 A 132 132 0 0 1 186.34 60.01 L 186.92 106.01 A 86 86 0 0 0 111.97 151.81 Z" class="slice" style="transform-origin:188 192;opacity:1;fill:#f472b6" transform="scale(1)"><title>Sun: 1335 contributions · 17.5% of the last 500 days</title><animateTransform attributeName="transform" type="scale" values="0.82;1" begin="0.75s" dur="0.6s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/><animate attributeName="opacity" values="0;1" begin="0.75s" dur="0.6s" fill="freeze"/></path>
-    <text x="243.80" y="102.37" text-anchor="middle" class="slice-label">Mon</text>
-    <text x="296.75" y="188.62" text-anchor="middle" class="slice-label">Tue</text>
-    <text x="266.16" y="271.97" text-anchor="middle" class="slice-label">Wed</text>
-    <text x="196.68" y="304.65" text-anchor="middle" class="slice-label">Thu</text>
-    <text x="128.29" y="287.19" text-anchor="middle" class="slice-label">Fri</text>
-    <text x="79.38" y="205.08" text-anchor="middle" class="slice-label">Sat</text>
-    <text x="131.16" y="102.99" text-anchor="middle" class="slice-label">Sun</text>
-    <text x="188" y="178" text-anchor="middle" class="center-num">7646</text>
+    <path d="M 189.66 60.01 A 132 132 0 0 1 303.10 127.38 L 262.99 149.90 A 86 86 0 0 0 189.08 106.01 Z" class="slice" style="transform-origin:188 192;opacity:1;fill:#22d3ee" transform="scale(1)"><title>Mon: 1308 contributions · 17.1% of the last 500 days</title><animateTransform attributeName="transform" type="scale" values="0.82;1" begin="0.15s" dur="0.6s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/><animate attributeName="opacity" values="0;1" begin="0.15s" dur="0.6s" fill="freeze"/></path>
+    <path d="M 304.69 130.29 A 132 132 0 0 1 312.34 236.30 L 269.01 220.86 A 86 86 0 0 0 264.02 151.80 Z" class="slice" style="transform-origin:188 192;opacity:1;fill:#34d399" transform="scale(1)"><title>Tue: 1042 contributions · 13.6% of the last 500 days</title><animateTransform attributeName="transform" type="scale" values="0.82;1" begin="0.25s" dur="0.6s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/><animate attributeName="opacity" values="0;1" begin="0.25s" dur="0.6s" fill="freeze"/></path>
+    <path d="M 311.19 239.41 A 132 132 0 0 1 240.51 313.10 L 222.21 270.90 A 86 86 0 0 0 268.26 222.89 Z" class="slice" style="transform-origin:188 192;opacity:1;fill:#a78bfa" transform="scale(1)"><title>Wed: 1000 contributions · 13.0% of the last 500 days</title><animateTransform attributeName="transform" type="scale" values="0.82;1" begin="0.35s" dur="0.6s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/><animate attributeName="opacity" values="0;1" begin="0.35s" dur="0.6s" fill="freeze"/></path>
+    <path d="M 237.45 314.39 A 132 132 0 0 1 160.87 321.18 L 170.32 276.16 A 86 86 0 0 0 220.22 271.74 Z" class="slice" style="transform-origin:188 192;opacity:1;fill:#60a5fa" transform="scale(1)"><title>Thu: 752 contributions · 9.8% of the last 500 days</title><animateTransform attributeName="transform" type="scale" values="0.82;1" begin="0.45s" dur="0.6s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/><animate attributeName="opacity" values="0;1" begin="0.45s" dur="0.6s" fill="freeze"/></path>
+    <path d="M 157.63 320.46 A 132 132 0 0 1 83.98 273.26 L 120.23 244.94 A 86 86 0 0 0 168.21 275.69 Z" class="slice" style="transform-origin:188 192;opacity:1;fill:#fbbf24" transform="scale(1)"><title>Fri: 855 contributions · 11.2% of the last 500 days</title><animateTransform attributeName="transform" type="scale" values="0.82;1" begin="0.55s" dur="0.6s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/><animate attributeName="opacity" values="0;1" begin="0.55s" dur="0.6s" fill="freeze"/></path>
+    <path d="M 81.97 270.62 A 132 132 0 0 1 69.98 132.89 L 111.11 153.49 A 86 86 0 0 0 118.92 243.22 Z" class="slice slice-peak" style="transform-origin:188 192;opacity:1;fill:#fb7185" transform="scale(1)"><title>Sat: 1376 contributions · 17.9% of the last 500 days</title><animate attributeName="opacity" values="1;0.68;1" dur="2.6s" begin="1.3s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="scale" values="0.82;1" begin="0.65s" dur="0.6s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/></path>
+    <path d="M 71.50 129.94 A 132 132 0 0 1 186.34 60.01 L 186.92 106.01 A 86 86 0 0 0 112.10 151.57 Z" class="slice" style="transform-origin:188 192;opacity:1;fill:#f472b6" transform="scale(1)"><title>Sun: 1335 contributions · 17.4% of the last 500 days</title><animateTransform attributeName="transform" type="scale" values="0.82;1" begin="0.75s" dur="0.6s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/><animate attributeName="opacity" values="0;1" begin="0.75s" dur="0.6s" fill="freeze"/></path>
+    <text x="243.66" y="102.28" text-anchor="middle" class="slice-label">Mon</text>
+    <text x="296.72" y="188.15" text-anchor="middle" class="slice-label">Tue</text>
+    <text x="266.67" y="271.45" text-anchor="middle" class="slice-label">Wed</text>
+    <text x="197.63" y="304.57" text-anchor="middle" class="slice-label">Thu</text>
+    <text x="129.19" y="287.77" text-anchor="middle" class="slice-label">Fri</text>
+    <text x="79.41" y="205.46" text-anchor="middle" class="slice-label">Sat</text>
+    <text x="131.31" y="102.90" text-anchor="middle" class="slice-label">Sun</text>
+    <text x="188" y="178" text-anchor="middle" class="center-num">7668</text>
     <text x="188" y="200" text-anchor="middle" class="center-sub">500 days</text>
     <text x="188" y="232" text-anchor="middle" class="center-streak">10-day streak</text>
   </g>
@@ -57,7 +57,7 @@
       <text x="584" y="144" text-anchor="end" class="legend-label">13.6%</text>
     <rect x="388" y="159" width="12" height="12" rx="2" style="fill:#a78bfa" class="legend-swatch"/>
       <text x="410" y="168" class="legend-label">Wed</text>
-      <text x="584" y="168" text-anchor="end" class="legend-label">13.1%</text>
+      <text x="584" y="168" text-anchor="end" class="legend-label">13.0%</text>
     <rect x="388" y="183" width="12" height="12" rx="2" style="fill:#60a5fa" class="legend-swatch"/>
       <text x="410" y="192" class="legend-label">Thu</text>
       <text x="584" y="192" text-anchor="end" class="legend-label">9.8%</text>
@@ -66,10 +66,10 @@
       <text x="584" y="216" text-anchor="end" class="legend-label">11.2%</text>
     <rect x="388" y="231" width="12" height="12" rx="2" style="fill:#fb7185" class="legend-swatch swatch-peak"/>
       <text x="410" y="240" class="legend-label legend-peak">Sat</text>
-      <text x="584" y="240" text-anchor="end" class="legend-label legend-peak">17.7%</text>
+      <text x="584" y="240" text-anchor="end" class="legend-label legend-peak">17.9%</text>
     <rect x="388" y="255" width="12" height="12" rx="2" style="fill:#f472b6" class="legend-swatch"/>
       <text x="410" y="264" class="legend-label">Sun</text>
-      <text x="584" y="264" text-anchor="end" class="legend-label">17.5%</text>
+      <text x="584" y="264" text-anchor="end" class="legend-label">17.4%</text>
   </g>
 
 </svg>
